@@ -1,23 +1,59 @@
 {
-	"lyria_affinity_40": {
-		"type": "affinity",
+	"lyria_friendship_20": {
+		"trigger": "relationship_changed",
 		"npc_id": "lyria",
-		"threshold": 40,
-		"once": true,
-		"text": "Lyria baja la guardia por un momento. Su voz es más suave de lo habitual."
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
+				}
+			}
+		},
+		"text": "Lyria empieza a recibirte con una calma distinta. No es confianza plena, pero ya no eres solo un extraño.",
+		"effects": {
+			"add_world_flags": [
+				"lyria_opened_first_door"
+			]
+		}
 	},
-	"lyria_affinity_60": {
-		"type": "affinity",
+	"lyria_tension_30": {
+		"trigger": "relationship_changed",
 		"npc_id": "lyria",
-		"threshold": 60,
-		"once": true,
-		"text": "Hay una cercanía nueva. No lo dice, pero se siente en cada pausa."
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 30
+				},
+				"jealousy": {
+					"max": 60
+				}
+			}
+		},
+		"text": "Entre tú y Lyria empieza a formarse una tensión que ninguno de los dos puede nombrar sin cambiar algo para siempre.",
+		"effects": {
+			"add_world_flags": [
+				"lyria_romantic_tension_awakened"
+			]
+		}
 	},
-	"lyria_affinity_90": {
-		"type": "affinity",
+	"lyria_loyalty_40": {
+		"trigger": "relationship_changed",
 		"npc_id": "lyria",
-		"threshold": 90,
-		"once": true,
-		"text": "La tensión es imposible de ignorar. Esto ya no es casualidad."
+		"conditions": {
+			"relationship": {
+				"loyalty": {
+					"min": 40
+				},
+				"friendship": {
+					"min": 30
+				}
+			}
+		},
+		"text": "Lyria duda antes de responderte. No porque no quiera ayudarte, sino porque empieza a considerar hacerlo incluso cuando no debería.",
+		"effects": {
+			"add_world_flags": [
+				"lyria_can_be_asked_too_much"
+			]
+		}
 	}
 }

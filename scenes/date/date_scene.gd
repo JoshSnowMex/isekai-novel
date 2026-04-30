@@ -101,10 +101,14 @@ func do_gift() -> void:
 func do_move() -> void:
 	if current_date["progress"] >= 70:
 		current_date["progress"] += 12
-		description_label.text = "Te acercas… y la reacción es favorable. La tensión crece."
+		var npc_id: String = current_date["npc_id"]
+		var relationship_text: String = GameManager.add_relationship_value(npc_id, "tension", 3)
+		description_label.text = "Te acercas… y la reacción es favorable. La tensión crece.\nTensión +3%s" % relationship_text
 	else:
 		current_date["progress"] -= 15
-		description_label.text = "El momento no era el adecuado. Retrocedes."
+		var npc_id: String = current_date["npc_id"]
+		var relationship_text: String = GameManager.add_relationship_value(npc_id, "jealousy", 2)
+		description_label.text = "El momento no era el adecuado. Retrocedes.\nCelos +2%s" % relationship_text
 
 	GameManager.consume_action(4)
 	refresh()
@@ -118,8 +122,12 @@ func end_date() -> void:
 	GameManager.ensure_npc_knowledge(npc_id)
 
 	if result >= 70:
-		var gain: int = 12
-		var rivalry_text: String = GameManager.add_affinity(npc_id, gain)
+		var friendship_gain: int = 5
+		var tension_gain: int = 8
+
+		var relationship_text: String = ""
+		relationship_text += GameManager.add_relationship_value(npc_id, "friendship", friendship_gain)
+		relationship_text += GameManager.add_relationship_value(npc_id, "tension", tension_gain)
 
 		var info_key: String = GameManager.reveal_random_npc_info(npc_id)
 		var reveal_text: String = ""
@@ -135,23 +143,32 @@ func end_date() -> void:
 			"La cita terminó con una cercanía difícil de ignorar."
 		)
 
-		description_label.text = "La cita fue un éxito. Algo ha cambiado entre ustedes.\nAfinidad +%s%s%s" % [
-			gain,
+		description_label.text = "La cita fue un éxito. Algo ha cambiado entre ustedes.\nAmistad +%s\nTensión +%s%s%s" % [
+			friendship_gain,
+			tension_gain,
 			reveal_text,
-			rivalry_text
+			relationship_text
 		]
 	else:
-		var loss: int = -10
-		var rivalry_text: String = GameManager.add_affinity(npc_id, loss)
+		var friendship_loss: int = -5
+		var tension_loss: int = -8
+		var jealousy_gain: int = 4
+
+		var relationship_text: String = ""
+		relationship_text += GameManager.add_relationship_value(npc_id, "friendship", friendship_loss)
+		relationship_text += GameManager.add_relationship_value(npc_id, "tension", tension_loss)
+		relationship_text += GameManager.add_relationship_value(npc_id, "jealousy", jealousy_gain)
 
 		GameManager.add_npc_note(
 			npc_id,
 			"Una cita incómoda dejó una distancia temporal."
 		)
 
-		description_label.text = "La cita termina con una sensación incómoda.\nAfinidad %s%s" % [
-			loss,
-			rivalry_text
+		description_label.text = "La cita termina con una sensación incómoda.\nAmistad %s\nTensión %s\nCelos +%s%s" % [
+			friendship_loss,
+			tension_loss,
+			jealousy_gain,
+			relationship_text
 		]
 
 	SaveManager.save_game()
@@ -221,12 +238,18 @@ func answer_question(question: Dictionary, selected: String) -> void:
 	clear_container(action_container)
 
 	if selected == correct:
+		var npc_id: String = current_date["npc_id"]
+		var relationship_text: String = GameManager.add_relationship_value(npc_id, "friendship", 2)
+
 		current_date["progress"] = clamp(current_date["progress"] + 15, 0, 100)
-		description_label.text = "Respondes sin dudar.\nLa reacción es inmediata… y claramente favorable."
+		description_label.text = "Respondes sin dudar.\nLa reacción es inmediata… y claramente favorable.\nAmistad +2%s" % relationship_text
 	else:
+		var npc_id: String = current_date["npc_id"]
+		var relationship_text: String = GameManager.add_relationship_value(npc_id, "friendship", -2)
+
 		current_date["progress"] = clamp(current_date["progress"] - 12, 0, 100)
 		current_date["mistakes"] += 1
-		description_label.text = "Tu respuesta no coincide.\nLa distancia entre ambos se hace evidente."
+		description_label.text = "Tu respuesta no coincide.\nLa distancia entre ambos se hace evidente.\nAmistad -2%s" % relationship_text
 
 	GameManager.consume_action(3)
 

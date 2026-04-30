@@ -62,7 +62,8 @@ func start_new_game(player_name: String, class_id: String) -> void:
 				"amount": 1
 			}
 		],
-		"daily_flags": {}
+		"daily_flags": {},
+		"world_flags": []
 	}
 
 	if class_data.has("starting_stats"):
@@ -384,38 +385,7 @@ func perform_activity(activity_id: String) -> String:
 	]
 
 func add_affinity(npc_id: String, amount: int) -> String:
-	ensure_relationship(npc_id)
-
-	var relation: Dictionary = player["relationships"][npc_id]
-	var old_value: int = int(relation.get("affinity", 0))
-	var new_value: int = clamp(old_value + amount, 0, 100)
-	
-	var message: String = ""
-
-	relation["affinity"] = new_value
-	
-	var event_texts: Array = EventSystem.process_affinity_events(npc_id, new_value)
-
-	for text in event_texts:
-		message += "\n\n" + text
-
-	var real_change: int = new_value - old_value
-
-	if real_change > 0:
-		var rivalry_results: Array = RivalrySystem.process_affinity_change(npc_id, real_change)
-
-		for result in rivalry_results:
-			var affected_npc_id: String = result.get("affected_npc_id", "")
-			var affected_npc: Dictionary = DataManager.get_npc(affected_npc_id)
-			var affected_name: String = affected_npc.get("name", affected_npc_id)
-			var penalty: int = int(result.get("penalty", 0))
-
-			message += "\n%s parece distante últimamente. Afinidad -%s" % [
-				affected_name,
-				penalty
-			]
-
-	return message
+	return add_relationship_value(npc_id, "friendship", amount)
 
 func add_relationship_value(npc_id: String, key: String, amount: int) -> String:
 	ensure_relationship(npc_id)
@@ -430,6 +400,22 @@ func add_relationship_value(npc_id: String, key: String, amount: int) -> String:
 	var real_change: int = new_value - old_value
 	var message: String = ""
 
+	if real_change == 0:
+		return message
+
+	if key == "friendship" or key == "tension" or key == "loyalty":
+		var total: int = get_total_affinity(npc_id)
+		var event_texts: Array = EventSystem.process_events({
+			"trigger": "relationship_changed",
+			"npc_id": npc_id,
+			"changed_key": key,
+			"amount": real_change,
+			"total": get_total_affinity(npc_id)
+		})
+
+		for text in event_texts:
+			message += "\n\n" + str(text)
+
 	if key == "tension" and real_change > 0:
 		var rivalry_results: Array = RivalrySystem.process_affinity_change(npc_id, real_change)
 
@@ -438,6 +424,8 @@ func add_relationship_value(npc_id: String, key: String, amount: int) -> String:
 			var affected_npc: Dictionary = DataManager.get_npc(affected_npc_id)
 			var affected_name: String = affected_npc.get("name", affected_npc_id)
 			var penalty: int = int(result.get("penalty", 0))
+
+			add_relationship_value(affected_npc_id, "jealousy", penalty)
 
 			message += "\n%s parece distante últimamente. Celos +%s" % [
 				affected_name,
@@ -457,3 +445,32 @@ func get_total_affinity(npc_id: String) -> int:
 
 	# Peso ajustable
 	return int((friendship * 0.4) + (tension * 0.4) + (loyalty * 0.2))
+
+func can_invite_to_date(npc_id: String) -> bool:
+	ensure_relationship(npc_id)
+
+	var relation: Dictionary = player["relationships"][npc_id]
+	var friendship: int = int(relation.get("friendship", 0))
+	var tension: int = int(relation.get("tension", 0))
+	var jealousy: int = int(relation.get("jealousy", 0))
+
+	return friendship >= 15 and tension >= 15 and jealousy < 80
+
+func get_relationship_value(npc_id: String, key: String) -> int:
+	ensure_relationship(npc_id)
+
+	var relation: Dictionary = player["relationships"][npc_id]
+	return int(relation.get(key, 0))
+
+func add_world_flag(flag: String) -> void:
+	if not player.has("world_flags"):
+		player["world_flags"] = []
+
+	if not player["world_flags"].has(flag):
+		player["world_flags"].append(flag)
+
+func has_world_flag(flag: String) -> bool:
+	if not player.has("world_flags"):
+		player["world_flags"] = []
+
+	return player["world_flags"].has(flag)

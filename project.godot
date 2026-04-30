@@ -23,6 +23,7 @@ SaveManager="*uid://cn0s5dc4gwddy"
 SceneRouter="*uid://c8cuffno3wfrk"
 RivalrySystem="*uid://c1mm3mb6q51jj"
 EventSystem="*uid://cyunuc5sibybv"
+ConditionSystem="*uid://b680vog6x7jmh"
 
 [physics]
 

@@ -42,8 +42,8 @@ func process_affinity_change(source_npc_id: String, amount: int) -> Array:
 		var penalty: int = max(1, int(round(float(amount) * penalty_ratio)))
 		var affected_relation: Dictionary = GameManager.player["relationships"][affected_npc_id]
 
-		affected_relation["affinity"] = clamp(
-			int(affected_relation.get("affinity", 0)) - penalty,
+		affected_relation["jealousy"] = clamp(
+			int(affected_relation.get("jealousy", 0)) + penalty,
 			0,
 			100
 		)

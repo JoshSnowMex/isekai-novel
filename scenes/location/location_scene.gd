@@ -147,10 +147,8 @@ func interact_npc(npc_id: String) -> void:
 	gift_button.pressed.connect(func(): show_gift_selection(npc_id))
 	action_container.add_child(gift_button)
 
-	var affinity: int = GameManager.player["relationships"].get(npc_id, {}).get("affinity", 0)
-
-	var date_button := UIFactory.button("Invitar a cita")
-	date_button.disabled = affinity < 40
+	var date_button: Button = UIFactory.button("Invitar a cita")
+	date_button.disabled = not GameManager.can_invite_to_date(npc_id)
 	date_button.pressed.connect(func(): SceneRouter.go_to_date(npc_id))
 	action_container.add_child(date_button)
 
@@ -167,27 +165,32 @@ func reload_scene() -> void:
 func _on_back_pressed() -> void:
 	SceneRouter.go_to_world_map()
 
-func ensure_relationship(npc_id: String) -> void:
-	if not GameManager.player["relationships"].has(npc_id):
-		GameManager.player["relationships"][npc_id] = {
-			"affinity": 0,
-			"gift_given_today": false
-		}
-
 func talk_to_npc(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
 	GameManager.ensure_npc_knowledge(npc_id)
 
 	var npc: Dictionary = DataManager.get_npc(npc_id)
-	var relation: Dictionary = GameManager.player["relationships"][npc_id]
 
-	var gain: int = randi_range(2, 4)
-	var rivalry_text: String = GameManager.add_affinity(npc_id, gain)
+	var friendship_gain: int = randi_range(2, 4)
+	var tension_gain: int = 0
 
-	var message: String = "Conversas con %s.\nLa tensión entre ambos se vuelve un poco más evidente.\nAfinidad +%s" % [
+	if randf() < 0.35:
+		tension_gain = 1
+
+	var relationship_text: String = GameManager.add_relationship_value(npc_id, "friendship", friendship_gain)
+
+	if tension_gain > 0:
+		relationship_text += GameManager.add_relationship_value(npc_id, "tension", tension_gain)
+
+	var message: String = "Conversas con %s.\nLa charla deja una huella más personal.\nAmistad +%s" % [
 		npc.get("name", npc_id),
-		gain
+		friendship_gain
 	]
+
+	if tension_gain > 0:
+		message += "\nTensión +%s" % tension_gain
+
+	message += relationship_text
 
 	if randf() < 0.35:
 		var info_key: String = GameManager.reveal_random_npc_info(npc_id)
@@ -283,16 +286,27 @@ func give_gift(npc_id: String, item_id: String) -> void:
 		result = randi_range(1, 2)
 		reaction = "Acepta el gesto con cortesía."
 
-	relation["affinity"] = clamp(int(relation.get("affinity", 0)) + result, 0, 100)
-	relation["gift_given_today"] = true
+	var relationship_text: String = ""
+
+	if result > 0:
+		relationship_text += GameManager.add_relationship_value(npc_id, "friendship", result)
+
+		if result >= 3:
+			var tension_bonus: int = 1
+			relationship_text += GameManager.add_relationship_value(npc_id, "tension", tension_bonus)
+		else:
+			relationship_text += GameManager.add_relationship_value(npc_id, "friendship", result)
+			relationship_text += GameManager.add_relationship_value(npc_id, "jealousy", 2)
+			relation["gift_given_today"] = true
 
 	GameManager.remove_item(item_id, 1)
 	GameManager.reveal_npc_gift(npc_id, item_id)
 
-	description_label.text = "%s\nRegalo: %s\nAfinidad: %+d" % [
+	description_label.text = "%s\nRegalo: %s\nAmistad: %+d%s" % [
 		reaction,
 		item.get("name", item_id),
-		result
+		result,
+		relationship_text
 	]
 
 	GameManager.consume_action(5)
