@@ -1,0 +1,20 @@
+{
+	"game_title": "Isekai Social Sim",
+	"version": "0.1.0",
+	"days_per_month": 30,
+	"weekdays": [
+		"Lunes",
+		"Martes",
+		"Miércoles",
+		"Jueves",
+		"Viernes",
+		"Sábado",
+		"Domingo"
+	],
+	"time_blocks": {
+		"morning": "Mañana",
+		"afternoon": "Tarde",
+		"evening": "Atardecer",
+		"night": "Noche"
+	}
+}

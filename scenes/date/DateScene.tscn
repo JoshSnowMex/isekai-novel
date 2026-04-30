@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://xmra4xfxfyji"]
+
+[ext_resource type="Script" uid="uid://ds2uubbnijthp" path="res://scenes/date/date_scene.gd" id="1_24f8s"]
+
+[node name="DateScene" type="Control" unique_id=218912474]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_24f8s")

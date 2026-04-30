@@ -1,0 +1,15 @@
+{
+	"lyria_ethan_triangle": {
+		"name": "Tensión entre Lyria y Ethan",
+		"type": "triangle",
+		"enabled": true,
+		"npc_a": "lyria",
+		"npc_b": "ethan",
+		"description": "Lyria y Ethan comparten una historia ambigua. Acercarte demasiado a uno puede alterar tu vínculo con el otro.",
+		"rules": {
+			"affinity_gain_threshold": 5,
+			"penalty_ratio": 0.5,
+			"minimum_affinity_to_trigger": 40
+		}
+	}
+}

@@ -1,0 +1,44 @@
+{
+	"flowers": {
+		"name": "Flores silvestres",
+		"description": "Un ramo sencillo, pero elegido con cuidado.",
+		"type": "gift",
+		"price": 12
+	},
+	"tea": {
+		"name": "Té aromático",
+		"description": "Una mezcla cálida y elegante.",
+		"type": "gift",
+		"price": 18
+	},
+	"moon_tea": {
+		"name": "Té lunar",
+		"description": "Una infusión rara de aroma suave y efecto relajante.",
+		"type": "gift",
+		"price": 35
+	},
+	"rare_book": {
+		"name": "Libro raro",
+		"description": "Un volumen antiguo con páginas delicadas.",
+		"type": "gift",
+		"price": 60
+	},
+	"bread": {
+		"name": "Pan dulce",
+		"description": "Simple, cálido y reconfortante.",
+		"type": "gift",
+		"price": 8
+	},
+	"cheap_perfume": {
+		"name": "Perfume barato",
+		"description": "Demasiado intenso para ser elegante.",
+		"type": "gift",
+		"price": 10
+	},
+	"loud_trinket": {
+		"name": "Adorno ruidoso",
+		"description": "Un objeto llamativo que tintinea al moverse.",
+		"type": "gift",
+		"price": 15
+	}
+}

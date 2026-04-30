@@ -1,0 +1,56 @@
+{
+	"study_library": {
+		"name": "Estudiar en la biblioteca",
+		"type": "train",
+		"stat": "intellect",
+		"base_gain": 1,
+		"stamina_cost": 8,
+		"money_gain": 0,
+		"description": "Pasas tiempo entre libros antiguos. Tu mente se afila."
+	},
+	"social_market": {
+		"name": "Socializar en el mercado",
+		"type": "train",
+		"stat": "charm",
+		"base_gain": 1,
+		"stamina_cost": 10,
+		"money_gain": 0,
+		"description": "Conversas, negocias y aprendes a leer miradas ajenas."
+	},
+	"work_library_half": {
+		"name": "Ayudar medio turno",
+		"type": "work",
+		"stat": "discipline",
+		"base_gain": 1,
+		"stamina_cost": 14,
+		"money_gain": 12,
+		"description": "Ordenas manuscritos y ayudas con registros."
+	},
+	"work_library_full": {
+		"name": "Trabajar jornada completa",
+		"type": "work",
+		"stat": "discipline",
+		"base_gain": 1,
+		"stamina_cost": 28,
+		"money_gain": 28,
+		"description": "Una jornada larga entre polvo, tinta y silencio."
+	},
+	"work_market_half": {
+		"name": "Ayudar en puestos",
+		"type": "work",
+		"stat": "strength",
+		"base_gain": 1,
+		"stamina_cost": 18,
+		"money_gain": 15,
+		"description": "Cargas cajas, negocias precios y sobrevives al ruido."
+	},
+	"work_market_full": {
+		"name": "Trabajar jornada completa",
+		"type": "work",
+		"stat": "strength",
+		"base_gain": 1,
+		"stamina_cost": 34,
+		"money_gain": 35,
+		"description": "El mercado exige cuerpo, paciencia y una sonrisa firme."
+	}
+}

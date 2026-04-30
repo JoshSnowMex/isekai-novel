@@ -1,0 +1,62 @@
+{
+	"ember_heart": {
+		"name": "Corazón de Brasa",
+		"description": "Pasional, intenso y dominante. Aprende rápido habilidades sociales y de presencia, pero le cuesta mantener la disciplina.",
+		"strong_against": "gale_mind",
+		"weak_against": "tide_soul",
+		"starting_stats": {
+			"strength": 2,
+			"intellect": 1,
+			"charm": 3,
+			"discipline": 1,
+			"intuition": 2
+		},
+		"growth_modifiers": {
+			"strength": 1.1,
+			"intellect": 0.9,
+			"charm": 1.25,
+			"discipline": 0.8,
+			"intuition": 1.0
+		}
+	},
+	"tide_soul": {
+		"name": "Alma de Marea",
+		"description": "Empático, profundo y seductor de forma sutil. Aprende rápido intuición e intelecto, pero le cuesta imponer presencia.",
+		"strong_against": "ember_heart",
+		"weak_against": "gale_mind",
+		"starting_stats": {
+			"strength": 1,
+			"intellect": 2,
+			"charm": 2,
+			"discipline": 2,
+			"intuition": 3
+		},
+		"growth_modifiers": {
+			"strength": 0.85,
+			"intellect": 1.15,
+			"charm": 1.0,
+			"discipline": 1.0,
+			"intuition": 1.25
+		}
+	},
+	"gale_mind": {
+		"name": "Mente de Vendaval",
+		"description": "Libre, astuto y difícil de leer. Aprende rápido intelecto y disciplina, pero sus vínculos emocionales avanzan con más dificultad.",
+		"strong_against": "tide_soul",
+		"weak_against": "ember_heart",
+		"starting_stats": {
+			"strength": 1,
+			"intellect": 3,
+			"charm": 1,
+			"discipline": 3,
+			"intuition": 2
+		},
+		"growth_modifiers": {
+			"strength": 0.9,
+			"intellect": 1.25,
+			"charm": 0.85,
+			"discipline": 1.2,
+			"intuition": 1.0
+		}
+	}
+}

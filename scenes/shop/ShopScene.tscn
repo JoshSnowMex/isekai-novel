@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://crjim3ns8umo1"]
+
+[ext_resource type="Script" uid="uid://0ao0wit67dxx" path="res://scenes/shop/shop_scene.gd" id="1_1t8pr"]
+
+[node name="ShopScene" type="Control" unique_id=1691436128]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_1t8pr")

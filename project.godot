@@ -1,0 +1,33 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="isekai-novel"
+run/main_scene="uid://cue7yupth87xj"
+config/features=PackedStringArray("4.6", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+DataManager="*uid://dfci35c3foshh"
+GameManager="*uid://l3eguxbpmofe"
+SaveManager="*uid://cn0s5dc4gwddy"
+SceneRouter="*uid://c8cuffno3wfrk"
+RivalrySystem="*uid://c1mm3mb6q51jj"
+EventSystem="*uid://cyunuc5sibybv"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"

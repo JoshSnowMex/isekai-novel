@@ -1,0 +1,45 @@
+{
+	"profile": {
+		"title": "Perfil",
+		"keys": {
+			"favorite_place": "Lugar favorito",
+			"hobby": "Hobby",
+			"favorite_color": "Color favorito",
+			"favorite_food": "Comida favorita"
+		}
+	},
+	"closeness": {
+		"title": "Cercanía",
+		"keys": {
+			"phone": "Contacto",
+			"routine": "Rutina",
+			"light_romantic_preference": "Gusto romántico ligero",
+			"annoyance": "Qué le molesta"
+		}
+	},
+	"trust": {
+		"title": "Confianza",
+		"keys": {
+			"height": "Altura",
+			"favorite_style": "Estilo favorito",
+			"minor_insecurity": "Inseguridad menor",
+			"accepted_affection": "Gesto afectivo aceptado"
+		}
+	},
+	"intimacy": {
+		"title": "Intimidad emocional",
+		"keys": {
+			"measurements": "Medidas",
+			"emotional_fear": "Miedo emocional",
+			"romantic_desire": "Deseo romántico",
+			"ideal_date": "Cita ideal"
+		}
+	},
+	"bond": {
+		"title": "Vínculo profundo",
+		"keys": {
+			"intimate_secret": "Secreto íntimo",
+			"partner_condition": "Condición de relación"
+		}
+	}
+}

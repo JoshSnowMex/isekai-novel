@@ -1,0 +1,47 @@
+{
+  "home": {
+	"name": "Casa del Forastero",
+	"description": "Una pequeña casa cedida al recién llegado. Silenciosa, íntima y extrañamente familiar.",
+	"actions": {
+	  "rest": true,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false
+	}
+  },
+  "library": {
+	"name": "Biblioteca del Alba",
+	"description": "Un lugar solemne donde los secretos del reino duermen entre páginas antiguas.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["study_library", "work_library_half", "work_library_full"]
+  },
+  "market": {
+	"name": "Mercado del Puente Rojo",
+	"description": "Ruidoso, cálido y lleno de miradas que dicen más de lo que deberían.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["social_market", "work_market_half", "work_market_full"]
+  },
+  "shop": {
+	"name": "Tienda del Umbral",
+	"description": "Un local pequeño, perfumado con incienso y lleno de objetos que parecen tener más historia de la que deberían.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": true
+	}
+  }
+}

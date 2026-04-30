@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bqstj4bbpeqix"]
+
+[ext_resource type="Script" uid="uid://bk1rm2ubj6ht7" path="res://scenes/location/location_scene.gd" id="1_sbw6a"]
+
+[node name="LocationScene" type="Control" unique_id=487846806]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_sbw6a")

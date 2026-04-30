@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bmsd1xmlteb3c"]
+
+[ext_resource type="Script" uid="uid://c7blpmts5hju1" path="res://scenes/journal/journal_scene.gd" id="1_ugtmv"]
+
+[node name="JournalScene" type="Control" unique_id=127261336]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ugtmv")

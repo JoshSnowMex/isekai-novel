@@ -1,0 +1,40 @@
+{
+	"lyria": {
+		"name": "María",
+		"role": "Archivista",
+		"romanceable": true,
+		"description": "Reservada, elegante y difícil de impresionar. Sus silencios suelen decir más que sus palabras.",
+		"schedule": {
+			"morning": "library",
+			"afternoon": "library",
+			"evening": "market",
+			"night": "home"
+		},
+		"gift_preferences": {
+			"loves": ["rare_book", "moon_tea"],
+			"likes": ["tea", "flowers"],
+			"neutral": ["bread"],
+			"hates": ["cheap_perfume", "loud_trinket"]
+		},
+		"info": {
+			"favorite_place": "La sala antigua de la biblioteca",
+			"hobby": "Restaurar libros prohibidos",
+			"favorite_color": "Azul noche",
+			"favorite_food": "Pan dulce con miel",
+			"phone": "No disponible aún",
+			"routine": "Lee antes del amanecer",
+			"light_romantic_preference": "Le gustan las miradas largas y las conversaciones privadas",
+			"annoyance": "La gente invasiva",
+			"height": "1.67 m",
+			"favorite_style": "Ropa sobria, elegante y ligeramente ajustada",
+			"minor_insecurity": "Cree que parece fría incluso cuando intenta ser amable",
+			"accepted_affection": "Tomarle la mano en silencio",
+			"measurements": "Información íntima no descubierta",
+			"emotional_fear": "Ser deseada solo por curiosidad",
+			"romantic_desire": "Una relación donde pueda perder el control sin sentirse vulnerable",
+			"ideal_date": "Una noche de lluvia leyendo junto a alguien que no necesite llenar el silencio",
+			"intimate_secret": "Todavía no revelado",
+			"partner_condition": "Afinidad alta, cita especial exitosa y confianza completa"
+		}
+	}
+}

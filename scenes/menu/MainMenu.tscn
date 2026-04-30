@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cue7yupth87xj"]
+
+[ext_resource type="Script" uid="uid://bky8xssgnsbyq" path="res://scenes/menu/main_menu.gd" id="1_m2yvp"]
+
+[node name="MainMenu" type="Control" unique_id=1057192810]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_m2yvp")

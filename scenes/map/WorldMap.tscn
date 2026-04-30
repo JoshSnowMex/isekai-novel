@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cfkrpcvtxsepl"]
+
+[ext_resource type="Script" uid="uid://dj18fun5jx7up" path="res://scenes/map/world_map.gd" id="1_05sse"]
+
+[node name="WorldMap" type="Control" unique_id=277014766]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_05sse")
