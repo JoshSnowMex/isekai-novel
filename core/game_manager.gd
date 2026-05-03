@@ -63,7 +63,13 @@ func start_new_game(player_name: String, class_id: String) -> void:
 			}
 		],
 		"daily_flags": {},
-		"world_flags": []
+		"world_flags": [],
+		"world_state": {
+			"global_tension": 0,
+			"world_instability": 0,
+			"romantic_pressure": 0
+		},
+		"pending_narrative_messages": []
 	}
 
 	if class_data.has("starting_stats"):
@@ -120,7 +126,14 @@ func sleep_until_next_day() -> void:
 	current_location_id = "home"
 
 	reset_daily_relationship_flags()
-	
+
+	var milestone_results: Array = MilestoneSystem.process_milestones({
+		"trigger": "day_started"
+	})
+
+	for milestone in milestone_results:
+		add_pending_narrative_message(milestone)
+
 	emit_signal("time_changed")
 	emit_signal("player_changed")
 
@@ -403,18 +416,26 @@ func add_relationship_value(npc_id: String, key: String, amount: int) -> String:
 	if real_change == 0:
 		return message
 
-	if key == "friendship" or key == "tension" or key == "loyalty":
+	if key == "friendship" or key == "tension" or key == "loyalty" or key == "jealousy":
 		var total: int = get_total_affinity(npc_id)
-		var event_texts: Array = EventSystem.process_events({
+
+		var event_context: Dictionary = {
 			"trigger": "relationship_changed",
 			"npc_id": npc_id,
 			"changed_key": key,
 			"amount": real_change,
-			"total": get_total_affinity(npc_id)
-		})
+			"total": total
+		}
+
+		var event_texts: Array = EventSystem.process_events(event_context)
 
 		for text in event_texts:
 			message += "\n\n" + str(text)
+
+		var milestone_results: Array = MilestoneSystem.process_milestones(event_context)
+
+		for milestone in milestone_results:
+			add_pending_narrative_message(milestone)
 
 	if key == "tension" and real_change > 0:
 		var rivalry_results: Array = RivalrySystem.process_affinity_change(npc_id, real_change)
@@ -474,3 +495,38 @@ func has_world_flag(flag: String) -> bool:
 		player["world_flags"] = []
 
 	return player["world_flags"].has(flag)
+
+func ensure_world_state() -> void:
+	if not player.has("world_state"):
+		player["world_state"] = {
+			"global_tension": 0,
+			"world_instability": 0,
+			"romantic_pressure": 0
+		}
+
+func add_world_state_value(key: String, amount: int) -> void:
+	ensure_world_state()
+
+	var old_value: int = int(player["world_state"].get(key, 0))
+	var new_value: int = clamp(old_value + amount, 0, 100)
+
+	player["world_state"][key] = new_value
+
+func get_world_state_value(key: String) -> int:
+	ensure_world_state()
+	return int(player["world_state"].get(key, 0))
+
+func add_pending_narrative_message(message: Dictionary) -> void:
+	if not player.has("pending_narrative_messages"):
+		player["pending_narrative_messages"] = []
+
+	player["pending_narrative_messages"].append(message)
+
+func consume_pending_narrative_messages() -> Array:
+	if not player.has("pending_narrative_messages"):
+		player["pending_narrative_messages"] = []
+
+	var messages: Array = player["pending_narrative_messages"].duplicate()
+	player["pending_narrative_messages"].clear()
+
+	return messages

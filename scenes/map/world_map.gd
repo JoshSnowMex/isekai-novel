@@ -8,6 +8,7 @@ var info_label: Label
 func _ready() -> void:
 	build_ui()
 	refresh_screen()
+	show_pending_narrative_messages()
 
 func build_ui() -> void:
 	var root := ScreenRoot.create(self)
@@ -72,3 +73,21 @@ func _on_save_pressed() -> void:
 
 func _on_menu_pressed() -> void:
 	SceneRouter.go_to_main_menu()
+
+func show_pending_narrative_messages() -> void:
+	var messages: Array = GameManager.consume_pending_narrative_messages()
+
+	if messages.is_empty():
+		return
+
+	var combined_text: String = ""
+
+	for message in messages:
+		var entry: Dictionary = message
+		combined_text += "%s\n\n%s\n\n" % [
+			entry.get("name", "Hito narrativo"),
+			entry.get("text", "")
+		]
+
+	info_label.text = combined_text.strip_edges()
+	SaveManager.save_game()

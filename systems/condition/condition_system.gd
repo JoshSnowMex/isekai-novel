@@ -15,6 +15,10 @@ func check_conditions(conditions: Dictionary, context: Dictionary = {}) -> bool:
 	if conditions.has("world_flags"):
 		if not check_world_flag_conditions(conditions["world_flags"]):
 			return false
+	
+	if conditions.has("world_state"):
+		if not check_world_state_conditions(conditions["world_state"]):
+			return false
 
 	if conditions.has("time"):
 		if not check_time_conditions(conditions["time"]):
@@ -125,6 +129,16 @@ func compare_number(value: int, rule: Dictionary) -> bool:
 
 	if rule.has("equals"):
 		if value != int(rule["equals"]):
+			return false
+
+	return true
+
+func check_world_state_conditions(data: Dictionary) -> bool:
+	for key in data.keys():
+		var rule: Dictionary = data[key]
+		var value: int = GameManager.get_world_state_value(key)
+
+		if not compare_number(value, rule):
 			return false
 
 	return true

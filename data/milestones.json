@@ -1,0 +1,61 @@
+{
+	"first_world_fracture": {
+		"name": "La primera grieta",
+		"trigger": "day_started",
+		"priority": 10,
+		"once": true,
+		"conditions": {
+			"time": {
+				"min_day": 3
+			},
+			"world_flags": {
+				"has_all": [
+					"lyria_opened_first_door"
+				]
+			}
+		},
+		"text": "Esa mañana, la aldea parece distinta. No por sus calles ni por su cielo, sino por la forma en que algunas miradas se apartan de ti demasiado rápido.\n\nAlgo en Luminaria ha empezado a moverse.",
+		"effects": {
+			"add_world_flags": [
+				"milestone:first_world_fracture",
+				"world_fracture_started"
+			],
+			"world_state": {
+				"global_tension": 10
+			}
+		}
+	},
+	"lyria_private_threshold": {
+		"name": "La puerta que no debía abrirse",
+		"trigger": "relationship_changed",
+		"priority": 20,
+		"once": true,
+		"npc_id": "lyria",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 30
+				},
+				"loyalty": {
+					"min": 10
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"lyria_opened_first_door"
+				]
+			}
+		},
+		"text": "Lyria te mira como si estuviera a punto de decir algo que no debería. Al final no lo hace.\n\nPero ahora sabes que hay una puerta invisible entre ambos. Y que ella ya tocó el pomo.",
+		"effects": {
+			"add_world_flags": [
+				"milestone:lyria_private_threshold",
+				"lyria_has_private_doubt"
+			],
+			"relationship": {
+				"npc_id": "lyria",
+				"loyalty": 3
+			}
+		}
+	}
+}
