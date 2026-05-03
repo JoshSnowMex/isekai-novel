@@ -11,7 +11,7 @@ func _ready() -> void:
 	show_pending_narrative_messages()
 
 func build_ui() -> void:
-	var root := ScreenRoot.create(self)
+	var root: VBoxContainer = ScreenRoot.create(self)
 
 	header_label = UIFactory.title("")
 	root.add_child(header_label)
@@ -27,15 +27,15 @@ func build_ui() -> void:
 	location_container.add_theme_constant_override("separation", 10)
 	root.add_child(location_container)
 
-	var save_button := UIFactory.button("Guardar partida")
+	var save_button: Button = UIFactory.button("Guardar partida")
 	save_button.pressed.connect(_on_save_pressed)
 	root.add_child(save_button)
-	
+
 	var journal_button: Button = UIFactory.button("Bitácora")
 	journal_button.pressed.connect(func(): SceneRouter.go_to_journal())
 	root.add_child(journal_button)
 
-	var menu_button := UIFactory.button("Volver al menú")
+	var menu_button: Button = UIFactory.button("Volver al menú")
 	menu_button.pressed.connect(_on_menu_pressed)
 	root.add_child(menu_button)
 
@@ -58,8 +58,8 @@ func refresh_screen() -> void:
 		child.queue_free()
 
 	for location_id in DataManager.locations.keys():
-		var location_data := DataManager.get_location(location_id)
-		var button := UIFactory.button(location_data.get("name", location_id))
+		var location_data: Dictionary = DataManager.get_location(location_id)
+		var button: Button = UIFactory.button(location_data.get("name", location_id))
 		button.pressed.connect(func(): visit_location(location_id))
 		location_container.add_child(button)
 

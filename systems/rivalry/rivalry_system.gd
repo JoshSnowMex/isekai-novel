@@ -24,8 +24,8 @@ func process_affinity_change(source_npc_id: String, amount: int) -> Array:
 		var affected_npc_id: String = npc_b if source_npc_id == npc_a else npc_a
 		var rules: Dictionary = rivalry.get("rules", {})
 
-		var threshold: int = int(rules.get("affinity_gain_threshold", 5))
-		var minimum_affinity: int = int(rules.get("minimum_affinity_to_trigger", 40))
+		var threshold: int = int(rules.get("tension_gain_threshold", rules.get("affinity_gain_threshold", 5)))
+		var minimum_tension: int = int(rules.get("minimum_tension_to_trigger", 30))
 		var penalty_ratio: float = float(rules.get("penalty_ratio", 0.5))
 
 		if amount < threshold:
@@ -34,24 +34,12 @@ func process_affinity_change(source_npc_id: String, amount: int) -> Array:
 		GameManager.ensure_relationship(source_npc_id)
 		GameManager.ensure_relationship(affected_npc_id)
 
-		var source_relation: Dictionary = GameManager.player["relationships"][source_npc_id]
+		var source_tension: int = GameManager.get_relationship_value(source_npc_id, "tension")
 
-		if int(source_relation.get("affinity", 0)) < minimum_affinity:
+		if source_tension < minimum_tension:
 			continue
 
 		var penalty: int = max(1, int(round(float(amount) * penalty_ratio)))
-		var affected_relation: Dictionary = GameManager.player["relationships"][affected_npc_id]
-
-		affected_relation["jealousy"] = clamp(
-			int(affected_relation.get("jealousy", 0)) + penalty,
-			0,
-			100
-		)
-
-		GameManager.add_npc_note(
-			affected_npc_id,
-			"Algo cambió al notar tu cercanía con otra persona."
-		)
 
 		results.append({
 			"rivalry_id": rivalry_id,

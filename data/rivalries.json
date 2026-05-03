@@ -1,15 +1,80 @@
 {
-	"lyria_ethan_triangle": {
-		"name": "Tensión entre Lyria y Ethan",
+	"aeris_eryon_triangle": {
+		"name": "La verdad entre Aeris y Eryon",
 		"type": "triangle",
 		"enabled": true,
-		"npc_a": "lyria",
-		"npc_b": "ethan",
-		"description": "Lyria y Ethan comparten una historia ambigua. Acercarte demasiado a uno puede alterar tu vínculo con el otro.",
+		"npc_a": "aeris",
+		"npc_b": "eryon",
+		"description": "Aeris y Eryon comparten una tensión intelectual previa. Acercarte demasiado a uno puede hacer que el otro se vuelva más cuidadoso, más hiriente o más interesado.",
 		"rules": {
-			"affinity_gain_threshold": 5,
+			"tension_gain_threshold": 5,
 			"penalty_ratio": 0.5,
-			"minimum_affinity_to_trigger": 40
+			"minimum_tension_to_trigger": 30
+		}
+	},
+	"rhea_kael_triangle": {
+		"name": "Cicatrices entre Rhea y Kael",
+		"type": "triangle",
+		"enabled": true,
+		"npc_a": "rhea",
+		"npc_b": "kael",
+		"description": "Rhea y Kael se entienden demasiado bien para llamarlo amistad simple. Tu cercanía puede despertar protección, rabia o miedo a perder.",
+		"rules": {
+			"tension_gain_threshold": 5,
+			"penalty_ratio": 0.5,
+			"minimum_tension_to_trigger": 30
+		}
+	},
+	"nova_myr_triangle": {
+		"name": "Caos compartido entre Nova y Myr",
+		"type": "triangle",
+		"enabled": true,
+		"npc_a": "nova",
+		"npc_b": "myr",
+		"description": "Nova y Myr han cruzado límites creativos y emocionales antes. Ningune sabe si eso fue juego, refugio o algo más peligroso.",
+		"rules": {
+			"tension_gain_threshold": 5,
+			"penalty_ratio": 0.45,
+			"minimum_tension_to_trigger": 25
+		}
+	},
+	"seraphine_elara_triangle": {
+		"name": "La culpa y la copa",
+		"type": "triangle",
+		"enabled": true,
+		"npc_a": "seraphine",
+		"npc_b": "elara",
+		"description": "Seraphine y Elara comparten una cercanía hecha de confesiones, contención y deseos que ninguna ha nombrado en público.",
+		"rules": {
+			"tension_gain_threshold": 4,
+			"penalty_ratio": 0.5,
+			"minimum_tension_to_trigger": 25
+		}
+	},
+	"rhein_taren_triangle": {
+		"name": "Deberes opuestos entre Rhein y Taren",
+		"type": "triangle",
+		"enabled": true,
+		"npc_a": "rhein",
+		"npc_b": "taren",
+		"description": "Rhein y Taren se respetan, se necesitan y se hieren desde posiciones opuestas. Lo que hay entre ellos nunca fue solo política.",
+		"rules": {
+			"tension_gain_threshold": 4,
+			"penalty_ratio": 0.5,
+			"minimum_tension_to_trigger": 25
+		}
+	},
+	"axiom_selene_triangle": {
+		"name": "Mensajes al Umbral",
+		"type": "triangle",
+		"enabled": true,
+		"npc_a": "axiom",
+		"npc_b": "selene",
+		"description": "Selene ha llevado mensajes que Axiom no debería poder recibir. Su vínculo no es humano, pero tampoco es neutral.",
+		"rules": {
+			"tension_gain_threshold": 4,
+			"penalty_ratio": 0.35,
+			"minimum_tension_to_trigger": 20
 		}
 	}
 }

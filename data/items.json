@@ -1,44 +1,122 @@
 {
-	"flowers": {
-		"name": "Flores silvestres",
-		"description": "Un ramo sencillo, pero elegido con cuidado.",
-		"type": "gift",
-		"price": 12
-	},
-	"tea": {
-		"name": "Té aromático",
-		"description": "Una mezcla cálida y elegante.",
-		"type": "gift",
-		"price": 18
-	},
-	"moon_tea": {
-		"name": "Té lunar",
-		"description": "Una infusión rara de aroma suave y efecto relajante.",
-		"type": "gift",
-		"price": 35
-	},
-	"rare_book": {
-		"name": "Libro raro",
-		"description": "Un volumen antiguo con páginas delicadas.",
+	"ancient_books": {
+		"name": "Libros antiguos",
+		"description": "Volúmenes viejos con márgenes llenos de notas y secretos.",
 		"type": "gift",
 		"price": 60
 	},
-	"bread": {
-		"name": "Pan dulce",
-		"description": "Simple, cálido y reconfortante.",
+	"symbolic_art": {
+		"name": "Arte simbólico",
+		"description": "Una pieza extraña que parece decir algo distinto según quién la mire.",
 		"type": "gift",
-		"price": 8
+		"price": 45
 	},
-	"cheap_perfume": {
-		"name": "Perfume barato",
-		"description": "Demasiado intenso para ser elegante.",
+	"weapons": {
+		"name": "Armas",
+		"description": "Herramientas de supervivencia, poder y promesas difíciles.",
 		"type": "gift",
-		"price": 10
+		"price": 55
 	},
-	"loud_trinket": {
-		"name": "Adorno ruidoso",
-		"description": "Un objeto llamativo que tintinea al moverse.",
+	"flowers": {
+		"name": "Flores",
+		"description": "Un gesto sencillo que puede ser inocente... o no tanto.",
+		"type": "gift",
+		"price": 12
+	},
+	"wine": {
+		"name": "Vino",
+		"description": "Una botella intensa, perfecta para conversaciones peligrosamente honestas.",
+		"type": "gift",
+		"price": 30
+	},
+	"special_tea": {
+		"name": "Té especial",
+		"description": "Una infusión cálida, aromática y cuidadosamente preparada.",
+		"type": "gift",
+		"price": 25
+	},
+	"sweets": {
+		"name": "Dulces",
+		"description": "Pequeños placeres para suavizar días ásperos.",
 		"type": "gift",
 		"price": 15
+	},
+	"simple_jewels": {
+		"name": "Joyas simples",
+		"description": "Adornos discretos, más cercanos al detalle que al lujo.",
+		"type": "gift",
+		"price": 40
+	},
+	"clothes": {
+		"name": "Ropa",
+		"description": "Prendas elegidas con intención. A veces eso dice demasiado.",
+		"type": "gift",
+		"price": 35
+	},
+	"music_box": {
+		"name": "Caja de música",
+		"description": "Una melodía pequeña capaz de llenar un silencio incómodo.",
+		"type": "gift",
+		"price": 42
+	},
+	"maps": {
+		"name": "Mapas",
+		"description": "Trazos de lugares conocidos, olvidados o imposibles.",
+		"type": "gift",
+		"price": 38
+	},
+	"mana_gems": {
+		"name": "Gemas de maná",
+		"description": "Cristales vibrantes que guardan energía arcana.",
+		"type": "gift",
+		"price": 50
+	},
+	"tech_prototypes": {
+		"name": "Prototipos tecnológicos",
+		"description": "Artefactos inestables, brillantes y probablemente peligrosos.",
+		"type": "gift",
+		"price": 58
+	},
+	"trophies": {
+		"name": "Trofeos",
+		"description": "Recuerdos de victorias, heridas y orgullo.",
+		"type": "gift",
+		"price": 32
+	},
+	"coins": {
+		"name": "Dinero",
+		"description": "Práctico, frío y a veces ofensivamente honesto.",
+		"type": "gift",
+		"price": 20
+	},
+	"blank_diaries": {
+		"name": "Diarios en blanco",
+		"description": "Páginas vacías para confesiones que aún no se atreven a existir.",
+		"type": "gift",
+		"price": 28
+	},
+	"sacred_objects": {
+		"name": "Objetos sagrados",
+		"description": "Reliquias pequeñas cargadas de fe, culpa o esperanza.",
+		"type": "gift",
+		"price": 48
+	},
+	"gadgets": {
+		"name": "Gadgets",
+		"description": "Pequeños mecanismos útiles, absurdos o brillantes.",
+		"type": "gift",
+		"price": 36
+	},
+	"desserts": {
+		"name": "Postres",
+		"description": "Dulzura evidente, fácil de aceptar y difícil de malinterpretar.",
+		"type": "gift",
+		"price": 18
+	},
+	"narrative_secrets": {
+		"name": "Secretos narrativos",
+		"description": "Información delicada. No debería regalarse... pero puede cambiarlo todo.",
+		"type": "gift",
+		"price": 75
 	}
 }
