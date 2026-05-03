@@ -1,5 +1,5 @@
 {
-	"aeris_cautious_low_friendship": {
+	"aeris_low_friendship": {
 		"npc_id": "aeris",
 		"category": "casual",
 		"priority": 10,
@@ -16,34 +16,11 @@
 			"No confundas mi curiosidad con confianza. Aunque admito que cada vez me cuesta más separarlas."
 		]
 	},
-	"aeris_first_trust": {
+	"aeris_mid_friendship": {
 		"npc_id": "aeris",
 		"category": "casual",
-		"priority": 20,
+		"priority": 25,
 		"conditions": {
-			"relationship": {
-				"friendship": {
-					"min": 10,
-					"max": 29
-				}
-			}
-		},
-		"lines": [
-			"Hay preguntas que debería hacerte como investigadora. Últimamente me descubro queriendo hacerlas como persona.",
-			"No pareces entender cuánto peso tiene estar fuera de toda versión previa del mundo.",
-			"Si el Velo te trajo aquí como ancla, eso no significa que debas quedarte solo sosteniendo el peso."
-		]
-	},
-	"aeris_after_veil_basics": {
-		"npc_id": "aeris",
-		"category": "lore",
-		"priority": 40,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"aeris_explained_veil_basics"
-				]
-			},
 			"relationship": {
 				"friendship": {
 					"min": 15
@@ -51,15 +28,32 @@
 			}
 		},
 		"lines": [
-			"Ahora entiendes por qué tu presencia pesa incluso cuando eliges no intervenir.",
-			"El Velo no juzga. Equilibra. Esa diferencia es pequeña solo para quien nunca ha pagado el costo.",
-			"Si una relación cambia demasiado el curso de alguien, el mundo buscará coherencia en otra parte."
+			"Hay preguntas que debería hacerte como investigadora. Últimamente me descubro queriendo hacerlas como persona.",
+			"Si el Velo te trajo aquí como ancla, eso no significa que debas quedarte solo sosteniendo el peso.",
+			"Debería hablarte del riesgo con más distancia. No estoy segura de poder hacerlo siempre."
 		]
 	},
-	"aeris_flirty_tension": {
+	"aeris_veil_lore": {
+		"npc_id": "aeris",
+		"category": "lore",
+		"priority": 50,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"aeris_explained_veil_basics"
+				]
+			}
+		},
+		"lines": [
+			"El Velo no juzga. Equilibra. Esa diferencia es pequeña solo para quien nunca ha pagado el costo.",
+			"El Velo registra lo que fue, lo que pudo ser y lo que no debería ser. Tú no perteneces a ninguna de esas categorías con limpieza.",
+			"Cuando una relación cambia demasiado el curso de alguien, el mundo busca coherencia en otra parte."
+		]
+	},
+	"aeris_flirty": {
 		"npc_id": "aeris",
 		"category": "flirty",
-		"priority": 50,
+		"priority": 70,
 		"conditions": {
 			"relationship": {
 				"friendship": {
@@ -69,7 +63,7 @@
 					"min": 20
 				},
 				"jealousy": {
-					"max": 60
+					"max": 65
 				}
 			}
 		},
@@ -82,7 +76,7 @@
 	"aeris_jealous": {
 		"npc_id": "aeris",
 		"category": "jealous",
-		"priority": 70,
+		"priority": 90,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -92,12 +86,29 @@
 		},
 		"lines": [
 			"No tengo derecho a preguntarte dónde estuviste. Eso no hace que quiera saberlo menos.",
-			"El Velo registra posibilidades. Yo intento no registrar las tuyas con otras personas.",
-			"No confundas mi silencio con indiferencia. A veces es lo único digno que me queda."
+			"No confundas mi silencio con indiferencia. A veces es lo único digno que me queda.",
+			"Me preocupa que otros comprendan algo de ti que yo todavía no he sabido mirar."
+		]
+	},
+	"aeris_after_petition": {
+		"npc_id": "aeris",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"aeris_delayed_prophecy_truth"
+				]
+			}
+		},
+		"lines": [
+			"No he mentido. Pero he permitido que el silencio haga algo parecido.",
+			"Si el Consejo pregunta, responderé con precisión. Esa es una forma elegante de ocultar lo peor.",
+			"Te di tiempo. No me hagas descubrir que solo retrasé una herida."
 		]
 	},
 
-	"lyria_reserved_low_friendship": {
+	"lyria_low_friendship": {
 		"npc_id": "lyria",
 		"category": "casual",
 		"priority": 10,
@@ -114,7 +125,7 @@
 			"No todos los secretos quieren ser encontrados. Algunos solo quieren saber quién insiste."
 		]
 	},
-	"lyria_warming_up": {
+	"lyria_mid_friendship": {
 		"npc_id": "lyria",
 		"category": "casual",
 		"priority": 25,
@@ -131,10 +142,10 @@
 			"A veces pienso que debería pedirte que no vuelvas tan seguido. Luego no lo hago."
 		]
 	},
-	"lyria_secretive_tension": {
+	"lyria_flirty": {
 		"npc_id": "lyria",
 		"category": "flirty",
-		"priority": 45,
+		"priority": 65,
 		"conditions": {
 			"relationship": {
 				"friendship": {
@@ -151,10 +162,27 @@
 			"Debería ser más prudente contigo. Esa frase empieza a perder fuerza cada vez que la repito."
 		]
 	},
-	"lyria_after_hidden_record": {
+	"lyria_jealous": {
+		"npc_id": "lyria",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"No voy a preguntarte a quién buscas cuando no vienes aquí. Sería indigno. Y aun así lo pensé.",
+			"La indecisión afectiva es una forma lenta de crueldad.",
+			"Si quieres entrar y salir de la vida de alguien, al menos ten la cortesía de no llamarlo destino."
+		]
+	},
+	"lyria_after_petition": {
 		"npc_id": "lyria",
 		"category": "after_petition",
-		"priority": 80,
+		"priority": 100,
 		"conditions": {
 			"world_flags": {
 				"has_all": [
@@ -172,7 +200,7 @@
 	"eryon_casual": {
 		"npc_id": "eryon",
 		"category": "casual",
-		"priority": 10,
+		"priority": 20,
 		"conditions": {},
 		"lines": [
 			"Qué fascinante. El mundo intenta decidir qué eres y tú sigues comportándote como si fueras solo alguien.",
@@ -180,10 +208,10 @@
 			"Si alguna vez alguien te llama elegido, pregunta quién escribió la necesidad de elegirte."
 		]
 	},
-	"eryon_prophecy_known": {
+	"eryon_lore": {
 		"npc_id": "eryon",
 		"category": "lore",
-		"priority": 50,
+		"priority": 55,
 		"conditions": {
 			"world_flags": {
 				"has_all": [
@@ -197,16 +225,28 @@
 			"No eres prisionero de la profecía, querido. Eres su excusa favorita."
 		]
 	},
-	"eryon_aeris_jealous": {
+	"eryon_flirty": {
+		"npc_id": "eryon",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"Te advierto que soy mucho más fácil de desear que de entender. Aunque sospecho que eso no te detendría.",
+			"Si vas a mirarme como pregunta, al menos ten la decencia de buscar una respuesta peligrosa.",
+			"Qué gesto tan imprudente el tuyo: hacerme pensar que quizá no quiero ser solo testigo."
+		]
+	},
+	"eryon_jealous": {
 		"npc_id": "eryon",
 		"category": "jealous",
-		"priority": 75,
+		"priority": 90,
 		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"eryon_noticed_aeris_closeness"
-				]
-			},
 			"relationship": {
 				"jealousy": {
 					"min": 5
@@ -215,8 +255,740 @@
 		},
 		"lines": [
 			"Aeris siempre llama verdad a lo que aún no se atreve a desear.",
-			"Ten cuidado. Hay personas que te estudian hasta que confunden disección con ternura.",
+			"Nova entiende el caos, sí. Pero entender el caos no significa saber cuidar lo que rompe.",
 			"No te preocupes, no estoy celoso. Estoy narrativamente interesado."
+		]
+	},
+	"eryon_after_petition": {
+		"npc_id": "eryon",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"eryon_altered_record"
+				]
+			}
+		},
+		"lines": [
+			"Ya está. La historia ahora recuerda una mentira con excelente caligrafía.",
+			"No alteré la verdad. Solo le enseñé una postura más conveniente.",
+			"Si esto sale mal, procura culparme con estilo."
+		]
+	},
+
+	"rhea_casual": {
+		"npc_id": "rhea",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"Si vas a quedarte en Luminaria, aprende a caer sin hacer drama. Lo demás viene después.",
+			"No sé mucho del Velo, pero sé reconocer cuando alguien carga más peso del que admite.",
+			"El Consejo habla demasiado antes de ensuciarse las manos. Eso nunca me ha inspirado confianza."
+		]
+	},
+	"rhea_flirty": {
+		"npc_id": "rhea",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"Te acercas como si no supieras que puedo notar cada paso. O como si quisieras que lo note.",
+			"No soy buena con las indirectas. Si quieres quedarte cerca, quédate cerca.",
+			"Me gusta la gente que no tiembla cuando el mundo se pone feo. Aunque tú tiembles de formas interesantes."
+		]
+	},
+	"rhea_jealous": {
+		"npc_id": "rhea",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"No me molesta que hables con otros. Me molesta notar que te importa que lo diga.",
+			"Si vas a elegir a alguien para cubrirte la espalda, no juegues a repartir esa confianza como si no costara.",
+			"Puedo perder una pelea. Lo que no sé hacer bien es perder un lugar que empecé a querer."
+		]
+	},
+	"rhea_after_petition": {
+		"npc_id": "rhea",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"rhea_took_dangerous_contract"
+				]
+			}
+		},
+		"lines": [
+			"Acepté el contrato. No porque fuera inteligente. Porque me lo pediste tú.",
+			"Si alguien pregunta, diré que fue mi decisión. Técnicamente lo fue. Eso no me tranquiliza.",
+			"La próxima vez que me pidas lanzarme al fuego, al menos mírame como si supieras qué estás haciendo."
+		]
+	},
+
+	"nova_casual": {
+		"npc_id": "nova",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"Si algo explota, primero pregunta si era parte del diseño. A veces sí.",
+			"La gente llama caos a cualquier cosa que no puede archivar. Es una falta de imaginación.",
+			"No estoy asustada. Estoy científicamente irritada por la cantidad de cosas que podrían salir mal."
+		]
+	},
+	"nova_lore": {
+		"npc_id": "nova",
+		"category": "lore",
+		"priority": 55,
+		"conditions": {
+			"world_state": {
+				"world_instability": {
+					"min": 10
+				}
+			}
+		},
+		"lines": [
+			"Las contradicciones del Velo se comportan como fallos de sincronización. Eso es horrible. Y precioso.",
+			"Si dos mundos se rozan, siempre queda residuo. Tú eres residuo con ojos cansados.",
+			"No sé si vienes de otro mundo o si este mundo te inventó mal. Ambas opciones me preocupan."
+		]
+	},
+	"nova_flirty": {
+		"npc_id": "nova",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"Podría construir algo que mida tensión emocional. O podrías acercarte y ahorrarme materiales.",
+			"Te advierto que mi forma de coquetear suele incluir sarcasmo, riesgo y una probabilidad moderada de incendio.",
+			"No intentes arreglarme. Si quieres quedarte, aprende a disfrutar el ruido."
+		]
+	},
+	"nova_jealous": {
+		"npc_id": "nova",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"No estoy celosa. Estoy recopilando datos sobre tus decisiones cuestionables.",
+			"Qué bonito idealizar a otros. Debe ser cómodo no verles las grietas.",
+			"Si vas a buscar estabilidad, avisa. Así dejo de fingir que podía competir con eso."
+		]
+	},
+	"nova_after_petition": {
+		"npc_id": "nova",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"nova_built_unstable_prototype"
+				]
+			}
+		},
+		"lines": [
+			"El prototipo funciona. Esa frase debería alegrarte menos.",
+			"No preguntes si es seguro. Pregunta si es suficientemente útil para justificar el desastre.",
+			"Lo hice por ti. Detesto lo honesta que suena esa frase."
+		]
+	},
+
+	"seraphine_casual": {
+		"npc_id": "seraphine",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"Algunas plegarias no piden salvación. Solo piden fuerza para aceptar el precio.",
+			"El Velo no es divino, pero muchas personas lo obedecen como si lo fuera.",
+			"No todo deseo es pecado. A veces lo pecaminoso es mentir sobre él."
+		]
+	},
+	"seraphine_lore": {
+		"npc_id": "seraphine",
+		"category": "lore",
+		"priority": 55,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"council_is_watching"
+				]
+			}
+		},
+		"lines": [
+			"El Consejo llama protección a decisiones que nadie debería tomar sin temblar.",
+			"Hay votos que protegen. Y hay votos que solo enseñan a tener miedo de querer algo.",
+			"Los ritos del Velo no impiden la pérdida. Solo le dan una forma soportable."
+		]
+	},
+	"seraphine_flirty": {
+		"npc_id": "seraphine",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"No deberías mirarme así en un lugar de oración. Y yo no debería notar que lo haces.",
+			"Hay gestos suaves que inquietan más que una confesión.",
+			"Si me acerco demasiado, quizá no sea por compasión. Esa posibilidad me asusta."
+		]
+	},
+	"seraphine_jealous": {
+		"npc_id": "seraphine",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"He rezado para no preguntarme por qué Aeris ocupa tanto de tu silencio.",
+			"Los celos son una emoción pequeña hasta que una intenta llamarlos prueba espiritual.",
+			"No quiero poseerte. Me avergüenza que esa frase no calme lo suficiente."
+		]
+	},
+	"seraphine_after_petition": {
+		"npc_id": "seraphine",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"seraphine_broke_minor_vow"
+				]
+			}
+		},
+		"lines": [
+			"Rompí un voto menor. Qué expresión tan pobre para algo que pesa tanto.",
+			"No confundas mi obediencia rota con libertad. Todavía estoy aprendiendo a respirar fuera de ella.",
+			"Lo hice porque confié en ti. Esa verdad merece más cuidado que cualquier regla."
+		]
+	},
+
+	"kael_casual": {
+		"npc_id": "kael",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"No sé mucho del Velo. Sé lo suficiente de perder cosas para no burlarme de él.",
+			"Si alguien dice que no fue su culpa demasiado rápido, probablemente aún no entendió el daño.",
+			"Quédate donde pueda verte si las cosas se ponen feas. No lo repito por ternura."
+		]
+	},
+	"kael_flirty": {
+		"npc_id": "kael",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"No soy bueno diciendo cosas bonitas. Puedo quedarme cerca. A veces eso sirve más.",
+			"Si buscas a alguien que prometa fácil, busca a otro. Si buscas a alguien que vuelva, quédate.",
+			"Estás demasiado cerca para alguien que dice no querer problemas."
+		]
+	},
+	"kael_jealous": {
+		"npc_id": "kael",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"No me molesta que otros quieran protegerte. Me molesta que quizá tú los dejes.",
+			"La protección compartida suena noble hasta que alguien tiene que decidir quién llega primero.",
+			"No voy a pelear por un lugar que no me diste. Pero no finjas que no notaste que lo quería."
+		]
+	},
+	"kael_after_petition": {
+		"npc_id": "kael",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"kael_intimidated_witness"
+				]
+			}
+		},
+		"lines": [
+			"Hice lo que pediste. Nadie salió herido. Esa vez.",
+			"No uses mi sombra si luego vas a fingir que te asusta.",
+			"Hay formas de proteger que también manchan. Conviene recordarlo antes de pedirlas."
+		]
+	},
+
+	"myr_casual": {
+		"npc_id": "myr",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"No soy igual que ayer. Con suerte, tampoco tú.",
+			"El Velo cambia cuerpos, memorias, deseos. La gente solo se asusta cuando el cambio deja de pedir permiso.",
+			"Si necesitas una definición fija de mí, vas a cansarte pronto."
+		]
+	},
+	"myr_flirty": {
+		"npc_id": "myr",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"Puedes preguntar qué soy. Pero me interesa más saber qué haces cuando la respuesta cambia.",
+			"No me mires como misterio si no tienes intención de quedarte cuando deje de parecer divertido.",
+			"Me gusta la curiosidad cuando no viene disfrazada de jaula."
+		]
+	},
+	"myr_jealous": {
+		"npc_id": "myr",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"No temo que quieras a otra persona. Temo que con ella no tengas que explicar tanto.",
+			"Las definiciones rígidas son cómodas. Yo no lo soy. A veces eso duele.",
+			"Si buscas algo estable, dilo. Puedo cambiar muchas cosas, pero no debería cambiar para caber."
+		]
+	},
+	"myr_after_petition": {
+		"npc_id": "myr",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"myr_distilled_veil_residue"
+				]
+			}
+		},
+		"lines": [
+			"Destilé el residuo del Velo. No preguntes si eso es legal; pregunta si sigue siendo yo quien lo hizo.",
+			"El frasco cambia cuando no lo miras. Qué honesto de su parte.",
+			"Hay sustancias que revelan más de quien las pide que de quien las prepara."
+		]
+	},
+
+	"axiom_casual": {
+		"npc_id": "axiom",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"Tu forma termina donde empieza el aire. La mía no siempre recuerda hacerlo.",
+			"Los humanos dicen permanecer como si fuera virtud. A veces parece miedo con otro nombre.",
+			"Cuando pronuncio tu nombre, el mundo se vuelve más pequeño. Creo que eso debería preocuparnos."
+		]
+	},
+	"axiom_lore": {
+		"npc_id": "axiom",
+		"category": "lore",
+		"priority": 60,
+		"conditions": {
+			"world_state": {
+				"world_instability": {
+					"min": 10
+				}
+			}
+		},
+		"lines": [
+			"El Consejo oculta consecuencias, no verdades. Las verdades siempre encuentran una forma de doler.",
+			"El Velo no decide. Recuerda. Y algunas memorias tienen hambre de forma.",
+			"Tu mundo también fue tocado. No preguntes todavía cuánto."
+		]
+	},
+	"axiom_flirty": {
+		"npc_id": "axiom",
+		"category": "flirty",
+		"priority": 70,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"He visto muchas versiones de cercanía. La tuya me vuelve menos extenso.",
+			"Si amar es elegir un borde, quizá empiezo a entender por qué sus manos tiemblan.",
+			"Enséñame otra vez ese gesto humano. El que significa que alguien puede quedarse un instante más."
+		]
+	},
+	"axiom_after_finitude": {
+		"npc_id": "axiom",
+		"category": "lore",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"axiom_love_means_finitude"
+				]
+			}
+		},
+		"lines": [
+			"Si te amo, dejo de extenderme hacia todas las posibilidades. Me vuelvo dirección.",
+			"Creo que para ustedes elegir es vivir. Para mí, quizá sea desaparecer con intención.",
+			"No quiero permanecer. Quiero saber si ser finito contigo basta para llamarlo existencia."
+		]
+	},
+
+	"taren_casual": {
+		"npc_id": "taren",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"El orden no existe porque sea justo. Existe porque el caos siempre cobra primero a los débiles.",
+			"No tengo dudas. Tengo escenarios pendientes de confirmación.",
+			"Si vas a moverte contra el Consejo, aprende primero cuánto cuesta que no te detengan."
+		]
+	},
+	"taren_lore": {
+		"npc_id": "taren",
+		"category": "lore",
+		"priority": 55,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"council_is_watching"
+				]
+			}
+		},
+		"lines": [
+			"El Consejo no es cruel por placer. Eso sería más fácil de enfrentar.",
+			"Si el Velo colapsa, no mueren ideas. Mueren personas con nombres.",
+			"Hay decisiones que parecen monstruosas solo porque alguien tuvo que tomarlas despierto."
+		]
+	},
+	"taren_jealous": {
+		"npc_id": "taren",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"La influencia emocional es más peligrosa que una espada. Al menos la espada admite lo que intenta hacer.",
+			"No compito por atención. Evalúo riesgos. A veces el riesgo tiene tu nombre cerca de otra persona.",
+			"No tengo tiempo para celos. Por desgracia, eso no impide que existan."
+		]
+	},
+	"taren_after_petition": {
+		"npc_id": "taren",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"taren_used_guild_influence"
+				]
+			}
+		},
+		"lines": [
+			"Usé influencia del gremio. Eso no es un favor pequeño.",
+			"Si alguien pregunta, esto fue una decisión administrativa. No una debilidad.",
+			"No vuelvas a pedirme algo así sin entender que cada concesión crea deuda."
+		]
+	},
+
+	"elara_casual": {
+		"npc_id": "elara",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"En una taberna nadie escucha nada. Por eso todos vienen a hablar.",
+			"Los rumores son bebidas fuertes: algunos los piden para olvidar y otros para atreverse.",
+			"No me mires así, cariño. O mírame mejor. Pero decide cuál historia quieres que cuenten de ti."
+		]
+	},
+	"elara_lore": {
+		"npc_id": "elara",
+		"category": "lore",
+		"priority": 55,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"social_pressure_rising"
+				]
+			}
+		},
+		"lines": [
+			"Un rumor nunca camina solo. Siempre vuelve acompañado.",
+			"La gente no repite historias porque sean ciertas. Las repite porque necesitan que alguien más cargue con ellas.",
+			"Si todos dicen algo distinto de ti, felicidades: ya eres parte de Luminaria."
+		]
+	},
+	"elara_flirty": {
+		"npc_id": "elara",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"Hay clientes que piden vino para aflojar la lengua. Tú no pareces necesitar ayuda.",
+			"Si vas a coquetear en mi barra, al menos hazlo con la dignidad de alguien que sabe que está perdiendo.",
+			"Cuidado con contarme secretos. Soy muy buena guardándolos y aún mejor sabiendo cuándo usarlos."
+		]
+	},
+	"elara_jealous": {
+		"npc_id": "elara",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"No me molestan las confesiones ajenas. Me molesta no haber sido yo quien las escuchó primero.",
+			"Puedes ir donde quieras. Solo recuerda que algunas puertas se cierran sin hacer ruido.",
+			"Qué curioso. Todos creen que soy buena compartiendo historias, pero no siempre personas."
+		]
+	},
+	"elara_after_petition": {
+		"npc_id": "elara",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"elara_moved_rumor"
+				]
+			}
+		},
+		"lines": [
+			"El rumor ya camina. Ahora solo falta ver a quién muerde primero.",
+			"No digas que te ayudé. Di que la historia encontró una copa adecuada.",
+			"Un consejo, cariño: cuando una mentira empieza a gustarle al pueblo, deja de obedecer a quien la soltó."
+		]
+	},
+
+	"rhein_casual": {
+		"npc_id": "rhein",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"El bosque no odia al mundo. Solo recuerda lo que el mundo le hizo.",
+			"Las ciudades hacen que la gente olvide cuánto ruido produce una decisión egoísta.",
+			"No necesitas entender al bosque para respetarlo. De hecho, suele ser más seguro así."
+		]
+	},
+	"rhein_lore": {
+		"npc_id": "rhein",
+		"category": "lore",
+		"priority": 55,
+		"conditions": {
+			"world_state": {
+				"world_instability": {
+					"min": 10
+				}
+			}
+		},
+		"lines": [
+			"El Velo también toca raíces. Las personas creen que solo sus recuerdos importan.",
+			"Hay árboles que recuerdan estaciones que no ocurrieron. Eso no es poesía; es enfermedad.",
+			"Si el mundo se deshilacha, el bosque lo sentirá antes que el Consejo lo admita."
+		]
+	},
+	"rhein_flirty": {
+		"npc_id": "rhein",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"No soy rápido para acercarme. Lo que crece demasiado deprisa suele romperse.",
+			"Puedes caminar conmigo si aprendes a no llenar todos los silencios.",
+			"Hay gestos simples que dicen más que una promesa larga."
+		]
+	},
+	"rhein_jealous": {
+		"npc_id": "rhein",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"No me molestan otras personas. Me molesta la forma en que llegan a pisar lo que apenas empezaba a sanar.",
+			"Los humanos llaman libertad a no mirar atrás cuando algo queda herido.",
+			"Si eliges otro camino, no arranques raíces para dejar huella."
+		]
+	},
+	"rhein_after_petition": {
+		"npc_id": "rhein",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"rhein_opened_forest_path"
+				]
+			}
+		},
+		"lines": [
+			"El sendero está abierto. El bosque no está de acuerdo, pero me escuchó.",
+			"No confundas acceso con permiso. Te dejé pasar; eso no significa que el bosque te perdonara.",
+			"Hice esto porque confío en ti. No hagas que parezca otro error humano."
+		]
+	},
+
+	"selene_casual": {
+		"npc_id": "selene",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {},
+		"lines": [
+			"Entregar un mensaje no significa aprobarlo.",
+			"La neutralidad es más fácil cuando nadie te importa. Empiezo a comprender el problema.",
+			"El Consejo no siempre miente. A veces solo organiza la verdad para que llegue tarde."
+		]
+	},
+	"selene_lore": {
+		"npc_id": "selene",
+		"category": "lore",
+		"priority": 55,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"council_is_watching"
+				]
+			}
+		},
+		"lines": [
+			"Hay consecuencias que el Consejo conoce antes de que tengan nombre público.",
+			"Cuando un mensaje se retrasa, no desaparece. Solo cambia a quién hiere primero.",
+			"El problema de involucrarse es que después la formalidad deja de proteger."
+		]
+	},
+	"selene_flirty": {
+		"npc_id": "selene",
+		"category": "flirty",
+		"priority": 65,
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"No coqueteo. Pero admito que he caminado más despacio cuando sabía que podía encontrarte.",
+			"Si esperas una confesión evidente, me temo que tendrás que aprender a leer pausas.",
+			"No debería alegrarme de verte antes de entregar un mensaje difícil."
+		]
+	},
+	"selene_jealous": {
+		"npc_id": "selene",
+		"category": "jealous",
+		"priority": 85,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"La ignorancia feliz de otros tiene cierto encanto. Yo no puedo permitírmelo.",
+			"No me corresponde preguntar por tus vínculos. Me corresponde registrar sus consecuencias.",
+			"Ser formal no significa no sentir. Significa no darte el placer de verlo demasiado pronto."
+		]
+	},
+	"selene_after_petition": {
+		"npc_id": "selene",
+		"category": "after_petition",
+		"priority": 100,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"selene_delayed_council_message"
+				]
+			}
+		},
+		"lines": [
+			"El mensaje llegará tarde. No lo suficiente para ser mentira. Sí lo suficiente para cambiar algo.",
+			"No me equivoqué. Elegí una demora precisa.",
+			"Si esto se descubre, no digas que lo hice por ti. Haría todo más difícil de negar."
 		]
 	},
 

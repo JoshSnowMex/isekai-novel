@@ -10,8 +10,8 @@ var activities: Dictionary = {}
 var rivalries: Dictionary = {}
 var events: Dictionary = {}
 var milestones: Dictionary = {}
-var petitions: Dictionary = {}
 var dialogues: Dictionary = {}
+var petitions: Dictionary = {}
 
 func _ready() -> void:
 	load_all_data()
@@ -68,8 +68,8 @@ func get_milestone(milestone_id: String) -> Dictionary:
 func get_rivalry(rivalry_id: String) -> Dictionary:
 	return rivalries.get(rivalry_id, {})
 
-func get_petition(petition_id: String) -> Dictionary:
-	return petitions.get(petition_id, {})
-
 func get_dialogue(dialogue_id: String) -> Dictionary:
 	return dialogues.get(dialogue_id, {})
+
+func get_petition(petition_id: String) -> Dictionary:
+	return petitions.get(petition_id, {})

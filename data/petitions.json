@@ -1,9 +1,51 @@
 {
+	"aeris_delay_prophecy": {
+		"name": "Retrasar una verdad",
+		"npc_id": "aeris",
+		"description": "Pedirle a Aeris que no revele todavía una parte de la profecía.",
+		"request_text": "Si esa verdad cambia lo que todos ven en mí, necesito tiempo antes de que la digas.",
+		"success_text": "Aeris baja la mirada hacia sus notas. Por primera vez, no parece una investigadora sino alguien asustada por lo que siente.\n\n\"El cielo no perdona las omisiones\", dice. \"Pero esta vez... yo cargaré con una.\"",
+		"failure_text": "Aeris cierra el cuaderno con suavidad.\n\n\"No puedo convertir mi miedo en una mentira, aunque sea por ti.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 25
+				},
+				"tension": {
+					"min": 10
+				},
+				"loyalty": {
+					"min": 8
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:aeris_delay_prophecy",
+				"aeris_delayed_prophecy_truth"
+			],
+			"relationship": {
+				"loyalty": 7,
+				"tension": 4
+			},
+			"world_state": {
+				"world_instability": 4,
+				"global_tension": 2
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2,
+				"tension": -2
+			}
+		},
+		"once": true
+	},
 	"lyria_hide_forbidden_record": {
 		"name": "Ocultar un registro prohibido",
 		"npc_id": "lyria",
-		"description": "Pedirle a Lyria que oculte un registro del Velo antes de que el consejo lo revise.",
-		"request_text": "Necesito que ese registro desaparezca de la vista del consejo. Solo por ahora.",
+		"description": "Pedirle a Lyria que oculte un registro del Velo antes de que el Consejo lo revise.",
+		"request_text": "Necesito que ese registro desaparezca de la vista del Consejo. Solo por ahora.",
 		"success_text": "Lyria guarda silencio durante demasiado tiempo. Luego toma el registro, lo cierra con cuidado y lo aparta del resto.\n\n\"No me pidas que finja que esto no significa nada\", murmura.",
 		"failure_text": "Lyria aparta la mirada.\n\n\"No. Si hago esto sin estar segura de ti, no sabré si estoy protegiendo una verdad... o perdiéndome contigo.\"",
 		"conditions": {
@@ -47,13 +89,264 @@
 		},
 		"once": true
 	},
-	"aeris_delay_prophecy": {
-		"name": "Retrasar una verdad",
-		"npc_id": "aeris",
-		"description": "Pedirle a Aeris que no revele todavía una parte de la profecía.",
-		"request_text": "Si esa verdad cambia lo que todos ven en mí, necesito tiempo antes de que la digas.",
-		"success_text": "Aeris baja la mirada hacia sus notas. Por primera vez, no parece una investigadora sino alguien asustada por lo que siente.\n\n\"El cielo no perdona las omisiones\", dice. \"Pero esta vez... yo cargaré con una.\"",
-		"failure_text": "Aeris cierra el cuaderno con suavidad.\n\n\"No puedo convertir mi miedo en una mentira, aunque sea por ti.\"",
+	"eryon_alter_record": {
+		"name": "Alterar una versión histórica",
+		"npc_id": "eryon",
+		"description": "Pedirle a Eryon que modifique un registro para proteger una versión conveniente de los hechos.",
+		"request_text": "Necesito que la historia recuerde esto de otra manera.",
+		"success_text": "Eryon sonríe, pero esta vez no hay humor suficiente para cubrir la gravedad del gesto.\n\n\"La historia siempre fue negociable\", dice. \"Lo peligroso es hacerlo por alguien que podría importarme.\"",
+		"failure_text": "Eryon inclina la cabeza.\n\n\"Todavía no. Alterar un registro es íntimo, querido. No confundas mi ironía con disponibilidad absoluta.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 22
+				},
+				"tension": {
+					"min": 12
+				},
+				"loyalty": {
+					"min": 8
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:eryon_alter_record",
+				"eryon_altered_record",
+				"history_record_bent"
+			],
+			"relationship": {
+				"loyalty": 6,
+				"tension": 4,
+				"jealousy": 2
+			},
+			"world_state": {
+				"world_instability": 6,
+				"global_tension": 3
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2,
+				"tension": 1
+			}
+		},
+		"once": true
+	},
+	"rhea_take_dangerous_contract": {
+		"name": "Tomar un contrato peligroso",
+		"npc_id": "rhea",
+		"description": "Pedirle a Rhea que acepte un contrato del gremio para desviar sospechas sobre ti.",
+		"request_text": "Necesito que tomes ese contrato antes de que el Consejo mire hacia mí.",
+		"success_text": "Rhea no pregunta dos veces. Eso debería aliviarte, pero no lo hace.\n\n\"Si sale mal, diré que fue idea mía\", dice ajustándose los guantes. \"Pero mírame cuando te digo esto: no me uses como escudo sin recordar que sangro.\"",
+		"failure_text": "Rhea aprieta la mandíbula.\n\n\"No. No todavía. No voy a meterme en una pelea por alguien que aún no sabe si me quiere cerca o solo útil.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
+				},
+				"loyalty": {
+					"min": 12
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:rhea_take_dangerous_contract",
+				"rhea_took_dangerous_contract"
+			],
+			"relationship": {
+				"loyalty": 7,
+				"tension": 3
+			},
+			"world_state": {
+				"global_tension": 4
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2,
+				"loyalty": -2
+			}
+		},
+		"once": true
+	},
+	"nova_build_unstable_prototype": {
+		"name": "Crear un prototipo inestable",
+		"npc_id": "nova",
+		"description": "Pedirle a Nova que construya un dispositivo capaz de medir una contradicción del Velo.",
+		"request_text": "Necesito algo que pueda detectar cuándo el mundo se contradice.",
+		"success_text": "Nova se ríe demasiado rápido.\n\n\"Esto es mala idea\", dice, y sus manos ya están trabajando. \"Mala idea brillante. Eso no la vuelve segura, pero sí irresistible.\"",
+		"failure_text": "Nova aparta una pieza con brusquedad.\n\n\"No voy a abrirle una herida al mundo solo porque me miraste como si yo pudiera arreglarlo todo.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
+				},
+				"tension": {
+					"min": 8
+				}
+			},
+			"world_state": {
+				"world_instability": {
+					"min": 5
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:nova_build_unstable_prototype",
+				"nova_built_unstable_prototype",
+				"veil_detector_exists"
+			],
+			"relationship": {
+				"loyalty": 5,
+				"tension": 4
+			},
+			"world_state": {
+				"world_instability": 5
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2,
+				"tension": -1
+			}
+		},
+		"once": true
+	},
+	"seraphine_break_minor_vow": {
+		"name": "Romper un voto menor",
+		"npc_id": "seraphine",
+		"description": "Pedirle a Seraphine que use un rito reservado para ocultar una señal del Velo.",
+		"request_text": "Necesito que uses ese rito antes de que el Santuario informe al Consejo.",
+		"success_text": "Seraphine cierra los ojos. Sus dedos tiemblan apenas sobre el símbolo sagrado.\n\n\"No confundas esto con obediencia hacia ti\", susurra. \"Estoy eligiendo cargar con una culpa que entiendo.\"",
+		"failure_text": "Seraphine retira la mano.\n\n\"No puedo. No si todavía no sé si esto es compasión, deseo o miedo vestido de ambos.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 24
+				},
+				"loyalty": {
+					"min": 12
+				},
+				"tension": {
+					"min": 8
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:seraphine_break_minor_vow",
+				"seraphine_broke_minor_vow",
+				"sanctuary_rite_concealed_signal"
+			],
+			"relationship": {
+				"loyalty": 8,
+				"tension": 3,
+				"jealousy": 2
+			},
+			"world_state": {
+				"romantic_pressure": 4,
+				"global_tension": 3
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2,
+				"loyalty": -2
+			}
+		},
+		"once": true
+	},
+	"kael_intimidate_witness": {
+		"name": "Silenciar a un testigo",
+		"npc_id": "kael",
+		"description": "Pedirle a Kael que intimide a alguien que vio demasiado.",
+		"request_text": "Alguien vio más de lo conveniente. Necesito que deje de hablar.",
+		"success_text": "Kael no pregunta quién tiene razón. Esa ausencia de juicio pesa.\n\n\"Nadie saldrá herido\", dice. \"Pero no me pidas que finja que esto está limpio.\"",
+		"failure_text": "Kael te mira con una dureza breve.\n\n\"No. Todavía no sabes qué parte de mí estás usando cuando pides eso.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 18
+				},
+				"loyalty": {
+					"min": 14
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:kael_intimidate_witness",
+				"kael_intimidated_witness"
+			],
+			"relationship": {
+				"loyalty": 8,
+				"tension": 2
+			},
+			"world_state": {
+				"global_tension": 5
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2,
+				"loyalty": -3
+			}
+		},
+		"once": true
+	},
+	"myr_distill_veil_residue": {
+		"name": "Destilar residuo del Velo",
+		"npc_id": "myr",
+		"description": "Pedirle a Myr que prepare una sustancia inestable a partir de una contradicción del Velo.",
+		"request_text": "Necesito que conviertas esta anomalía en algo que pueda usarse.",
+		"success_text": "Myr observa el residuo cambiar de color dentro del frasco.\n\n\"Esto no quiere ser herramienta\", dice. \"Quiere ser posibilidad. Pero puedo hacerlo obedecer un instante.\"",
+		"failure_text": "Myr cierra el frasco antes de que puedas insistir.\n\n\"No voy a forzar un cambio que ni tú sabes nombrar. Yo sé demasiado de eso.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
+				},
+				"loyalty": {
+					"min": 8
+				}
+			},
+			"world_state": {
+				"world_instability": {
+					"min": 8
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:myr_distill_veil_residue",
+				"myr_distilled_veil_residue",
+				"veil_residue_sample"
+			],
+			"relationship": {
+				"loyalty": 5,
+				"tension": 3
+			},
+			"world_state": {
+				"world_instability": 4
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2
+			}
+		},
+		"once": true
+	},
+	"axiom_open_forbidden_possibility": {
+		"name": "Abrir una posibilidad prohibida",
+		"npc_id": "axiom",
+		"description": "Pedirle a Axiom que abra una línea del Velo que no debería estar disponible.",
+		"request_text": "Necesito ver una posibilidad que el mundo está intentando cerrar.",
+		"success_text": "Axiom no se mueve, pero el aire alrededor cambia de memoria.\n\n\"Abriré una línea\", dice. \"Pero toda posibilidad observada aprende a querer existir.\"",
+		"failure_text": "El silencio de Axiom pesa como una puerta sin borde.\n\n\"No. Si abro eso por ti antes de entender tu deseo, podría confundir amor con destrucción.\"",
 		"conditions": {
 			"relationship": {
 				"friendship": {
@@ -65,25 +358,75 @@
 				"loyalty": {
 					"min": 10
 				}
+			},
+			"world_state": {
+				"world_instability": {
+					"min": 12
+				}
 			}
 		},
 		"effects_success": {
 			"add_world_flags": [
-				"petition:aeris_delay_prophecy",
-				"aeris_delayed_prophecy_truth"
+				"petition:axiom_open_forbidden_possibility",
+				"axiom_opened_forbidden_possibility",
+				"forbidden_possibility_seen"
 			],
 			"relationship": {
 				"loyalty": 7,
-				"tension": 4
+				"tension": 5
 			},
 			"world_state": {
-				"world_instability": 4
+				"world_instability": 10,
+				"global_tension": 5
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"tension": -2,
+				"loyalty": -2
+			}
+		},
+		"once": true
+	},
+	"taren_use_guild_influence": {
+		"name": "Usar influencia del gremio",
+		"npc_id": "taren",
+		"description": "Pedirle a Taren que use autoridad del gremio para bloquear una orden del Consejo.",
+		"request_text": "Necesito que el gremio retrase esa orden. Oficialmente.",
+		"success_text": "Taren firma sin prisa. El gesto parece administrativo hasta que entiendes cuánto acaba de arriesgar.\n\n\"No fue por ti\", dice. \"Fue porque el Consejo necesitaba un límite. No confundas mis razones.\"",
+		"failure_text": "Taren deja la pluma sobre la mesa.\n\n\"No voy a poner al gremio en una posición vulnerable por una confianza que aún no has ganado.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 22
+				},
+				"loyalty": {
+					"min": 16
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"council_is_watching"
+				]
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:taren_use_guild_influence",
+				"taren_used_guild_influence",
+				"guild_delayed_council_order"
+			],
+			"relationship": {
+				"loyalty": 8
+			},
+			"world_state": {
+				"global_tension": 6
 			}
 		},
 		"effects_failure": {
 			"relationship": {
 				"friendship": -2,
-				"tension": -2
+				"loyalty": -2
 			}
 		},
 		"once": true
@@ -115,12 +458,95 @@
 				"tension": 2
 			},
 			"world_state": {
-				"global_tension": 4
+				"global_tension": 4,
+				"romantic_pressure": 2
 			}
 		},
 		"effects_failure": {
 			"relationship": {
 				"friendship": -2
+			}
+		},
+		"once": true
+	},
+	"rhein_open_forest_path": {
+		"name": "Abrir un sendero del bosque",
+		"npc_id": "rhein",
+		"description": "Pedirle a Rhein que permita cruzar una zona del bosque que normalmente protege.",
+		"request_text": "Necesito atravesar esa parte del bosque antes de que el Consejo cierre el acceso.",
+		"success_text": "Rhein mira hacia los árboles como si esperara una respuesta.\n\n\"El bosque no está de acuerdo\", dice al fin. \"Pero me escuchó. Eso no significa que te haya perdonado.\"",
+		"failure_text": "Rhein niega lentamente.\n\n\"No. No abriré una herida más solo porque los humanos siempre creen tener prisa.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 22
+				},
+				"loyalty": {
+					"min": 10
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:rhein_open_forest_path",
+				"rhein_opened_forest_path",
+				"forest_hidden_path_open"
+			],
+			"relationship": {
+				"loyalty": 6,
+				"tension": 2
+			},
+			"world_state": {
+				"world_instability": 3
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2
+			}
+		},
+		"once": true
+	},
+	"selene_delay_council_message": {
+		"name": "Retrasar un mensaje oficial",
+		"npc_id": "selene",
+		"description": "Pedirle a Selene que demore una comunicación del Consejo sin destruirla.",
+		"request_text": "No necesito que ese mensaje desaparezca. Solo que llegue tarde.",
+		"success_text": "Selene ordena los sellos con una precisión casi dolorosa.\n\n\"Llegará tarde\", dice. \"No lo suficiente para ser mentira. Sí lo suficiente para cambiar algo.\"",
+		"failure_text": "Selene conserva una calma impecable.\n\n\"No. Si altero el tiempo de un mensaje, altero a quien recibe el golpe. Todavía no sé si entiendes eso.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
+				},
+				"loyalty": {
+					"min": 12
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"council_is_watching"
+				]
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:selene_delay_council_message",
+				"selene_delayed_council_message",
+				"council_message_delayed"
+			],
+			"relationship": {
+				"loyalty": 7,
+				"tension": 2
+			},
+			"world_state": {
+				"global_tension": 4
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2,
+				"loyalty": -2
 			}
 		},
 		"once": true
