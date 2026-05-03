@@ -9,14 +9,20 @@ func _ready() -> void:
 	show_intro_text()
 
 func build_ui() -> void:
-	var root := ScreenRoot.create(self)
+	var root: VBoxContainer = ScreenRoot.create(self)
 
 	root.add_child(UIFactory.title("El umbral"))
 
 	text_label = UIFactory.body()
+	text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	root.add_child(text_label)
 
+	var class_label: Label = UIFactory.body("Elige tu camino")
+	root.add_child(class_label)
+
 	option_container = VBoxContainer.new()
+	option_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	option_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	option_container.add_theme_constant_override("separation", 12)
 	root.add_child(option_container)
@@ -30,24 +36,24 @@ func show_class_options() -> void:
 	clear_options()
 
 	for class_id in DataManager.player_classes.keys():
-		var class_data := DataManager.get_player_class(class_id)
-		var button := UIFactory.button(class_data.get("name", class_id))
+		var class_data: Dictionary = DataManager.get_player_class(class_id)
+		var button: Button = UIFactory.button(class_data.get("name", class_id))
 		button.pressed.connect(func(): select_class(class_id))
 		option_container.add_child(button)
 
 func select_class(class_id: String) -> void:
 	selected_class_id = class_id
-	var class_data := DataManager.get_player_class(class_id)
+	var class_data: Dictionary = DataManager.get_player_class(class_id)
 
 	text_label.text = class_data.get("name", "") + "\n\n" + class_data.get("description", "") + "\n\n¿Este será el impulso que guiará tu nueva vida?"
 
 	clear_options()
 
-	var confirm_button := UIFactory.button("Confirmar clase")
+	var confirm_button: Button = UIFactory.button("Confirmar clase")
 	confirm_button.pressed.connect(confirm_class)
 	option_container.add_child(confirm_button)
 
-	var back_button := UIFactory.button("Elegir otra clase")
+	var back_button: Button = UIFactory.button("Elegir otra clase")
 	back_button.pressed.connect(show_intro_text)
 	option_container.add_child(back_button)
 

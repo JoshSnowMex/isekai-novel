@@ -15,69 +15,34 @@ func _ready() -> void:
 func build_ui() -> void:
 	var root: VBoxContainer = ScreenRoot.create(self)
 
-	var top_bar: HBoxContainer = HBoxContainer.new()
-	top_bar.alignment = BoxContainer.ALIGNMENT_CENTER
-	top_bar.add_theme_constant_override("separation", 12)
-	root.add_child(top_bar)
-
-	var back_button: Button = UIFactory.button("← Mapa")
-	back_button.custom_minimum_size = Vector2(180, 42)
+	var back_button: Button = UIFactory.button("← Volver al mapa")
 	back_button.pressed.connect(_on_back_pressed)
-	top_bar.add_child(back_button)
+	root.add_child(back_button)
 
 	title_label = UIFactory.title("")
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top_bar.add_child(title_label)
+	root.add_child(title_label)
 
 	description_label = UIFactory.body("")
-	description_label.custom_minimum_size = Vector2(1, 90)
+	description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	root.add_child(description_label)
 
-	var columns: HBoxContainer = HBoxContainer.new()
-	columns.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	columns.add_theme_constant_override("separation", 18)
-	root.add_child(columns)
-
-	var action_panel: VBoxContainer = VBoxContainer.new()
-	action_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	columns.add_child(action_panel)
-
-	var section_label: Label = UIFactory.body("Acciones disponibles")
-	action_panel.add_child(section_label)
-
-	var action_scroll: ScrollContainer = ScrollContainer.new()
-	action_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	action_panel.add_child(action_scroll)
+	var action_label: Label = UIFactory.body("Acciones")
+	root.add_child(action_label)
 
 	action_container = VBoxContainer.new()
 	action_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	action_container.add_theme_constant_override("separation", 10)
-	action_scroll.add_child(action_container)
-
-	var npc_panel: VBoxContainer = VBoxContainer.new()
-	npc_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	npc_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	columns.add_child(npc_panel)
+	root.add_child(action_container)
 
 	var npc_label: Label = UIFactory.body("Personas aquí")
-	npc_panel.add_child(npc_label)
-
-	var npc_scroll: ScrollContainer = ScrollContainer.new()
-	npc_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	npc_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	npc_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	npc_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	npc_panel.add_child(npc_scroll)
+	root.add_child(npc_label)
 
 	npc_container = VBoxContainer.new()
 	npc_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	npc_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	npc_container.add_theme_constant_override("separation", 10)
-	npc_scroll.add_child(npc_container)
+	root.add_child(npc_container)
 
 func load_location(location_id: String, message: String = "") -> void:
 	current_location_id = location_id
@@ -127,8 +92,7 @@ func build_actions(location_data: Dictionary) -> void:
 		add_action("Dormir", func(): do_sleep())
 
 	if action_container.get_child_count() == 0:
-		var empty_label: Label = UIFactory.body("No hay acciones disponibles aquí por ahora.")
-		action_container.add_child(empty_label)
+		action_container.add_child(UIFactory.body("No hay acciones disponibles aquí por ahora."))
 
 func build_npcs() -> void:
 	clear_container(npc_container)
@@ -143,17 +107,14 @@ func build_npcs() -> void:
 			GameManager.reveal_npc_schedule(npc_id, time)
 
 			var button: Button = UIFactory.button(npc.get("name", npc_id))
-			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			button.pressed.connect(func(): interact_npc(npc_id))
 			npc_container.add_child(button)
 
 	if npc_container.get_child_count() == 0:
-		var empty_label: Label = UIFactory.body("No ves a nadie conocido aquí en este momento.")
-		npc_container.add_child(empty_label)
+		npc_container.add_child(UIFactory.body("No ves a nadie conocido aquí en este momento."))
 
 func add_action(text: String, callback: Callable) -> void:
 	var button: Button = UIFactory.button(text)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.pressed.connect(callback)
 	action_container.add_child(button)
 
@@ -194,8 +155,7 @@ func interact_npc(npc_id: String) -> void:
 
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 
-	var title: Label = UIFactory.title(npc.get("name", npc_id))
-	action_container.add_child(title)
+	action_container.add_child(UIFactory.title(npc.get("name", npc_id)))
 
 	var talk_button: Button = UIFactory.button("Hablar")
 	talk_button.pressed.connect(func(): talk_to_npc(npc_id))
@@ -269,8 +229,7 @@ func show_gift_selection(npc_id: String) -> void:
 
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 
-	var title: Label = UIFactory.title("Regalo para %s" % npc.get("name", npc_id))
-	action_container.add_child(title)
+	action_container.add_child(UIFactory.title("Regalo para %s" % npc.get("name", npc_id)))
 
 	if relation.get("gift_given_today", false):
 		description_label.text = "Ya le diste un regalo hoy."
