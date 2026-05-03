@@ -8,28 +8,38 @@ func _ready() -> void:
 	update_buttons()
 
 func build_ui() -> void:
-	var root := ScreenRoot.create(self)
+	var root: VBoxContainer = ScreenRoot.create(self)
+
+	var spacer_top: Control = Control.new()
+	spacer_top.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(spacer_top)
 
 	root.add_child(UIFactory.title(DataManager.game_config.get("game_title", "Isekai Social Sim")))
 
 	subtitle_label = UIFactory.body("Drama romántico · Tensión adulta · Fantasía isekai")
 	root.add_child(subtitle_label)
 
-	var spacer := Control.new()
-	spacer.custom_minimum_size = Vector2(1, 24)
-	root.add_child(spacer)
+	var menu_container: VBoxContainer = VBoxContainer.new()
+	menu_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	menu_container.add_theme_constant_override("separation", 10)
+	menu_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	root.add_child(menu_container)
 
-	var new_game_button := UIFactory.button("Nuevo juego")
+	var new_game_button: Button = UIFactory.button("Nuevo juego")
 	new_game_button.pressed.connect(_on_new_game_pressed)
-	root.add_child(new_game_button)
+	menu_container.add_child(new_game_button)
 
 	continue_button = UIFactory.button("Continuar")
 	continue_button.pressed.connect(_on_continue_pressed)
-	root.add_child(continue_button)
+	menu_container.add_child(continue_button)
 
-	var quit_button := UIFactory.button("Salir")
+	var quit_button: Button = UIFactory.button("Salir")
 	quit_button.pressed.connect(_on_quit_pressed)
-	root.add_child(quit_button)
+	menu_container.add_child(quit_button)
+
+	var spacer_bottom: Control = Control.new()
+	spacer_bottom.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(spacer_bottom)
 
 func update_buttons() -> void:
 	continue_button.disabled = not SaveManager.has_save_file()

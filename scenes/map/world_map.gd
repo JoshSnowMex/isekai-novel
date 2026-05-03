@@ -19,29 +19,54 @@ func build_ui() -> void:
 	status_label = UIFactory.body("")
 	root.add_child(status_label)
 
-	info_label = UIFactory.body("Selecciona una ubicación.")
-	root.add_child(info_label)
+	var main: HBoxContainer = HBoxContainer.new()
+	main.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	main.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	main.add_theme_constant_override("separation", 20)
+	root.add_child(main)
+
+	var left_panel: VBoxContainer = VBoxContainer.new()
+	left_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	main.add_child(left_panel)
 
 	var location_label: Label = UIFactory.body("Ubicaciones")
-	root.add_child(location_label)
+	left_panel.add_child(location_label)
+
+	var location_scroll: ScrollContainer = ScrollContainer.new()
+	location_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	location_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	location_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	location_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	left_panel.add_child(location_scroll)
 
 	location_container = VBoxContainer.new()
 	location_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	location_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	location_container.add_theme_constant_override("separation", 10)
-	root.add_child(location_container)
+	location_container.add_theme_constant_override("separation", 8)
+	location_scroll.add_child(location_container)
+
+	var right_panel: VBoxContainer = VBoxContainer.new()
+	right_panel.custom_minimum_size = Vector2(340, 1)
+	right_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right_panel.add_theme_constant_override("separation", 10)
+	main.add_child(right_panel)
+
+	info_label = UIFactory.body("Selecciona una ubicación.")
+	info_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	info_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right_panel.add_child(info_label)
 
 	var journal_button: Button = UIFactory.button("Bitácora")
 	journal_button.pressed.connect(func(): SceneRouter.go_to_journal())
-	root.add_child(journal_button)
+	right_panel.add_child(journal_button)
 
 	var save_button: Button = UIFactory.button("Guardar partida")
 	save_button.pressed.connect(_on_save_pressed)
-	root.add_child(save_button)
+	right_panel.add_child(save_button)
 
 	var menu_button: Button = UIFactory.button("Volver al menú")
 	menu_button.pressed.connect(_on_menu_pressed)
-	root.add_child(menu_button)
+	right_panel.add_child(menu_button)
 
 func refresh_screen() -> void:
 	header_label.text = "Mes %s · Día %s · %s · %s" % [
@@ -64,6 +89,7 @@ func refresh_screen() -> void:
 	for location_id in DataManager.locations.keys():
 		var location_data: Dictionary = DataManager.get_location(location_id)
 		var button: Button = UIFactory.button(location_data.get("name", location_id))
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.pressed.connect(func(): visit_location(location_id))
 		location_container.add_child(button)
 
