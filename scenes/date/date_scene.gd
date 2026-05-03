@@ -174,8 +174,7 @@ func end_date() -> void:
 
 	SaveManager.save_game()
 
-	await get_tree().create_timer(2.0).timeout
-	SceneRouter.go_to_location()
+	show_final_summary(summary_text)
 
 func refresh() -> void:
 	current_date["progress"] = clamp(current_date["progress"], 0, 100)
@@ -264,3 +263,12 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func show_final_summary(summary_text: String) -> void:
+	description_label.text = summary_text
+
+	clear_container(action_container)
+
+	var continue_button: Button = UIFactory.button("Continuar")
+	continue_button.pressed.connect(func(): SceneRouter.go_to_world_map())
+	action_container.add_child(continue_button)
