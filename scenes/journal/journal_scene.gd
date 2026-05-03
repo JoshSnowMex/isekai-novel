@@ -17,10 +17,14 @@ func build_ui() -> void:
 	body_container.add_theme_constant_override("separation", 18)
 	root.add_child(body_container)
 
+	var npc_scroll: ScrollContainer = ScrollContainer.new()
+	npc_scroll.custom_minimum_size = Vector2(240, 420)
+	npc_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body_container.add_child(npc_scroll)
+
 	npc_button_container = VBoxContainer.new()
-	npc_button_container.custom_minimum_size = Vector2(220, 420)
 	npc_button_container.add_theme_constant_override("separation", 8)
-	body_container.add_child(npc_button_container)
+	npc_scroll.add_child(npc_button_container)
 
 	details_label = RichTextLabel.new()
 	details_label.custom_minimum_size = Vector2(520, 420)
@@ -39,6 +43,7 @@ func build_npc_list() -> void:
 		child.queue_free()
 
 	var has_known_npcs: bool = false
+	var first_npc_id: String = ""
 
 	for npc_id in DataManager.npcs.keys():
 		GameManager.ensure_npc_knowledge(npc_id)
@@ -50,14 +55,19 @@ func build_npc_list() -> void:
 
 		has_known_npcs = true
 
+		if first_npc_id == "":
+			first_npc_id = npc_id
+
 		var npc: Dictionary = DataManager.get_npc(npc_id)
 		var button: Button = UIFactory.button(npc.get("name", npc_id))
-		button.custom_minimum_size = Vector2(210, 42)
+		button.custom_minimum_size = Vector2(220, 42)
 		button.pressed.connect(func(): show_npc(npc_id))
 		npc_button_container.add_child(button)
 
 	if not has_known_npcs:
 		details_label.text = "Todavía no has conocido a nadie."
+	else:
+		show_npc(first_npc_id)
 
 func show_npc(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
@@ -75,7 +85,6 @@ func show_npc(npc_id: String) -> void:
 
 	var relationship_state: String = relation.get("relationship_state", "none")
 	var relation_label: String = GameManager.get_affinity_label(total, relationship_state)
-	
 
 	var text: String = ""
 	text += "[center][font_size=24][color=#f0cfe6]%s[/color][/font_size][/center]\n" % npc.get("name", npc_id)
@@ -139,7 +148,8 @@ func build_gift_group(label: String, items: Array, known_gifts: Array) -> String
 
 	for item_id in items:
 		if known_gifts.has(item_id):
-			shown.append(str(item_id))
+			var item_data: Dictionary = DataManager.get_item(str(item_id))
+			shown.append(str(item_data.get("name", item_id)))
 		else:
 			shown.append("????")
 

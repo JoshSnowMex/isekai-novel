@@ -65,7 +65,7 @@
 		}
 	},
 	"arcane_library": {
-		"name": "Biblioteca Arcana",
+		"name": "Ateneo Arcana",
 		"description": "Una sección prohibida de la biblioteca, reservada para quienes saben formular preguntas peligrosas.",
 		"actions": {
 			"rest": false,

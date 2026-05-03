@@ -6,47 +6,93 @@ var action_container: VBoxContainer
 var npc_container: VBoxContainer
 
 var current_location_id: String = ""
+var last_message: String = ""
 
 func _ready() -> void:
 	build_ui()
 	load_location(GameManager.current_location_id)
 
 func build_ui() -> void:
-	var root := ScreenRoot.create(self)
+	var root: VBoxContainer = ScreenRoot.create(self)
+
+	var top_bar: HBoxContainer = HBoxContainer.new()
+	top_bar.alignment = BoxContainer.ALIGNMENT_CENTER
+	top_bar.add_theme_constant_override("separation", 12)
+	root.add_child(top_bar)
+
+	var back_button: Button = UIFactory.button("← Mapa")
+	back_button.custom_minimum_size = Vector2(180, 42)
+	back_button.pressed.connect(_on_back_pressed)
+	top_bar.add_child(back_button)
 
 	title_label = UIFactory.title("")
-	root.add_child(title_label)
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_bar.add_child(title_label)
 
 	description_label = UIFactory.body("")
+	description_label.custom_minimum_size = Vector2(1, 90)
 	root.add_child(description_label)
 
-	var section_label := UIFactory.body("Acciones disponibles")
-	root.add_child(section_label)
+	var columns: HBoxContainer = HBoxContainer.new()
+	columns.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	columns.add_theme_constant_override("separation", 18)
+	root.add_child(columns)
+
+	var action_panel: VBoxContainer = VBoxContainer.new()
+	action_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	columns.add_child(action_panel)
+
+	var section_label: Label = UIFactory.body("Acciones disponibles")
+	action_panel.add_child(section_label)
+
+	var action_scroll: ScrollContainer = ScrollContainer.new()
+	action_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	action_panel.add_child(action_scroll)
 
 	action_container = VBoxContainer.new()
-	action_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	action_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	action_container.add_theme_constant_override("separation", 10)
-	root.add_child(action_container)
+	action_scroll.add_child(action_container)
 
-	var npc_label := UIFactory.body("Personas aquí")
-	root.add_child(npc_label)
+	var npc_panel: VBoxContainer = VBoxContainer.new()
+	npc_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	npc_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	columns.add_child(npc_panel)
+
+	var npc_label: Label = UIFactory.body("Personas aquí")
+	npc_panel.add_child(npc_label)
+
+	var npc_scroll: ScrollContainer = ScrollContainer.new()
+	npc_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	npc_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	npc_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	npc_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	npc_panel.add_child(npc_scroll)
 
 	npc_container = VBoxContainer.new()
-	npc_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	npc_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	npc_container.add_theme_constant_override("separation", 10)
-	root.add_child(npc_container)
+	npc_scroll.add_child(npc_container)
 
-	var back_button := UIFactory.button("Volver al mapa")
-	back_button.pressed.connect(_on_back_pressed)
-	root.add_child(back_button)
-
-func load_location(location_id: String) -> void:
+func load_location(location_id: String, message: String = "") -> void:
 	current_location_id = location_id
 
 	var data: Dictionary = DataManager.get_location(location_id)
 
 	title_label.text = data.get("name", location_id)
-	description_label.text = data.get("description", "")
+
+	if message != "":
+		last_message = message
+		description_label.text = message
+	elif last_message != "":
+		description_label.text = last_message
+	else:
+		description_label.text = data.get("description", "")
 
 	build_actions(data)
 	build_npcs()
@@ -66,19 +112,23 @@ func build_actions(location_data: Dictionary) -> void:
 		add_action("Entrenar", func(): do_train(location_data))
 
 	if actions.get("work_full", false):
-		add_action("Trabajar (jornada completa)", func(): do_work_full())
+		add_action("Trabajar jornada completa", func(): do_work_full())
 
 	if actions.get("work_half", false):
-		add_action("Trabajar (medio turno)", func(): do_work_half())
+		add_action("Trabajar medio turno", func(): do_work_half())
 
 	if actions.get("rest", false):
 		add_action("Descansar", func(): do_rest())
-	
+
 	if actions.get("shop", false):
 		add_action("Comprar", func(): SceneRouter.go_to_shop())
 
 	if current_location_id == "home" and GameManager.is_day_exhausted():
 		add_action("Dormir", func(): do_sleep())
+
+	if action_container.get_child_count() == 0:
+		var empty_label: Label = UIFactory.body("No hay acciones disponibles aquí por ahora.")
+		action_container.add_child(empty_label)
 
 func build_npcs() -> void:
 	clear_container(npc_container)
@@ -86,17 +136,24 @@ func build_npcs() -> void:
 	for npc_id in DataManager.npcs.keys():
 		var npc: Dictionary = DataManager.get_npc(npc_id)
 		var time: String = GameManager.current_time_block
+		var schedule: Dictionary = npc.get("schedule", {})
 
-		if npc["schedule"][time] == current_location_id:
+		if schedule.get(time, "") == current_location_id:
 			GameManager.mark_npc_seen(npc_id)
 			GameManager.reveal_npc_schedule(npc_id, time)
 
 			var button: Button = UIFactory.button(npc.get("name", npc_id))
+			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			button.pressed.connect(func(): interact_npc(npc_id))
 			npc_container.add_child(button)
 
+	if npc_container.get_child_count() == 0:
+		var empty_label: Label = UIFactory.body("No ves a nadie conocido aquí en este momento.")
+		npc_container.add_child(empty_label)
+
 func add_action(text: String, callback: Callable) -> void:
-	var button := UIFactory.button(text)
+	var button: Button = UIFactory.button(text)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.pressed.connect(callback)
 	action_container.add_child(button)
 
@@ -104,32 +161,33 @@ func clear_container(container: VBoxContainer) -> void:
 	for child in container.get_children():
 		child.queue_free()
 
-# ====== ACCIONES ======
-
 func do_train(location_data: Dictionary) -> void:
 	var stat: String = location_data.get("train_stat", "intellect")
 	GameManager.player["stats"][stat] += 1
 	GameManager.consume_action(10)
-	reload_scene()
+	reload_scene("Entrenas y mejoras %s." % stat)
 
 func do_work_full() -> void:
 	GameManager.player["money"] += 20
 	GameManager.consume_action(25)
-	reload_scene()
+	reload_scene("Trabajas una jornada completa.\nDinero +20")
 
 func do_work_half() -> void:
 	GameManager.player["money"] += 10
 	GameManager.consume_action(15)
-	reload_scene()
+	reload_scene("Trabajas medio turno.\nDinero +10")
 
 func do_rest() -> void:
-	GameManager.player["stamina"] += 20
+	GameManager.player["stamina"] = min(
+		int(GameManager.player.get("stamina", 0)) + 20,
+		int(GameManager.player.get("max_stamina", 100))
+	)
 	GameManager.consume_action(5)
-	reload_scene()
+	reload_scene("Descansas un momento.\nResistencia +20")
 
 func do_sleep() -> void:
 	GameManager.sleep_until_next_day()
-	reload_scene()
+	reload_scene("Duermes hasta la mañana siguiente.")
 
 func interact_npc(npc_id: String) -> void:
 	clear_container(action_container)
@@ -139,7 +197,7 @@ func interact_npc(npc_id: String) -> void:
 	var title: Label = UIFactory.title(npc.get("name", npc_id))
 	action_container.add_child(title)
 
-	var talk_button := UIFactory.button("Hablar")
+	var talk_button: Button = UIFactory.button("Hablar")
 	talk_button.pressed.connect(func(): talk_to_npc(npc_id))
 	action_container.add_child(talk_button)
 
@@ -152,18 +210,9 @@ func interact_npc(npc_id: String) -> void:
 	date_button.pressed.connect(func(): SceneRouter.go_to_date(npc_id))
 	action_container.add_child(date_button)
 
-	var back_button := UIFactory.button("Volver")
+	var back_button: Button = UIFactory.button("Volver")
 	back_button.pressed.connect(func(): load_location(current_location_id))
 	action_container.add_child(back_button)
-
-# ====== CONTROL ======
-
-func reload_scene() -> void:
-	SaveManager.save_game()
-	load_location(current_location_id)
-
-func _on_back_pressed() -> void:
-	SceneRouter.go_to_world_map()
 
 func talk_to_npc(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
@@ -207,11 +256,9 @@ func talk_to_npc(npc_id: String) -> void:
 		"Una conversación casual dejó ver algo más profundo de %s." % npc.get("name", npc_id)
 	)
 
-	description_label.text = message
-
 	GameManager.consume_action(5)
 	SaveManager.save_game()
-	load_location(current_location_id)
+	reload_scene(message)
 
 func show_gift_selection(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
@@ -294,15 +341,16 @@ func give_gift(npc_id: String, item_id: String) -> void:
 		if result >= 3:
 			var tension_bonus: int = 1
 			relationship_text += GameManager.add_relationship_value(npc_id, "tension", tension_bonus)
-		else:
-			relationship_text += GameManager.add_relationship_value(npc_id, "friendship", result)
-			relationship_text += GameManager.add_relationship_value(npc_id, "jealousy", 2)
-			relation["gift_given_today"] = true
+	else:
+		relationship_text += GameManager.add_relationship_value(npc_id, "friendship", result)
+		relationship_text += GameManager.add_relationship_value(npc_id, "jealousy", 2)
+
+	relation["gift_given_today"] = true
 
 	GameManager.remove_item(item_id, 1)
 	GameManager.reveal_npc_gift(npc_id, item_id)
 
-	description_label.text = "%s\nRegalo: %s\nAmistad: %+d%s" % [
+	var message: String = "%s\nRegalo: %s\nAmistad: %+d%s" % [
 		reaction,
 		item.get("name", item_id),
 		result,
@@ -311,10 +359,16 @@ func give_gift(npc_id: String, item_id: String) -> void:
 
 	GameManager.consume_action(5)
 	SaveManager.save_game()
-	load_location(current_location_id)
+	reload_scene(message)
 
 func do_activity(activity_id: String) -> void:
 	var result_message: String = GameManager.perform_activity(activity_id)
-	description_label.text = result_message
 	SaveManager.save_game()
-	load_location(current_location_id)
+	reload_scene(result_message)
+
+func reload_scene(message: String = "") -> void:
+	SaveManager.save_game()
+	load_location(current_location_id, message)
+
+func _on_back_pressed() -> void:
+	SceneRouter.go_to_world_map()
