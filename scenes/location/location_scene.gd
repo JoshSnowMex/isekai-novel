@@ -179,6 +179,23 @@ func interact_npc(npc_id: String) -> void:
 		var hint_label: Label = UIFactory.body(GameManager.get_date_blocked_reason(npc_id))
 		action_container.add_child(hint_label)
 	
+	var step_id: String = RelationshipSystem.get_next_step_id(npc_id)
+
+	if step_id != "":
+		var step: Dictionary = DataManager.get_relationship_step(step_id)
+		var special_button: Button = UIFactory.button("Cita especial: %s" % step.get("name", step_id))
+		var can_start_special: bool = RelationshipSystem.can_start_step(npc_id, step_id)
+
+		special_button.disabled = GameManager.is_day_exhausted() or not can_start_special
+		special_button.pressed.connect(func(): SceneRouter.go_to_date(npc_id, "", "special", step_id))
+		action_container.add_child(special_button)
+
+		if not can_start_special:
+			var reason: String = RelationshipSystem.get_blocked_reason(npc_id, step_id)
+
+			if reason != "":
+				action_container.add_child(UIFactory.body(reason))
+	
 	var petition_button: Button = UIFactory.button("Pedir favor")
 	petition_button.disabled = GameManager.is_day_exhausted() or not PetitionSystem.has_any_available_petition(npc_id)
 	petition_button.pressed.connect(func(): show_petitions(npc_id))

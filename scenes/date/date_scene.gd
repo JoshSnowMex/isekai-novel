@@ -9,7 +9,11 @@ var current_date: Dictionary = {}
 func _ready() -> void:
 	setup_fullscreen_root()
 	build_ui()
-	start_date(SceneRouter.temp_npc_id, SceneRouter.temp_date_location_id)
+
+	if SceneRouter.temp_date_type == "special":
+		start_special_date(SceneRouter.temp_npc_id, SceneRouter.temp_relationship_step_id)
+	else:
+		start_date(SceneRouter.temp_npc_id, SceneRouter.temp_date_location_id)
 
 func build_ui() -> void:
 	var root: VBoxContainer = ScreenRoot.create(self)
@@ -17,13 +21,22 @@ func build_ui() -> void:
 	title_label = UIFactory.title("")
 	root.add_child(title_label)
 
+	var description_scroll: ScrollContainer = ScrollContainer.new()
+	description_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	description_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	root.add_child(description_scroll)
+
 	description_label = UIFactory.body("")
 	description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	root.add_child(description_label)
+	description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	description_scroll.add_child(description_label)
 
 	action_container = VBoxContainer.new()
 	action_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	action_container.add_theme_constant_override("separation", 10)
+	action_container.add_theme_constant_override("separation", 8)
+	action_container.custom_minimum_size = Vector2(1, 150)
 	root.add_child(action_container)
 
 func start_date(npc_id: String, date_location_id: String = "") -> void:
@@ -51,13 +64,50 @@ func start_date(npc_id: String, date_location_id: String = "") -> void:
 
 	build_actions()
 
+func start_special_date(npc_id: String, step_id: String) -> void:
+	current_date = RelationshipSystem.create_special_date_state(npc_id, step_id)
+
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var step: Dictionary = DataManager.get_relationship_step(step_id)
+
+	title_label.text = "Cita especial con %s" % npc.get("name", npc_id)
+
+	description_label.text = "%s\n\n%s\n\nPara avanzar, deberás responder correctamente sobre lo que conoces de %s." % [
+		step.get("name", step_id),
+		step.get("description", ""),
+		npc.get("name", npc_id)
+	]
+
+	build_special_actions()
+
 func build_actions() -> void:
 	clear_container(action_container)
 
-	add_action("Hablar", func(): do_talk())
-	add_action("Dar regalo", func(): do_gift())
-	add_action("Hacer movimiento", func(): show_move_selection())
+	var talk_button: Button = UIFactory.button("Hablar")
+	talk_button.disabled = not DateSystem.can_talk(current_date)
+	talk_button.pressed.connect(func(): do_talk())
+	action_container.add_child(talk_button)
+
+	var gift_button: Button = UIFactory.button("Dar regalo")
+	gift_button.disabled = not DateSystem.can_gift(current_date)
+	gift_button.pressed.connect(func(): do_gift())
+	action_container.add_child(gift_button)
+
+	var move_button: Button = UIFactory.button("Hacer movimiento")
+	move_button.disabled = not DateSystem.can_move(current_date)
+	move_button.pressed.connect(func(): show_move_selection())
+	action_container.add_child(move_button)
+
 	add_action("Terminar cita", func(): end_date())
+
+func build_special_actions() -> void:
+	clear_container(action_container)
+
+	if RelationshipSystem.is_special_date_complete(current_date):
+		add_action("Cerrar la conversación", func(): end_special_date())
+	else:
+		add_action("Responder", func(): do_special_question())
+		add_action("Cancelar", func(): cancel_special_date())
 
 func add_action(text: String, callback: Callable) -> void:
 	var button: Button = UIFactory.button(text)
@@ -68,11 +118,58 @@ func clear_container(container: VBoxContainer) -> void:
 	for child in container.get_children():
 		child.queue_free()
 
+func do_special_question() -> void:
+	var q: Dictionary = RelationshipSystem.build_special_question(current_date)
+
+	if q.is_empty():
+		description_label.text = "Aunque has llegado hasta aquí, aún no conoces suficiente información aplicable para sostener esta conversación."
+		build_special_actions()
+		return
+
+	clear_container(action_container)
+
+	description_label.text = q.get("question", "")
+
+	for option in q.get("options", []):
+		var value: String = str(option)
+		var button: Button = UIFactory.button(value)
+		button.pressed.connect(func(): answer_special_question(q, value))
+		action_container.add_child(button)
+
+func answer_special_question(question: Dictionary, selected: String) -> void:
+	var result: Dictionary = RelationshipSystem.answer_special_question(current_date, question, selected)
+
+	description_label.text = "%s\n\nProgreso especial: %s/%s\nErrores: %s" % [
+		result.get("text", ""),
+		current_date.get("progress", 0),
+		current_date.get("questions_required", 0),
+		current_date.get("mistakes", 0)
+	]
+
+	GameManager.consume_action(3)
+	SaveManager.save_game()
+	build_special_actions()
+
+func end_special_date() -> void:
+	var result: Dictionary = RelationshipSystem.finish_special_date(current_date)
+	SaveManager.save_game()
+	show_final_summary(result.get("text", "La cita especial terminó."))
+
+func cancel_special_date() -> void:
+	show_final_summary("Decides no continuar con esta cita especial por ahora.\n\nA veces, no forzar una respuesta también protege el vínculo.")
+
 func do_talk() -> void:
+	if not DateSystem.can_talk(current_date):
+		description_label.text = "La conversación ya dio todo lo que podía dar en esta cita."
+		build_actions()
+		return
+
 	var npc_id: String = current_date["npc_id"]
 	var known_info: Array = GameManager.player["known_npc_info"].get(npc_id, {}).get("info", [])
 
-	if known_info.is_empty():
+	DateSystem.register_talk(current_date)
+
+	if known_info.is_empty() or not DateSystem.can_question(current_date):
 		do_random_dialogue()
 		return
 
@@ -82,6 +179,10 @@ func do_talk() -> void:
 		do_question()
 
 func do_question() -> void:
+	if not DateSystem.can_question(current_date):
+		do_random_dialogue()
+		return
+
 	var npc_id: String = current_date["npc_id"]
 	var q: Dictionary = build_question(npc_id)
 
@@ -89,6 +190,7 @@ func do_question() -> void:
 		do_random_dialogue()
 		return
 
+	DateSystem.register_question(current_date)
 	clear_container(action_container)
 
 	description_label.text = q["question"]
@@ -104,7 +206,11 @@ func do_question() -> void:
 	action_container.add_child(back_button)
 
 func do_gift() -> void:
-	var npc_id: String = current_date["npc_id"]
+	if not DateSystem.can_gift(current_date):
+		description_label.text = "Ya diste un regalo durante esta cita."
+		build_actions()
+		return
+
 	var gifts: Array = GameManager.get_gift_items_in_inventory()
 
 	clear_container(action_container)
@@ -136,6 +242,11 @@ func do_gift() -> void:
 	action_container.add_child(back_button)
 
 func give_date_gift(item_id: String) -> void:
+	if not DateSystem.can_gift(current_date):
+		description_label.text = "Ya diste un regalo durante esta cita."
+		build_actions()
+		return
+
 	var npc_id: String = current_date["npc_id"]
 
 	if not GameManager.has_item(item_id):
@@ -175,6 +286,7 @@ func give_date_gift(item_id: String) -> void:
 		})
 		current_date["mistakes"] = int(current_date.get("mistakes", 0)) + 1
 
+	DateSystem.register_gift(current_date)
 	GameManager.remove_item(item_id, 1)
 	GameManager.reveal_npc_gift(npc_id, item_id)
 	GameManager.consume_action(3)
@@ -192,13 +304,12 @@ func give_date_gift(item_id: String) -> void:
 func show_move_selection() -> void:
 	clear_container(action_container)
 
-	var npc_id: String = current_date["npc_id"]
 	var move_ids: Array = DateSystem.get_available_moves(current_date)
 
 	description_label.text = "Elige un gesto. No todos los movimientos son buena idea solo porque puedas intentarlos."
 
 	if move_ids.is_empty():
-		description_label.text = "Aún no hay suficiente cercanía para intentar un movimiento romántico."
+		description_label.text = "Ya no conviene intentar más movimientos en esta cita."
 	else:
 		for move_id in move_ids:
 			var id: String = str(move_id)
@@ -217,9 +328,11 @@ func perform_move(move_id: String) -> void:
 	GameManager.consume_action(4)
 	SaveManager.save_game()
 
-	description_label.text = "%s\n\nProgreso actual: %s" % [
+	description_label.text = "%s\n\nProgreso actual: %s\nMovimientos usados: %s/%s" % [
 		result.get("text", ""),
-		current_date.get("progress", 0)
+		current_date.get("progress", 0),
+		current_date.get("moves_used", []).size(),
+		DateSystem.NORMAL_DATE_MAX_MOVES
 	]
 
 	build_actions()
@@ -249,10 +362,16 @@ func do_random_dialogue() -> void:
 	var dialogue_line: String = DialogueSystem.get_dialogue_line(npc_id, "casual")
 
 	current_date["progress"] = clamp(int(current_date["progress"]) + 5, 0, 100)
-	description_label.text = "%s\n\nLa conversación acerca la cita.\nProgreso +5" % dialogue_line
+	description_label.text = "%s\n\nLa conversación acerca la cita.\nProgreso +5\nConversaciones usadas: %s/%s" % [
+		dialogue_line,
+		current_date.get("talks_used", 0),
+		DateSystem.NORMAL_DATE_MAX_TALKS
+	]
 
 	GameManager.consume_action(3)
+	SaveManager.save_game()
 	refresh()
+	build_actions()
 
 func build_question(npc_id: String) -> Dictionary:
 	var npc: Dictionary = DataManager.get_npc(npc_id)

@@ -10,6 +10,8 @@ const SHOP_SCENE := "res://scenes/shop/ShopScene.tscn"
 
 var temp_npc_id: String = ""
 var temp_date_location_id: String = ""
+var temp_date_type: String = "normal"
+var temp_relationship_step_id: String = ""
 
 func go_to_main_menu() -> void:
 	get_tree().change_scene_to_file(MAIN_MENU)
@@ -22,11 +24,6 @@ func go_to_world_map() -> void:
 	
 func go_to_location() -> void:
 	get_tree().change_scene_to_file(LOCATION_SCENE)
-	
-func go_to_date(npc_id: String, date_location_id: String = "") -> void:
-	temp_npc_id = npc_id
-	temp_date_location_id = date_location_id
-	get_tree().change_scene_to_file("res://scenes/date/DateScene.tscn")
 
 func go_to_journal() -> void:
 	get_tree().change_scene_to_file(JOURNAL_SCENE)
@@ -36,3 +33,10 @@ func go_to_shop() -> void:
 
 func quit_game() -> void:
 	get_tree().quit()
+
+func go_to_date(npc_id: String, date_location_id: String = "", date_type: String = "normal", relationship_step_id: String = "") -> void:
+	temp_npc_id = npc_id
+	temp_date_location_id = date_location_id
+	temp_date_type = date_type
+	temp_relationship_step_id = relationship_step_id
+	get_tree().change_scene_to_file("res://scenes/date/DateScene.tscn")

@@ -1,5 +1,10 @@
 extends Node
 
+const NORMAL_DATE_MAX_TALKS: int = 3
+const NORMAL_DATE_MAX_QUESTIONS: int = 2
+const NORMAL_DATE_MAX_MOVES: int = 2
+const NORMAL_DATE_MAX_GIFTS: int = 1
+
 func get_available_date_locations(npc_id: String) -> Array:
 	var result: Array = []
 	var total: int = GameManager.get_total_affinity(npc_id)
@@ -14,6 +19,8 @@ func get_available_date_locations(npc_id: String) -> Array:
 	return result
 
 func create_date_state(npc_id: String, date_location_id: String) -> Dictionary:
+	GameManager.ensure_relationship(npc_id)
+
 	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
 	var base_progress: int = int(date_location.get("starting_progress", 50))
 
@@ -26,8 +33,7 @@ func create_date_state(npc_id: String, date_location_id: String) -> Dictionary:
 	if bad_fit_npcs.has(npc_id):
 		base_progress -= 8
 
-	var relation: Dictionary = GameManager.player["relationships"].get(npc_id, {})
-	var jealousy: int = int(relation.get("jealousy", 0))
+	var jealousy: int = GameManager.get_relationship_value(npc_id, "jealousy")
 
 	if jealousy >= 40:
 		base_progress -= 8
@@ -37,15 +43,48 @@ func create_date_state(npc_id: String, date_location_id: String) -> Dictionary:
 		"date_location_id": date_location_id,
 		"progress": clamp(base_progress, 0, 100),
 		"mistakes": 0,
-		"moves_used": []
+		"talks_used": 0,
+		"questions_used": 0,
+		"gifts_used": 0,
+		"moves_used": [],
+		"date_type": "normal"
 	}
+
+func can_talk(date_state: Dictionary) -> bool:
+	return int(date_state.get("talks_used", 0)) < NORMAL_DATE_MAX_TALKS
+
+func can_question(date_state: Dictionary) -> bool:
+	return int(date_state.get("questions_used", 0)) < NORMAL_DATE_MAX_QUESTIONS
+
+func can_gift(date_state: Dictionary) -> bool:
+	return int(date_state.get("gifts_used", 0)) < NORMAL_DATE_MAX_GIFTS
+
+func can_move(date_state: Dictionary) -> bool:
+	var moves_used: Array = date_state.get("moves_used", [])
+	return moves_used.size() < NORMAL_DATE_MAX_MOVES
+
+func register_talk(date_state: Dictionary) -> void:
+	date_state["talks_used"] = int(date_state.get("talks_used", 0)) + 1
+
+func register_question(date_state: Dictionary) -> void:
+	date_state["questions_used"] = int(date_state.get("questions_used", 0)) + 1
+
+func register_gift(date_state: Dictionary) -> void:
+	date_state["gifts_used"] = int(date_state.get("gifts_used", 0)) + 1
 
 func get_available_moves(date_state: Dictionary) -> Array:
 	var result: Array = []
 	var npc_id: String = date_state.get("npc_id", "")
 	var total: int = GameManager.get_total_affinity(npc_id)
+	var moves_used: Array = date_state.get("moves_used", [])
+
+	if not can_move(date_state):
+		return result
 
 	for move_id in DataManager.date_moves.keys():
+		if moves_used.has(move_id):
+			continue
+
 		var move: Dictionary = DataManager.get_date_move(move_id)
 		var min_total: int = int(move.get("min_total_affinity", 0))
 
@@ -55,6 +94,20 @@ func get_available_moves(date_state: Dictionary) -> Array:
 	return result
 
 func perform_move(date_state: Dictionary, move_id: String) -> Dictionary:
+	if not can_move(date_state):
+		return {
+			"success": false,
+			"text": "Ya intentaste suficientes movimientos en esta cita. Forzar más solo volvería incómodo el momento."
+		}
+
+	var moves_used: Array = date_state.get("moves_used", [])
+
+	if moves_used.has(move_id):
+		return {
+			"success": false,
+			"text": "Repetir el mismo gesto le quitaría toda naturalidad al momento."
+		}
+
 	var npc_id: String = date_state.get("npc_id", "")
 	var move: Dictionary = DataManager.get_date_move(move_id)
 	var date_location_id: String = date_state.get("date_location_id", "")
@@ -99,10 +152,11 @@ func perform_move(date_state: Dictionary, move_id: String) -> Dictionary:
 
 	var success: bool = score >= 45
 
+	add_move_used(date_state, move_id)
+
 	if success:
 		date_state["progress"] = clamp(progress + int(move.get("success_progress", 0)), 0, 100)
 		apply_relationship_effects(npc_id, move.get("success_relationship", {}))
-		add_move_used(date_state, move_id)
 
 		return {
 			"success": true,
@@ -112,7 +166,6 @@ func perform_move(date_state: Dictionary, move_id: String) -> Dictionary:
 	date_state["progress"] = clamp(progress + int(move.get("failure_progress", 0)), 0, 100)
 	date_state["mistakes"] = int(date_state.get("mistakes", 0)) + 1
 	apply_relationship_effects(npc_id, move.get("failure_relationship", {}))
-	add_move_used(date_state, move_id)
 
 	return {
 		"success": false,
@@ -139,7 +192,6 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 	var npc_id: String = date_state.get("npc_id", "")
 	var date_location_id: String = date_state.get("date_location_id", "")
 	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
-	var npc: Dictionary = DataManager.get_npc(npc_id)
 
 	var progress: int = int(date_state.get("progress", 0))
 	var success_threshold: int = int(date_location.get("success_threshold", 70))
@@ -198,22 +250,22 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 
 	var reveal_text: String = reveal_date_reward_info(npc_id, success_level)
 	var collectible_text: String = grant_date_collectible(npc_id, date_location_id)
-
-	update_relationship_state_after_date(npc_id, success_level)
+	var successful_date_text: String = register_successful_date(npc_id, date_location_id, success_level)
 
 	GameManager.add_npc_note(
 		npc_id,
 		"La cita en %s dejó una memoria difícil de ignorar." % date_location.get("name", date_location_id)
 	)
 
-	summary = "La cita fue %s.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nRecompensas aplicadas:%s%s%s" % [
+	summary = "La cita fue %s.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nRecompensas aplicadas:%s%s%s%s" % [
 		get_success_label(success_level),
 		date_location.get("name", date_location_id),
 		progress,
 		mistakes,
 		format_reward_text(rewards),
 		reveal_text,
-		collectible_text
+		collectible_text,
+		successful_date_text
 	]
 
 	if reward_text != "":
@@ -224,6 +276,17 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 		"level": success_level,
 		"text": summary
 	}
+
+func register_successful_date(npc_id: String, date_location_id: String, success_level: String) -> String:
+	var flag: String = "successful_date:%s" % npc_id
+	var location_flag: String = "successful_date:%s:%s" % [npc_id, date_location_id]
+	var level_flag: String = "successful_date:%s:%s:%s" % [npc_id, date_location_id, success_level]
+
+	GameManager.add_world_flag(flag)
+	GameManager.add_world_flag(location_flag)
+	GameManager.add_world_flag(level_flag)
+
+	return "\n\nLa cita exitosa quedó registrada en tus recuerdos."
 
 func reveal_date_reward_info(npc_id: String, success_level: String) -> String:
 	var reveal_text: String = ""
@@ -281,13 +344,6 @@ func grant_date_collectible(npc_id: String, date_location_id: String) -> String:
 		npc.get("name", npc_id),
 		date_location.get("name", date_location_id)
 	]
-
-func update_relationship_state_after_date(npc_id: String, success_level: String) -> void:
-	var relation: Dictionary = GameManager.player["relationships"][npc_id]
-	var state: String = relation.get("relationship_state", "none")
-
-	if state == "none" and (success_level == "excellent" or success_level == "perfect"):
-		relation["relationship_state"] = "interest"
 
 func get_success_label(success_level: String) -> String:
 	match success_level:

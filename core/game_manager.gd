@@ -657,3 +657,54 @@ func has_collectible(collectible_id: String) -> bool:
 func get_collectibles() -> Array:
 	ensure_collectibles()
 	return player["collectibles"]
+
+func get_info_tier(info_key: String) -> int:
+	var tier_20: Array = [
+		"favorite_place",
+		"hobby",
+		"favorite_color",
+		"favorite_food"
+	]
+
+	var tier_40: Array = [
+		"phone",
+		"routine",
+		"light_romantic_preference",
+		"dislikes"
+	]
+
+	var tier_60: Array = [
+		"height",
+		"favorite_style",
+		"minor_insecurity",
+		"accepted_affectionate_gesture"
+	]
+
+	var tier_80: Array = [
+		"measurements",
+		"emotional_fear",
+		"romantic_desire",
+		"ideal_date"
+	]
+
+	var tier_100: Array = [
+		"intimate_secret",
+		"partner_condition"
+	]
+
+	if tier_20.has(info_key):
+		return 20
+
+	if tier_40.has(info_key):
+		return 40
+
+	if tier_60.has(info_key):
+		return 60
+
+	if tier_80.has(info_key):
+		return 80
+
+	if tier_100.has(info_key):
+		return 100
+
+	return 0

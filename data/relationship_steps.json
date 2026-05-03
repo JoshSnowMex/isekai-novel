@@ -1,0 +1,62 @@
+{
+	"interest": {
+		"name": "Hablar de lo que está pasando",
+		"description": "Una cita especial para reconocer que entre ambos existe algo más que amistad.",
+		"from_state": "none",
+		"to_state": "interest",
+		"required_total_affinity": 35,
+		"required_info_tier": 20,
+		"required_known_info_count": 2,
+		"required_successful_date": true,
+		"questions_required": 2,
+		"allowed_failures": 0,
+		"portrait_piece_index": 1,
+		"success_text": "La conversación deja de rodear lo evidente.\n\nNo hay promesa todavía. No hay nombre definitivo. Pero algo entre ustedes queda reconocido, frágil y peligroso.\n\nYa no es solo cercanía. Es interés.",
+		"failure_text": "La conversación intenta llegar a un lugar para el que todavía no hay suficiente verdad compartida.\n\nNo hay ruptura. Pero queda claro que todavía falta conocer más antes de nombrar lo que ocurre."
+	},
+	"dating": {
+		"name": "Pedir salir",
+		"description": "Una cita especial para convertir la tensión en una relación reconocida.",
+		"from_state": "interest",
+		"to_state": "dating",
+		"required_total_affinity": 55,
+		"required_info_tier": 40,
+		"required_known_info_count": 3,
+		"required_successful_date": true,
+		"questions_required": 3,
+		"allowed_failures": 1,
+		"portrait_piece_index": 2,
+		"success_text": "Esta vez no queda espacio para fingir casualidad.\n\nLa respuesta no convierte el mundo en algo sencillo, pero sí cambia el lugar que ocupas en su vida.\n\nAhora están saliendo.",
+		"failure_text": "La intención era clara, pero la base todavía no alcanza.\n\nLa respuesta no es un rechazo absoluto; es una puerta que no se abre todavía."
+	},
+	"lovers": {
+		"name": "Cruzar una línea íntima",
+		"description": "Una cita especial para aceptar una relación más traviesa, privada y cargada de deseo.",
+		"from_state": "dating",
+		"to_state": "lovers",
+		"required_total_affinity": 75,
+		"required_info_tier": 60,
+		"required_known_info_count": 3,
+		"required_successful_date": true,
+		"questions_required": 3,
+		"allowed_failures": 1,
+		"portrait_piece_index": 3,
+		"success_text": "La relación cruza una frontera que ya llevaba tiempo dibujándose entre miradas, pausas y gestos demasiado lentos.\n\nNo hay vulgaridad en ello. Hay deseo reconocido, cuidado y una intimidad que ya no quiere fingir inocencia.",
+		"failure_text": "El deseo estaba ahí, pero el momento no logra sostenerlo.\n\nLa distancia que aparece no destruye lo construido, aunque sí recuerda que la intimidad no se toma: se concede."
+	},
+	"partner": {
+		"name": "Definir el vínculo",
+		"description": "Una cita especial final para culminar la ruta personal del NPC. Puede ser pareja formal, amante declarado o pacto íntimo según el personaje y la decisión del jugador.",
+		"from_state": "lovers",
+		"to_state": "partner",
+		"required_total_affinity": 95,
+		"required_info_tier": 100,
+		"required_known_info_count": 4,
+		"required_successful_date": true,
+		"questions_required": 4,
+		"allowed_failures": 1,
+		"portrait_piece_index": 4,
+		"success_text": "No todas las relaciones culminan con el mismo nombre.\n\nAlgunas se vuelven promesa. Otras, pacto. Otras, una forma de amor que no necesita pedir permiso al mundo.\n\nPero esta sí queda sellada: el vínculo llegó a su forma máxima.",
+		"failure_text": "Intentar definirlo todo revela justamente lo que aún falta.\n\nNo es el final, pero sí una advertencia: un vínculo máximo no se sostiene solo con deseo. También necesita verdad."
+	}
+}

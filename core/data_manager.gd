@@ -14,6 +14,7 @@ var dialogues: Dictionary = {}
 var petitions: Dictionary = {}
 var date_locations: Dictionary = {}
 var date_moves: Dictionary = {}
+var relationship_steps: Dictionary = {}
 	
 
 func _ready() -> void:
@@ -34,6 +35,7 @@ func load_all_data() -> void:
 	dialogues = load_json("res://data/dialogues.json")
 	date_locations = load_json("res://data/date_locations.json")
 	date_moves = load_json("res://data/date_moves.json")
+	relationship_steps = load_json("res://data/relationship_steps.json")
 
 func load_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -84,3 +86,6 @@ func get_date_location(date_location_id: String) -> Dictionary:
 
 func get_date_move(date_move_id: String) -> Dictionary:
 	return date_moves.get(date_move_id, {})
+
+func get_relationship_step(step_id: String) -> Dictionary:
+	return relationship_steps.get(step_id, {})
