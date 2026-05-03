@@ -1,8 +1,8 @@
 {
-	"first_world_fracture": {
-		"name": "La primera grieta",
+	"veil_first_contradiction": {
+		"name": "La primera contradicción",
 		"trigger": "day_started",
-		"priority": 10,
+		"priority": 100,
 		"once": true,
 		"conditions": {
 			"time": {
@@ -14,47 +14,296 @@
 				]
 			}
 		},
-		"text": "Esa mañana, la aldea parece distinta. No por sus calles ni por su cielo, sino por la forma en que algunas miradas se apartan de ti demasiado rápido.\n\nAlgo en Luminaria ha empezado a moverse.",
+		"text": "Esa mañana, Luminaria recuerda algo que nunca ocurrió.\n\nUn vendedor te saluda por una conversación que no tuvieron. Una puerta aparece con marcas de uso aunque ayer no existía. En la biblioteca, una página menciona tu llegada antes de que llegaras.\n\nNadie grita. Nadie corre.\n\nEl Velo no castiga. Equilibra.\n\nY tú eres una variable que no pertenece a ninguna versión previa del mundo.",
 		"effects": {
 			"add_world_flags": [
-				"milestone:first_world_fracture",
-				"world_fracture_started"
+				"milestone:veil_first_contradiction",
+				"world_fracture_started",
+				"veil_has_started_balancing"
 			],
 			"world_state": {
-				"global_tension": 10
+				"global_tension": 8,
+				"world_instability": 6
 			}
 		}
 	},
-	"lyria_private_threshold": {
-		"name": "La puerta que no debía abrirse",
+	"aeris_names_the_anchor": {
+		"name": "El nombre del ancla",
 		"trigger": "relationship_changed",
-		"priority": 20,
+		"priority": 110,
 		"once": true,
-		"npc_id": "lyria",
+		"npc_id": "aeris",
 		"conditions": {
 			"relationship": {
 				"friendship": {
-					"min": 30
+					"min": 20
+				}
+			}
+		},
+		"text": "Aeris no te llama héroe.\n\nEso debería tranquilizarte.\n\nEn cambio, abre un mapa estelar que no muestra estrellas, sino posibilidades superpuestas.\n\n\"El Velo no te trajo por virtud\", dice con una delicadeza casi cruel. \"Te trajo porque no estabas escrito aquí. Eres un ancla emocional. Algo externo. Algo que puede obligar al mundo a elegir una versión de sí mismo.\"\n\nLuego baja la voz.\n\n\"Eso no te hace culpable. Pero tampoco te hace inocente.\"",
+		"effects": {
+			"add_world_flags": [
+				"milestone:aeris_names_the_anchor",
+				"aeris_explained_anchor_nature",
+				"player_known_as_external_anchor"
+			],
+			"relationship": {
+				"npc_id": "aeris",
+				"loyalty": 2
+			},
+			"world_state": {
+				"world_instability": 3
+			}
+		}
+	},
+	"aeris_silences_the_prophecy": {
+		"name": "Cuando Aeris calla",
+		"trigger": "petition_completed",
+		"priority": 105,
+		"once": true,
+		"npc_id": "aeris",
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"aeris_delayed_prophecy_truth"
+				]
+			}
+		},
+		"text": "La profecía no se rompe cuando Aeris decide callar.\n\nEso sería demasiado simple.\n\nEn lugar de romperse, se dobla.\n\nUna línea desaparece de sus notas. Otra aparece en un margen que ella jura no haber escrito. La predicción sigue ahí, pero ahora parece menos una advertencia y más una trampa que aprende.\n\nAeris no ha mentido.\n\nPero ha permitido que el miedo edite el destino.",
+		"effects": {
+			"add_world_flags": [
+				"milestone:aeris_silences_the_prophecy",
+				"prophecy_temporarily_silenced",
+				"prophecy_started_adapting"
+			],
+			"relationship": {
+				"npc_id": "aeris",
+				"loyalty": 4,
+				"tension": 2
+			},
+			"world_state": {
+				"world_instability": 7,
+				"global_tension": 3
+			}
+		}
+	},
+	"eryon_reveals_written_fear": {
+		"name": "Una profecía hecha de miedo",
+		"trigger": "relationship_changed",
+		"priority": 95,
+		"once": true,
+		"npc_id": "eryon",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
 				},
-				"loyalty": {
+				"tension": {
 					"min": 10
 				}
 			},
 			"world_flags": {
 				"has_all": [
-					"lyria_opened_first_door"
+					"player_known_as_external_anchor"
 				]
 			}
 		},
-		"text": "Lyria te mira como si estuviera a punto de decir algo que no debería. Al final no lo hace.\n\nPero ahora sabes que hay una puerta invisible entre ambos. Y que ella ya tocó el pomo.",
+		"text": "Eryon se ríe cuando mencionas la profecía.\n\nNo con burla. Con cansancio.\n\n\"Las profecías no nacen completas\", dice. \"Alguien teme algo. Otro alguien lo escribe con palabras bonitas. Luego generaciones enteras obedecen a una herida como si fuera destino.\"\n\nTe muestra tres versiones distintas del mismo texto.\n\nEn ninguna eres héroe.\n\nEn todas eres útil.",
 		"effects": {
 			"add_world_flags": [
-				"milestone:lyria_private_threshold",
-				"lyria_has_private_doubt"
+				"milestone:eryon_reveals_written_fear",
+				"prophecy_is_known_as_manipulated"
 			],
 			"relationship": {
+				"npc_id": "eryon",
+				"loyalty": 2,
+				"tension": 2
+			},
+			"world_state": {
+				"global_tension": 4
+			}
+		}
+	},
+	"council_begins_to_measure_you": {
+		"name": "El Consejo toma medidas",
+		"trigger": "day_started",
+		"priority": 90,
+		"once": true,
+		"conditions": {
+			"time": {
+				"min_day": 5
+			},
+			"world_state": {
+				"global_tension": {
+					"min": 10
+				}
+			}
+		},
+		"text": "El Consejo no te amenaza.\n\nEso sería torpe.\n\nEn cambio, Selene entrega más mensajes de lo habitual. Taren evita una pregunta directa. Algunos comerciantes empiezan a recordar normas que ayer nadie aplicaba.\n\nNo eres prisionero.\n\nTodavía.\n\nPero Luminaria ha empezado a medirte como se mide una grieta en un muro: no por odio, sino por miedo a que todo el edificio caiga.",
+		"effects": {
+			"add_world_flags": [
+				"milestone:council_begins_to_measure_you",
+				"council_is_watching",
+				"council_has_started_containment"
+			],
+			"world_state": {
+				"global_tension": 5
+			}
+		}
+	},
+	"first_love_costs_a_possibility": {
+		"name": "El precio de elegir",
+		"trigger": "relationship_changed",
+		"priority": 85,
+		"once": true,
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 25
+				},
+				"tension": {
+					"min": 25
+				}
+			}
+		},
+		"text": "El afecto no altera el mundo de inmediato.\n\nPrimero altera las posibilidades.\n\nUna persona te mira más tiempo de lo prudente. Otra llega tarde a donde debía estar. Una decisión pequeña, casi invisible, deja de ocurrir porque alguien prefirió pensar en ti.\n\nEl Velo registra el desvío.\n\nEnamorarse no crea poder de la nada.\n\nLo toma de otro futuro.",
+		"effects": {
+			"add_world_flags": [
+				"milestone:first_love_costs_a_possibility",
+				"love_has_cost_possibility"
+			],
+			"world_state": {
+				"romantic_pressure": 7,
+				"world_instability": 3
+			}
+		}
+	},
+	"jealousy_becomes_memory": {
+		"name": "Celos que el mundo recuerda",
+		"trigger": "relationship_changed",
+		"priority": 80,
+		"once": true,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				},
+				"tension": {
+					"min": 20
+				}
+			}
+		},
+		"text": "Los celos no llegan como una escena.\n\nLlegan como una memoria falsa.\n\nAlguien recuerda haberte visto sonreír de cierta forma. Otra persona jura haber escuchado una promesa que nunca hiciste. Una conversación que no ocurrió empieza a doler como si hubiera sido real.\n\nEl Velo no distingue del todo entre deseo, miedo y posibilidad.\n\nY eso vuelve peligrosas incluso las miradas.",
+		"effects": {
+			"add_world_flags": [
+				"milestone:jealousy_becomes_memory",
+				"jealousy_has_entered_story"
+			],
+			"world_state": {
+				"romantic_pressure": 6,
+				"global_tension": 4
+			}
+		}
+	},
+	"forbidden_record_hidden": {
+		"name": "El registro desaparecido",
+		"trigger": "petition_completed",
+		"priority": 95,
+		"once": true,
+		"npc_id": "lyria",
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"lyria_hid_forbidden_record"
+				]
+			}
+		},
+		"text": "El registro ya no está donde debería.\n\nNadie acusa a Lyria.\n\nTodavía.\n\nPero la biblioteca recuerda dos versiones de sí misma: una donde el registro sigue en su lugar, y otra donde nunca existió.\n\nLyria te mira sin reproche, y eso pesa más.\n\nUna verdad fue ocultada por ti. Eso también es una forma de intimidad.",
+		"effects": {
+			"add_world_flags": [
+				"milestone:forbidden_record_hidden",
+				"council_missing_record",
+				"library_has_conflicting_memory"
+			],
+			"world_state": {
+				"global_tension": 6,
+				"world_instability": 6,
+				"romantic_pressure": 3
+			},
+			"relationship": {
 				"npc_id": "lyria",
-				"loyalty": 3
+				"loyalty": 3,
+				"tension": 2
+			}
+		}
+	},
+	"axiom_understands_love_as_death": {
+		"name": "La forma finita del amor",
+		"trigger": "relationship_changed",
+		"priority": 110,
+		"once": true,
+		"npc_id": "axiom",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 25
+				},
+				"tension": {
+					"min": 15
+				}
+			},
+			"world_state": {
+				"world_instability": {
+					"min": 10
+				}
+			}
+		},
+		"text": "Axiom tarda demasiado en responder cuando le preguntas qué siente.\n\nSu forma tiembla, apenas un error en el aire.\n\n\"Si te amo\", dice al fin, \"dejo de extenderme hacia todas las posibilidades. Me vuelvo dirección. Me vuelvo pérdida.\"\n\nSus dedos intentan imitar una mano humana.\n\n\"Creo que para ustedes eso significa elegir. Para mí significa desaparecer de todo lo que no seas tú.\"",
+		"effects": {
+			"add_world_flags": [
+				"milestone:axiom_understands_love_as_death",
+				"axiom_love_means_finitude"
+			],
+			"relationship": {
+				"npc_id": "axiom",
+				"loyalty": 5,
+				"tension": 3
+			},
+			"world_state": {
+				"world_instability": 8
+			}
+		}
+	},
+	"return_home_is_not_victory": {
+		"name": "La puerta de regreso",
+		"trigger": "day_started",
+		"priority": 70,
+		"once": true,
+		"conditions": {
+			"time": {
+				"min_day": 10
+			},
+			"world_state": {
+				"world_instability": {
+					"min": 18
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"player_known_as_external_anchor"
+				]
+			}
+		},
+		"text": "Por primera vez desde tu llegada, sueñas con tu mundo.\n\nNo como recuerdo.\n\nComo puerta.\n\nPero algo está mal. Una calle que conocías tiene otro nombre. Una voz familiar olvida una fecha imposible de olvidar. Tu mundo también parece haber sido tocado por el Velo.\n\nVolver quizás sea posible.\n\nVolver intacto, no.",
+		"effects": {
+			"add_world_flags": [
+				"milestone:return_home_is_not_victory",
+				"return_home_path_glimpsed",
+				"origin_world_changed"
+			],
+			"world_state": {
+				"global_tension": 5,
+				"world_instability": 5
 			}
 		}
 	}

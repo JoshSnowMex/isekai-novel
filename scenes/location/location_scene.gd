@@ -9,6 +9,7 @@ var current_location_id: String = ""
 var last_message: String = ""
 
 func _ready() -> void:
+	setup_fullscreen_root()
 	build_ui()
 	load_location(GameManager.current_location_id)
 
@@ -89,7 +90,7 @@ func build_actions(location_data: Dictionary) -> void:
 		add_action("Comprar", func(): SceneRouter.go_to_shop())
 
 	if current_location_id == "home" and GameManager.is_day_exhausted():
-		add_action("Dormir", func(): do_sleep())
+		add_action("Dormir", func(): do_sleep(), true)
 
 	if action_container.get_child_count() == 0:
 		action_container.add_child(UIFactory.body("No hay acciones disponibles aquí por ahora."))
@@ -113,8 +114,9 @@ func build_npcs() -> void:
 	if npc_container.get_child_count() == 0:
 		npc_container.add_child(UIFactory.body("No ves a nadie conocido aquí en este momento."))
 
-func add_action(text: String, callback: Callable) -> void:
+func add_action(text: String, callback: Callable, allow_when_exhausted: bool = false) -> void:
 	var button: Button = UIFactory.button(text)
+	button.disabled = GameManager.is_day_exhausted() and not allow_when_exhausted
 	button.pressed.connect(callback)
 	action_container.add_child(button)
 
@@ -158,23 +160,34 @@ func interact_npc(npc_id: String) -> void:
 	action_container.add_child(UIFactory.title(npc.get("name", npc_id)))
 
 	var talk_button: Button = UIFactory.button("Hablar")
+	talk_button.disabled = GameManager.is_day_exhausted()
 	talk_button.pressed.connect(func(): talk_to_npc(npc_id))
 	action_container.add_child(talk_button)
 
 	var gift_button: Button = UIFactory.button("Dar regalo")
+	gift_button.disabled = GameManager.is_day_exhausted()
 	gift_button.pressed.connect(func(): show_gift_selection(npc_id))
 	action_container.add_child(gift_button)
 
 	var date_button: Button = UIFactory.button("Invitar a cita")
-	date_button.disabled = not GameManager.can_invite_to_date(npc_id)
+	date_button.disabled = GameManager.is_day_exhausted() or not GameManager.can_invite_to_date(npc_id)
 	date_button.pressed.connect(func(): SceneRouter.go_to_date(npc_id))
 	action_container.add_child(date_button)
+	
+	var petition_button: Button = UIFactory.button("Pedir favor")
+	petition_button.disabled = GameManager.is_day_exhausted() or not PetitionSystem.has_any_available_petition(npc_id)
+	petition_button.pressed.connect(func(): show_petitions(npc_id))
+	action_container.add_child(petition_button)
 
 	var back_button: Button = UIFactory.button("Volver")
 	back_button.pressed.connect(func(): load_location(current_location_id))
 	action_container.add_child(back_button)
 
 func talk_to_npc(npc_id: String) -> void:
+	if not GameManager.can_perform_action(5):
+		reload_scene(GameManager.get_action_blocked_message(5))
+		return
+		
 	GameManager.ensure_relationship(npc_id)
 	GameManager.ensure_npc_knowledge(npc_id)
 
@@ -259,6 +272,9 @@ func show_gift_selection(npc_id: String) -> void:
 	action_container.add_child(back_button)
 
 func give_gift(npc_id: String, item_id: String) -> void:
+	if not GameManager.can_perform_action(5):
+		reload_scene(GameManager.get_action_blocked_message(5))
+		return
 	GameManager.ensure_relationship(npc_id)
 	GameManager.ensure_npc_knowledge(npc_id)
 
@@ -321,6 +337,10 @@ func give_gift(npc_id: String, item_id: String) -> void:
 	reload_scene(message)
 
 func do_activity(activity_id: String) -> void:
+	if GameManager.is_day_exhausted():
+		reload_scene("Ya no te queda tiempo útil hoy. Deberías volver a casa y dormir.")
+		return
+
 	var result_message: String = GameManager.perform_activity(activity_id)
 	SaveManager.save_game()
 	reload_scene(result_message)
@@ -331,3 +351,72 @@ func reload_scene(message: String = "") -> void:
 
 func _on_back_pressed() -> void:
 	SceneRouter.go_to_world_map()
+
+func setup_fullscreen_root() -> void:
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	offset_left = 0
+	offset_top = 0
+	offset_right = 0
+	offset_bottom = 0
+
+func show_petitions(npc_id: String) -> void:
+	clear_container(action_container)
+
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var petition_ids: Array = PetitionSystem.get_available_petitions(npc_id)
+
+	action_container.add_child(UIFactory.title("Pedir favor a %s" % npc.get("name", npc_id)))
+
+	if petition_ids.is_empty():
+		description_label.text = "No hay nada que puedas pedirle ahora."
+	else:
+		description_label.text = "Algunas peticiones cruzan una línea. Elige con cuidado."
+
+		for petition_id in petition_ids:
+			var id: String = str(petition_id)
+			var petition: Dictionary = DataManager.get_petition(id)
+			var button: Button = UIFactory.button(petition.get("name", id))
+			button.pressed.connect(func(): confirm_petition(id))
+			action_container.add_child(button)
+
+	var back_button: Button = UIFactory.button("Volver")
+	back_button.pressed.connect(func(): interact_npc(npc_id))
+	action_container.add_child(back_button)
+
+func confirm_petition(petition_id: String) -> void:
+	clear_container(action_container)
+
+	var petition: Dictionary = DataManager.get_petition(petition_id)
+	var npc_id: String = petition.get("npc_id", "")
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+
+	description_label.text = "%s\n\n%s" % [
+		npc.get("name", npc_id),
+		petition.get("request_text", "")
+	]
+
+	var accept_button: Button = UIFactory.button("Hacer la petición")
+	accept_button.pressed.connect(func(): perform_petition(petition_id))
+	action_container.add_child(accept_button)
+
+	var cancel_button: Button = UIFactory.button("No todavía")
+	cancel_button.pressed.connect(func(): interact_npc(npc_id))
+	action_container.add_child(cancel_button)
+
+func perform_petition(petition_id: String) -> void:
+	if not GameManager.can_perform_action(5):
+		reload_scene(GameManager.get_action_blocked_message(5))
+		return
+
+	var result: Dictionary = PetitionSystem.perform_petition(petition_id)
+	var petition: Dictionary = DataManager.get_petition(petition_id)
+	var npc_id: String = petition.get("npc_id", "")
+
+	GameManager.consume_action(5)
+	GameManager.add_npc_note(
+		npc_id,
+		"Una petición cruzó un límite y dejó consecuencias."
+	)
+
+	SaveManager.save_game()
+	reload_scene(result.get("text", "La petición terminó."))

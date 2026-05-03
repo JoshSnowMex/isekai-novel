@@ -4,6 +4,7 @@ var npc_button_container: VBoxContainer
 var details_label: RichTextLabel
 
 func _ready() -> void:
+	setup_fullscreen_root()
 	build_ui()
 	build_npc_list()
 
@@ -195,3 +196,10 @@ func build_notes_section(knowledge: Dictionary) -> String:
 			text += "- %s\n" % note
 
 	return text
+
+func setup_fullscreen_root() -> void:
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	offset_left = 0
+	offset_top = 0
+	offset_right = 0
+	offset_bottom = 0

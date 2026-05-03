@@ -55,5 +55,128 @@
 				"lyria_can_be_asked_too_much"
 			]
 		}
+	},
+	"aeris_first_trust": {
+		"trigger": "relationship_changed",
+		"npc_id": "aeris",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 10
+				}
+			}
+		},
+		"text": "Aeris empieza a hablarte con menos distancia académica.\n\nNo abandona su cautela, pero por primera vez sus preguntas no suenan como estudio, sino como preocupación.",
+		"effects": {
+			"add_world_flags": [
+				"aeris_first_trust"
+			],
+			"relationship": {
+				"npc_id": "aeris",
+				"loyalty": 2
+			}
+		}
+	},
+	"aeris_mentions_the_veil": {
+		"trigger": "relationship_changed",
+		"npc_id": "aeris",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 15
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"aeris_first_trust"
+				]
+			}
+		},
+		"text": "Aeris extiende un mapa cubierto de líneas imposibles.\n\n\"El Velo no es una muralla\", explica. \"Es memoria. Registra lo que fue, lo que pudo ser y lo que no debería repetirse. Tu llegada no abrió una puerta; obligó al mundo a recordar una posibilidad que no le pertenecía.\"",
+		"effects": {
+			"add_world_flags": [
+				"aeris_explained_veil_basics"
+			],
+			"world_state": {
+				"world_instability": 2
+			}
+		}
+	},
+	"aeris_warns_about_coherence": {
+		"trigger": "relationship_changed",
+		"npc_id": "aeris",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 22
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"aeris_explained_veil_basics"
+				]
+			}
+		},
+		"text": "Aeris tarda en elegir sus palabras.\n\n\"El Velo permite contradicciones pequeñas, pero no las perdona para siempre. Cuando una vida cambia demasiado el curso de otras, cobra coherencia. A veces con recuerdos falsos. A veces con pérdidas reales.\"",
+		"effects": {
+			"add_world_flags": [
+				"aeris_warned_about_coherence_cost"
+			],
+			"world_state": {
+				"global_tension": 2,
+				"world_instability": 2
+			}
+		}
+	},
+	"eryon_reacts_to_aeris_closeness": {
+		"trigger": "relationship_changed",
+		"npc_id": "aeris",
+		"conditions": {
+			"relationship": {
+				"tension": {
+					"min": 20
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"aeris_first_trust"
+				]
+			}
+		},
+		"text": "Eryon no menciona a Aeris directamente.\n\nSolo sonríe al verte pasar y dice: \"Cuidado con quienes llaman verdad a lo que todavía les duele demasiado admitir.\"",
+		"effects": {
+			"add_world_flags": [
+				"eryon_noticed_aeris_closeness"
+			],
+			"relationship": {
+				"npc_id": "eryon",
+				"jealousy": 5
+			}
+		}
+	},
+	"council_notices_aeris_interest": {
+		"trigger": "relationship_changed",
+		"npc_id": "aeris",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 25
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"aeris_explained_veil_basics"
+				]
+			}
+		},
+		"text": "Selene entrega un mensaje sellado al observatorio.\n\nAeris no te lo muestra, pero la forma en que guarda el papel basta para entenderlo: el Consejo ya notó que habla contigo más de lo prudente.",
+		"effects": {
+			"add_world_flags": [
+				"council_noticed_aeris_interest"
+			],
+			"world_state": {
+				"global_tension": 4
+			}
+		}
 	}
 }

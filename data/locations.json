@@ -8,7 +8,10 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_home_discipline"
+		]
 	},
 	"library": {
 		"name": "Biblioteca del Alba",
@@ -21,7 +24,7 @@
 			"shop": false
 		},
 		"activities": [
-			"study_library",
+			"train_library_intellect",
 			"work_library_half",
 			"work_library_full"
 		]
@@ -37,7 +40,7 @@
 			"shop": false
 		},
 		"activities": [
-			"social_market",
+			"train_market_charm",
 			"work_market_half",
 			"work_market_full"
 		]
@@ -62,10 +65,15 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_observatory_intuition",
+			"work_observatory_half",
+			"work_observatory_full"
+		]
 	},
 	"arcane_library": {
-		"name": "Ateneo Arcana",
+		"name": "Ateneo Arcano",
 		"description": "Una sección prohibida de la biblioteca, reservada para quienes saben formular preguntas peligrosas.",
 		"actions": {
 			"rest": false,
@@ -73,7 +81,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_arcane_intellect",
+			"work_arcane_half",
+			"work_arcane_full"
+		]
 	},
 	"private_study": {
 		"name": "Estudio Privado",
@@ -84,7 +97,10 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_private_intuition"
+		]
 	},
 	"archives": {
 		"name": "Archivos del Velo",
@@ -95,7 +111,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_archives_intellect",
+			"work_archives_half",
+			"work_archives_full"
+		]
 	},
 	"plaza": {
 		"name": "Plaza de Luminaria",
@@ -106,7 +127,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_plaza_charm",
+			"work_plaza_half",
+			"work_plaza_full"
+		]
 	},
 	"guild": {
 		"name": "Gremio del Alba Roja",
@@ -117,7 +143,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_guild_strength",
+			"work_guild_half",
+			"work_guild_full"
+		]
 	},
 	"tavern": {
 		"name": "Taberna del Puente Rojo",
@@ -128,7 +159,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_tavern_charm",
+			"work_tavern_half",
+			"work_tavern_full"
+		]
 	},
 	"workshop": {
 		"name": "Taller Arcano",
@@ -139,7 +175,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_workshop_discipline",
+			"work_workshop_half",
+			"work_workshop_full"
+		]
 	},
 	"sanctuary": {
 		"name": "Santuario del Velo Quieto",
@@ -150,7 +191,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_sanctuary_discipline",
+			"work_sanctuary_half",
+			"work_sanctuary_full"
+		]
 	},
 	"forest": {
 		"name": "Bosque Herido",
@@ -161,7 +207,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_forest_intuition",
+			"work_forest_half",
+			"work_forest_full"
+		]
 	},
 	"council_hall": {
 		"name": "Salón del Consejo",
@@ -172,7 +223,12 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_council_discipline",
+			"work_council_half",
+			"work_council_full"
+		]
 	},
 	"threshold": {
 		"name": "Umbral",
@@ -183,6 +239,9 @@
 			"work_full": false,
 			"work_half": false,
 			"shop": false
-		}
+		},
+		"activities": [
+			"train_threshold_intuition"
+		]
 	}
 }

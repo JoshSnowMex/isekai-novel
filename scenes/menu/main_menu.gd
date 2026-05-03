@@ -4,6 +4,7 @@ var continue_button: Button
 var subtitle_label: Label
 
 func _ready() -> void:
+	setup_fullscreen_root()
 	build_ui()
 	update_buttons()
 
@@ -53,3 +54,10 @@ func _on_continue_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	SceneRouter.quit_game()
+	
+func setup_fullscreen_root() -> void:
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	offset_left = 0
+	offset_top = 0
+	offset_right = 0
+	offset_bottom = 0

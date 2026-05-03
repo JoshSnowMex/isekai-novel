@@ -5,6 +5,7 @@ var option_container: VBoxContainer
 var selected_class_id: String = ""
 
 func _ready() -> void:
+	setup_fullscreen_root()
 	build_ui()
 	show_intro_text()
 
@@ -69,7 +70,23 @@ func select_class(class_id: String) -> void:
 	selected_class_id = class_id
 	var class_data: Dictionary = DataManager.get_player_class(class_id)
 
-	text_label.text = class_data.get("name", "") + "\n\n" + class_data.get("description", "") + "\n\n¿Este será el impulso que guiará tu nueva vida?"
+	var text: String = ""
+	text += class_data.get("name", "") + "\n\n"
+	text += class_data.get("description", "") + "\n\n"
+	text += "Estilo narrativo:\n"
+	text += class_data.get("narrative_style", "") + "\n\n"
+
+	text += "Fortalezas:\n"
+	for item in class_data.get("strengths", []):
+		text += "- %s\n" % item
+
+	text += "\nDebilidades:\n"
+	for item in class_data.get("weaknesses", []):
+		text += "- %s\n" % item
+
+	text += "\n¿Este será el impulso que guiará tu nueva vida?"
+
+	text_label.text = text
 
 	clear_options()
 
@@ -91,3 +108,10 @@ func confirm_class() -> void:
 func clear_options() -> void:
 	for child in option_container.get_children():
 		child.queue_free()
+
+func setup_fullscreen_root() -> void:
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	offset_left = 0
+	offset_top = 0
+	offset_right = 0
+	offset_bottom = 0

@@ -10,6 +10,7 @@ var activities: Dictionary = {}
 var rivalries: Dictionary = {}
 var events: Dictionary = {}
 var milestones: Dictionary = {}
+var petitions: Dictionary = {}
 
 func _ready() -> void:
 	load_all_data()
@@ -25,6 +26,7 @@ func load_all_data() -> void:
 	rivalries = load_json("res://data/rivalries.json")
 	events = load_json("res://data/events.json")
 	milestones = load_json("res://data/milestones.json")
+	petitions = load_json("res://data/petitions.json")
 
 func load_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -63,3 +65,6 @@ func get_milestone(milestone_id: String) -> Dictionary:
 
 func get_rivalry(rivalry_id: String) -> Dictionary:
 	return rivalries.get(rivalry_id, {})
+
+func get_petition(petition_id: String) -> Dictionary:
+	return petitions.get(petition_id, {})

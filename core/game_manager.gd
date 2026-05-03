@@ -373,29 +373,46 @@ func perform_activity(activity_id: String) -> String:
 		return "No tienes suficiente resistencia para esta actividad."
 
 	var stat: String = activity.get("stat", "")
-	var base_gain: int = int(activity.get("base_gain", 0))
-	var money_gain: int = int(activity.get("money_gain", 0))
+	var base_stat_gain: int = int(activity.get("base_stat_gain", activity.get("base_gain", 0)))
+	var base_money_gain: int = int(activity.get("base_money_gain", activity.get("money_gain", 0)))
+	var work_modifier_key: String = activity.get("work_modifier_key", "none")
+
 	var class_id: String = player.get("class_id", "")
 	var class_data: Dictionary = DataManager.get_player_class(class_id)
-	var modifiers: Dictionary = class_data.get("growth_modifiers", {})
 
-	var modifier: float = float(modifiers.get(stat, 1.0))
-	var final_gain: int = max(1, int(round(float(base_gain) * modifier)))
+	var growth_modifiers: Dictionary = class_data.get("growth_modifiers", {})
+	var work_modifiers: Dictionary = class_data.get("work_modifiers", {})
 
-	if stat != "":
-		player["stats"][stat] = int(player["stats"].get(stat, 0)) + final_gain
+	var stat_modifier: float = float(growth_modifiers.get(stat, 1.0))
+	var money_modifier: float = float(work_modifiers.get(work_modifier_key, 1.0))
 
-	player["money"] = int(player.get("money", 0)) + money_gain
+	var final_stat_gain: int = 0
+	var final_money_gain: int = 0
+
+	if base_stat_gain > 0 and stat != "":
+		final_stat_gain = max(1, int(round(float(base_stat_gain) * stat_modifier)))
+		player["stats"][stat] = int(player["stats"].get(stat, 0)) + final_stat_gain
+
+	if base_money_gain > 0:
+		final_money_gain = max(1, int(round(float(base_money_gain) * money_modifier)))
+		player["money"] = int(player.get("money", 0)) + final_money_gain
 
 	consume_action(stamina_cost)
 
-	return "%s\n\n%s +%s\nDinero +%s\nResistencia -%s" % [
-		activity.get("description", "Actividad completada."),
-		stat,
-		final_gain,
-		money_gain,
-		stamina_cost
-	]
+	var stat_label: String = get_stat_label(stat)
+
+	var result: String = activity.get("description", "Actividad completada.")
+	result += "\n\n"
+
+	if final_stat_gain > 0:
+		result += "%s +%s\n" % [stat_label, final_stat_gain]
+
+	if final_money_gain > 0:
+		result += "Dinero +%s\n" % final_money_gain
+
+	result += "Resistencia -%s" % stamina_cost
+
+	return result
 
 func add_affinity(npc_id: String, amount: int) -> String:
 	return add_relationship_value(npc_id, "friendship", amount)
@@ -406,7 +423,8 @@ func add_relationship_value(npc_id: String, key: String, amount: int) -> String:
 	var relation: Dictionary = player["relationships"][npc_id]
 
 	var old_value: int = int(relation.get(key, 0))
-	var new_value: int = clamp(old_value + amount, 0, 100)
+	var modified_amount: int = apply_relationship_modifier(key, amount)
+	var new_value: int = clamp(old_value + modified_amount, 0, 100)
 
 	relation[key] = new_value
 
@@ -530,3 +548,55 @@ func consume_pending_narrative_messages() -> Array:
 	player["pending_narrative_messages"].clear()
 
 	return messages
+
+func can_perform_action(required_stamina: int = 0) -> bool:
+	if is_day_exhausted():
+		return false
+
+	if int(player.get("stamina", 0)) < required_stamina:
+		return false
+
+	return true
+
+func get_action_blocked_message(required_stamina: int = 0) -> String:
+	if is_day_exhausted():
+		return "Ya no te queda tiempo útil hoy. Deberías volver a casa y dormir."
+
+	if int(player.get("stamina", 0)) < required_stamina:
+		return "No tienes suficiente resistencia para hacer eso."
+
+	return ""
+
+func apply_relationship_modifier(key: String, amount: int) -> int:
+	if amount == 0:
+		return 0
+
+	var class_id: String = player.get("class_id", "")
+	var class_data: Dictionary = DataManager.get_player_class(class_id)
+	var modifiers: Dictionary = class_data.get("relationship_modifiers", {})
+
+	var modifier: float = float(modifiers.get(key, 1.0))
+	var modified: int = int(round(float(amount) * modifier))
+
+	if amount > 0:
+		return max(1, modified)
+
+	if amount < 0:
+		return min(-1, modified)
+
+	return modified
+	
+func get_stat_label(stat: String) -> String:
+	match stat:
+		"strength":
+			return "Fuerza"
+		"intellect":
+			return "Intelecto"
+		"charm":
+			return "Encanto"
+		"discipline":
+			return "Disciplina"
+		"intuition":
+			return "Intuición"
+		_:
+			return stat

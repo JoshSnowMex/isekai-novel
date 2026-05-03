@@ -25,6 +25,7 @@ RivalrySystem="*uid://c1mm3mb6q51jj"
 EventSystem="*uid://cyunuc5sibybv"
 ConditionSystem="*uid://b680vog6x7jmh"
 MilestoneSystem="*uid://dnahdvhobl34s"
+PetitionSystem="*uid://7w03dhndrbg2"
 
 [physics]
 

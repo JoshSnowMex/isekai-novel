@@ -1,0 +1,128 @@
+{
+	"lyria_hide_forbidden_record": {
+		"name": "Ocultar un registro prohibido",
+		"npc_id": "lyria",
+		"description": "Pedirle a Lyria que oculte un registro del Velo antes de que el consejo lo revise.",
+		"request_text": "Necesito que ese registro desaparezca de la vista del consejo. Solo por ahora.",
+		"success_text": "Lyria guarda silencio durante demasiado tiempo. Luego toma el registro, lo cierra con cuidado y lo aparta del resto.\n\n\"No me pidas que finja que esto no significa nada\", murmura.",
+		"failure_text": "Lyria aparta la mirada.\n\n\"No. Si hago esto sin estar segura de ti, no sabré si estoy protegiendo una verdad... o perdiéndome contigo.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 25
+				},
+				"loyalty": {
+					"min": 10
+				},
+				"jealousy": {
+					"max": 70
+				}
+			},
+			"world_flags": {
+				"has_all": [
+					"lyria_opened_first_door"
+				]
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:lyria_hide_forbidden_record",
+				"lyria_hid_forbidden_record"
+			],
+			"relationship": {
+				"loyalty": 8,
+				"tension": 3,
+				"jealousy": 2
+			},
+			"world_state": {
+				"world_instability": 5,
+				"global_tension": 3
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -3,
+				"loyalty": -2
+			}
+		},
+		"once": true
+	},
+	"aeris_delay_prophecy": {
+		"name": "Retrasar una verdad",
+		"npc_id": "aeris",
+		"description": "Pedirle a Aeris que no revele todavía una parte de la profecía.",
+		"request_text": "Si esa verdad cambia lo que todos ven en mí, necesito tiempo antes de que la digas.",
+		"success_text": "Aeris baja la mirada hacia sus notas. Por primera vez, no parece una investigadora sino alguien asustada por lo que siente.\n\n\"El cielo no perdona las omisiones\", dice. \"Pero esta vez... yo cargaré con una.\"",
+		"failure_text": "Aeris cierra el cuaderno con suavidad.\n\n\"No puedo convertir mi miedo en una mentira, aunque sea por ti.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 25
+				},
+				"tension": {
+					"min": 15
+				},
+				"loyalty": {
+					"min": 10
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:aeris_delay_prophecy",
+				"aeris_delayed_prophecy_truth"
+			],
+			"relationship": {
+				"loyalty": 7,
+				"tension": 4
+			},
+			"world_state": {
+				"world_instability": 4
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2,
+				"tension": -2
+			}
+		},
+		"once": true
+	},
+	"elara_spread_rumor": {
+		"name": "Mover un rumor",
+		"npc_id": "elara",
+		"description": "Pedirle a Elara que haga circular un rumor conveniente.",
+		"request_text": "Necesito que cierta versión de la historia llegue a oídos correctos.",
+		"success_text": "Elara sonríe sin alegría.\n\n\"Puedo hacerlo. Pero recuerda algo, cariño: un rumor nunca camina solo. Siempre vuelve acompañado.\"",
+		"failure_text": "Elara te observa desde el otro lado de la barra.\n\n\"Todavía no sé si quieres sobrevivir... o solo ensuciarte las manos con estilo.\"",
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
+				},
+				"loyalty": {
+					"min": 8
+				}
+			}
+		},
+		"effects_success": {
+			"add_world_flags": [
+				"petition:elara_spread_rumor",
+				"elara_moved_rumor"
+			],
+			"relationship": {
+				"loyalty": 5,
+				"tension": 2
+			},
+			"world_state": {
+				"global_tension": 4
+			}
+		},
+		"effects_failure": {
+			"relationship": {
+				"friendship": -2
+			}
+		},
+		"once": true
+	}
+}

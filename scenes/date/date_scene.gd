@@ -7,6 +7,7 @@ var action_container: VBoxContainer
 var current_date: Dictionary = {}
 
 func _ready() -> void:
+	setup_fullscreen_root()
 	build_ui()
 	start_date(SceneRouter.temp_npc_id)
 
@@ -256,3 +257,10 @@ func answer_question(question: Dictionary, selected: String) -> void:
 	await get_tree().create_timer(1.5).timeout
 	build_actions()
 	refresh()
+
+func setup_fullscreen_root() -> void:
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	offset_left = 0
+	offset_top = 0
+	offset_right = 0
+	offset_bottom = 0
