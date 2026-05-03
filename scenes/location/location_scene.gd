@@ -172,7 +172,7 @@ func interact_npc(npc_id: String) -> void:
 	var date_button: Button = UIFactory.button("Invitar a cita")
 	var can_date: bool = GameManager.can_invite_to_date(npc_id)
 	date_button.disabled = GameManager.is_day_exhausted() or not can_date
-	date_button.pressed.connect(func(): SceneRouter.go_to_date(npc_id))
+	date_button.pressed.connect(func(): show_date_location_selection(npc_id))
 	action_container.add_child(date_button)
 
 	if not can_date:
@@ -427,3 +427,27 @@ func perform_petition(petition_id: String) -> void:
 
 	SaveManager.save_game()
 	reload_scene(result.get("text", "La petición terminó."))
+
+func show_date_location_selection(npc_id: String) -> void:
+	clear_container(action_container)
+
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var available_locations: Array = DateSystem.get_available_date_locations(npc_id)
+
+	action_container.add_child(UIFactory.title("Invitar a cita a %s" % npc.get("name", npc_id)))
+
+	if available_locations.is_empty():
+		description_label.text = "Aún no hay suficiente cercanía para proponer una cita."
+	else:
+		description_label.text = "Elige un lugar. El ambiente puede cambiarlo todo."
+
+		for date_location_id in available_locations:
+			var id: String = str(date_location_id)
+			var date_location: Dictionary = DataManager.get_date_location(id)
+			var button: Button = UIFactory.button(date_location.get("name", id))
+			button.pressed.connect(func(): SceneRouter.go_to_date(npc_id, id))
+			action_container.add_child(button)
+
+	var back_button: Button = UIFactory.button("Volver")
+	back_button.pressed.connect(func(): interact_npc(npc_id))
+	action_container.add_child(back_button)

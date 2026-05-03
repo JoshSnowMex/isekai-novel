@@ -12,6 +12,9 @@ var events: Dictionary = {}
 var milestones: Dictionary = {}
 var dialogues: Dictionary = {}
 var petitions: Dictionary = {}
+var date_locations: Dictionary = {}
+var date_moves: Dictionary = {}
+	
 
 func _ready() -> void:
 	load_all_data()
@@ -29,6 +32,8 @@ func load_all_data() -> void:
 	milestones = load_json("res://data/milestones.json")
 	petitions = load_json("res://data/petitions.json")
 	dialogues = load_json("res://data/dialogues.json")
+	date_locations = load_json("res://data/date_locations.json")
+	date_moves = load_json("res://data/date_moves.json")
 
 func load_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -73,3 +78,9 @@ func get_dialogue(dialogue_id: String) -> Dictionary:
 
 func get_petition(petition_id: String) -> Dictionary:
 	return petitions.get(petition_id, {})
+
+func get_date_location(date_location_id: String) -> Dictionary:
+	return date_locations.get(date_location_id, {})
+
+func get_date_move(date_move_id: String) -> Dictionary:
+	return date_moves.get(date_move_id, {})

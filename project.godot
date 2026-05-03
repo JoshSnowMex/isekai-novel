@@ -27,6 +27,7 @@ ConditionSystem="*uid://b680vog6x7jmh"
 MilestoneSystem="*uid://dnahdvhobl34s"
 PetitionSystem="*uid://7w03dhndrbg2"
 DialogueSystem="*uid://dmqvesu5yci1w"
+DateSystem="*uid://d30brvtftx2fc"
 
 [physics]
 

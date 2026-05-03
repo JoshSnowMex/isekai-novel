@@ -69,7 +69,8 @@ func start_new_game(player_name: String, class_id: String) -> void:
 			"world_instability": 0,
 			"romantic_pressure": 0
 		},
-		"pending_narrative_messages": []
+		"pending_narrative_messages": [],
+		"collectibles": [],
 	}
 
 	if class_data.has("starting_stats"):
@@ -638,3 +639,21 @@ func get_date_blocked_reason(npc_id: String) -> String:
 		return ""
 
 	return "Aún no hay suficiente confianza para invitarle a una cita."
+
+func ensure_collectibles() -> void:
+	if not player.has("collectibles"):
+		player["collectibles"] = []
+
+func add_collectible(collectible_id: String) -> void:
+	ensure_collectibles()
+
+	if not player["collectibles"].has(collectible_id):
+		player["collectibles"].append(collectible_id)
+
+func has_collectible(collectible_id: String) -> bool:
+	ensure_collectibles()
+	return player["collectibles"].has(collectible_id)
+
+func get_collectibles() -> Array:
+	ensure_collectibles()
+	return player["collectibles"]

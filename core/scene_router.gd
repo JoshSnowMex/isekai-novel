@@ -9,6 +9,7 @@ const JOURNAL_SCENE := "res://scenes/journal/JournalScene.tscn"
 const SHOP_SCENE := "res://scenes/shop/ShopScene.tscn"
 
 var temp_npc_id: String = ""
+var temp_date_location_id: String = ""
 
 func go_to_main_menu() -> void:
 	get_tree().change_scene_to_file(MAIN_MENU)
@@ -22,9 +23,10 @@ func go_to_world_map() -> void:
 func go_to_location() -> void:
 	get_tree().change_scene_to_file(LOCATION_SCENE)
 	
-func go_to_date(npc_id: String) -> void:
+func go_to_date(npc_id: String, date_location_id: String = "") -> void:
 	temp_npc_id = npc_id
-	get_tree().change_scene_to_file(DATE_SCENE)
+	temp_date_location_id = date_location_id
+	get_tree().change_scene_to_file("res://scenes/date/DateScene.tscn")
 
 func go_to_journal() -> void:
 	get_tree().change_scene_to_file(JOURNAL_SCENE)
