@@ -12,7 +12,18 @@ func _ready() -> void:
 func build_ui() -> void:
 	var root: VBoxContainer = ScreenRoot.create(self)
 
-	root.add_child(UIFactory.title("Tienda"))
+	var top_bar: HBoxContainer = HBoxContainer.new()
+	top_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_bar.add_theme_constant_override("separation", 12)
+	root.add_child(top_bar)
+
+	var back_button: Button = UIFactory.button("← Volver al mapa")
+	back_button.pressed.connect(func(): SceneRouter.go_to_world_map())
+	top_bar.add_child(back_button)
+
+	var title: Label = UIFactory.title("Tienda")
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_bar.add_child(title)
 
 	money_label = UIFactory.body("")
 	root.add_child(money_label)
@@ -20,14 +31,18 @@ func build_ui() -> void:
 	message_label = UIFactory.body("Compra regalos para usarlos en tus relaciones.")
 	root.add_child(message_label)
 
+	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	root.add_child(scroll)
+
 	item_container = VBoxContainer.new()
+	item_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	item_container.add_theme_constant_override("separation", 8)
-	root.add_child(item_container)
-
-	var back_button: Button = UIFactory.button("Volver al mapa")
-	back_button.pressed.connect(func(): SceneRouter.go_to_world_map())
-	root.add_child(back_button)
+	scroll.add_child(item_container)
 
 func refresh_shop() -> void:
 	money_label.text = "Dinero: %s" % GameManager.player.get("money", 0)
@@ -45,6 +60,7 @@ func refresh_shop() -> void:
 			item.get("name", item_id),
 			item.get("price", 0)
 		])
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.pressed.connect(func(): buy_item(item_id))
 		item_container.add_child(button)
 

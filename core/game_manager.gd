@@ -491,9 +491,29 @@ func can_invite_to_date(npc_id: String) -> bool:
 	var relation: Dictionary = player["relationships"][npc_id]
 	var friendship: int = int(relation.get("friendship", 0))
 	var tension: int = int(relation.get("tension", 0))
+	var loyalty: int = int(relation.get("loyalty", 0))
 	var jealousy: int = int(relation.get("jealousy", 0))
+	var total: int = get_total_affinity(npc_id)
 
-	return friendship >= 15 and tension >= 15 and jealousy < 80
+	if jealousy >= 80:
+		return false
+
+	if relation.get("relationship_state", "none") != "none":
+		return true
+
+	if total >= 35:
+		return true
+
+	if friendship >= 25:
+		return true
+
+	if friendship >= 18 and tension >= 5:
+		return true
+
+	if friendship >= 18 and loyalty >= 5:
+		return true
+
+	return false
 
 func get_relationship_value(npc_id: String, key: String) -> int:
 	ensure_relationship(npc_id)
@@ -600,3 +620,21 @@ func get_stat_label(stat: String) -> String:
 			return "Intuición"
 		_:
 			return stat
+
+func get_date_blocked_reason(npc_id: String) -> String:
+	ensure_relationship(npc_id)
+
+	var relation: Dictionary = player["relationships"][npc_id]
+	var friendship: int = int(relation.get("friendship", 0))
+	var tension: int = int(relation.get("tension", 0))
+	var loyalty: int = int(relation.get("loyalty", 0))
+	var jealousy: int = int(relation.get("jealousy", 0))
+	var total: int = get_total_affinity(npc_id)
+
+	if jealousy >= 80:
+		return "La tensión emocional es demasiado alta. Ahora mismo no parece buen momento para una cita."
+
+	if total >= 35 or friendship >= 25 or (friendship >= 18 and tension >= 5) or (friendship >= 18 and loyalty >= 5):
+		return ""
+
+	return "Aún no hay suficiente confianza para invitarle a una cita."

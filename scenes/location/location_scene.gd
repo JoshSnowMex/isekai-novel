@@ -170,9 +170,14 @@ func interact_npc(npc_id: String) -> void:
 	action_container.add_child(gift_button)
 
 	var date_button: Button = UIFactory.button("Invitar a cita")
-	date_button.disabled = GameManager.is_day_exhausted() or not GameManager.can_invite_to_date(npc_id)
+	var can_date: bool = GameManager.can_invite_to_date(npc_id)
+	date_button.disabled = GameManager.is_day_exhausted() or not can_date
 	date_button.pressed.connect(func(): SceneRouter.go_to_date(npc_id))
 	action_container.add_child(date_button)
+
+	if not can_date:
+		var hint_label: Label = UIFactory.body(GameManager.get_date_blocked_reason(npc_id))
+		action_container.add_child(hint_label)
 	
 	var petition_button: Button = UIFactory.button("Pedir favor")
 	petition_button.disabled = GameManager.is_day_exhausted() or not PetitionSystem.has_any_available_petition(npc_id)
