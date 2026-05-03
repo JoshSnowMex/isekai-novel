@@ -1,0 +1,234 @@
+{
+	"aeris_cautious_low_friendship": {
+		"npc_id": "aeris",
+		"category": "casual",
+		"priority": 10,
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"max": 14
+				}
+			}
+		},
+		"lines": [
+			"Todavía no sé si eres una anomalía o una persona. Me inquieta que quiera averiguarlo.",
+			"Tu presencia altera mis registros incluso cuando no haces nada. Eso no debería ser posible.",
+			"No confundas mi curiosidad con confianza. Aunque admito que cada vez me cuesta más separarlas."
+		]
+	},
+	"aeris_first_trust": {
+		"npc_id": "aeris",
+		"category": "casual",
+		"priority": 20,
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 10,
+					"max": 29
+				}
+			}
+		},
+		"lines": [
+			"Hay preguntas que debería hacerte como investigadora. Últimamente me descubro queriendo hacerlas como persona.",
+			"No pareces entender cuánto peso tiene estar fuera de toda versión previa del mundo.",
+			"Si el Velo te trajo aquí como ancla, eso no significa que debas quedarte solo sosteniendo el peso."
+		]
+	},
+	"aeris_after_veil_basics": {
+		"npc_id": "aeris",
+		"category": "lore",
+		"priority": 40,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"aeris_explained_veil_basics"
+				]
+			},
+			"relationship": {
+				"friendship": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"Ahora entiendes por qué tu presencia pesa incluso cuando eliges no intervenir.",
+			"El Velo no juzga. Equilibra. Esa diferencia es pequeña solo para quien nunca ha pagado el costo.",
+			"Si una relación cambia demasiado el curso de alguien, el mundo buscará coherencia en otra parte."
+		]
+	},
+	"aeris_flirty_tension": {
+		"npc_id": "aeris",
+		"category": "flirty",
+		"priority": 50,
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
+				},
+				"tension": {
+					"min": 20
+				},
+				"jealousy": {
+					"max": 60
+				}
+			}
+		},
+		"lines": [
+			"Debería observarte como fenómeno. Me preocupa que ya no pueda hacerlo.",
+			"Cada vez que te acercas, mis conclusiones se vuelven menos útiles.",
+			"Si supieras cuántas veces he reescrito una nota solo para no admitir que hablaba de ti..."
+		]
+	},
+	"aeris_jealous": {
+		"npc_id": "aeris",
+		"category": "jealous",
+		"priority": 70,
+		"conditions": {
+			"relationship": {
+				"jealousy": {
+					"min": 20
+				}
+			}
+		},
+		"lines": [
+			"No tengo derecho a preguntarte dónde estuviste. Eso no hace que quiera saberlo menos.",
+			"El Velo registra posibilidades. Yo intento no registrar las tuyas con otras personas.",
+			"No confundas mi silencio con indiferencia. A veces es lo único digno que me queda."
+		]
+	},
+
+	"lyria_reserved_low_friendship": {
+		"npc_id": "lyria",
+		"category": "casual",
+		"priority": 10,
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"max": 14
+				}
+			}
+		},
+		"lines": [
+			"Si necesitas algo de la biblioteca, pregunta. Si necesitas algo de mí, tendrás que ser más claro.",
+			"Hay personas que hablan para acercarse. Yo suelo hacerlo para mantener distancia.",
+			"No todos los secretos quieren ser encontrados. Algunos solo quieren saber quién insiste."
+		]
+	},
+	"lyria_warming_up": {
+		"npc_id": "lyria",
+		"category": "casual",
+		"priority": 25,
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"Empiezo a reconocer tus pasos. No sé si eso debería tranquilizarme.",
+			"Traes desorden a lugares que han sobrevivido siglos precisamente por no cambiar.",
+			"A veces pienso que debería pedirte que no vuelvas tan seguido. Luego no lo hago."
+		]
+	},
+	"lyria_secretive_tension": {
+		"npc_id": "lyria",
+		"category": "flirty",
+		"priority": 45,
+		"conditions": {
+			"relationship": {
+				"friendship": {
+					"min": 20
+				},
+				"tension": {
+					"min": 15
+				}
+			}
+		},
+		"lines": [
+			"Hay formas de cercanía que empiezan con una pregunta y terminan pareciendo una confesión.",
+			"No te acerques tanto a los estantes prohibidos. Ni a mí, si no sabes qué harás con lo que encuentres.",
+			"Debería ser más prudente contigo. Esa frase empieza a perder fuerza cada vez que la repito."
+		]
+	},
+	"lyria_after_hidden_record": {
+		"npc_id": "lyria",
+		"category": "after_petition",
+		"priority": 80,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"lyria_hid_forbidden_record"
+				]
+			}
+		},
+		"lines": [
+			"No me arrepiento. Eso es lo que más me asusta.",
+			"El registro está oculto. La consecuencia, no.",
+			"Si alguien pregunta, no sabré mentir con calma. Pero tal vez sí sabré hacerlo por ti."
+		]
+	},
+
+	"eryon_casual": {
+		"npc_id": "eryon",
+		"category": "casual",
+		"priority": 10,
+		"conditions": {},
+		"lines": [
+			"Qué fascinante. El mundo intenta decidir qué eres y tú sigues comportándote como si fueras solo alguien.",
+			"Las historias aman a los forasteros. Son tan útiles para culparlos de todo.",
+			"Si alguna vez alguien te llama elegido, pregunta quién escribió la necesidad de elegirte."
+		]
+	},
+	"eryon_prophecy_known": {
+		"npc_id": "eryon",
+		"category": "lore",
+		"priority": 50,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"prophecy_is_known_as_manipulated"
+				]
+			}
+		},
+		"lines": [
+			"Una profecía manipulada sigue siendo útil. A veces más que una verdadera.",
+			"Nadie obedece al destino con tanta devoción como quien lo fabricó por miedo.",
+			"No eres prisionero de la profecía, querido. Eres su excusa favorita."
+		]
+	},
+	"eryon_aeris_jealous": {
+		"npc_id": "eryon",
+		"category": "jealous",
+		"priority": 75,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"eryon_noticed_aeris_closeness"
+				]
+			},
+			"relationship": {
+				"jealousy": {
+					"min": 5
+				}
+			}
+		},
+		"lines": [
+			"Aeris siempre llama verdad a lo que aún no se atreve a desear.",
+			"Ten cuidado. Hay personas que te estudian hasta que confunden disección con ternura.",
+			"No te preocupes, no estoy celoso. Estoy narrativamente interesado."
+		]
+	},
+
+	"default_generic": {
+		"npc_id": "*",
+		"category": "casual",
+		"priority": 0,
+		"conditions": {},
+		"lines": [
+			"Conversan durante un rato. Hay cosas que todavía no se dicen, pero algo cambia en el aire.",
+			"La charla avanza entre pausas, gestos y palabras pequeñas.",
+			"Hablan de asuntos simples, aunque en Luminaria incluso lo simple parece tener sombra."
+		]
+	}
+}

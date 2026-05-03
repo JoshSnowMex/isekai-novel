@@ -204,8 +204,10 @@ func talk_to_npc(npc_id: String) -> void:
 	if tension_gain > 0:
 		relationship_text += GameManager.add_relationship_value(npc_id, "tension", tension_gain)
 
-	var message: String = "Conversas con %s.\nLa charla deja una huella más personal.\nAmistad +%s" % [
-		npc.get("name", npc_id),
+	var dialogue_line: String = DialogueSystem.get_dialogue_line(npc_id, "casual")
+
+	var message: String = "%s\n\nAmistad +%s" % [
+		dialogue_line,
 		friendship_gain
 	]
 

@@ -1,23 +1,23 @@
 {
-	"train_home_discipline": {
-		"name": "Organizar tus notas",
+	"train_home_discipline_minor": {
+		"name": "Ordenar tus notas",
 		"type": "train",
 		"stat": "discipline",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 8,
+		"stamina_cost": 6,
 		"work_modifier_key": "none",
-		"description": "Ordenas tus notas, limpias la casa y preparas tu mente para sobrevivir otro día en Luminaria."
+		"description": "Ordenas tus notas, limpias la casa y preparas tu mente. No es entrenamiento formal, pero te ayuda a mantener disciplina."
 	},
-	"train_library_intellect": {
-		"name": "Estudiar registros comunes",
+	"train_library_intellect_minor": {
+		"name": "Leer registros comunes",
 		"type": "train",
 		"stat": "intellect",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 10,
+		"stamina_cost": 8,
 		"work_modifier_key": "academic",
-		"description": "Estudias registros abiertos de la biblioteca. Tu comprensión del mundo se afila."
+		"description": "Lees registros abiertos de la biblioteca. Aprendes, aunque los textos más valiosos siguen fuera de tu alcance."
 	},
 	"work_library_half": {
 		"name": "Clasificar manuscritos",
@@ -29,35 +29,25 @@
 		"work_modifier_key": "academic",
 		"description": "Ordenas manuscritos, etiquetas registros y ganas unas monedas sin alejarte demasiado del conocimiento."
 	},
-	"work_library_full": {
-		"name": "Asistente de archivo",
-		"type": "work_full",
-		"stat": "discipline",
-		"base_stat_gain": 1,
-		"base_money_gain": 28,
-		"stamina_cost": 28,
-		"work_modifier_key": "academic",
-		"description": "Pasas una jornada larga entre polvo, tinta y normas estrictas. Ganas dinero, pero el cansancio se nota."
-	},
-	"train_market_charm": {
-		"name": "Practicar negociación",
+	"train_market_strength_minor": {
+		"name": "Ayudar con carga ligera",
 		"type": "train",
-		"stat": "charm",
-		"base_stat_gain": 2,
+		"stat": "strength",
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
 		"stamina_cost": 10,
-		"work_modifier_key": "social",
-		"description": "Observas gestos, precios y mentiras pequeñas. Aprendes a hablar antes de pedir."
+		"work_modifier_key": "physical",
+		"description": "Mueves cajas y mercancía ligera. No es entrenamiento puro, pero el cuerpo aprende."
 	},
 	"work_market_half": {
 		"name": "Ayudar en puestos",
 		"type": "work_half",
-		"stat": "strength",
+		"stat": "charm",
 		"base_stat_gain": 1,
 		"base_money_gain": 15,
-		"stamina_cost": 18,
-		"work_modifier_key": "physical",
-		"description": "Cargas cajas, acomodas mercancía y sobrevives al ruido del mercado."
+		"stamina_cost": 16,
+		"work_modifier_key": "service",
+		"description": "Atiendes clientes, acomodas mercancía y sobrevives al ruido del mercado."
 	},
 	"work_market_full": {
 		"name": "Jornada en el mercado",
@@ -69,15 +59,15 @@
 		"work_modifier_key": "physical",
 		"description": "Una jornada pesada de carga, gritos y sudor. El dinero llega, pero el cuerpo paga."
 	},
-	"train_observatory_intuition": {
+	"train_observatory_intuition_minor": {
 		"name": "Observar anomalías estelares",
 		"type": "train",
 		"stat": "intuition",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 12,
+		"stamina_cost": 10,
 		"work_modifier_key": "spiritual",
-		"description": "Miras el cielo hasta que deja de parecer cielo. Algo en ti aprende a notar lo imposible."
+		"description": "Miras el cielo hasta que deja de parecer cielo. Algo en ti empieza a notar lo imposible."
 	},
 	"work_observatory_half": {
 		"name": "Registrar cartas estelares",
@@ -89,25 +79,15 @@
 		"work_modifier_key": "academic",
 		"description": "Ayudas con cartas estelares y cálculos menores. No entiendes todo, pero empiezas a ver patrones."
 	},
-	"work_observatory_full": {
-		"name": "Asistencia astral",
-		"type": "work_full",
-		"stat": "intellect",
-		"base_stat_gain": 1,
-		"base_money_gain": 32,
-		"stamina_cost": 30,
-		"work_modifier_key": "academic",
-		"description": "Una jornada larga registrando señales del cielo. El cansancio mental se acumula."
-	},
-	"train_arcane_intellect": {
+	"train_arcane_intellect_major": {
 		"name": "Estudiar teoría arcana",
 		"type": "train",
 		"stat": "intellect",
 		"base_stat_gain": 3,
 		"base_money_gain": 0,
-		"stamina_cost": 16,
+		"stamina_cost": 18,
 		"work_modifier_key": "academic",
-		"description": "El Ateneo Arcano no enseña respuestas; enseña preguntas peligrosas."
+		"description": "El Ateneo Arcano no enseña respuestas; enseña preguntas peligrosas. Tu intelecto crece con fuerza."
 	},
 	"work_arcane_half": {
 		"name": "Copiar fórmulas arcanas",
@@ -125,27 +105,27 @@
 		"stat": "intellect",
 		"base_stat_gain": 1,
 		"base_money_gain": 38,
-		"stamina_cost": 36,
+		"stamina_cost": 38,
 		"work_modifier_key": "academic",
 		"description": "El Ateneo paga bien porque nadie sale de una jornada exactamente igual."
 	},
-	"train_private_intuition": {
+	"train_private_intuition_minor": {
 		"name": "Meditar sobre contradicciones",
 		"type": "train",
 		"stat": "intuition",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 10,
+		"stamina_cost": 8,
 		"work_modifier_key": "spiritual",
 		"description": "En silencio, repasas lo que no encaja. A veces entender empieza por sentir el error."
 	},
-	"train_archives_intellect": {
+	"train_archives_intellect_minor": {
 		"name": "Comparar versiones históricas",
 		"type": "train",
 		"stat": "intellect",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 12,
+		"stamina_cost": 10,
 		"work_modifier_key": "academic",
 		"description": "Lees versiones incompatibles del mismo hecho. Tu mente aprende a sostener contradicciones."
 	},
@@ -159,25 +139,15 @@
 		"work_modifier_key": "academic",
 		"description": "Restauras registros viejos con paciencia quirúrgica."
 	},
-	"work_archives_full": {
-		"name": "Catalogación profunda",
-		"type": "work_full",
-		"stat": "discipline",
-		"base_stat_gain": 1,
-		"base_money_gain": 34,
-		"stamina_cost": 34,
-		"work_modifier_key": "academic",
-		"description": "El archivo exige horas de precisión y silencio. La paga no compensa la inquietud, pero ayuda."
-	},
-	"train_plaza_charm": {
+	"train_plaza_charm_major": {
 		"name": "Leer la plaza",
 		"type": "train",
 		"stat": "charm",
-		"base_stat_gain": 2,
+		"base_stat_gain": 3,
 		"base_money_gain": 0,
-		"stamina_cost": 10,
+		"stamina_cost": 16,
 		"work_modifier_key": "social",
-		"description": "Escuchas conversaciones, ritmos y silencios públicos. Aprendes cómo entra una palabra en una multitud."
+		"description": "La plaza es escenario y espejo. Aprendes cómo entra una palabra en una multitud."
 	},
 	"work_plaza_half": {
 		"name": "Hacer recados públicos",
@@ -189,17 +159,7 @@
 		"work_modifier_key": "service",
 		"description": "Llevas mensajes, compras menores y favores pequeños. La plaza paga en monedas y rumores."
 	},
-	"work_plaza_full": {
-		"name": "Asistente civil",
-		"type": "work_full",
-		"stat": "charm",
-		"base_stat_gain": 1,
-		"base_money_gain": 30,
-		"stamina_cost": 28,
-		"work_modifier_key": "service",
-		"description": "Una jornada de encargos sociales. Sonreír también cansa."
-	},
-	"train_guild_strength": {
+	"train_guild_strength_major": {
 		"name": "Entrenar en el gremio",
 		"type": "train",
 		"stat": "strength",
@@ -207,7 +167,7 @@
 		"base_money_gain": 0,
 		"stamina_cost": 18,
 		"work_modifier_key": "physical",
-		"description": "Golpes, caídas y respiración pesada. El cuerpo aprende lo que la mente evita."
+		"description": "Golpes, caídas y respiración pesada. El gremio es el mejor lugar para fortalecer el cuerpo."
 	},
 	"work_guild_half": {
 		"name": "Contrato menor",
@@ -229,13 +189,13 @@
 		"work_modifier_key": "danger",
 		"description": "Una jornada de riesgo real. La paga es alta porque el cuerpo no siempre vuelve entero."
 	},
-	"train_tavern_charm": {
+	"train_tavern_charm_minor": {
 		"name": "Practicar conversación de taberna",
 		"type": "train",
 		"stat": "charm",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 12,
+		"stamina_cost": 10,
 		"work_modifier_key": "social",
 		"description": "Aprendes cuándo bromear, cuándo callar y cuándo mirar como si supieras más de lo que dices."
 	},
@@ -259,13 +219,13 @@
 		"work_modifier_key": "service",
 		"description": "Una jornada entera entre calor, vasos y secretos derramados."
 	},
-	"train_workshop_discipline": {
+	"train_workshop_discipline_minor": {
 		"name": "Calibrar mecanismos",
 		"type": "train",
 		"stat": "discipline",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 14,
+		"stamina_cost": 12,
 		"work_modifier_key": "craft",
 		"description": "Un tornillo mal ajustado puede arruinarlo todo. El taller enseña paciencia a golpes."
 	},
@@ -289,13 +249,13 @@
 		"work_modifier_key": "craft",
 		"description": "Horas entre engranajes y gemas calientes. La paga es buena; la estabilidad, discutible."
 	},
-	"train_sanctuary_discipline": {
+	"train_sanctuary_discipline_major": {
 		"name": "Disciplina contemplativa",
 		"type": "train",
 		"stat": "discipline",
-		"base_stat_gain": 2,
+		"base_stat_gain": 3,
 		"base_money_gain": 0,
-		"stamina_cost": 10,
+		"stamina_cost": 16,
 		"work_modifier_key": "spiritual",
 		"description": "El santuario no fortalece el cuerpo. Fortalece la parte de ti que quiere huir."
 	},
@@ -309,23 +269,13 @@
 		"work_modifier_key": "spiritual",
 		"description": "Ordenas velas, limpias altares y escuchas plegarias que nadie dirige a ti."
 	},
-	"work_sanctuary_full": {
-		"name": "Servicio del santuario",
-		"type": "work_full",
-		"stat": "discipline",
-		"base_stat_gain": 1,
-		"base_money_gain": 27,
-		"stamina_cost": 28,
-		"work_modifier_key": "spiritual",
-		"description": "Una jornada de cuidado ritual. No paga mucho, pero deja una calma extraña."
-	},
-	"train_forest_intuition": {
+	"train_forest_intuition_minor": {
 		"name": "Escuchar el bosque",
 		"type": "train",
 		"stat": "intuition",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 14,
+		"stamina_cost": 12,
 		"work_modifier_key": "spiritual",
 		"description": "El bosque no habla, pero corrige a quien sabe escuchar."
 	},
@@ -339,23 +289,13 @@
 		"work_modifier_key": "danger",
 		"description": "Recolectas hierbas donde el bosque todavía permite pisar."
 	},
-	"work_forest_full": {
-		"name": "Patrulla del bosque",
-		"type": "work_full",
-		"stat": "strength",
-		"base_stat_gain": 1,
-		"base_money_gain": 38,
-		"stamina_cost": 38,
-		"work_modifier_key": "danger",
-		"description": "Patrullar el bosque herido no es caminar. Es negociar con algo que recuerda dolor."
-	},
-	"train_council_discipline": {
+	"train_council_discipline_minor": {
 		"name": "Estudiar protocolo",
 		"type": "train",
 		"stat": "discipline",
-		"base_stat_gain": 2,
+		"base_stat_gain": 1,
 		"base_money_gain": 0,
-		"stamina_cost": 12,
+		"stamina_cost": 10,
 		"work_modifier_key": "political",
 		"description": "El consejo enseña que incluso una pausa puede ser una amenaza si se coloca bien."
 	},
@@ -379,7 +319,7 @@
 		"work_modifier_key": "political",
 		"description": "Una jornada con documentos del consejo. El dinero es bueno; la sensación de ser observado, constante."
 	},
-	"train_threshold_intuition": {
+	"train_threshold_intuition_major": {
 		"name": "Contemplar el Umbral",
 		"type": "train",
 		"stat": "intuition",

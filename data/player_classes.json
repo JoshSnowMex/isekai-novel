@@ -1,284 +1,284 @@
 {
-	"sensitive_outsider": {
-		"name": "Forastero Sensible",
-		"element": "Luz tenue",
-		"description": "Llegaste a Luminaria con una percepción emocional casi dolorosa. Lees silencios, dudas y deseos antes de que alguien los admita. No eres el más fuerte ni el más constante, pero entiendes el temblor oculto debajo de cada vínculo.",
-		"narrative_style": "Percibe subtexto emocional, detecta contradicciones íntimas y desbloquea rutas donde comprender duele más que actuar.",
-		"starting_stats": {
-			"strength": 1,
-			"intellect": 2,
-			"charm": 3,
-			"discipline": 1,
-			"intuition": 4
-		},
-		"growth_modifiers": {
-			"strength": 0.8,
-			"intellect": 1.0,
-			"charm": 1.25,
-			"discipline": 0.75,
-			"intuition": 1.35
-		},
-		"work_modifiers": {
-			"physical": 0.85,
-			"academic": 1.0,
-			"social": 1.15,
-			"craft": 0.9,
-			"spiritual": 1.15,
-			"political": 0.95,
-			"service": 1.1,
-			"danger": 0.85
-		},
-		"relationship_modifiers": {
-			"friendship": 1.15,
-			"tension": 1.05,
-			"loyalty": 1.0,
-			"jealousy": 1.1
-		},
-		"strengths": [
-			"Comprender emociones ocultas",
-			"Crear intimidad temprana",
-			"Detectar miedo, deseo o culpa"
-		],
-		"weaknesses": [
-			"Le cuesta sostener disciplina bajo presión",
-			"Puede involucrarse demasiado pronto",
-			"Es vulnerable a celos y ambigüedad emocional"
-		],
-		"favored_npcs": ["aeris", "myr", "axiom", "lyria"]
+  "sensitive_outsider": {
+	"name": "Forastero Sensible",
+	"element": "Luz tenue",
+	"description": "Llegaste a Luminaria con una percepción emocional casi dolorosa. Lees silencios, dudas y deseos antes de que alguien los admita. No eres el más fuerte ni el más constante, pero entiendes el temblor oculto debajo de cada vínculo.",
+	"narrative_style": "Percibe subtexto emocional, detecta contradicciones íntimas y desbloquea rutas donde comprender duele más que actuar.",
+	"starting_stats": {
+	  "strength": 1,
+	  "intellect": 2,
+	  "charm": 3,
+	  "discipline": 1,
+	  "intuition": 4
 	},
-	"bold_outsider": {
-		"name": "Forastero Audaz",
-		"element": "Fuego vivo",
-		"description": "No entiendes todas las reglas de este mundo, pero sabes cuándo alguien necesita que una puerta se abra a golpes. Tu presencia es directa, cálida y peligrosa.",
-		"narrative_style": "Resuelve hitos mediante riesgo, protección y decisiones impulsivas con consecuencias visibles.",
-		"starting_stats": {
-			"strength": 4,
-			"intellect": 1,
-			"charm": 3,
-			"discipline": 2,
-			"intuition": 1
-		},
-		"growth_modifiers": {
-			"strength": 1.35,
-			"intellect": 0.75,
-			"charm": 1.15,
-			"discipline": 1.0,
-			"intuition": 0.85
-		},
-		"work_modifiers": {
-			"physical": 1.3,
-			"academic": 0.75,
-			"social": 1.05,
-			"craft": 1.1,
-			"spiritual": 0.85,
-			"political": 0.9,
-			"service": 1.0,
-			"danger": 1.35
-		},
-		"relationship_modifiers": {
-			"friendship": 1.05,
-			"tension": 1.2,
-			"loyalty": 1.1,
-			"jealousy": 1.15
-		},
-		"strengths": [
-			"Actuar bajo presión",
-			"Proteger a otros",
-			"Crear tensión mediante presencia física y valentía"
-		],
-		"weaknesses": [
-			"Puede ignorar señales sutiles",
-			"Tiende a empeorar conflictos políticos",
-			"Le cuesta con personajes que exigen paciencia intelectual"
-		],
-		"favored_npcs": ["rhea", "kael", "taren", "nova"]
+	"growth_modifiers": {
+	  "strength": 0.8,
+	  "intellect": 1.0,
+	  "charm": 1.25,
+	  "discipline": 0.75,
+	  "intuition": 1.35
 	},
-	"scholar_outsider": {
-		"name": "Forastero Erudito",
-		"element": "Aire quieto",
-		"description": "Tu instinto no es luchar ni seducir, sino entender. El Velo, la profecía y las contradicciones del mundo te atraen como piezas de un sistema roto.",
-		"narrative_style": "Desbloquea explicaciones del Velo, rutas de investigación y decisiones donde la verdad tiene precio.",
-		"starting_stats": {
-			"strength": 1,
-			"intellect": 4,
-			"charm": 1,
-			"discipline": 3,
-			"intuition": 2
-		},
-		"growth_modifiers": {
-			"strength": 0.75,
-			"intellect": 1.4,
-			"charm": 0.85,
-			"discipline": 1.2,
-			"intuition": 1.05
-		},
-		"work_modifiers": {
-			"physical": 0.75,
-			"academic": 1.35,
-			"social": 0.85,
-			"craft": 1.05,
-			"spiritual": 1.05,
-			"political": 1.2,
-			"service": 0.9,
-			"danger": 0.8
-		},
-		"relationship_modifiers": {
-			"friendship": 1.05,
-			"tension": 0.95,
-			"loyalty": 1.15,
-			"jealousy": 0.95
-		},
-		"strengths": [
-			"Comprender sistemas mágicos y políticos",
-			"Descubrir contradicciones del Velo",
-			"Acceder a rutas con Aeris, Eryon y Lyria"
-		],
-		"weaknesses": [
-			"Físicamente limitado",
-			"Puede parecer frío o distante",
-			"Le cuesta con personajes que exigen acción inmediata"
-		],
-		"favored_npcs": ["aeris", "eryon", "lyria", "selene"]
+	"work_modifiers": {
+	  "physical": 0.85,
+	  "academic": 1.0,
+	  "social": 1.15,
+	  "craft": 0.9,
+	  "spiritual": 1.15,
+	  "political": 0.95,
+	  "service": 1.1,
+	  "danger": 0.85
 	},
-	"charming_outsider": {
-		"name": "Forastero Encantador",
-		"element": "Agua tibia",
-		"description": "En otro mundo quizá habrías sobrevivido leyendo habitaciones, no libros. En Luminaria, tu sonrisa puede abrir puertas, suavizar sospechas y encender tensiones.",
-		"narrative_style": "Manipula escenas sociales, acelera vínculos románticos y convierte rumores en herramientas peligrosas.",
-		"starting_stats": {
-			"strength": 1,
-			"intellect": 2,
-			"charm": 4,
-			"discipline": 1,
-			"intuition": 3
-		},
-		"growth_modifiers": {
-			"strength": 0.85,
-			"intellect": 1.0,
-			"charm": 1.4,
-			"discipline": 0.8,
-			"intuition": 1.2
-		},
-		"work_modifiers": {
-			"physical": 0.85,
-			"academic": 0.95,
-			"social": 1.35,
-			"craft": 0.85,
-			"spiritual": 0.95,
-			"political": 1.2,
-			"service": 1.3,
-			"danger": 0.9
-		},
-		"relationship_modifiers": {
-			"friendship": 1.0,
-			"tension": 1.3,
-			"loyalty": 0.9,
-			"jealousy": 1.25
-		},
-		"strengths": [
-			"Crear atracción temprana",
-			"Manejar rumores y conversaciones",
-			"Reducir resistencias sociales"
-		],
-		"weaknesses": [
-			"Puede generar celos con facilidad",
-			"La lealtad tarda más en sentirse genuina",
-			"Personajes disciplinados pueden desconfiar de su encanto"
-		],
-		"favored_npcs": ["elara", "eryon", "seraphine", "nova"]
+	"relationship_modifiers": {
+	  "friendship": 1.15,
+	  "tension": 1.05,
+	  "loyalty": 1.0,
+	  "jealousy": 1.1
 	},
-	"steadfast_outsider": {
-		"name": "Forastero Disciplinado",
-		"element": "Tierra firme",
-		"description": "Tu fuerza no está en brillar, sino en permanecer. En un mundo que se contradice, tu constancia puede volverse refugio.",
-		"narrative_style": "Construye lealtad, desbloquea peticiones indebidas y resiste presión del Consejo o del Velo.",
-		"starting_stats": {
-			"strength": 3,
-			"intellect": 2,
-			"charm": 1,
-			"discipline": 4,
-			"intuition": 1
-		},
-		"growth_modifiers": {
-			"strength": 1.15,
-			"intellect": 1.0,
-			"charm": 0.75,
-			"discipline": 1.4,
-			"intuition": 0.9
-		},
-		"work_modifiers": {
-			"physical": 1.1,
-			"academic": 1.0,
-			"social": 0.8,
-			"craft": 1.15,
-			"spiritual": 1.2,
-			"political": 1.15,
-			"service": 0.95,
-			"danger": 1.05
-		},
-		"relationship_modifiers": {
-			"friendship": 1.1,
-			"tension": 0.9,
-			"loyalty": 1.35,
-			"jealousy": 0.85
-		},
-		"strengths": [
-			"Construir confianza duradera",
-			"Desbloquear lealtad profunda",
-			"Resistir presión emocional y política"
-		],
-		"weaknesses": [
-			"Romance más lento",
-			"Menos facilidad para coquetear",
-			"Puede perder oportunidades por exceso de prudencia"
-		],
-		"favored_npcs": ["taren", "seraphine", "rhein", "lyria"]
+	"strengths": [
+	  "Comprender emociones ocultas",
+	  "Crear intimidad temprana",
+      "Detectar miedo, deseo o culpa"
+	],
+	"weaknesses": [
+	  "Le cuesta sostener disciplina bajo presión",
+	  "Puede involucrarse demasiado pronto",
+      "Es vulnerable a celos y ambigüedad emocional"
+	],
+	"favored_npcs": ["aeris", "myr", "axiom", "lyria"]
+  },
+  "bold_outsider": {
+	"name": "Forastero Audaz",
+	"element": "Fuego vivo",
+	"description": "No entiendes todas las reglas de este mundo, pero sabes cuándo alguien necesita que una puerta se abra a golpes. Tu presencia es directa, cálida y peligrosa.",
+	"narrative_style": "Resuelve hitos mediante riesgo, protección y decisiones impulsivas con consecuencias visibles.",
+	"starting_stats": {
+	  "strength": 4,
+	  "intellect": 1,
+	  "charm": 3,
+	  "discipline": 2,
+	  "intuition": 1
 	},
-		"balanced_outsider": {
-		"name": "Forastero Equilibrado",
-		"element": "Centro",
-		"description": "No destacas de forma evidente en ningún camino, pero tampoco cargas una debilidad marcada. Tu nueva vida en Luminaria empieza sin inclinaciones extremas: cada vínculo, cada oficio y cada entrenamiento dependerán más de tus decisiones que de tu naturaleza.",
-		"narrative_style": "Ruta neutral y flexible. No acelera ni penaliza relaciones, trabajos o crecimiento. Ideal para jugadores que prefieren construir su identidad desde cero.",
-		"starting_stats": {
-			"strength": 2,
-			"intellect": 2,
-			"charm": 2,
-			"discipline": 2,
-			"intuition": 2
-		},
-		"growth_modifiers": {
-			"strength": 1.0,
-			"intellect": 1.0,
-			"charm": 1.0,
-			"discipline": 1.0,
-			"intuition": 1.0
-		},
-		"work_modifiers": {
-			"physical": 1.0,
-			"academic": 1.0,
-			"social": 1.0,
-			"craft": 1.0,
-			"spiritual": 1.0,
-			"political": 1.0,
-			"service": 1.0,
-			"danger": 1.0
-		},
-		"relationship_modifiers": {
-			"friendship": 1.0,
-			"tension": 1.0,
-			"loyalty": 1.0,
-			"jealousy": 1.0
-		},
-		"strengths": [
-			"No tiene penalizaciones",
-			"Funciona bien con cualquier estilo de juego",
-			"Permite aprender el sistema sin sesgos fuertes"
-		],
-		"weaknesses": [
-			"No tiene ventajas claras",
-			"No acelera rutas específicas",
-			"Puede sentirse menos dramático que otros caminos"
-		],
-		"favored_npcs": []
-	}
+	"growth_modifiers": {
+	  "strength": 1.35,
+	  "intellect": 0.75,
+	  "charm": 1.15,
+	  "discipline": 1.0,
+	  "intuition": 0.85
+	},
+	"work_modifiers": {
+	  "physical": 1.3,
+	  "academic": 0.75,
+	  "social": 1.05,
+	  "craft": 1.1,
+	  "spiritual": 0.85,
+	  "political": 0.9,
+	  "service": 1.0,
+	  "danger": 1.35
+	},
+	"relationship_modifiers": {
+	  "friendship": 1.05,
+	  "tension": 1.2,
+	  "loyalty": 1.1,
+	  "jealousy": 1.15
+	},
+	"strengths": [
+	  "Actuar bajo presión",
+	  "Proteger a otros",
+      "Crear tensión mediante presencia física y valentía"
+	],
+	"weaknesses": [
+	  "Puede ignorar señales sutiles",
+	  "Tiende a empeorar conflictos políticos",
+      "Le cuesta con personajes que exigen paciencia intelectual"
+	],
+	"favored_npcs": ["rhea", "kael", "taren", "nova"]
+  },
+  "scholar_outsider": {
+	"name": "Forastero Erudito",
+	"element": "Aire quieto",
+	"description": "Tu instinto no es luchar ni seducir, sino entender. El Velo, la profecía y las contradicciones del mundo te atraen como piezas de un sistema roto.",
+	"narrative_style": "Desbloquea explicaciones del Velo, rutas de investigación y decisiones donde la verdad tiene precio.",
+	"starting_stats": {
+	  "strength": 1,
+	  "intellect": 4,
+	  "charm": 1,
+	  "discipline": 3,
+	  "intuition": 2
+	},
+	"growth_modifiers": {
+	  "strength": 0.75,
+	  "intellect": 1.4,
+	  "charm": 0.85,
+	  "discipline": 1.2,
+	  "intuition": 1.05
+	},
+	"work_modifiers": {
+	  "physical": 0.75,
+	  "academic": 1.35,
+	  "social": 0.85,
+	  "craft": 1.05,
+	  "spiritual": 1.05,
+	  "political": 1.2,
+	  "service": 0.9,
+	  "danger": 0.8
+	},
+	"relationship_modifiers": {
+	  "friendship": 1.05,
+	  "tension": 0.95,
+	  "loyalty": 1.15,
+	  "jealousy": 0.95
+	},
+	"strengths": [
+	  "Comprender sistemas mágicos y políticos",
+	  "Descubrir contradicciones del Velo",
+      "Acceder a rutas con Aeris, Eryon y Lyria"
+	],
+	"weaknesses": [
+	  "Físicamente limitado",
+	  "Puede parecer frío o distante",
+      "Le cuesta con personajes que exigen acción inmediata"
+	],
+	"favored_npcs": ["aeris", "eryon", "lyria", "selene"]
+  },
+  "charming_outsider": {
+	"name": "Forastero Encantador",
+	"element": "Agua tibia",
+	"description": "En otro mundo quizá habrías sobrevivido leyendo habitaciones, no libros. En Luminaria, tu sonrisa puede abrir puertas, suavizar sospechas y encender tensiones.",
+	"narrative_style": "Manipula escenas sociales, acelera vínculos románticos y convierte rumores en herramientas peligrosas.",
+	"starting_stats": {
+	  "strength": 1,
+	  "intellect": 2,
+	  "charm": 4,
+	  "discipline": 1,
+	  "intuition": 3
+	},
+	"growth_modifiers": {
+	  "strength": 0.85,
+	  "intellect": 1.0,
+	  "charm": 1.4,
+	  "discipline": 0.8,
+	  "intuition": 1.2
+	},
+	"work_modifiers": {
+	  "physical": 0.85,
+	  "academic": 0.95,
+	  "social": 1.35,
+	  "craft": 0.85,
+	  "spiritual": 0.95,
+	  "political": 1.2,
+	  "service": 1.3,
+	  "danger": 0.9
+	},
+	"relationship_modifiers": {
+	  "friendship": 1.0,
+	  "tension": 1.3,
+	  "loyalty": 0.9,
+	  "jealousy": 1.25
+	},
+	"strengths": [
+	  "Crear atracción temprana",
+	  "Manejar rumores y conversaciones",
+      "Reducir resistencias sociales"
+	],
+	"weaknesses": [
+	  "Puede generar celos con facilidad",
+	  "La lealtad tarda más en sentirse genuina",
+      "Personajes disciplinados pueden desconfiar de su encanto"
+	],
+	"favored_npcs": ["elara", "eryon", "seraphine", "nova"]
+  },
+  "steadfast_outsider": {
+	"name": "Forastero Disciplinado",
+	"element": "Tierra firme",
+	"description": "Tu fuerza no está en brillar, sino en permanecer. En un mundo que se contradice, tu constancia puede volverse refugio.",
+	"narrative_style": "Construye lealtad, desbloquea peticiones indebidas y resiste presión del Consejo o del Velo.",
+	"starting_stats": {
+	  "strength": 3,
+	  "intellect": 2,
+	  "charm": 1,
+	  "discipline": 4,
+	  "intuition": 1
+	},
+	"growth_modifiers": {
+	  "strength": 1.15,
+	  "intellect": 1.0,
+	  "charm": 0.75,
+	  "discipline": 1.4,
+	  "intuition": 0.9
+	},
+	"work_modifiers": {
+	  "physical": 1.1,
+	  "academic": 1.0,
+	  "social": 0.8,
+	  "craft": 1.15,
+	  "spiritual": 1.2,
+	  "political": 1.15,
+	  "service": 0.95,
+	  "danger": 1.05
+	},
+	"relationship_modifiers": {
+	  "friendship": 1.1,
+	  "tension": 0.9,
+	  "loyalty": 1.35,
+	  "jealousy": 0.85
+	},
+	"strengths": [
+	  "Construir confianza duradera",
+	  "Desbloquear lealtad profunda",
+      "Resistir presión emocional y política"
+	],
+	"weaknesses": [
+	  "Romance más lento",
+	  "Menos facilidad para coquetear",
+      "Puede perder oportunidades por exceso de prudencia"
+	],
+	"favored_npcs": ["taren", "seraphine", "rhein", "lyria"]
+  },
+  "balanced_outsider": {
+	"name": "Forastero Equilibrado",
+	"element": "Centro",
+	"description": "No destacas de forma evidente en ningún camino, pero tampoco cargas una debilidad marcada. Tu nueva vida en Luminaria empieza sin inclinaciones extremas: cada vínculo, cada oficio y cada entrenamiento dependerán más de tus decisiones que de tu naturaleza.",
+	"narrative_style": "Ruta neutral y flexible. No acelera ni penaliza relaciones, trabajos o crecimiento. Ideal para jugadores que prefieren construir su identidad desde cero.",
+	"starting_stats": {
+	  "strength": 2,
+	  "intellect": 2,
+	  "charm": 2,
+	  "discipline": 2,
+	  "intuition": 2
+	},
+	"growth_modifiers": {
+	  "strength": 1.0,
+	  "intellect": 1.0,
+	  "charm": 1.0,
+	  "discipline": 1.0,
+	  "intuition": 1.0
+	},
+	"work_modifiers": {
+	  "physical": 1.0,
+	  "academic": 1.0,
+	  "social": 1.0,
+	  "craft": 1.0,
+	  "spiritual": 1.0,
+	  "political": 1.0,
+	  "service": 1.0,
+	  "danger": 1.0
+	},
+	"relationship_modifiers": {
+	  "friendship": 1.0,
+	  "tension": 1.0,
+	  "loyalty": 1.0,
+	  "jealousy": 1.0
+	},
+	"strengths": [
+	  "No tiene penalizaciones",
+	  "Funciona bien con cualquier estilo de juego",
+      "Permite aprender el sistema sin sesgos fuertes"
+	],
+	"weaknesses": [
+	  "No tiene ventajas claras",
+	  "No acelera rutas específicas",
+      "Puede sentirse menos dramático que otros caminos"
+	],
+	"favored_npcs": []
+  }
 }

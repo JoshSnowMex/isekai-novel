@@ -10,7 +10,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_home_discipline"
+			"train_home_discipline_minor"
 		]
 	},
 	"library": {
@@ -24,9 +24,8 @@
 			"shop": false
 		},
 		"activities": [
-			"train_library_intellect",
-			"work_library_half",
-			"work_library_full"
+			"train_library_intellect_minor",
+			"work_library_half"
 		]
 	},
 	"market": {
@@ -40,7 +39,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_market_charm",
+			"train_market_strength_minor",
 			"work_market_half",
 			"work_market_full"
 		]
@@ -67,9 +66,8 @@
 			"shop": false
 		},
 		"activities": [
-			"train_observatory_intuition",
-			"work_observatory_half",
-			"work_observatory_full"
+			"train_observatory_intuition_minor",
+			"work_observatory_half"
 		]
 	},
 	"arcane_library": {
@@ -83,7 +81,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_arcane_intellect",
+			"train_arcane_intellect_major",
 			"work_arcane_half",
 			"work_arcane_full"
 		]
@@ -99,7 +97,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_private_intuition"
+			"train_private_intuition_minor"
 		]
 	},
 	"archives": {
@@ -113,9 +111,8 @@
 			"shop": false
 		},
 		"activities": [
-			"train_archives_intellect",
-			"work_archives_half",
-			"work_archives_full"
+			"train_archives_intellect_minor",
+			"work_archives_half"
 		]
 	},
 	"plaza": {
@@ -129,9 +126,8 @@
 			"shop": false
 		},
 		"activities": [
-			"train_plaza_charm",
-			"work_plaza_half",
-			"work_plaza_full"
+			"train_plaza_charm_major",
+			"work_plaza_half"
 		]
 	},
 	"guild": {
@@ -145,7 +141,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_guild_strength",
+			"train_guild_strength_major",
 			"work_guild_half",
 			"work_guild_full"
 		]
@@ -161,7 +157,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_tavern_charm",
+			"train_tavern_charm_minor",
 			"work_tavern_half",
 			"work_tavern_full"
 		]
@@ -177,7 +173,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_workshop_discipline",
+			"train_workshop_discipline_minor",
 			"work_workshop_half",
 			"work_workshop_full"
 		]
@@ -193,9 +189,8 @@
 			"shop": false
 		},
 		"activities": [
-			"train_sanctuary_discipline",
-			"work_sanctuary_half",
-			"work_sanctuary_full"
+			"train_sanctuary_discipline_major",
+			"work_sanctuary_half"
 		]
 	},
 	"forest": {
@@ -209,9 +204,8 @@
 			"shop": false
 		},
 		"activities": [
-			"train_forest_intuition",
-			"work_forest_half",
-			"work_forest_full"
+			"train_forest_intuition_minor",
+			"work_forest_half"
 		]
 	},
 	"council_hall": {
@@ -225,7 +219,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_council_discipline",
+			"train_council_discipline_minor",
 			"work_council_half",
 			"work_council_full"
 		]
@@ -241,7 +235,7 @@
 			"shop": false
 		},
 		"activities": [
-			"train_threshold_intuition"
+			"train_threshold_intuition_major"
 		]
 	}
 }
