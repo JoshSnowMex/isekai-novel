@@ -708,3 +708,88 @@ func get_info_tier(info_key: String) -> int:
 		return 100
 
 	return 0
+
+func get_relationship_state_label(state: String) -> String:
+	match state:
+		"none":
+			return "Sin relación"
+		"interest":
+			return "Interés romántico"
+		"dating":
+			return "Saliendo"
+		"lovers":
+			return "Relación íntima"
+		"partner":
+			return "Vínculo culminado"
+		_:
+			return state
+
+func get_relationship_state_description(state: String) -> String:
+	match state:
+		"none":
+			return "Aún no hay una relación romántica reconocida."
+		"interest":
+			return "Hay interés romántico claro, pero todavía no existe compromiso."
+		"dating":
+			return "Están saliendo. Hay una intención romántica activa."
+		"lovers":
+			return "Existe una relación más íntima, traviesa y privada."
+		"partner":
+			return "El vínculo personal con este personaje llegó a su forma máxima. Puede ser formal, íntimo o especial según el personaje."
+		_:
+			return ""
+
+func get_npc_collectibles(npc_id: String) -> Dictionary:
+	ensure_collectibles()
+
+	var date_memories: Array = []
+	var portrait_pieces: Array = []
+	var trophies: Array = []
+
+	for collectible_id in player["collectibles"]:
+		var id: String = str(collectible_id)
+
+		if id.begins_with("date_memory:%s:" % npc_id):
+			date_memories.append(id)
+		elif id.begins_with("portrait_piece:%s:" % npc_id):
+			portrait_pieces.append(id)
+		elif id == "relationship_trophy:%s" % npc_id:
+			trophies.append(id)
+
+	return {
+		"date_memories": date_memories,
+		"portrait_pieces": portrait_pieces,
+		"trophies": trophies
+	}
+
+func get_collectible_label(collectible_id: String) -> String:
+	var parts: PackedStringArray = collectible_id.split(":")
+
+	if collectible_id.begins_with("date_memory:") and parts.size() >= 3:
+		var npc_id: String = parts[1]
+		var date_location_id: String = parts[2]
+		var npc: Dictionary = DataManager.get_npc(npc_id)
+		var date_location: Dictionary = DataManager.get_date_location(date_location_id)
+
+		return "Recuerdo de %s en %s" % [
+			npc.get("name", npc_id),
+			date_location.get("name", date_location_id)
+		]
+
+	if collectible_id.begins_with("portrait_piece:") and parts.size() >= 3:
+		var npc_id: String = parts[1]
+		var piece_index: String = parts[2]
+		var npc: Dictionary = DataManager.get_npc(npc_id)
+
+		return "Pieza de retrato %s de %s" % [
+			piece_index,
+			npc.get("name", npc_id)
+		]
+
+	if collectible_id.begins_with("relationship_trophy:") and parts.size() >= 2:
+		var npc_id: String = parts[1]
+		var npc: Dictionary = DataManager.get_npc(npc_id)
+
+		return "Trofeo de vínculo: %s" % npc.get("name", npc_id)
+
+	return collectible_id

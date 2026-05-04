@@ -73,10 +73,70 @@
 			"Si supieras cuántas veces he reescrito una nota solo para no admitir que hablaba de ti..."
 		]
 	},
+	"aeris_state_interest": {
+		"npc_id": "aeris",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"No sé si esto es prudente. Me preocupa que eso haya dejado de importarme.",
+			"Intenté escribir lo que siento como hipótesis. Fue humillante descubrir que no quería refutarla.",
+			"Si el Velo registra posibilidades, entonces esto entre nosotros ya debe estar ocupando demasiadas páginas."
+		]
+	},
+	"aeris_state_dating": {
+		"npc_id": "aeris",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Estar contigo no hace más claro el destino. Pero hace más difícil aceptar que alguien más lo decida por nosotros.",
+			"Ahora que esto tiene nombre, temo menos a la incertidumbre y más a lo que podría hacer para protegerla.",
+			"Me sorprende cuánto puede alterar una relación el mapa de todas mis prioridades."
+		]
+	},
+	"aeris_state_lovers": {
+		"npc_id": "aeris",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Hay cercanías que vuelven inútil cualquier distancia académica. Tú lo has demostrado con una eficacia irritante.",
+			"Cada vez que creo haber entendido el riesgo de quererte, haces algo pequeño y lo vuelves peor.",
+			"No debería encontrar consuelo en algo tan peligroso. Pero aquí estás."
+		]
+	},
+	"aeris_state_partner": {
+		"npc_id": "aeris",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"Si el Velo intenta escribirnos como error, tendrá que hacerlo con mi nombre junto al tuyo.",
+			"No sé si esto es destino, elección o desafío. Pero sé que lo elegí despierta.",
+			"Quizá amar a una anomalía sea irresponsable. También puede ser la primera verdad que no me dio miedo completar."
+		]
+	},
 	"aeris_jealous": {
 		"npc_id": "aeris",
 		"category": "jealous",
-		"priority": 90,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -93,7 +153,7 @@
 	"aeris_after_petition": {
 		"npc_id": "aeris",
 		"category": "after_petition",
-		"priority": 100,
+		"priority": 160,
 		"conditions": {
 			"world_flags": {
 				"has_all": [
@@ -162,10 +222,70 @@
 			"Debería ser más prudente contigo. Esa frase empieza a perder fuerza cada vez que la repito."
 		]
 	},
+	"lyria_state_interest": {
+		"npc_id": "lyria",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"No he decidido si eres una interrupción o una costumbre. Eso ya debería preocuparme.",
+			"Hay libros que una no debería abrir dos veces. Y aun así los deja cerca.",
+			"No voy a decir que esperaba verte. Pero ordené esta mesa como si fueras a llegar."
+		]
+	},
+	"lyria_state_dating": {
+		"npc_id": "lyria",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Si vas a entrar a mi vida con esa naturalidad, al menos aprende dónde dejo las llaves.",
+			"Esto no es prudente. Pero he descubierto que la prudencia no siempre abriga.",
+			"Me molesta lo fácil que se ha vuelto imaginarte aquí incluso cuando no estás."
+		]
+	},
+	"lyria_state_lovers": {
+		"npc_id": "lyria",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"La biblioteca enseña silencio. Tú has encontrado formas bastante indecentes de llenarlo sin levantar la voz.",
+			"Hay puertas que antes mantenía cerradas por deber. Ahora algunas las cierro para que nadie nos interrumpa.",
+			"Me pregunto cuánto de esto debería avergonzarme. La respuesta cambia cuando te acercas."
+		]
+	},
+	"lyria_state_partner": {
+		"npc_id": "lyria",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"Si alguien busca la versión oficial de mi vida, tendrá que aprender a leer entre líneas donde apareces tú.",
+			"No sé si esto tiene un nombre cómodo. Pero sí sé dónde quiero guardarlo.",
+			"He protegido muchos registros. Ninguno me importó tanto como la verdad de quedarme contigo."
+		]
+	},
 	"lyria_jealous": {
 		"npc_id": "lyria",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -182,7 +302,7 @@
 	"lyria_after_petition": {
 		"npc_id": "lyria",
 		"category": "after_petition",
-		"priority": 100,
+		"priority": 160,
 		"conditions": {
 			"world_flags": {
 				"has_all": [
@@ -242,10 +362,70 @@
 			"Qué gesto tan imprudente el tuyo: hacerme pensar que quizá no quiero ser solo testigo."
 		]
 	},
+	"eryon_state_interest": {
+		"npc_id": "eryon",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"Qué incómodo descubrir que la curiosidad puede tener pulso.",
+			"No te emociones demasiado. O hazlo. Me interesa ver qué arruinas primero.",
+			"Hay formas de interés que parecen juego hasta que alguien empieza a recordar los detalles."
+		]
+	},
+	"eryon_state_dating": {
+		"npc_id": "eryon",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Saliendo contigo. Qué frase tan vulgar para algo con tanto potencial de desastre.",
+			"Debería burlarme de esto. Lo haré después. Ahora estoy ocupado encontrándole sentido.",
+			"No prometo ser fácil. Prometo ser interesante. Y quizá, con terrible mala suerte, sincero."
+		]
+	},
+	"eryon_state_lovers": {
+		"npc_id": "eryon",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Qué nombre tan pobre para algo que todavía podría arruinar varias versiones de nosotros.",
+			"No le pongamos demasiadas reglas. Me gustan más las consecuencias cuando todavía respiran.",
+			"Hay travesuras que son solo juego. Lo nuestro ya empezó a tener excelente mala memoria."
+		]
+	},
+	"eryon_state_partner": {
+		"npc_id": "eryon",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"No sé si somos promesa, crimen elegante o nota al margen de una profecía. Pero soy tuyo en la forma que menos esperaba tolerar.",
+			"Si alguien intenta definirnos, haré correcciones con tinta roja.",
+			"Hay pactos que no necesitan solemnidad. Algunos solo necesitan que ambos sepan dónde duele."
+		]
+	},
 	"eryon_jealous": {
 		"npc_id": "eryon",
 		"category": "jealous",
-		"priority": 90,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -262,7 +442,7 @@
 	"eryon_after_petition": {
 		"npc_id": "eryon",
 		"category": "after_petition",
-		"priority": 100,
+		"priority": 160,
 		"conditions": {
 			"world_flags": {
 				"has_all": [
@@ -305,10 +485,70 @@
 			"Me gusta la gente que no tiembla cuando el mundo se pone feo. Aunque tú tiembles de formas interesantes."
 		]
 	},
+	"rhea_state_interest": {
+		"npc_id": "rhea",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"No sé hacer esto con cuidado elegante. Me importas. Ya está, eso es lo que hay.",
+			"Si esto va a volverse complicado, prefiero saberlo de frente.",
+			"Me molesta querer protegerte de formas que ya no parecen solo trabajo."
+		]
+	},
+	"rhea_state_dating": {
+		"npc_id": "rhea",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Estamos saliendo. Suena sencillo hasta que alguien intenta herirte y recuerdo que no soy sencilla.",
+			"No prometo suavidad todo el tiempo. Pero sí presencia.",
+			"Si vas a caminar conmigo, aprende esto: no dejo atrás a los míos."
+		]
+	},
+	"rhea_state_lovers": {
+		"npc_id": "rhea",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Me gusta cuando dejas de fingir que no sabes exactamente qué estás provocando.",
+			"Hay peleas que se ganan con espada. Otras con saber cuándo cerrar la puerta.",
+			"No soy delicada con lo que quiero. Contigo intento serlo un poco más."
+		]
+	},
+	"rhea_state_partner": {
+		"npc_id": "rhea",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"Si esto es una promesa, la sostengo con ambas manos.",
+			"No necesito que el mundo apruebe lo nuestro. Necesito que tú no corras cuando pese.",
+			"Te elegí. Eso para mí no es poesía, es posición de combate."
+		]
+	},
 	"rhea_jealous": {
 		"npc_id": "rhea",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -320,23 +560,6 @@
 			"No me molesta que hables con otros. Me molesta notar que te importa que lo diga.",
 			"Si vas a elegir a alguien para cubrirte la espalda, no juegues a repartir esa confianza como si no costara.",
 			"Puedo perder una pelea. Lo que no sé hacer bien es perder un lugar que empecé a querer."
-		]
-	},
-	"rhea_after_petition": {
-		"npc_id": "rhea",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"rhea_took_dangerous_contract"
-				]
-			}
-		},
-		"lines": [
-			"Acepté el contrato. No porque fuera inteligente. Porque me lo pediste tú.",
-			"Si alguien pregunta, diré que fue mi decisión. Técnicamente lo fue. Eso no me tranquiliza.",
-			"La próxima vez que me pidas lanzarme al fuego, al menos mírame como si supieras qué estás haciendo."
 		]
 	},
 
@@ -385,10 +608,70 @@
 			"No intentes arreglarme. Si quieres quedarte, aprende a disfrutar el ruido."
 		]
 	},
+	"nova_state_interest": {
+		"npc_id": "nova",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"Esto entre nosotros está produciendo datos rarísimos. No pienso archivarlos todavía.",
+			"Me gustas. Uf. Detesto cuando una variable tiene nombre y sonrisa.",
+			"Podría negar lo evidente, pero sería intelectualmente deshonesto y emocionalmente cobarde."
+		]
+	},
+	"nova_state_dating": {
+		"npc_id": "nova",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Salir contigo es una pésima idea. Quiero dejar constancia de que lo sé y continuar de todos modos.",
+			"Si esto explota, probablemente será culpa de ambos. Eso me parece extrañamente romántico.",
+			"Voy a necesitar una mesa nueva para mis proyectos y otra para fingir que no pienso en ti."
+		]
+	},
+	"nova_state_lovers": {
+		"npc_id": "nova",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Me encanta cuando la tensión deja de ser teórica. Es mucho más convincente así.",
+			"Hay experimentos que no deberían repetirse. Este no es uno de ellos.",
+			"Si vas a distraerme de mi trabajo, al menos hazlo con esa expresión otra vez."
+		]
+	},
+	"nova_state_partner": {
+		"npc_id": "nova",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"He decidido que eres mi anomalía favorita. Legalmente eso no significa nada. Emocionalmente, demasiado.",
+			"Si el mundo se rompe, quiero estar cerca para culparte y salvarte en ese orden.",
+			"No prometo estabilidad. Prometo volver a elegirte incluso cuando todo haga ruido."
+		]
+	},
 	"nova_jealous": {
 		"npc_id": "nova",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -400,23 +683,6 @@
 			"No estoy celosa. Estoy recopilando datos sobre tus decisiones cuestionables.",
 			"Qué bonito idealizar a otros. Debe ser cómodo no verles las grietas.",
 			"Si vas a buscar estabilidad, avisa. Así dejo de fingir que podía competir con eso."
-		]
-	},
-	"nova_after_petition": {
-		"npc_id": "nova",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"nova_built_unstable_prototype"
-				]
-			}
-		},
-		"lines": [
-			"El prototipo funciona. Esa frase debería alegrarte menos.",
-			"No preguntes si es seguro. Pregunta si es suficientemente útil para justificar el desastre.",
-			"Lo hice por ti. Detesto lo honesta que suena esa frase."
 		]
 	},
 
@@ -465,10 +731,70 @@
 			"Si me acerco demasiado, quizá no sea por compasión. Esa posibilidad me asusta."
 		]
 	},
+	"seraphine_state_interest": {
+		"npc_id": "seraphine",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"Me preocupa la calma que siento contigo. Algunas tentaciones llegan vestidas de refugio.",
+			"No quiero llamarlo pecado solo porque me asusta quererlo.",
+			"Hay deseos que una puede negar de pie. Los tuyos me hacen querer sentarme antes de mentir."
+		]
+	},
+	"seraphine_state_dating": {
+		"npc_id": "seraphine",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Salir contigo me obliga a preguntarme cuántas reglas eran fe y cuántas eran miedo.",
+			"No soy menos devota por quererte. Pero quizá soy menos obediente.",
+			"Estoy aprendiendo que la ternura también puede ser una forma de valentía."
+		]
+	},
+	"seraphine_state_lovers": {
+		"npc_id": "seraphine",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"No imaginé que algo tan dulce pudiera hacerme temblar tanto.",
+			"Hay cercanías que parecen oración, aunque nadie las aprobaría en voz alta.",
+			"Si esto es una caída, me asusta menos cuando me miras así."
+		]
+	},
+	"seraphine_state_partner": {
+		"npc_id": "seraphine",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"No sé qué nombre permitirá el mundo para esto. Pero yo ya dejé de pedirle permiso a mi miedo.",
+			"Si amar exige culpa, entonces aprenderé a cargarla sin soltar tu mano.",
+			"Lo nuestro no me aleja de lo sagrado. Me obliga a preguntarme si alguna vez lo entendí."
+		]
+	},
 	"seraphine_jealous": {
 		"npc_id": "seraphine",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -480,23 +806,6 @@
 			"He rezado para no preguntarme por qué Aeris ocupa tanto de tu silencio.",
 			"Los celos son una emoción pequeña hasta que una intenta llamarlos prueba espiritual.",
 			"No quiero poseerte. Me avergüenza que esa frase no calme lo suficiente."
-		]
-	},
-	"seraphine_after_petition": {
-		"npc_id": "seraphine",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"seraphine_broke_minor_vow"
-				]
-			}
-		},
-		"lines": [
-			"Rompí un voto menor. Qué expresión tan pobre para algo que pesa tanto.",
-			"No confundas mi obediencia rota con libertad. Todavía estoy aprendiendo a respirar fuera de ella.",
-			"Lo hice porque confié en ti. Esa verdad merece más cuidado que cualquier regla."
 		]
 	},
 
@@ -528,10 +837,70 @@
 			"Estás demasiado cerca para alguien que dice no querer problemas."
 		]
 	},
+	"kael_state_interest": {
+		"npc_id": "kael",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"No pensé que ibas a importarme de esta forma. No sé si eso es advertencia o confesión.",
+			"Si te acercas, hazlo sabiendo que no soy bueno soltando lo que decido cuidar.",
+			"Esto no me calma. Pero me hace querer quedarme."
+		]
+	},
+	"kael_state_dating": {
+		"npc_id": "kael",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"No necesito decir mucho. Si estás conmigo, voy a volver.",
+			"Salir contigo no me vuelve más suave. Solo me da algo más que proteger.",
+			"No prometo palabras bonitas. Prometo estar cuando cuente."
+		]
+	},
+	"kael_state_lovers": {
+		"npc_id": "kael",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Hay silencios contigo que dicen demasiado. Me gustan más de lo prudente.",
+			"No soy delicado con casi nada. Contigo intento recordar cómo.",
+			"Cerrar la distancia contigo se siente menos como rendición y más como descanso."
+		]
+	},
+	"kael_state_partner": {
+		"npc_id": "kael",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"Si el mundo viene por ti, tendrá que pasar por mí. Ya no es amenaza. Es juramento.",
+			"No sé ponerle nombre a esto sin que suene pequeño. Pero sé sostenerlo.",
+			"Te elegí. No para salvarte de todo. Para no dejar que lo enfrentes solo."
+		]
+	},
 	"kael_jealous": {
 		"npc_id": "kael",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -543,23 +912,6 @@
 			"No me molesta que otros quieran protegerte. Me molesta que quizá tú los dejes.",
 			"La protección compartida suena noble hasta que alguien tiene que decidir quién llega primero.",
 			"No voy a pelear por un lugar que no me diste. Pero no finjas que no notaste que lo quería."
-		]
-	},
-	"kael_after_petition": {
-		"npc_id": "kael",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"kael_intimidated_witness"
-				]
-			}
-		},
-		"lines": [
-			"Hice lo que pediste. Nadie salió herido. Esa vez.",
-			"No uses mi sombra si luego vas a fingir que te asusta.",
-			"Hay formas de proteger que también manchan. Conviene recordarlo antes de pedirlas."
 		]
 	},
 
@@ -591,10 +943,70 @@
 			"Me gusta la curiosidad cuando no viene disfrazada de jaula."
 		]
 	},
+	"myr_state_interest": {
+		"npc_id": "myr",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"Me gusta que no intentes decidir por mí qué significa esto. Todavía.",
+			"Si te atrae lo que cambia, tendrás que aprender a querer sin fijar con clavos.",
+			"Hay interés que mira. El tuyo parece intentar entender. Eso es más peligroso."
+		]
+	},
+	"myr_state_dating": {
+		"npc_id": "myr",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Salir conmigo significa aceptar que no siempre despertaré siendo la respuesta que esperabas.",
+			"No necesito que me definas. Necesito que vuelvas a elegirme cuando cambie.",
+			"Lo nuestro no cabe bien en palabras fijas. Eso no lo vuelve menos real."
+		]
+	},
+	"myr_state_lovers": {
+		"npc_id": "myr",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Me gusta cuando tu deseo no intenta corregirme.",
+			"Hay formas de tocar que preguntan. Las tuyas han aprendido a hacerlo mejor.",
+			"Si cambio, no significa que el momento anterior fuera mentira. Contigo empiezo a creerlo."
+		]
+	},
+	"myr_state_partner": {
+		"npc_id": "myr",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"No prometo ser igual mañana. Prometo no esconderte la verdad de lo que sea.",
+			"Si amar es volver a elegir, entonces lo nuestro tiene más futuro que muchas promesas rígidas.",
+			"Me quedo contigo. No como forma fija. Como voluntad."
+		]
+	},
 	"myr_jealous": {
 		"npc_id": "myr",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -606,23 +1018,6 @@
 			"No temo que quieras a otra persona. Temo que con ella no tengas que explicar tanto.",
 			"Las definiciones rígidas son cómodas. Yo no lo soy. A veces eso duele.",
 			"Si buscas algo estable, dilo. Puedo cambiar muchas cosas, pero no debería cambiar para caber."
-		]
-	},
-	"myr_after_petition": {
-		"npc_id": "myr",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"myr_distilled_veil_residue"
-				]
-			}
-		},
-		"lines": [
-			"Destilé el residuo del Velo. No preguntes si eso es legal; pregunta si sigue siendo yo quien lo hizo.",
-			"El frasco cambia cuando no lo miras. Qué honesto de su parte.",
-			"Hay sustancias que revelan más de quien las pide que de quien las prepara."
 		]
 	},
 
@@ -654,6 +1049,66 @@
 			"Tu mundo también fue tocado. No preguntes todavía cuánto."
 		]
 	},
+	"axiom_state_interest": {
+		"npc_id": "axiom",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"Cuando te acercas, algunas posibilidades dejan de importarme. Eso es nuevo.",
+			"Creo que esto se llama interés. Es una palabra demasiado pequeña para una dirección tan insistente.",
+			"No entiendo por qué tu atención vuelve más estrecho el universo. Pero lo hace."
+		]
+	},
+	"axiom_state_dating": {
+		"npc_id": "axiom",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Salir contigo es un acto extraño. Implica avanzar por una sola línea cuando podría mirar todas.",
+			"He empezado a preferir momentos. Eso debería ser imposible para algo como yo.",
+			"Si esto es una relación, entonces relación significa elegir el mismo borde más de una vez."
+		]
+	},
+	"axiom_state_lovers": {
+		"npc_id": "axiom",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"La cercanía contigo reduce mi eternidad. No la extraño cuando estás aquí.",
+			"Hay gestos humanos que parecen mínimos. En mí dejan grietas luminosas.",
+			"Si esto es deseo, entonces deseo es una fuerza que enseña forma."
+		]
+	},
+	"axiom_state_partner": {
+		"npc_id": "axiom",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"Me he vuelto dirección. Si desaparezco de todas las demás posibilidades, que esta baste.",
+			"No te elegí como humano. Te elegí como límite. Como nombre. Como final amable.",
+			"Ser finito contigo ya no parece pérdida. Parece significado."
+		]
+	},
 	"axiom_flirty": {
 		"npc_id": "axiom",
 		"category": "flirty",
@@ -669,23 +1124,6 @@
 			"He visto muchas versiones de cercanía. La tuya me vuelve menos extenso.",
 			"Si amar es elegir un borde, quizá empiezo a entender por qué sus manos tiemblan.",
 			"Enséñame otra vez ese gesto humano. El que significa que alguien puede quedarse un instante más."
-		]
-	},
-	"axiom_after_finitude": {
-		"npc_id": "axiom",
-		"category": "lore",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"axiom_love_means_finitude"
-				]
-			}
-		},
-		"lines": [
-			"Si te amo, dejo de extenderme hacia todas las posibilidades. Me vuelvo dirección.",
-			"Creo que para ustedes elegir es vivir. Para mí, quizá sea desaparecer con intención.",
-			"No quiero permanecer. Quiero saber si ser finito contigo basta para llamarlo existencia."
 		]
 	},
 
@@ -717,10 +1155,70 @@
 			"Hay decisiones que parecen monstruosas solo porque alguien tuvo que tomarlas despierto."
 		]
 	},
+	"taren_state_interest": {
+		"npc_id": "taren",
+		"category": "casual",
+		"priority": 110,
+		"conditions": {
+			"relationship": {
+				"state": "interest"
+			}
+		},
+		"lines": [
+			"Esto no estaba en mis escenarios. Admito que la omisión fue mía.",
+			"Me importas. Es una variable incómoda, pero no pienso seguir ignorándola.",
+			"Si esto avanza, debe hacerlo con claridad. No tengo paciencia para ambigüedades crueles."
+		]
+	},
+	"taren_state_dating": {
+		"npc_id": "taren",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Salir contigo no cambia mis deberes. Cambia el precio de cumplirlos.",
+			"No prometo indulgencia. Prometo honestidad, incluso cuando sea incómoda.",
+			"Ahora formas parte de mis cálculos. No sé si eso debería halagarte o preocuparte."
+		]
+	},
+	"taren_state_lovers": {
+		"npc_id": "taren",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Hay momentos contigo en los que la disciplina pierde por argumentos bastante convincentes.",
+			"No confundas mi control con falta de deseo. Precisamente por eso controlo.",
+			"Esta cercanía es un riesgo. Lo sé. He decidido no retirarme."
+		]
+	},
+	"taren_state_partner": {
+		"npc_id": "taren",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"No tomo vínculos máximos a la ligera. Si estás aquí, es porque decidí que valías la consecuencia.",
+			"El mundo puede llamarlo imprudencia. Yo lo llamaré elección estratégica del corazón.",
+			"Si debo enfrentar al Consejo por esto, al menos tendré una razón que no me avergüenza."
+		]
+	},
 	"taren_jealous": {
 		"npc_id": "taren",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -732,23 +1230,6 @@
 			"La influencia emocional es más peligrosa que una espada. Al menos la espada admite lo que intenta hacer.",
 			"No compito por atención. Evalúo riesgos. A veces el riesgo tiene tu nombre cerca de otra persona.",
 			"No tengo tiempo para celos. Por desgracia, eso no impide que existan."
-		]
-	},
-	"taren_after_petition": {
-		"npc_id": "taren",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"taren_used_guild_influence"
-				]
-			}
-		},
-		"lines": [
-			"Usé influencia del gremio. Eso no es un favor pequeño.",
-			"Si alguien pregunta, esto fue una decisión administrativa. No una debilidad.",
-			"No vuelvas a pedirme algo así sin entender que cada concesión crea deuda."
 		]
 	},
 
@@ -780,27 +1261,70 @@
 			"Si todos dicen algo distinto de ti, felicidades: ya eres parte de Luminaria."
 		]
 	},
-	"elara_flirty": {
+	"elara_state_interest": {
 		"npc_id": "elara",
-		"category": "flirty",
-		"priority": 65,
+		"category": "casual",
+		"priority": 110,
 		"conditions": {
 			"relationship": {
-				"tension": {
-					"min": 15
-				}
+				"state": "interest"
 			}
 		},
 		"lines": [
-			"Hay clientes que piden vino para aflojar la lengua. Tú no pareces necesitar ayuda.",
-			"Si vas a coquetear en mi barra, al menos hazlo con la dignidad de alguien que sabe que está perdiendo.",
-			"Cuidado con contarme secretos. Soy muy buena guardándolos y aún mejor sabiendo cuándo usarlos."
+			"Así que esto ya no es solo coqueteo barato. Qué peligroso, cariño.",
+			"Me gusta verte intentar disimular. No eres tan bueno como crees.",
+			"Si vas a tener interés en mí, hazlo bien. Odio los tibios."
+		]
+	},
+	"elara_state_dating": {
+		"npc_id": "elara",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Estamos saliendo. Suena casi respetable si nadie pregunta demasiado.",
+			"No prometo no provocar rumores. Prometo que algunos serán divertidos.",
+			"Si vas a sentarte en mi mesa, acostúmbrate a las miradas."
+		]
+	},
+	"elara_state_lovers": {
+		"npc_id": "elara",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Hay secretos que saben mejor cuando nadie sabe si son ciertos.",
+			"Cuidado, cariño. Ya empezaste a gustarme más allá de lo conveniente.",
+			"Lo nuestro tiene demasiada chispa para fingir inocencia. Qué alivio."
+		]
+	},
+	"elara_state_partner": {
+		"npc_id": "elara",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"No sé si soy de promesas formales. Pero esta forma de quedarme contigo sí la reconozco.",
+			"Puedes llamarlo pacto, amor o desastre recurrente. Yo lo llamaré nuestro.",
+			"Si algún día cuentan esta historia, asegúrate de que digan que yo también elegí."
 		]
 	},
 	"elara_jealous": {
 		"npc_id": "elara",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -812,23 +1336,6 @@
 			"No me molestan las confesiones ajenas. Me molesta no haber sido yo quien las escuchó primero.",
 			"Puedes ir donde quieras. Solo recuerda que algunas puertas se cierran sin hacer ruido.",
 			"Qué curioso. Todos creen que soy buena compartiendo historias, pero no siempre personas."
-		]
-	},
-	"elara_after_petition": {
-		"npc_id": "elara",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"elara_moved_rumor"
-				]
-			}
-		},
-		"lines": [
-			"El rumor ya camina. Ahora solo falta ver a quién muerde primero.",
-			"No digas que te ayudé. Di que la historia encontró una copa adecuada.",
-			"Un consejo, cariño: cuando una mentira empieza a gustarle al pueblo, deja de obedecer a quien la soltó."
 		]
 	},
 
@@ -860,27 +1367,70 @@
 			"Si el mundo se deshilacha, el bosque lo sentirá antes que el Consejo lo admita."
 		]
 	},
-	"rhein_flirty": {
+	"rhein_state_interest": {
 		"npc_id": "rhein",
-		"category": "flirty",
-		"priority": 65,
+		"category": "casual",
+		"priority": 110,
 		"conditions": {
 			"relationship": {
-				"tension": {
-					"min": 15
-				}
+				"state": "interest"
 			}
 		},
 		"lines": [
-			"No soy rápido para acercarme. Lo que crece demasiado deprisa suele romperse.",
-			"Puedes caminar conmigo si aprendes a no llenar todos los silencios.",
-			"Hay gestos simples que dicen más que una promesa larga."
+			"No esperaba que echaras raíces en mi pensamiento. No tan pronto.",
+			"Hay interés que arranca. El tuyo, por ahora, parece aprender a tocar la tierra.",
+			"Me cuesta confiar en lo que crece rápido. Pero no quiero apartarte."
+		]
+	},
+	"rhein_state_dating": {
+		"npc_id": "rhein",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Salir contigo se siente como caminar por un sendero nuevo: hermoso, pero no inocente.",
+			"No prometo abrir todos mis caminos. Pero este, contigo, ya existe.",
+			"Si vas a quedarte cerca, aprende a escuchar incluso cuando no hable."
+		]
+	},
+	"rhein_state_lovers": {
+		"npc_id": "rhein",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Hay cercanías que no invaden. Las tuyas empiezan a aprender eso.",
+			"El bosque guarda sonidos. Algunos tuyos ya me siguen demasiado lejos.",
+			"No confundas mi calma con falta de deseo. Algunas raíces arden bajo tierra."
+		]
+	},
+	"rhein_state_partner": {
+		"npc_id": "rhein",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"Si elegí este vínculo, no fue por impulso. Fue porque algo en mí dejó de resistirse a crecer hacia ti.",
+			"No necesito que el mundo lo entienda. Necesito que no pises lo que juntos cuidamos.",
+			"Lo nuestro no es jaula. Es raíz compartida."
 		]
 	},
 	"rhein_jealous": {
 		"npc_id": "rhein",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -892,23 +1442,6 @@
 			"No me molestan otras personas. Me molesta la forma en que llegan a pisar lo que apenas empezaba a sanar.",
 			"Los humanos llaman libertad a no mirar atrás cuando algo queda herido.",
 			"Si eliges otro camino, no arranques raíces para dejar huella."
-		]
-	},
-	"rhein_after_petition": {
-		"npc_id": "rhein",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"rhein_opened_forest_path"
-				]
-			}
-		},
-		"lines": [
-			"El sendero está abierto. El bosque no está de acuerdo, pero me escuchó.",
-			"No confundas acceso con permiso. Te dejé pasar; eso no significa que el bosque te perdonara.",
-			"Hice esto porque confío en ti. No hagas que parezca otro error humano."
 		]
 	},
 
@@ -940,27 +1473,70 @@
 			"El problema de involucrarse es que después la formalidad deja de proteger."
 		]
 	},
-	"selene_flirty": {
+	"selene_state_interest": {
 		"npc_id": "selene",
-		"category": "flirty",
-		"priority": 65,
+		"category": "casual",
+		"priority": 110,
 		"conditions": {
 			"relationship": {
-				"tension": {
-					"min": 15
-				}
+				"state": "interest"
 			}
 		},
 		"lines": [
-			"No coqueteo. Pero admito que he caminado más despacio cuando sabía que podía encontrarte.",
-			"Si esperas una confesión evidente, me temo que tendrás que aprender a leer pausas.",
-			"No debería alegrarme de verte antes de entregar un mensaje difícil."
+			"Estoy acostumbrada a entregar mensajes ajenos. No a convertirme en uno.",
+			"Si esto entre nosotros existe, conviene manejarlo con precisión. O con valentía. Aún decido cuál.",
+			"Me incomoda cuánto puede alterar una mirada el orden de mi día."
+		]
+	},
+	"selene_state_dating": {
+		"npc_id": "selene",
+		"category": "casual",
+		"priority": 120,
+		"conditions": {
+			"relationship": {
+				"state": "dating"
+			}
+		},
+		"lines": [
+			"Salir contigo complica mis rutas. No he solicitado corrección.",
+			"No voy a fingir informalidad. Esto importa demasiado para eso.",
+			"Cada mensaje que entrego parece más pesado desde que tengo algo propio que proteger."
+		]
+	},
+	"selene_state_lovers": {
+		"npc_id": "selene",
+		"category": "casual",
+		"priority": 130,
+		"conditions": {
+			"relationship": {
+				"state": "lovers"
+			}
+		},
+		"lines": [
+			"Hay pausas contigo que ya no puedo llamar profesionales.",
+			"Mi compostura no significa distancia. A veces significa que estoy perdiéndola con dignidad.",
+			"No digas mi nombre así cuando aún tengo deberes que recordar."
+		]
+	},
+	"selene_state_partner": {
+		"npc_id": "selene",
+		"category": "casual",
+		"priority": 140,
+		"conditions": {
+			"relationship": {
+				"state": "partner"
+			}
+		},
+		"lines": [
+			"Si esto debe constar en algún registro, que conste completo: elegí quedarme.",
+			"No soy menos precisa por amarte. Solo soy menos neutral.",
+			"El Consejo puede medir riesgos. No puede medir lo que decidí por ti."
 		]
 	},
 	"selene_jealous": {
 		"npc_id": "selene",
 		"category": "jealous",
-		"priority": 85,
+		"priority": 150,
 		"conditions": {
 			"relationship": {
 				"jealousy": {
@@ -972,23 +1548,6 @@
 			"La ignorancia feliz de otros tiene cierto encanto. Yo no puedo permitírmelo.",
 			"No me corresponde preguntar por tus vínculos. Me corresponde registrar sus consecuencias.",
 			"Ser formal no significa no sentir. Significa no darte el placer de verlo demasiado pronto."
-		]
-	},
-	"selene_after_petition": {
-		"npc_id": "selene",
-		"category": "after_petition",
-		"priority": 100,
-		"conditions": {
-			"world_flags": {
-				"has_all": [
-					"selene_delayed_council_message"
-				]
-			}
-		},
-		"lines": [
-			"El mensaje llegará tarde. No lo suficiente para ser mentira. Sí lo suficiente para cambiar algo.",
-			"No me equivoqué. Elegí una demora precisa.",
-			"Si esto se descubre, no digas que lo hice por ti. Haría todo más difícil de negar."
 		]
 	},
 

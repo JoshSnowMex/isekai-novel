@@ -178,5 +178,79 @@
 				"global_tension": 4
 			}
 		}
+	},
+
+	"relationship_interest_completed": {
+		"trigger": "relationship_step_completed",
+		"conditions": {
+			"context": {
+				"to_state": "interest"
+			}
+		},
+		"text": "El vínculo cruza una línea silenciosa.\n\nNo hay promesa. No hay pertenencia. Pero ya no pueden fingir que lo que ocurre entre ustedes es simple casualidad.",
+		"effects": {
+			"add_world_flags": [
+				"relationship_state_reached:interest"
+			],
+			"world_state": {
+				"romantic_pressure": 2
+			}
+		}
+	},
+	"relationship_dating_completed": {
+		"trigger": "relationship_step_completed",
+		"conditions": {
+			"context": {
+				"to_state": "dating"
+			}
+		},
+		"text": "La relación deja de vivir solo en insinuaciones.\n\nAhora existe una intención clara. Eso no la vuelve segura. En Luminaria, nombrar un vínculo también le da algo que perder.",
+		"effects": {
+			"add_world_flags": [
+				"relationship_state_reached:dating"
+			],
+			"world_state": {
+				"romantic_pressure": 4,
+				"global_tension": 1
+			}
+		}
+	},
+	"relationship_lovers_completed": {
+		"trigger": "relationship_step_completed",
+		"conditions": {
+			"context": {
+				"to_state": "lovers"
+			}
+		},
+		"text": "La cercanía se vuelve más peligrosa, más privada y más difícil de negar.\n\nNo se trata solo de deseo. Se trata de la confianza necesaria para permitirse cruzar una línea sin destruir lo que había antes.",
+		"effects": {
+			"add_world_flags": [
+				"relationship_state_reached:lovers"
+			],
+			"world_state": {
+				"romantic_pressure": 8,
+				"global_tension": 2
+			}
+		}
+	},
+	"relationship_partner_completed": {
+		"trigger": "relationship_step_completed",
+		"conditions": {
+			"context": {
+				"to_state": "partner"
+			}
+		},
+		"text": "El vínculo alcanza su forma máxima.\n\nTal vez no sea una promesa tradicional. Tal vez no tenga un nombre cómodo. Pero entre ustedes queda algo sellado, algo que el mundo tendrá que aprender a soportar.",
+		"effects": {
+			"add_world_flags": [
+				"relationship_state_reached:partner",
+				"route_culminated"
+			],
+			"world_state": {
+				"romantic_pressure": 10,
+				"global_tension": 3,
+				"world_instability": 2
+			}
+		}
 	}
 }
