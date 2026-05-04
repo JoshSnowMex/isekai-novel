@@ -61,27 +61,81 @@ func show_npc_list() -> void:
 
 	for npc_id in DataManager.npcs.keys():
 		var npc: Dictionary = DataManager.get_npc(npc_id)
+		var is_known: bool = is_npc_known(npc_id)
 
-		if not GameManager.player["known_npc_info"].has(npc_id):
-			continue
+		if is_known:
+			var relation: Dictionary = GameManager.player["relationships"].get(npc_id, {})
+			var state: String = relation.get("relationship_state", "none")
+			var total: int = GameManager.get_total_affinity(npc_id)
 
-		var relation: Dictionary = GameManager.player["relationships"].get(npc_id, {})
-		var state: String = relation.get("relationship_state", "none")
+			var button_text: String = "%s · %s · Vínculo %s" % [
+				npc.get("name", npc_id),
+				GameManager.get_relationship_state_label(state),
+				total
+			]
+
+			var button: Button = UIFactory.button(button_text)
+			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			button.pressed.connect(func(): show_npc_detail(npc_id))
+			list_container.add_child(button)
+		else:
+			var unknown_button: Button = UIFactory.button("??? · Personaje no conocido")
+			unknown_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			unknown_button.pressed.connect(func(): show_unknown_npc_detail())
+			list_container.add_child(unknown_button)
+
+func is_npc_known(npc_id: String) -> bool:
+	if not GameManager.player.has("known_npc_info"):
+		return false
+
+	if not GameManager.player["known_npc_info"].has(npc_id):
+		return false
+
+	var knowledge: Dictionary = GameManager.player["known_npc_info"].get(npc_id, {})
+	var known_info: Array = knowledge.get("info", [])
+	var known_gifts: Array = knowledge.get("gifts", [])
+	var notes: Array = knowledge.get("notes", [])
+
+	if not known_info.is_empty():
+		return true
+
+	if not known_gifts.is_empty():
+		return true
+
+	if not notes.is_empty():
+		return true
+
+	if GameManager.player["relationships"].has(npc_id):
+		var relation: Dictionary = GameManager.player["relationships"][npc_id]
 		var total: int = GameManager.get_total_affinity(npc_id)
 
-		var button_text: String = "%s · %s · Vínculo %s" % [
-			npc.get("name", npc_id),
-			GameManager.get_relationship_state_label(state),
-			total
-		]
+		if total > 0:
+			return true
 
-		var button: Button = UIFactory.button(button_text)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.pressed.connect(func(): show_npc_detail(npc_id))
-		list_container.add_child(button)
+		if relation.get("relationship_state", "none") != "none":
+			return true
 
-	if list_container.get_child_count() == 0:
-		list_container.add_child(UIFactory.body("Todavía no conoces a nadie lo suficiente para registrar detalles."))
+	var collectibles: Dictionary = GameManager.get_npc_collectibles(npc_id)
+
+	if not collectibles.get("date_memories", []).is_empty():
+		return true
+
+	if not collectibles.get("portrait_pieces", []).is_empty():
+		return true
+
+	if not collectibles.get("trophies", []).is_empty():
+		return true
+
+	return false
+
+func show_unknown_npc_detail() -> void:
+	var text: String = ""
+	text += "???\n\n"
+	text += "Personaje no conocido.\n\n"
+	text += "Todavía no tienes información suficiente para registrar detalles en la bitácora.\n\n"
+	text += "Interactúa con personajes en las distintas ubicaciones para descubrir quiénes son, qué desean y qué papel pueden tener en tu historia."
+
+	detail_label.text = text
 
 func show_npc_detail(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)

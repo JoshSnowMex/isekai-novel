@@ -28,6 +28,10 @@ func check_conditions(conditions: Dictionary, context: Dictionary = {}) -> bool:
 		if not check_inventory_conditions(conditions["inventory"]):
 			return false
 
+	if conditions.has("context"):
+		if not check_context_conditions(conditions["context"], context):
+			return false
+
 	return true
 
 func check_relationship_conditions(data: Dictionary, context: Dictionary = {}) -> bool:
@@ -44,11 +48,46 @@ func check_relationship_conditions(data: Dictionary, context: Dictionary = {}) -
 		if key == "npc_id":
 			continue
 
-		var rule: Dictionary = data[key]
+		if key == "state":
+			var expected_state: String = str(data[key])
+			var current_state: String = str(relation.get("relationship_state", "none"))
+
+			if current_state != expected_state:
+				return false
+
+			continue
+
+		var raw_rule = data[key]
+
+		if typeof(raw_rule) != TYPE_DICTIONARY:
+			return false
+
+		var rule: Dictionary = raw_rule
 		var value: int = int(relation.get(key, 0))
 
 		if not compare_number(value, rule):
 			return false
+
+	return true
+
+func check_context_conditions(data: Dictionary, context: Dictionary = {}) -> bool:
+	for key in data.keys():
+		var expected = data[key]
+
+		if not context.has(key):
+			return false
+
+		var current = context[key]
+
+		if typeof(expected) == TYPE_DICTIONARY:
+			if typeof(current) != TYPE_INT and typeof(current) != TYPE_FLOAT:
+				return false
+
+			if not compare_number(int(current), expected):
+				return false
+		else:
+			if str(current) != str(expected):
+				return false
 
 	return true
 
