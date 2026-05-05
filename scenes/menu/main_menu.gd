@@ -1,6 +1,7 @@
 extends Control
 
 var continue_button: Button
+var load_manual_button: Button
 var subtitle_label: Label
 
 func _ready() -> void:
@@ -34,6 +35,10 @@ func build_ui() -> void:
 	continue_button.pressed.connect(_on_continue_pressed)
 	menu_container.add_child(continue_button)
 
+	load_manual_button = UIFactory.button("Cargar guardado manual")
+	load_manual_button.pressed.connect(_on_load_manual_pressed)
+	menu_container.add_child(load_manual_button)
+
 	var quit_button: Button = UIFactory.button("Salir")
 	quit_button.pressed.connect(_on_quit_pressed)
 	menu_container.add_child(quit_button)
@@ -43,13 +48,18 @@ func build_ui() -> void:
 	root.add_child(spacer_bottom)
 
 func update_buttons() -> void:
-	continue_button.disabled = not SaveManager.has_save_file()
+	continue_button.disabled = not SaveManager.has_continue_file()
+	load_manual_button.disabled = not SaveManager.has_manual_save_file()
 
 func _on_new_game_pressed() -> void:
 	SceneRouter.go_to_intro()
 
 func _on_continue_pressed() -> void:
-	if SaveManager.load_game():
+	if SaveManager.load_continue_game():
+		SceneRouter.go_to_world_map()
+
+func _on_load_manual_pressed() -> void:
+	if SaveManager.load_manual_game():
 		SceneRouter.go_to_world_map()
 
 func _on_quit_pressed() -> void:

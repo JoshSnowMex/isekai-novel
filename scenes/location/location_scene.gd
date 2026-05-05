@@ -89,9 +89,6 @@ func build_actions(location_data: Dictionary) -> void:
 	if actions.get("shop", false):
 		add_action("Comprar", func(): SceneRouter.go_to_shop())
 
-	if current_location_id == "home" and GameManager.is_day_exhausted():
-		add_action("Dormir", func(): do_sleep(), true)
-
 	if action_container.get_child_count() == 0:
 		action_container.add_child(UIFactory.body("No hay acciones disponibles aquí por ahora."))
 
@@ -147,10 +144,6 @@ func do_rest() -> void:
 	)
 	GameManager.consume_action(5)
 	reload_scene("Descansas un momento.\nResistencia +20")
-
-func do_sleep() -> void:
-	GameManager.sleep_until_next_day()
-	reload_scene("Duermes hasta la mañana siguiente.")
 
 func interact_npc(npc_id: String) -> void:
 	clear_container(action_container)
@@ -254,7 +247,7 @@ func talk_to_npc(npc_id: String) -> void:
 	)
 
 	GameManager.consume_action(5)
-	SaveManager.save_game()
+	SaveManager.autosave_game()
 	reload_scene(message)
 
 func show_gift_selection(npc_id: String) -> void:
@@ -357,7 +350,7 @@ func give_gift(npc_id: String, item_id: String) -> void:
 	]
 
 	GameManager.consume_action(5)
-	SaveManager.save_game()
+	SaveManager.autosave_game()
 	reload_scene(message)
 
 func do_activity(activity_id: String) -> void:
@@ -366,11 +359,11 @@ func do_activity(activity_id: String) -> void:
 		return
 
 	var result_message: String = GameManager.perform_activity(activity_id)
-	SaveManager.save_game()
+	SaveManager.autosave_game()
 	reload_scene(result_message)
 
 func reload_scene(message: String = "") -> void:
-	SaveManager.save_game()
+	SaveManager.autosave_game()
 	load_location(current_location_id, message)
 
 func _on_back_pressed() -> void:
@@ -442,7 +435,7 @@ func perform_petition(petition_id: String) -> void:
 		"Una petición cruzó un límite y dejó consecuencias."
 	)
 
-	SaveManager.save_game()
+	SaveManager.autosave_game()
 	reload_scene(result.get("text", "La petición terminó."))
 
 func show_date_location_selection(npc_id: String) -> void:

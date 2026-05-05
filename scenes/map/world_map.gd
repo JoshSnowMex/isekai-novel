@@ -61,10 +61,6 @@ func build_ui() -> void:
 	journal_button.pressed.connect(func(): SceneRouter.go_to_journal())
 	right_panel.add_child(journal_button)
 
-	var save_button: Button = UIFactory.button("Guardar partida")
-	save_button.pressed.connect(_on_save_pressed)
-	right_panel.add_child(save_button)
-
 	var menu_button: Button = UIFactory.button("Volver al menú")
 	menu_button.pressed.connect(_on_menu_pressed)
 	right_panel.add_child(menu_button)
@@ -96,11 +92,12 @@ func refresh_screen() -> void:
 
 func visit_location(location_id: String) -> void:
 	GameManager.current_location_id = location_id
-	SceneRouter.go_to_location()
 
-func _on_save_pressed() -> void:
-	SaveManager.save_game()
-	info_label.text = "Partida guardada."
+	if location_id == "home":
+		SceneRouter.go_to_home()
+		return
+
+	SceneRouter.go_to_location()
 
 func _on_menu_pressed() -> void:
 	SceneRouter.go_to_main_menu()
@@ -114,14 +111,25 @@ func show_pending_narrative_messages() -> void:
 	var combined_text: String = ""
 
 	for message in messages:
-		var entry: Dictionary = message
-		combined_text += "%s\n\n%s\n\n" % [
-			entry.get("name", "Hito narrativo"),
-			entry.get("text", "")
-		]
+		combined_text += format_narrative_message(message)
+		combined_text += "\n\n"
 
 	info_label.text = combined_text.strip_edges()
-	SaveManager.save_game()
+	SaveManager.autosave_game()
+
+
+func format_narrative_message(message: Variant) -> String:
+	if message is Dictionary:
+		var entry: Dictionary = message
+		var title: String = str(entry.get("name", entry.get("title", "Hito narrativo")))
+		var text: String = str(entry.get("text", entry.get("message", "")))
+
+		if text == "":
+			return title
+
+		return "%s\n\n%s" % [title, text]
+
+	return "El Velo se agita\n\n%s" % str(message)
 
 func setup_fullscreen_root() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)

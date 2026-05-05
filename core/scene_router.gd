@@ -4,6 +4,7 @@ const MAIN_MENU := "res://scenes/menu/MainMenu.tscn"
 const INTRO_SCENE := "res://scenes/intro/IntroScene.tscn"
 const WORLD_MAP := "res://scenes/map/WorldMap.tscn"
 const LOCATION_SCENE := "res://scenes/location/LocationScene.tscn"
+const HOME_SCENE := "res://scenes/home/HomeScene.tscn"
 const DATE_SCENE := "res://scenes/date/DateScene.tscn"
 const JOURNAL_SCENE := "res://scenes/journal/JournalScene.tscn"
 const SHOP_SCENE := "res://scenes/shop/ShopScene.tscn"
@@ -24,6 +25,9 @@ func go_to_world_map() -> void:
 	
 func go_to_location() -> void:
 	get_tree().change_scene_to_file(LOCATION_SCENE)
+
+func go_to_home() -> void:
+	get_tree().change_scene_to_file(HOME_SCENE)
 
 func go_to_journal() -> void:
 	get_tree().change_scene_to_file(JOURNAL_SCENE)

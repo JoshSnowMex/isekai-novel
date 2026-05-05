@@ -22,10 +22,10 @@ static func body(text: String = "") -> Label:
 	return label
 
 static func button(text: String) -> Button:
-	var button: Button = Button.new()
-	button.text = text
-	button.custom_minimum_size = Vector2(260, 40)
-	button.add_theme_font_size_override("font_size", 16)
+	var new_button: Button = Button.new()
+	new_button.text = text
+	new_button.custom_minimum_size = Vector2(260, 40)
+	new_button.add_theme_font_size_override("font_size", 16)
 
 	var normal: StyleBoxFlat = StyleBoxFlat.new()
 	normal.bg_color = Color(0.28, 0.13, 0.23)
@@ -43,9 +43,9 @@ static func button(text: String) -> Button:
 	pressed.bg_color = Color(0.62, 0.26, 0.48)
 	pressed.set_corner_radius_all(10)
 
-	button.add_theme_stylebox_override("normal", normal)
-	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_stylebox_override("pressed", pressed)
-	button.add_theme_color_override("font_color", Color(0.98, 0.9, 0.96))
+	new_button.add_theme_stylebox_override("normal", normal)
+	new_button.add_theme_stylebox_override("hover", hover)
+	new_button.add_theme_stylebox_override("pressed", pressed)
+	new_button.add_theme_color_override("font_color", Color(0.98, 0.9, 0.96))
 
-	return button
+	return new_button

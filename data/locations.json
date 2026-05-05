@@ -1,241 +1,217 @@
 {
-	"home": {
-		"name": "Casa del Forastero",
-		"description": "Una pequeña casa cedida al recién llegado. Silenciosa, íntima y extrañamente familiar.",
-		"actions": {
-			"rest": true,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_home_discipline_minor"
-		]
+  "home": {
+	"name": "Casa del Forastero",
+	"description": "Una pequeña casa cedida al recién llegado. Silenciosa, íntima y extrañamente familiar.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
 	},
-	"library": {
-		"name": "Biblioteca del Alba",
-		"description": "Un lugar solemne donde los secretos del reino duermen entre páginas antiguas.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_library_intellect_minor",
-			"work_library_half"
-		]
+	"activities": []
+  },
+  "library": {
+	"name": "Biblioteca del Alba",
+	"description": "Un lugar solemne donde los secretos del reino duermen entre páginas antiguas.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
 	},
-	"market": {
-		"name": "Mercado del Puente Rojo",
-		"description": "Ruidoso, cálido y lleno de miradas que dicen más de lo que deberían.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_market_strength_minor",
-			"work_market_half",
-			"work_market_full"
-		]
+	"activities": ["train_library_intellect_minor", "work_library_half"]
+  },
+  "market": {
+	"name": "Mercado del Puente Rojo",
+	"description": "Ruidoso, cálido y lleno de miradas que dicen más de lo que deberían.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
 	},
-	"shop": {
-		"name": "Tienda del Umbral",
-		"description": "Un local pequeño, perfumado con incienso y lleno de objetos que parecen tener más historia de la que deberían.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": true
-		}
-	},
-	"observatory": {
-		"name": "Observatorio del Velo",
-		"description": "Una torre abierta al cielo, donde las estrellas parecen observar de vuelta.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_observatory_intuition_minor",
-			"work_observatory_half"
-		]
-	},
-	"arcane_library": {
-		"name": "Ateneo Arcano",
-		"description": "Una sección prohibida de la biblioteca, reservada para quienes saben formular preguntas peligrosas.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_arcane_intellect_major",
-			"work_arcane_half",
-			"work_arcane_full"
-		]
-	},
-	"private_study": {
-		"name": "Estudio Privado",
-		"description": "Un cuarto pequeño, cargado de tinta, mapas y secretos nunca dichos en voz alta.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_private_intuition_minor"
-		]
-	},
-	"archives": {
-		"name": "Archivos del Velo",
-		"description": "Pasillos de registros antiguos donde cada versión de la historia parece contradecir a otra.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_archives_intellect_minor",
-			"work_archives_half"
-		]
-	},
-	"plaza": {
-		"name": "Plaza de Luminaria",
-		"description": "El corazón social de la aldea. Aquí las noticias viajan más rápido que la verdad.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_plaza_charm_major",
-			"work_plaza_half"
-		]
-	},
-	"guild": {
-		"name": "Gremio del Alba Roja",
-		"description": "Un lugar de contratos, heridas y promesas hechas antes de pensar.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_guild_strength_major",
-			"work_guild_half",
-			"work_guild_full"
-		]
-	},
-	"tavern": {
-		"name": "Taberna del Puente Rojo",
-		"description": "Cálida, ruidosa y peligrosa cuando alguien bebe lo suficiente para decir la verdad.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_tavern_charm_minor",
-			"work_tavern_half",
-			"work_tavern_full"
-		]
-	},
-	"workshop": {
-		"name": "Taller Arcano",
-		"description": "Un caos de engranajes, gemas y humo dulce. Todo aquí parece a punto de explotar.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_workshop_discipline_minor",
-			"work_workshop_half",
-			"work_workshop_full"
-		]
-	},
-	"sanctuary": {
-		"name": "Santuario del Velo Quieto",
-		"description": "Un espacio de rezos, culpa y deseos cuidadosamente enterrados.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_sanctuary_discipline_major",
-			"work_sanctuary_half"
-		]
-	},
-	"forest": {
-		"name": "Bosque Herido",
-		"description": "Un bosque antiguo que conserva cicatrices que nadie en la aldea quiere explicar.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_forest_intuition_minor",
-			"work_forest_half"
-		]
-	},
-	"council_hall": {
-		"name": "Salón del Consejo",
-		"description": "Donde se toman decisiones públicas y se ocultan consecuencias privadas.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_council_discipline_minor",
-			"work_council_half",
-			"work_council_full"
-		]
-	},
-	"threshold": {
-		"name": "Umbral",
-		"description": "Un lugar imposible. No parece estar en el mundo, sino detrás de él.",
-		"actions": {
-			"rest": false,
-			"train": false,
-			"work_full": false,
-			"work_half": false,
-			"shop": false
-		},
-		"activities": [
-			"train_threshold_intuition_major"
-		]
+	"activities": [
+	  "train_market_strength_minor",
+	  "work_market_half",
+      "work_market_full"
+	]
+  },
+  "shop": {
+	"name": "Tienda del Umbral",
+	"description": "Un local pequeño, perfumado con incienso y lleno de objetos que parecen tener más historia de la que deberían.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": true
 	}
+  },
+  "observatory": {
+	"name": "Observatorio del Velo",
+	"description": "Una torre abierta al cielo, donde las estrellas parecen observar de vuelta.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["train_observatory_intuition_minor", "work_observatory_half"]
+  },
+  "arcane_library": {
+	"name": "Ateneo Arcano",
+	"description": "Una sección prohibida de la biblioteca, reservada para quienes saben formular preguntas peligrosas.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": [
+	  "train_arcane_intellect_major",
+	  "work_arcane_half",
+      "work_arcane_full"
+	]
+  },
+  "private_study": {
+	"name": "Estudio Privado",
+	"description": "Un cuarto pequeño, cargado de tinta, mapas y secretos nunca dichos en voz alta.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["train_private_intuition_minor"]
+  },
+  "archives": {
+	"name": "Archivos del Velo",
+	"description": "Pasillos de registros antiguos donde cada versión de la historia parece contradecir a otra.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["train_archives_intellect_minor", "work_archives_half"]
+  },
+  "plaza": {
+	"name": "Plaza de Luminaria",
+	"description": "El corazón social de la aldea. Aquí las noticias viajan más rápido que la verdad.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["train_plaza_charm_major", "work_plaza_half"]
+  },
+  "guild": {
+	"name": "Gremio del Alba Roja",
+	"description": "Un lugar de contratos, heridas y promesas hechas antes de pensar.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": [
+	  "train_guild_strength_major",
+	  "work_guild_half",
+      "work_guild_full"
+	]
+  },
+  "tavern": {
+	"name": "Taberna del Puente Rojo",
+	"description": "Cálida, ruidosa y peligrosa cuando alguien bebe lo suficiente para decir la verdad.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": [
+	  "train_tavern_charm_minor",
+	  "work_tavern_half",
+      "work_tavern_full"
+	]
+  },
+  "workshop": {
+	"name": "Taller Arcano",
+	"description": "Un caos de engranajes, gemas y humo dulce. Todo aquí parece a punto de explotar.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": [
+	  "train_workshop_discipline_minor",
+	  "work_workshop_half",
+      "work_workshop_full"
+	]
+  },
+  "sanctuary": {
+	"name": "Santuario del Velo Quieto",
+	"description": "Un espacio de rezos, culpa y deseos cuidadosamente enterrados.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["train_sanctuary_discipline_major", "work_sanctuary_half"]
+  },
+  "forest": {
+	"name": "Bosque Herido",
+	"description": "Un bosque antiguo que conserva cicatrices que nadie en la aldea quiere explicar.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["train_forest_intuition_minor", "work_forest_half"]
+  },
+  "council_hall": {
+	"name": "Salón del Consejo",
+	"description": "Donde se toman decisiones públicas y se ocultan consecuencias privadas.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": [
+	  "train_council_discipline_minor",
+	  "work_council_half",
+      "work_council_full"
+	]
+  },
+  "threshold": {
+	"name": "Umbral",
+	"description": "Un lugar imposible. No parece estar en el mundo, sino detrás de él.",
+	"actions": {
+	  "rest": false,
+	  "train": false,
+	  "work_full": false,
+	  "work_half": false,
+	  "shop": false
+	},
+	"activities": ["train_threshold_intuition_major"]
+  }
 }
