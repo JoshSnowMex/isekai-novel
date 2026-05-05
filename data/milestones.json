@@ -1,158 +1,4 @@
 {
-	"day_2_first_distortion": {
-		"name": "La primera contradicción",
-		"trigger": "day_started",
-		"conditions": {
-			"time": {
-				"min_day": 2
-			},
-			"world_flags": {
-				"missing_all": [
-					"milestone:day_2_first_distortion"
-				]
-			}
-		},
-		"text": "Al despertar, recuerdas haber dejado una taza junto a la ventana.\n\nLa taza está ahí.\n\nTambién está rota sobre la mesa.\n\nDurante unos segundos, ambas cosas parecen igualmente ciertas.",
-		"effects": {
-			"add_world_flags": [
-				"milestone:day_2_first_distortion",
-				"veil_distortion_seen"
-			],
-			"world_state": {
-				"world_instability": 2
-			}
-		}
-	},
-	"day_3_aeris_veil_hint": {
-		"name": "Aeris nota el patrón",
-		"trigger": "day_started",
-		"conditions": {
-			"time": {
-				"min_day": 3
-			},
-			"world_flags": {
-				"has_all": [
-					"veil_distortion_seen"
-				],
-				"missing_all": [
-					"milestone:day_3_aeris_veil_hint"
-				]
-			}
-		},
-		"text": "Aeris te intercepta antes de que el día avance demasiado.\n\n\"No eres la única variable\", dice en voz baja. \"Pero sí eres la única que el Velo parece estar usando como punto de comparación.\"",
-		"effects": {
-			"add_world_flags": [
-				"milestone:day_3_aeris_veil_hint",
-				"aeris_suspects_anchor"
-			],
-			"relationship": {
-				"npc_id": "aeris",
-				"friendship": 2,
-				"loyalty": 1
-			}
-		}
-	},
-	"day_4_council_observes": {
-		"name": "El Consejo empieza a mirar",
-		"trigger": "day_started",
-		"conditions": {
-			"time": {
-				"min_day": 4
-			},
-			"world_flags": {
-				"missing_all": [
-					"milestone:day_4_council_observes"
-				]
-			}
-		},
-		"text": "Un mensajero del Consejo pregunta tu nombre aunque claramente ya lo sabe.\n\nNo te acusa de nada.\n\nEso lo vuelve peor.",
-		"effects": {
-			"add_world_flags": [
-				"milestone:day_4_council_observes",
-				"council_is_watching"
-			],
-			"world_state": {
-				"global_tension": 3
-			}
-		}
-	},
-	"day_5_rumors_begin": {
-		"name": "Rumores del Forastero",
-		"trigger": "day_started",
-		"conditions": {
-			"time": {
-				"min_day": 5
-			},
-			"world_flags": {
-				"has_all": [
-					"council_is_watching"
-				],
-				"missing_all": [
-					"milestone:day_5_rumors_begin"
-				]
-			}
-		},
-		"text": "En la plaza, dos personas dejan de hablar cuando te acercas.\n\nUna tercera no se calla a tiempo:\n\n\"Dicen que donde camina el Forastero, el mundo recuerda mal.\"",
-		"effects": {
-			"add_world_flags": [
-				"milestone:day_5_rumors_begin",
-				"social_pressure_rising"
-			],
-			"world_state": {
-				"global_tension": 2,
-				"romantic_pressure": 1
-			}
-		}
-	},
-	"day_6_memory_slip": {
-		"name": "Recuerdo ajeno",
-		"trigger": "day_started",
-		"conditions": {
-			"time": {
-				"min_day": 6
-			},
-			"world_flags": {
-				"missing_all": [
-					"milestone:day_6_memory_slip"
-				]
-			}
-		},
-		"text": "Despiertas recordando una conversación que nunca tuviste.\n\nLa voz era familiar.\n\nLo más inquietante no es que recuerdes sus palabras, sino que extrañas haberlas escuchado.",
-		"effects": {
-			"add_world_flags": [
-				"milestone:day_6_memory_slip",
-				"false_memory_first"
-			],
-			"world_state": {
-				"world_instability": 3
-			}
-		}
-	},
-	"day_7_first_week_pressure": {
-		"name": "La primera semana pesa",
-		"trigger": "day_started",
-		"conditions": {
-			"time": {
-				"min_day": 7
-			},
-			"world_flags": {
-				"missing_all": [
-					"milestone:day_7_first_week_pressure"
-				]
-			}
-		},
-		"text": "Una semana en Luminaria.\n\nEl mundo ya no se siente como un lugar al que llegaste.\n\nSe siente como un lugar que empieza a reclamarte.",
-		"effects": {
-			"add_world_flags": [
-				"milestone:day_7_first_week_pressure",
-				"first_week_completed"
-			],
-			"world_state": {
-				"romantic_pressure": 2,
-				"global_tension": 1
-			}
-		}
-	},
 	"relationship_first_interest": {
 		"name": "Algo reconocido",
 		"trigger": "relationship_step_completed",
@@ -202,111 +48,54 @@
 			}
 		}
 	},
-	"day_9_world_repeats": {
-		"name": "El día que se repite mal",
-		"trigger": "day_started",
+	"relationship_first_lovers": {
+		"name": "Una línea cruzada",
+		"trigger": "relationship_step_completed",
 		"conditions": {
-			"time": {
-				"min_day": 9
+			"context": {
+				"to_state": "lovers"
 			},
 			"world_flags": {
-				"has_all": [
-					"false_memory_first"
-				],
 				"missing_all": [
-					"milestone:day_9_world_repeats"
+					"milestone:first_lovers"
 				]
 			}
 		},
-		"text": "Durante la mañana, alguien te saluda por segunda vez con las mismas palabras.\n\nCuando se lo señalas, palidece.\n\n\"Yo también sentí que ya había dicho eso\", susurra.",
+		"text": "La intimidad cambia el peso de una decisión.\n\nNo porque vuelva todo más puro.\n\nSino porque ahora el daño, el deseo y la lealtad tienen nombres concretos.",
 		"effects": {
 			"add_world_flags": [
-				"milestone:day_9_world_repeats",
-				"world_repetition_seen"
+				"milestone:first_lovers",
+				"intimacy_crossed_once"
 			],
 			"world_state": {
-				"world_instability": 4,
+				"romantic_pressure": 8,
 				"global_tension": 2
 			}
 		}
 	},
-	"day_10_council_warning": {
-		"name": "Advertencia preventiva",
-		"trigger": "day_started",
+	"relationship_first_partner": {
+		"name": "Vínculo culminado",
+		"trigger": "relationship_step_completed",
 		"conditions": {
-			"time": {
-				"min_day": 10
-			},
-			"world_flags": {
-				"has_all": [
-					"council_is_watching"
-				],
-				"missing_all": [
-					"milestone:day_10_council_warning"
-				]
-			}
-		},
-		"text": "El Consejo no te convoca.\n\nSolo deja una nota donde sabe que la encontrarás:\n\n\"Toda anomalía que aprende a ser amada se vuelve más difícil de contener.\"",
-		"effects": {
-			"add_world_flags": [
-				"milestone:day_10_council_warning",
-				"council_warned_about_romance"
-			],
-			"world_state": {
-				"global_tension": 4
-			}
-		}
-	},
-	"day_12_veil_cost": {
-		"name": "El costo de la coherencia",
-		"trigger": "day_started",
-		"conditions": {
-			"time": {
-				"min_day": 12
-			},
-			"world_flags": {
-				"has_all": [
-					"aeris_explained_veil_basics"
-				],
-				"missing_all": [
-					"milestone:day_12_veil_cost"
-				]
-			}
-		},
-		"text": "Algo pequeño desaparece de tu casa.\n\nNo sabes qué era.\n\nSolo sabes que el espacio vacío te duele como si hubiera tenido nombre.",
-		"effects": {
-			"add_world_flags": [
-				"milestone:day_12_veil_cost",
-				"coherence_cost_felt"
-			],
-			"world_state": {
-				"world_instability": 5
-			}
-		}
-	},
-	"day_14_demo_climax": {
-		"name": "La segunda semana termina",
-		"trigger": "day_started",
-		"conditions": {
-			"time": {
-				"min_day": 14
+			"context": {
+				"to_state": "partner"
 			},
 			"world_flags": {
 				"missing_all": [
-					"milestone:day_14_demo_climax"
+					"milestone:first_partner"
 				]
 			}
 		},
-		"text": "Dos semanas en Luminaria.\n\nEl Velo ya no parece una teoría.\n\nEl Consejo ya no parece lejano.\n\nY las personas que has tocado con tus decisiones ya no pueden volver intactas a la versión de sí mismas que existía antes de ti.",
+		"text": "Un vínculo alcanza su forma máxima.\n\nEso no significa que el mundo lo entienda.\n\nSolo significa que ahora tendrá que responder a él.",
 		"effects": {
 			"add_world_flags": [
-				"milestone:day_14_demo_climax",
-				"demo_arc_completed"
+				"milestone:first_partner",
+				"partner_reached_once"
 			],
 			"world_state": {
-				"world_instability": 4,
-				"global_tension": 4,
-				"romantic_pressure": 4
+				"romantic_pressure": 10,
+				"global_tension": 3,
+				"world_instability": 2
 			}
 		}
 	}

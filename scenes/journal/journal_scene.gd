@@ -201,6 +201,15 @@ func show_npc_detail(npc_id: String) -> void:
 	else:
 		for collectible_id in date_memories:
 			text += "- %s\n" % GameManager.get_collectible_label(str(collectible_id))
+	
+	var emotional_memories: Array = collectibles.get("emotional_memories", [])
+	text += "\nMemorias emocionales:\n"
+
+	if emotional_memories.is_empty():
+		text += "- Ninguna todavía.\n"
+	else:
+		for collectible_id in emotional_memories:
+			text += "- %s\n" % GameManager.get_collectible_label(str(collectible_id))
 
 	var portrait_pieces: Array = collectibles.get("portrait_pieces", [])
 	text += "\nPiezas de retrato:\n"
@@ -218,6 +227,15 @@ func show_npc_detail(npc_id: String) -> void:
 		text += "- No obtenido.\n"
 	else:
 		for collectible_id in trophies:
+			text += "- %s\n" % GameManager.get_collectible_label(str(collectible_id))
+	
+	var union_tokens: Array = collectibles.get("union_tokens", [])
+	text += "\nPruebas de unión:\n"
+
+	if union_tokens.is_empty():
+		text += "- Ninguna todavía.\n"
+	else:
+		for collectible_id in union_tokens:
 			text += "- %s\n" % GameManager.get_collectible_label(str(collectible_id))
 
 	text += "\nNotas:\n"

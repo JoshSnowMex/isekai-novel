@@ -5,6 +5,12 @@ const BLOCKED_PREFIX := "storylet_blocked:"
 
 
 func process_storylets(context: Dictionary = {}) -> Array:
+	var allow_multiple: bool = bool(context.get("allow_multiple_storylets", false))
+
+	if not allow_multiple and has_storylet_triggered_today():
+		if not context.get("force_world_consequence_check", false):
+			return []
+
 	var available: Array = get_available_storylets(context)
 
 	if available.is_empty():
@@ -25,6 +31,8 @@ func process_storylets(context: Dictionary = {}) -> Array:
 
 	if text == "":
 		return []
+
+	mark_storylet_triggered_today()
 
 	return [text]
 
@@ -95,6 +103,9 @@ func calculate_storylet_weight(storylet_id: String, storylet: Dictionary, contex
 	var npc_id: String = storylet.get("npc_id", "")
 
 	if npc_id == "":
+		if storylet.get("category", "") == "world_consequence":
+			weight += 30
+
 		return weight
 
 	GameManager.ensure_relationship(npc_id)
@@ -187,6 +198,17 @@ func block_incompatible_storylets(storylet: Dictionary) -> void:
 func is_storylet_completed(storylet_id: String) -> bool:
 	return GameManager.has_world_flag(COMPLETED_PREFIX + storylet_id)
 
-
 func mark_storylet_completed(storylet_id: String) -> void:
 	GameManager.add_world_flag(COMPLETED_PREFIX + storylet_id)
+
+func has_storylet_triggered_today() -> bool:
+	if not GameManager.player.has("daily_flags"):
+		GameManager.player["daily_flags"] = {}
+
+	return bool(GameManager.player["daily_flags"].get("storylet_triggered_today", false))
+
+func mark_storylet_triggered_today() -> void:
+	if not GameManager.player.has("daily_flags"):
+		GameManager.player["daily_flags"] = {}
+
+	GameManager.player["daily_flags"]["storylet_triggered_today"] = true

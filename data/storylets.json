@@ -4,12 +4,15 @@
 		"npc_id": "aeris",
 		"category": "main_story",
 		"consequence_type": "mixed",
-		"priority": 70,
+		"priority": 90,
 		"repeatable": false,
 		"blocks": [
 			"lyria_first_archive_consequence",
 			"eryon_first_prophecy_consequence",
-			"nova_first_experiment_consequence"
+			"nova_first_experiment_consequence",
+			"axiom_first_threshold_consequence",
+			"myr_first_identity_consequence",
+			"rhein_first_roots_consequence"
 		],
 		"conditions": {
 			"relationship": {
@@ -19,16 +22,21 @@
 			"world_flags": {
 				"missing_all": [
 					"storylet_completed:aeris_first_veil_consequence",
+					"story_axis:veil_interpretation:aeris",
 					"story_axis:veil_interpretation:lyria",
 					"story_axis:veil_interpretation:eryon",
-					"story_axis:veil_interpretation:nova"
+					"story_axis:veil_interpretation:nova",
+					"story_axis:veil_interpretation:axiom",
+					"story_axis:veil_interpretation:myr",
+					"story_axis:veil_interpretation:rhein"
 				]
 			}
 		},
 		"effects": {
 			"add_world_flags": [
 				"story_axis:veil_interpretation:aeris",
-				"aeris_observation_compromised"
+				"aeris_observation_compromised",
+				"veil_distortion_seen"
 			],
 			"world_state": {
 				"world_instability": 2,
@@ -48,12 +56,15 @@
 		"npc_id": "lyria",
 		"category": "main_story",
 		"consequence_type": "mixed",
-		"priority": 70,
+		"priority": 90,
 		"repeatable": false,
 		"blocks": [
 			"aeris_first_veil_consequence",
 			"eryon_first_prophecy_consequence",
-			"nova_first_experiment_consequence"
+			"nova_first_experiment_consequence",
+			"axiom_first_threshold_consequence",
+			"myr_first_identity_consequence",
+			"rhein_first_roots_consequence"
 		],
 		"conditions": {
 			"relationship": {
@@ -64,15 +75,20 @@
 				"missing_all": [
 					"storylet_completed:lyria_first_archive_consequence",
 					"story_axis:veil_interpretation:aeris",
+					"story_axis:veil_interpretation:lyria",
 					"story_axis:veil_interpretation:eryon",
-					"story_axis:veil_interpretation:nova"
+					"story_axis:veil_interpretation:nova",
+					"story_axis:veil_interpretation:axiom",
+					"story_axis:veil_interpretation:myr",
+					"story_axis:veil_interpretation:rhein"
 				]
 			}
 		},
 		"effects": {
 			"add_world_flags": [
 				"story_axis:veil_interpretation:lyria",
-				"lyria_archives_contaminated"
+				"lyria_archives_contaminated",
+				"veil_distortion_seen"
 			],
 			"world_state": {
 				"world_instability": 1,
@@ -92,12 +108,15 @@
 		"npc_id": "eryon",
 		"category": "main_story",
 		"consequence_type": "mixed",
-		"priority": 70,
+		"priority": 90,
 		"repeatable": false,
 		"blocks": [
 			"aeris_first_veil_consequence",
 			"lyria_first_archive_consequence",
-			"nova_first_experiment_consequence"
+			"nova_first_experiment_consequence",
+			"axiom_first_threshold_consequence",
+			"myr_first_identity_consequence",
+			"rhein_first_roots_consequence"
 		],
 		"conditions": {
 			"relationship": {
@@ -109,14 +128,19 @@
 					"storylet_completed:eryon_first_prophecy_consequence",
 					"story_axis:veil_interpretation:aeris",
 					"story_axis:veil_interpretation:lyria",
-					"story_axis:veil_interpretation:nova"
+					"story_axis:veil_interpretation:eryon",
+					"story_axis:veil_interpretation:nova",
+					"story_axis:veil_interpretation:axiom",
+					"story_axis:veil_interpretation:myr",
+					"story_axis:veil_interpretation:rhein"
 				]
 			}
 		},
 		"effects": {
 			"add_world_flags": [
 				"story_axis:veil_interpretation:eryon",
-				"prophecy_started_flirting_with_truth"
+				"prophecy_started_flirting_with_truth",
+				"veil_distortion_seen"
 			],
 			"world_state": {
 				"world_instability": 2,
@@ -131,12 +155,297 @@
 		},
 		"text": "Eryon te lee una línea de la profecía.\n\nLa primera vez, dice una cosa.\n\nLa segunda, cambia una palabra.\n\nLa tercera, parece estar hablando de ti y de él, aunque ninguno quiera admitirlo.\n\nEryon sonríe, pero no parece divertido. Parece preocupado de que la historia haya empezado a coquetear de vuelta."
 	},
+	"nova_first_experiment_consequence": {
+		"title": "Una chispa demasiado personal",
+		"npc_id": "nova",
+		"category": "main_story",
+		"consequence_type": "escalation",
+		"priority": 85,
+		"repeatable": false,
+		"blocks": [
+			"aeris_first_veil_consequence",
+			"lyria_first_archive_consequence",
+			"eryon_first_prophecy_consequence",
+			"axiom_first_threshold_consequence",
+			"myr_first_identity_consequence",
+			"rhein_first_roots_consequence"
+		],
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 12 },
+				"tension": { "min": 10 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:nova_first_experiment_consequence",
+					"story_axis:veil_interpretation:aeris",
+					"story_axis:veil_interpretation:lyria",
+					"story_axis:veil_interpretation:eryon",
+					"story_axis:veil_interpretation:nova",
+					"story_axis:veil_interpretation:axiom",
+					"story_axis:veil_interpretation:myr",
+					"story_axis:veil_interpretation:rhein"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"story_axis:veil_interpretation:nova",
+				"nova_used_player_as_emotional_constant",
+				"unstable_prototype_awakened",
+				"veil_distortion_seen"
+			],
+			"world_state": {
+				"world_instability": 5,
+				"romantic_pressure": 3
+			},
+			"relationship": {
+				"tension": 2,
+				"jealousy": 1
+			},
+			"collectibles": [
+				"emotional_memory:nova:spark_too_personal"
+			]
+		},
+		"text": "Nova jura que el prototipo era seguro.\n\nLuego admite que era seguro antes de calibrarlo con una emoción que no quiso nombrar.\n\nLa máquina responde a tu presencia como si te reconociera.\n\nNova ríe primero.\n\nDespués apaga todo con manos temblorosas."
+	},
+	"axiom_first_threshold_consequence": {
+		"title": "El Umbral pronuncia tu nombre",
+		"npc_id": "axiom",
+		"category": "main_story",
+		"consequence_type": "escalation",
+		"priority": 85,
+		"repeatable": false,
+		"blocks": [
+			"aeris_first_veil_consequence",
+			"lyria_first_archive_consequence",
+			"eryon_first_prophecy_consequence",
+			"nova_first_experiment_consequence",
+			"myr_first_identity_consequence",
+			"rhein_first_roots_consequence"
+		],
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 10 },
+				"loyalty": { "min": 5 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:axiom_first_threshold_consequence",
+					"story_axis:veil_interpretation:aeris",
+					"story_axis:veil_interpretation:lyria",
+					"story_axis:veil_interpretation:eryon",
+					"story_axis:veil_interpretation:nova",
+					"story_axis:veil_interpretation:axiom",
+					"story_axis:veil_interpretation:myr",
+					"story_axis:veil_interpretation:rhein"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"story_axis:veil_interpretation:axiom",
+				"threshold_recognized_player",
+				"veil_distortion_seen"
+			],
+			"world_state": {
+				"world_instability": 6
+			},
+			"relationship": {
+				"loyalty": 2
+			},
+			"collectibles": [
+				"emotional_memory:axiom:threshold_spoke_your_name"
+			]
+		},
+		"text": "Axiom no te llama por tu nombre.\n\nEl Umbral lo hace.\n\nDurante un instante, el borde del mundo parece aprender la forma de tu ausencia. Axiom inclina la cabeza, casi con ternura.\n\n\"Ahora te recuerda\", dice.\n\nNo suena como una bendición."
+	},
+	"myr_first_identity_consequence": {
+		"title": "Una forma que responde a tu mirada",
+		"npc_id": "myr",
+		"category": "main_story",
+		"consequence_type": "mixed",
+		"priority": 80,
+		"repeatable": false,
+		"blocks": [
+			"aeris_first_veil_consequence",
+			"lyria_first_archive_consequence",
+			"eryon_first_prophecy_consequence",
+			"nova_first_experiment_consequence",
+			"axiom_first_threshold_consequence",
+			"rhein_first_roots_consequence"
+		],
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 14 },
+				"tension": { "min": 8 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:myr_first_identity_consequence",
+					"story_axis:veil_interpretation:aeris",
+					"story_axis:veil_interpretation:lyria",
+					"story_axis:veil_interpretation:eryon",
+					"story_axis:veil_interpretation:nova",
+					"story_axis:veil_interpretation:axiom",
+					"story_axis:veil_interpretation:myr",
+					"story_axis:veil_interpretation:rhein"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"story_axis:veil_interpretation:myr",
+				"identity_shift_touched_by_player",
+				"veil_distortion_seen"
+			],
+			"world_state": {
+				"world_instability": 3,
+				"romantic_pressure": 1
+			},
+			"relationship": {
+				"tension": 2
+			},
+			"collectibles": [
+				"emotional_memory:myr:shape_answered_your_gaze"
+			]
+		},
+		"text": "Myr cambia de forma mientras hablas.\n\nNo de manera dramática. No como truco.\n\nSolo un detalle: la curva de una sonrisa, el tono de una voz, la manera en que sus ojos buscan los tuyos.\n\nMyr lo nota también.\n\n\"No intenté hacerlo\", murmura.\n\nEl Velo tampoco parece haberlo intentado. Y aun así ocurrió."
+	},
+	"rhein_first_roots_consequence": {
+		"title": "El bosque recuerda antes que la gente",
+		"npc_id": "rhein",
+		"category": "main_story",
+		"consequence_type": "warning",
+		"priority": 80,
+		"repeatable": false,
+		"blocks": [
+			"aeris_first_veil_consequence",
+			"lyria_first_archive_consequence",
+			"eryon_first_prophecy_consequence",
+			"nova_first_experiment_consequence",
+			"axiom_first_threshold_consequence",
+			"myr_first_identity_consequence"
+		],
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 16 },
+				"loyalty": { "min": 5 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:rhein_first_roots_consequence",
+					"story_axis:veil_interpretation:aeris",
+					"story_axis:veil_interpretation:lyria",
+					"story_axis:veil_interpretation:eryon",
+					"story_axis:veil_interpretation:nova",
+					"story_axis:veil_interpretation:axiom",
+					"story_axis:veil_interpretation:myr",
+					"story_axis:veil_interpretation:rhein"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"story_axis:veil_interpretation:rhein",
+				"forest_remembers_player",
+				"veil_distortion_seen"
+			],
+			"world_state": {
+				"world_instability": 2
+			},
+			"relationship": {
+				"loyalty": 1
+			},
+			"collectibles": [
+				"emotional_memory:rhein:forest_remembered_first"
+			]
+		},
+		"text": "Rhein te guía hasta un árbol marcado con una cicatriz imposible.\n\nLa corteza lleva tus iniciales.\n\nNo recuerdas haberlas tallado.\n\nRhein tampoco dice que lo hiciste.\n\n\"El bosque recuerda cosas que aún no han ocurrido\", explica. \"Eso no significa que quiera que ocurran.\""
+	},
+	"selene_council_attention": {
+		"title": "Un mensaje que pesa demasiado",
+		"npc_id": "selene",
+		"category": "social_pressure",
+		"consequence_type": "warning",
+		"priority": 70,
+		"repeatable": false,
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 12 }
+			},
+			"world_state": {
+				"world_instability": { "min": 4 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:selene_council_attention",
+					"council_is_watching"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"council_is_watching",
+				"selene_delivered_first_warning"
+			],
+			"world_state": {
+				"global_tension": 4
+			},
+			"relationship": {
+				"loyalty": 1
+			},
+			"collectibles": [
+				"emotional_memory:selene:first_warning_carried"
+			]
+		},
+		"text": "Selene te entrega un mensaje sin sello.\n\nEso debería hacerlo menos oficial.\n\nPero sus dedos tardan demasiado en soltarlo.\n\n\"No preguntes quién lo envía\", dice. \"Y por favor, no hagas que tenga que traerte el siguiente.\""
+	},
+	"elara_rumor_pressure": {
+		"title": "El rumor aprende a sonreír",
+		"npc_id": "elara",
+		"category": "social_pressure",
+		"consequence_type": "mixed",
+		"priority": 65,
+		"repeatable": false,
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 10 }
+			},
+			"world_state": {
+				"romantic_pressure": { "min": 5 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:elara_rumor_pressure",
+					"social_pressure_rising"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"social_pressure_rising",
+				"elara_started_tracking_romance"
+			],
+			"world_state": {
+				"global_tension": 2,
+				"romantic_pressure": 2
+			},
+			"relationship": {
+				"friendship": 1
+			},
+			"collectibles": [
+				"emotional_memory:elara:rumor_learned_to_smile"
+			]
+		},
+		"text": "Elara no inventa el rumor.\n\nSolo lo repite mejor que los demás.\n\nCuando te ve, sonríe como si acabara de descubrir que tu vida sentimental puede mover más gente que una orden del Consejo.\n\n\"No te preocupes\", dice. \"Si van a hablar de ti, al menos haré que suene interesante.\""
+	},
 	"rhea_protection_cost": {
 		"title": "La guardia que no ocurrió",
 		"npc_id": "rhea",
 		"category": "consequence",
 		"consequence_type": "cost",
-		"priority": 65,
+		"priority": 75,
 		"repeatable": false,
 		"conditions": {
 			"relationship": {
@@ -144,7 +453,7 @@
 				"tension": { "min": 25 }
 			},
 			"world_state": {
-				"global_tension": { "min": 8 }
+				"global_tension": { "min": 6 }
 			},
 			"world_flags": {
 				"missing_all": [
@@ -176,7 +485,7 @@
 		"npc_id": "taren",
 		"category": "consequence",
 		"consequence_type": "cost",
-		"priority": 65,
+		"priority": 75,
 		"repeatable": false,
 		"conditions": {
 			"relationship": {
@@ -207,41 +516,138 @@
 		},
 		"text": "Taren deja un informe sin firmar porque eligió quedarse un poco más contigo.\n\nNo fue una gran traición. No fue una escena dramática.\n\nSolo una demora.\n\nAl día siguiente, el gremio actúa con información incompleta y alguien toma una mala decisión en su nombre.\n\nA veces el mundo no se rompe por amor. A veces se desordena."
 	},
-	"nova_experiment_cost": {
-		"title": "Una chispa demasiado personal",
-		"npc_id": "nova",
+	"seraphine_vow_trembles": {
+		"title": "Un voto aprende a temblar",
+		"npc_id": "seraphine",
 		"category": "consequence",
-		"consequence_type": "escalation",
-		"priority": 65,
+		"consequence_type": "temptation",
+		"priority": 70,
 		"repeatable": false,
 		"conditions": {
 			"relationship": {
-				"tension": { "min": 30 },
-				"loyalty": { "min": 20 }
+				"tension": { "min": 25 },
+				"loyalty": { "min": 18 }
 			},
 			"world_flags": {
 				"missing_all": [
-					"storylet_completed:nova_experiment_cost"
+					"storylet_completed:seraphine_vow_trembles"
 				]
 			}
 		},
 		"effects": {
 			"add_world_flags": [
-				"nova_used_player_as_emotional_constant",
-				"unstable_prototype_awakened"
+				"seraphine_vow_trembled",
+				"faith_pressure_rising"
 			],
 			"world_state": {
-				"world_instability": 5,
-				"romantic_pressure": 3
+				"romantic_pressure": 4,
+				"global_tension": 2
 			},
 			"relationship": {
 				"tension": 2,
 				"jealousy": 1
 			},
 			"collectibles": [
-				"emotional_memory:nova:spark_too_personal"
+				"emotional_memory:seraphine:vow_learned_to_tremble"
 			]
 		},
-		"text": "Nova jura que el prototipo era seguro.\n\nLuego admite que era seguro antes de calibrarlo con una emoción que no quiso nombrar.\n\nLa máquina responde a tu presencia como si te reconociera.\n\nNova ríe primero.\n\nDespués apaga todo con manos temblorosas."
+		"text": "Seraphine no rompe su voto.\n\nEso sería más sencillo.\n\nLo sostiene con ambas manos mientras te mira como si sostenerlo doliera.\n\n\"No me pidas que mienta sobre lo que siento\", dice.\n\nLuego baja la voz.\n\n\"Pero tampoco me pidas todavía que lo nombre.\""
+	},
+	"kael_guardian_distance": {
+		"title": "La distancia como forma de cuidado",
+		"npc_id": "kael",
+		"category": "consequence",
+		"consequence_type": "cost",
+		"priority": 65,
+		"repeatable": false,
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 20 },
+				"loyalty": { "min": 20 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:kael_guardian_distance"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"kael_started_guarding_from_distance"
+			],
+			"world_state": {
+				"global_tension": 2
+			},
+			"relationship": {
+				"loyalty": 2,
+				"tension": -1
+			},
+			"collectibles": [
+				"emotional_memory:kael:distance_as_care"
+			]
+		},
+		"text": "Kael empieza a aparecer donde no lo llamaste.\n\nNo cerca. Nunca tan cerca como para admitir que te sigue.\n\nPero cuando alguien te observa demasiado tiempo desde la plaza, Kael ya está entre esa mirada y tú.\n\nCuidarte, para él, todavía se parece demasiado a alejarse."
+	},
+	"village_attack_after_weakened_security": {
+		"title": "El precio de una guardia ausente",
+		"npc_id": "",
+		"category": "world_consequence",
+		"consequence_type": "rupture",
+		"priority": 95,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"village_security_weakened"
+				],
+				"missing_all": [
+					"storylet_completed:village_attack_after_weakened_security",
+					"village_attack_resolved"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"village_attack_happened"
+			],
+			"world_state": {
+				"global_tension": 8,
+				"romantic_pressure": 2
+			},
+			"collectibles": [
+				"emotional_memory:world:price_of_absent_guard"
+			]
+		},
+		"text": "El ataque no destruye Luminaria.\n\nEso casi lo vuelve peor.\n\nUna puerta rota. Dos heridos. Un niño que no deja de preguntar por qué nadie estaba mirando el lindero.\n\nNadie pronuncia tu nombre.\n\nPero las consecuencias rara vez necesitan decir a quién pertenecen."
+	},
+	"guild_confusion_after_taren_delay": {
+		"title": "Órdenes cruzadas",
+		"npc_id": "",
+		"category": "world_consequence",
+		"consequence_type": "cost",
+		"priority": 90,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": [
+					"guild_order_weakened"
+				],
+				"missing_all": [
+					"storylet_completed:guild_confusion_after_taren_delay"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"guild_confusion_seen"
+			],
+			"world_state": {
+				"global_tension": 5
+			},
+			"collectibles": [
+				"emotional_memory:world:guild_orders_crossed"
+			]
+		},
+		"text": "Dos equipos del gremio salen con órdenes contradictorias.\n\nNo ocurre una tragedia.\n\nPero sí ocurre algo que en Luminaria puede ser igual de peligroso: todos empiezan a preguntarse quién está distraído, quién está mintiendo y quién está dejando que el deseo afecte decisiones públicas."
 	}
 }

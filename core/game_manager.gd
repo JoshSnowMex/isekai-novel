@@ -136,6 +136,15 @@ func sleep_until_next_day() -> void:
 	for storylet_text in storylet_results:
 		add_pending_narrative_message(storylet_text)
 
+	var world_consequence_results: Array = StoryletSystem.process_storylets({
+		"trigger": "day_started",
+		"force_world_consequence_check": true,
+		"allow_multiple_storylets": true
+	})
+
+	for consequence_text in world_consequence_results:
+		add_pending_narrative_message(consequence_text)
+
 	var milestone_results: Array = MilestoneSystem.process_milestones({
 		"trigger": "day_started"
 	})
@@ -761,25 +770,33 @@ func get_relationship_state_description(state: String) -> String:
 
 func get_npc_collectibles(npc_id: String) -> Dictionary:
 	ensure_collectibles()
-
+	
 	var date_memories: Array = []
+	var emotional_memories: Array = []
 	var portrait_pieces: Array = []
 	var trophies: Array = []
+	var union_tokens: Array = []
 
 	for collectible_id in player["collectibles"]:
 		var id: String = str(collectible_id)
 
 		if id.begins_with("date_memory:%s:" % npc_id):
 			date_memories.append(id)
+		elif id.begins_with("emotional_memory:%s:" % npc_id):
+			emotional_memories.append(id)
 		elif id.begins_with("portrait_piece:%s:" % npc_id):
 			portrait_pieces.append(id)
 		elif id == "relationship_trophy:%s" % npc_id:
 			trophies.append(id)
+		elif id.begins_with("union_token:%s:" % npc_id):
+			union_tokens.append(id)
 
 	return {
 		"date_memories": date_memories,
+		"emotional_memories": emotional_memories,
 		"portrait_pieces": portrait_pieces,
-		"trophies": trophies
+		"trophies": trophies,
+		"union_tokens": union_tokens
 	}
 
 func get_collectible_label(collectible_id: String) -> String:
