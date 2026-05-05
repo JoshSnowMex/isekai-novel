@@ -483,7 +483,6 @@ func get_total_affinity(npc_id: String) -> int:
 	var tension: int = int(relation.get("tension", 0))
 	var loyalty: int = int(relation.get("loyalty", 0))
 
-	# Peso ajustable
 	return int((friendship * 0.4) + (tension * 0.4) + (loyalty * 0.2))
 
 func can_invite_to_date(npc_id: String) -> bool:
@@ -555,7 +554,7 @@ func get_world_state_value(key: String) -> int:
 	ensure_world_state()
 	return int(player["world_state"].get(key, 0))
 
-func add_pending_narrative_message(message: Dictionary) -> void:
+func add_pending_narrative_message(message: Variant) -> void:
 	if not player.has("pending_narrative_messages"):
 		player["pending_narrative_messages"] = []
 
@@ -606,7 +605,7 @@ func apply_relationship_modifier(key: String, amount: int) -> int:
 		return min(-1, modified)
 
 	return modified
-	
+
 func get_stat_label(stat: String) -> String:
 	match stat:
 		"strength":
