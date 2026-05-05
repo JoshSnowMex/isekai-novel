@@ -401,8 +401,15 @@ func build_question(npc_id: String) -> Dictionary:
 
 	options.shuffle()
 
+	var label: String = GameManager.get_info_label(info_key)
+	var category_label: String = GameManager.get_info_category_title_for_key(info_key)
+
 	return {
-		"question": "¿Recuerdas esto sobre %s?" % npc.get("name", npc_id),
+		"question": "Para dar este paso, necesitas demostrar que realmente has puesto atención.\n\n%s · %s\n¿Cuál es la respuesta correcta para %s?" % [
+			category_label,
+			label,
+			npc.get("name", npc_id)
+		],
 		"info_key": info_key,
 		"correct": correct_value,
 		"options": options
