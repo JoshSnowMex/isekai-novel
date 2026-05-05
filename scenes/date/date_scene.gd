@@ -33,11 +33,18 @@ func build_ui() -> void:
 	description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	description_scroll.add_child(description_label)
 
+	var action_scroll: ScrollContainer = ScrollContainer.new()
+	action_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	root.add_child(action_scroll)
+
 	action_container = VBoxContainer.new()
+	action_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	action_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	action_container.add_theme_constant_override("separation", 8)
-	action_container.custom_minimum_size = Vector2(1, 150)
-	root.add_child(action_container)
+	action_container.add_theme_constant_override("separation", 10)
+	action_scroll.add_child(action_container)
 
 func start_date(npc_id: String, date_location_id: String = "") -> void:
 	if date_location_id == "":

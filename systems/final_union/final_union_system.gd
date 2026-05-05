@@ -180,6 +180,12 @@ func complete_final_union(npc_id: String) -> Dictionary:
 	GameManager.add_world_flag("final_union_chosen")
 	GameManager.add_world_flag("final_union:%s" % npc_id)
 	GameManager.add_collectible("union_token:%s:final_union" % npc_id)
+	
+	GameManager.record_emotional_date(
+		npc_id,
+		"final_union_day",
+		"Unión definitiva"
+	)
 
 	GameManager.add_npc_note(
 		npc_id,

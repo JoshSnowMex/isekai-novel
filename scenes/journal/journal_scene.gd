@@ -183,6 +183,9 @@ func show_world_state_detail() -> void:
 	text += "Memorias del mundo:\n"
 	text += build_world_memories_text()
 
+	text += "\nCalendario emocional:\n"
+	text += build_global_emotional_calendar_summary()
+	
 	detail_label.text = text
 
 
@@ -331,6 +334,10 @@ func show_npc_detail(npc_id: String) -> void:
 	text += build_final_union_progress_text(npc_id)
 	text += "\n"
 
+	text += "Fechas importantes:\n"
+	text += build_emotional_calendar_text(npc_id)
+	text += "\n"
+
 	text += "Información descubierta:\n"
 	text += build_known_info_text(npc_id)
 
@@ -449,6 +456,67 @@ func build_known_info_text(npc_id: String) -> String:
 
 	return text
 
+func build_emotional_calendar_text(npc_id: String) -> String:
+	var calendar: Dictionary = GameManager.get_npc_emotional_calendar(npc_id)
+
+	if calendar.is_empty():
+		return "- Todavía no hay fechas importantes registradas.\n"
+
+	var order: Array = [
+		"first_date",
+		"first_successful_date",
+		"first_excellent_date",
+		"first_perfect_date",
+		"relationship_interest_day",
+		"relationship_dating_day",
+		"relationship_lovers_day",
+		"relationship_partner_day",
+		"final_union_day"
+	]
+
+	var text: String = ""
+
+	GameManager.ensure_npc_knowledge(npc_id)
+	var knowledge: Dictionary = GameManager.player["known_npc_info"].get(npc_id, {})
+	var known_info: Array = knowledge.get("info", [])
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var info_data: Dictionary = npc.get("info", {})
+
+	if known_info.has("birthday") and info_data.has("birthday"):
+		text += "- Cumpleaños: %s\n" % str(info_data.get("birthday", ""))
+
+	for key in order:
+		if not calendar.has(key):
+			continue
+
+		var data: Dictionary = calendar[key]
+		text += "- %s: Día %s · %s\n" % [
+			data.get("label", key),
+			int(data.get("day", 1)),
+			GameManager.get_time_block_label(str(data.get("time_block", "")))
+		]
+
+	var extra_keys: Array = []
+
+	for key in calendar.keys():
+		if not order.has(key):
+			extra_keys.append(key)
+
+	extra_keys.sort()
+
+	for key in extra_keys:
+		var data: Dictionary = calendar[key]
+		text += "- %s: Día %s · %s\n" % [
+			data.get("label", key),
+			int(data.get("day", 1)),
+			GameManager.get_time_block_label(str(data.get("time_block", "")))
+		]
+
+	if text == "":
+		return "- Todavía no hay fechas importantes registradas.\n"
+
+	return text
+	
 func build_final_union_progress_text(npc_id: String) -> String:
 	var text: String = "Unión definitiva:\n"
 	var requirement: Dictionary = DataManager.get_final_union_requirement(npc_id)
@@ -593,3 +661,32 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func build_global_emotional_calendar_summary() -> String:
+	var calendar: Dictionary = GameManager.get_emotional_calendar()
+
+	if calendar.is_empty():
+		return "- Todavía no hay fechas emocionales registradas.\n"
+
+	var text: String = ""
+	var found: bool = false
+
+	for npc_id in calendar.keys():
+		var npc_calendar: Dictionary = calendar[npc_id]
+
+		if npc_calendar.is_empty():
+			continue
+
+		var npc: Dictionary = DataManager.get_npc(str(npc_id))
+		var count: int = npc_calendar.keys().size()
+
+		text += "- %s: %s fecha(s) importante(s) registrada(s).\n" % [
+			npc.get("name", npc_id),
+			count
+		]
+		found = true
+
+	if not found:
+		return "- Todavía no hay fechas emocionales registradas.\n"
+
+	return text

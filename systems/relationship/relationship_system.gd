@@ -211,6 +211,12 @@ func complete_relationship_step(npc_id: String, step_id: String) -> Dictionary:
 	var relation: Dictionary = GameManager.player["relationships"][npc_id]
 	relation["relationship_state"] = to_state
 
+	GameManager.record_emotional_date(
+		npc_id,
+		"relationship_%s_day" % to_state,
+		"Relación: %s" % GameManager.get_relationship_state_label(to_state)
+	)
+
 	var flag: String = "relationship_step:%s:%s" % [npc_id, step_id]
 	GameManager.add_world_flag(flag)
 

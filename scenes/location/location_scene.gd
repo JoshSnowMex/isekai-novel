@@ -332,6 +332,13 @@ func give_gift(npc_id: String, item_id: String) -> void:
 		result = randi_range(5, 6)
 		reaction = "Su reacción lo dice todo. Has tocado una fibra muy personal."
 		gift_strategy = "gift_loved"
+		
+		GameManager.record_emotional_date(
+			npc_id,
+			"first_loved_gift",
+			"Primer regalo amado"
+		)
+		
 	elif item_id in prefs.get("likes", []):
 		result = randi_range(3, 4)
 		reaction = "Acepta el regalo con una calidez difícil de fingir."

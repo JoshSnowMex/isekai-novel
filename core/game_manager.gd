@@ -73,6 +73,7 @@ func start_new_game(player_name: String, class_id: String, gender_identity: Stri
 		"pending_narrative_messages": [],
 		"collectibles": [],
 		"final_union_npc_id": "",
+		"emotional_calendar": {},
 	}
 
 	if class_data.has("starting_stats"):
@@ -1157,3 +1158,71 @@ func get_known_info_count_for_category(npc_id: String, category_id: String) -> i
 			count += 1
 
 	return count
+
+func ensure_emotional_calendar() -> void:
+	if not player.has("emotional_calendar"):
+		player["emotional_calendar"] = {}
+
+
+func get_emotional_calendar() -> Dictionary:
+	ensure_emotional_calendar()
+	return player["emotional_calendar"]
+
+
+func get_npc_emotional_calendar(npc_id: String) -> Dictionary:
+	ensure_emotional_calendar()
+
+	if not player["emotional_calendar"].has(npc_id):
+		player["emotional_calendar"][npc_id] = {}
+
+	return player["emotional_calendar"][npc_id]
+
+
+func record_emotional_date(npc_id: String, key: String, label: String, overwrite: bool = false) -> void:
+	var npc_calendar: Dictionary = get_npc_emotional_calendar(npc_id)
+
+	if npc_calendar.has(key) and not overwrite:
+		return
+
+	npc_calendar[key] = {
+		"day": int(player.get("day", 1)),
+		"time_block": current_time_block,
+		"label": label
+	}
+
+
+func has_emotional_date(npc_id: String, key: String) -> bool:
+	var npc_calendar: Dictionary = get_npc_emotional_calendar(npc_id)
+	return npc_calendar.has(key)
+
+
+func get_emotional_date_label(npc_id: String, key: String) -> String:
+	var npc_calendar: Dictionary = get_npc_emotional_calendar(npc_id)
+
+	if not npc_calendar.has(key):
+		return ""
+
+	var data: Dictionary = npc_calendar[key]
+	return "%s · Día %s" % [
+		data.get("label", key),
+		int(data.get("day", 1))
+	]
+
+
+func get_time_block_label(time_block: String) -> String:
+	match time_block:
+		"morning":
+			return "Mañana"
+		"afternoon":
+			return "Tarde"
+		"night":
+			return "Noche"
+		_:
+			return time_block
+
+
+func get_current_calendar_stamp() -> String:
+	return "Día %s · %s" % [
+		int(player.get("day", 1)),
+		get_time_block_label(current_time_block)
+	]

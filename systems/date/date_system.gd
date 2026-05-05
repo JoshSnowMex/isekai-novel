@@ -51,6 +51,12 @@ func create_date_state(npc_id: String, date_location_id: String) -> Dictionary:
 	if jealousy >= 40:
 		base_progress -= 8
 
+	GameManager.record_emotional_date(
+		npc_id,
+		"first_date",
+		"Primera cita"
+	)
+
 	return {
 		"npc_id": npc_id,
 		"date_location_id": date_location_id,
@@ -271,6 +277,26 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 			"level": success_level,
 			"text": summary
 		}
+
+	GameManager.record_emotional_date(
+		npc_id,
+		"first_successful_date",
+		"Primera cita exitosa"
+	)
+
+	if success_level == "excellent":
+		GameManager.record_emotional_date(
+			npc_id,
+			"first_excellent_date",
+			"Primera cita excelente"
+		)
+
+	if success_level == "perfect":
+		GameManager.record_emotional_date(
+			npc_id,
+			"first_perfect_date",
+			"Primera cita perfecta"
+		)
 
 	var reward_key: String = "success_rewards"
 

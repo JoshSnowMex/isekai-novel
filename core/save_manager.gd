@@ -79,6 +79,9 @@ func load_from_path(path: String) -> bool:
 	if not GameManager.player.has("final_union_npc_id"):
 		GameManager.player["final_union_npc_id"] = str(data.get("final_union_npc_id", ""))
 
+	if not GameManager.player.has("emotional_calendar"):
+		GameManager.player["emotional_calendar"] = {}
+		
 	return true
 
 
