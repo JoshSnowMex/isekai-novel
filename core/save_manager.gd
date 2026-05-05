@@ -20,7 +20,8 @@ func write_save_file(path: String) -> void:
 		"current_weekday_index": GameManager.current_weekday_index,
 		"current_time_block": GameManager.current_time_block,
 		"current_action_index": GameManager.current_action_index,
-		"current_location_id": GameManager.current_location_id
+		"current_location_id": GameManager.current_location_id,
+		"final_union_npc_id": GameManager.player.get("final_union_npc_id", "")
 	}
 
 	var file := FileAccess.open(path, FileAccess.WRITE)
@@ -74,6 +75,9 @@ func load_from_path(path: String) -> bool:
 	GameManager.current_time_block = str(data.get("current_time_block", "morning"))
 	GameManager.current_action_index = int(data.get("current_action_index", 0))
 	GameManager.current_location_id = str(data.get("current_location_id", "home"))
+	
+	if not GameManager.player.has("final_union_npc_id"):
+		GameManager.player["final_union_npc_id"] = str(data.get("final_union_npc_id", ""))
 
 	return true
 

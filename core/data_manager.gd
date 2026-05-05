@@ -17,6 +17,7 @@ var date_moves: Dictionary = {}
 var relationship_steps: Dictionary = {}
 var npc_story_profiles: Dictionary = {}
 var storylets: Dictionary = {}
+var final_union_requirements: Dictionary = {}
 	
 
 func _ready() -> void:
@@ -40,6 +41,7 @@ func load_all_data() -> void:
 	relationship_steps = load_json("res://data/relationship_steps.json")
 	npc_story_profiles = load_json("res://data/npc_story_profiles.json")
 	storylets = load_json("res://data/storylets.json")
+	final_union_requirements = load_json("res://data/final_union_requirements.json")
 
 func load_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -99,3 +101,13 @@ func get_npc_story_profile(npc_id: String) -> Dictionary:
 
 func get_storylet(storylet_id: String) -> Dictionary:
 	return storylets.get(storylet_id, {})
+
+func get_final_union_requirement(npc_id: String) -> Dictionary:
+	var default_data: Dictionary = final_union_requirements.get("default", {})
+	var npc_data: Dictionary = final_union_requirements.get(npc_id, {})
+	var result: Dictionary = default_data.duplicate(true)
+
+	for key in npc_data.keys():
+		result[key] = npc_data[key]
+
+	return result

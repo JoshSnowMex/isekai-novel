@@ -151,7 +151,9 @@ func show_world_state_detail() -> void:
 
 	var text: String = ""
 	text += "Estado del mundo\n\n"
-
+	text += "Unión definitiva:\n"
+	text += build_final_union_text()
+	text += "\n"
 	text += "Lectura general:\n"
 	text += "- Tensión global: %s · %s\n" % [
 		global_tension,
@@ -285,6 +287,19 @@ func build_world_memories_text() -> String:
 
 	return text
 
+func build_final_union_text() -> String:
+	if not FinalUnionSystem.has_final_union():
+		return "- Todavía no has elegido una unión definitiva.\n"
+
+	var npc_id: String = FinalUnionSystem.get_final_union_npc_id()
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var requirement: Dictionary = DataManager.get_final_union_requirement(npc_id)
+
+	return "- %s · %s\n" % [
+		npc.get("name", npc_id),
+		requirement.get("name", "Unión final")
+	]
+	
 func show_npc_detail(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
 	GameManager.ensure_npc_knowledge(npc_id)
@@ -311,6 +326,9 @@ func show_npc_detail(npc_id: String) -> void:
 	text += "- Total: %s\n\n" % GameManager.get_total_affinity(npc_id)
 
 	text += build_progression_text(npc_id)
+	text += "\n"
+	
+	text += build_final_union_progress_text(npc_id)
 	text += "\n"
 
 	text += "Información descubierta:\n"
@@ -430,6 +448,32 @@ func build_known_info_text(npc_id: String) -> String:
 		return "- Has descubierto información, pero no coincide con el esquema actual.\n"
 
 	return text
+
+func build_final_union_progress_text(npc_id: String) -> String:
+	var text: String = "Unión definitiva:\n"
+	var requirement: Dictionary = DataManager.get_final_union_requirement(npc_id)
+
+	if FinalUnionSystem.has_final_union():
+		if FinalUnionSystem.get_final_union_npc_id() == npc_id:
+			text += "- Este personaje es tu unión definitiva.\n"
+		else:
+			var chosen_id: String = FinalUnionSystem.get_final_union_npc_id()
+			var chosen_npc: Dictionary = DataManager.get_npc(chosen_id)
+			text += "- Ya elegiste una unión definitiva con %s.\n" % chosen_npc.get("name", chosen_id)
+
+		return text
+
+	text += "- Tipo: %s\n" % requirement.get("name", "Unión final")
+
+	var reason: String = FinalUnionSystem.get_blocked_reason(npc_id)
+
+	if reason == "":
+		text += "- Disponible: sí\n"
+	else:
+		text += "- Disponible: no\n"
+		text += "- Motivo: %s\n" % reason
+
+	return text
 	
 func build_progression_text(npc_id: String) -> String:
 	var text: String = "Próximo avance:\n"
@@ -448,15 +492,23 @@ func build_progression_text(npc_id: String) -> String:
 		text += "- Disponible: no\n"
 		text += "- Motivo: %s\n" % RelationshipSystem.get_blocked_reason(npc_id, step_id)
 
-	var required_tier: int = int(step.get("required_info_tier", 0))
-	var required_count: int = int(step.get("required_known_info_count", 0))
-	var known_count: int = RelationshipSystem.get_known_info_count_for_tier(npc_id, required_tier)
+	var required_categories: Dictionary = step.get("required_info_categories", {})
 
-	text += "- Información tier %s: %s/%s\n" % [
-		required_tier,
-		known_count,
-		required_count
-	]
+	if required_categories.is_empty():
+		text += "- Información requerida: no\n"
+	else:
+		text += "- Información requerida:\n"
+
+		for category_id in required_categories.keys():
+			var required_count: int = int(required_categories[category_id])
+			var known_count: int = RelationshipSystem.get_known_info_count_for_category(npc_id, str(category_id))
+			var category_title: String = GameManager.get_info_category_title(str(category_id))
+
+			text += "  · %s: %s/%s\n" % [
+				category_title,
+				known_count,
+				required_count
+			]
 
 	if step.get("required_successful_date", false):
 		var has_date: bool = GameManager.has_world_flag("successful_date:%s" % npc_id)

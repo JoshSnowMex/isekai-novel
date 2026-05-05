@@ -72,6 +72,7 @@ func start_new_game(player_name: String, class_id: String, gender_identity: Stri
 		},
 		"pending_narrative_messages": [],
 		"collectibles": [],
+		"final_union_npc_id": "",
 	}
 
 	if class_data.has("starting_stats"):
@@ -914,3 +915,52 @@ func is_npc_romanceable(npc_id: String) -> bool:
 		return bool(npc.get("romanceable", true))
 
 	return bool(profile.get("romanceable", true))
+
+func get_info_category_title(category_id: String) -> String:
+	var section: Dictionary = DataManager.npc_info_schema.get(category_id, {})
+	return str(section.get("title", category_id))
+
+
+func get_info_keys_for_category(category_id: String) -> Array:
+	var section: Dictionary = DataManager.npc_info_schema.get(category_id, {})
+	var keys: Dictionary = section.get("keys", {})
+	var result: Array = []
+
+	for key in keys.keys():
+		result.append(str(key))
+
+	return result
+
+
+func get_info_category_id_for_key(info_key: String) -> String:
+	for section_id in DataManager.npc_info_schema.keys():
+		var section: Dictionary = DataManager.npc_info_schema[section_id]
+		var keys: Dictionary = section.get("keys", {})
+
+		if keys.has(info_key):
+			return str(section_id)
+
+	return ""
+
+
+func get_info_category_title_for_key(info_key: String) -> String:
+	var category_id: String = get_info_category_id_for_key(info_key)
+
+	if category_id == "":
+		return "Información"
+
+	return get_info_category_title(category_id)
+
+
+func get_known_info_count_for_category(npc_id: String, category_id: String) -> int:
+	GameManager.ensure_npc_knowledge(npc_id)
+
+	var known_info: Array = player["known_npc_info"][npc_id].get("info", [])
+	var category_keys: Array = get_info_keys_for_category(category_id)
+	var count: int = 0
+
+	for info_key in known_info:
+		if category_keys.has(str(info_key)):
+			count += 1
+
+	return count

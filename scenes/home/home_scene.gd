@@ -4,7 +4,7 @@ var title_label: Label
 var status_label: Label
 var description_label: Label
 var action_container: VBoxContainer
-
+var final_union_container: VBoxContainer
 
 func _ready() -> void:
 	setup_fullscreen_root()
@@ -34,6 +34,11 @@ func build_ui() -> void:
 	action_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	action_container.add_theme_constant_override("separation", 10)
 	root.add_child(action_container)
+	
+	final_union_container = VBoxContainer.new()
+	final_union_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	final_union_container.add_theme_constant_override("separation", 8)
+	root.add_child(final_union_container)
 
 	build_actions()
 
@@ -55,6 +60,7 @@ func refresh_screen(message: String = "") -> void:
 	else:
 		description_label.text = "Una pequeña casa cedida al recién llegado. Aquí puedes recuperar fuerzas, ordenar tus decisiones y cerrar el día cuando estés listo."
 
+	build_final_union_options()
 
 func build_actions() -> void:
 	clear_container(action_container)
@@ -110,6 +116,35 @@ func _on_save_pressed() -> void:
 func _on_back_pressed() -> void:
 	SceneRouter.go_to_world_map()
 
+func build_final_union_options() -> void:
+	clear_container(final_union_container)
+
+	if FinalUnionSystem.has_final_union():
+		var npc_id: String = FinalUnionSystem.get_final_union_npc_id()
+		var npc: Dictionary = DataManager.get_npc(npc_id)
+		final_union_container.add_child(UIFactory.body("Unión definitiva actual: %s" % npc.get("name", npc_id)))
+		return
+
+	var candidates: Array = FinalUnionSystem.get_available_candidates()
+
+	if candidates.is_empty():
+		final_union_container.add_child(UIFactory.body("Aún no hay nadie listo para una unión definitiva."))
+		return
+
+	final_union_container.add_child(UIFactory.body("Unión definitiva disponible:"))
+
+	for npc_id in candidates:
+		var npc: Dictionary = DataManager.get_npc(str(npc_id))
+		var requirement: Dictionary = DataManager.get_final_union_requirement(str(npc_id))
+		var button: Button = UIFactory.button(requirement.get("proposal_label", "Proponer unión a %s" % npc.get("name", npc_id)))
+		button.pressed.connect(func(): propose_final_union(str(npc_id)))
+		final_union_container.add_child(button)
+
+
+func propose_final_union(npc_id: String) -> void:
+	var result: Dictionary = FinalUnionSystem.complete_final_union(npc_id)
+	SaveManager.autosave_game()
+	refresh_screen(str(result.get("text", "")))
 
 func clear_container(container: VBoxContainer) -> void:
 	for child in container.get_children():

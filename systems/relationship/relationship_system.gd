@@ -54,12 +54,8 @@ func can_start_step(npc_id: String, step_id: String) -> bool:
 		if not GameManager.has_world_flag("successful_date:%s" % npc_id):
 			return false
 
-	var required_tier: int = int(step.get("required_info_tier", 0))
-	var required_count: int = int(step.get("required_known_info_count", 0))
-
-	if required_tier > 0 and required_count > 0:
-		if get_known_info_count_for_tier(npc_id, required_tier) < required_count:
-			return false
+	if not meets_info_category_requirements(npc_id, step.get("required_info_categories", {})):
+		return false
 
 	return true
 
@@ -88,16 +84,10 @@ func get_blocked_reason(npc_id: String, step_id: String) -> String:
 		if not GameManager.has_world_flag("successful_date:%s" % npc_id):
 			return "Necesitas tener primero una cita normal exitosa con este personaje. Una cita fallida no cuenta para avanzar la relación."
 
-	var required_tier: int = int(step.get("required_info_tier", 0))
-	var required_count: int = int(step.get("required_known_info_count", 0))
-	var known_count: int = get_known_info_count_for_tier(npc_id, required_tier)
+	var info_reason: String = get_info_category_blocked_reason(npc_id, step.get("required_info_categories", {}))
 
-	if required_tier > 0 and required_count > 0 and known_count < required_count:
-		return "Necesitas conocer más información personal de nivel %s. Conoces %s/%s. Hablar, tener citas exitosas y dar regalos adecuados puede revelar información nueva." % [
-			required_tier,
-			known_count,
-			required_count
-		]
+	if info_reason != "":
+		return info_reason
 
 	return ""
 
@@ -149,20 +139,21 @@ func build_special_question(date_state: Dictionary) -> Dictionary:
 	var npc_id: String = date_state.get("npc_id", "")
 	var step_id: String = date_state.get("relationship_step_id", "")
 	var step: Dictionary = DataManager.get_relationship_step(step_id)
-	var required_tier: int = int(step.get("required_info_tier", 0))
 	var answered: Array = date_state.get("answered_info_keys", [])
+	var required_categories: Dictionary = step.get("required_info_categories", {})
 
-	var available_keys: Array = get_known_info_keys_for_tier(npc_id, required_tier)
-	var candidates: Array = []
+	var candidates: Array = get_known_info_keys_for_categories(npc_id, required_categories)
 
-	for key in available_keys:
+	var available_candidates: Array = []
+
+	for key in candidates:
 		if not answered.has(key):
-			candidates.append(key)
+			available_candidates.append(key)
 
-	if candidates.is_empty():
+	if available_candidates.is_empty():
 		return {}
 
-	var info_key: String = str(candidates.pick_random())
+	var info_key: String = str(available_candidates.pick_random())
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	var info_data: Dictionary = npc.get("info", {})
 	var correct_value: String = str(info_data.get(info_key, ""))
@@ -188,9 +179,11 @@ func build_special_question(date_state: Dictionary) -> Dictionary:
 	options.shuffle()
 
 	var label: String = GameManager.get_info_label(info_key)
+	var category_label: String = GameManager.get_info_category_title_for_key(info_key)
 
 	return {
-		"question": "Para dar este paso, necesitas demostrar que realmente has puesto atención.\n\n%s:\n¿Cuál es la respuesta correcta para %s?" % [
+		"question": "Para dar este paso, necesitas demostrar que realmente has puesto atención.\n\n%s · %s:\n¿Cuál es la respuesta correcta para %s?" % [
+			category_label,
 			label,
 			npc.get("name", npc_id)
 		],
@@ -330,3 +323,90 @@ func fail_relationship_step(npc_id: String, step_id: String) -> Dictionary:
 			relationship_text
 		]
 	}
+
+func meets_info_category_requirements(npc_id: String, requirements: Dictionary) -> bool:
+	if requirements.is_empty():
+		return true
+
+	for category_id in requirements.keys():
+		var required_count: int = int(requirements[category_id])
+		var known_count: int = get_known_info_count_for_category(npc_id, str(category_id))
+
+		if known_count < required_count:
+			return false
+
+	return true
+
+
+func get_info_category_blocked_reason(npc_id: String, requirements: Dictionary) -> String:
+	if requirements.is_empty():
+		return ""
+
+	var missing_lines: Array = []
+
+	for category_id in requirements.keys():
+		var required_count: int = int(requirements[category_id])
+		var known_count: int = get_known_info_count_for_category(npc_id, str(category_id))
+		var category_title: String = GameManager.get_info_category_title(str(category_id))
+
+		if known_count < required_count:
+			missing_lines.append("- %s: %s/%s" % [
+				category_title,
+				known_count,
+				required_count
+			])
+
+	if missing_lines.is_empty():
+		return ""
+
+	var text: String = "Necesitas conocer mejor a este personaje en categorías concretas:\n"
+
+	for line in missing_lines:
+		text += "%s\n" % line
+
+	text += "Hablar, tener citas exitosas y dar regalos adecuados puede revelar información nueva."
+
+	return text.strip_edges()
+
+
+func get_known_info_count_for_category(npc_id: String, category_id: String) -> int:
+	GameManager.ensure_npc_knowledge(npc_id)
+
+	var known_info: Array = GameManager.player["known_npc_info"][npc_id].get("info", [])
+	var category_keys: Array = GameManager.get_info_keys_for_category(category_id)
+	var count: int = 0
+
+	for info_key in known_info:
+		if category_keys.has(str(info_key)):
+			count += 1
+
+	return count
+
+
+func get_known_info_keys_for_category(npc_id: String, category_id: String) -> Array:
+	GameManager.ensure_npc_knowledge(npc_id)
+
+	var known_info: Array = GameManager.player["known_npc_info"][npc_id].get("info", [])
+	var category_keys: Array = GameManager.get_info_keys_for_category(category_id)
+	var result: Array = []
+
+	for info_key in known_info:
+		var key: String = str(info_key)
+
+		if category_keys.has(key):
+			result.append(key)
+
+	return result
+
+
+func get_known_info_keys_for_categories(npc_id: String, requirements: Dictionary) -> Array:
+	var result: Array = []
+
+	for category_id in requirements.keys():
+		var keys: Array = get_known_info_keys_for_category(npc_id, str(category_id))
+
+		for key in keys:
+			if not result.has(key):
+				result.append(key)
+
+	return result

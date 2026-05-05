@@ -1,0 +1,249 @@
+{
+	"default": {
+		"required_relationship_state": "partner",
+		"required_total_affinity": 98,
+		"required_loyalty": 70,
+		"max_jealousy": 35,
+		"required_info_categories": {
+			"final": 3,
+			"romance": 2,
+			"emotional_shadow": 1,
+			"responsibility_cost": 1
+		},
+		"required_collectible_prefixes": [
+			"emotional_memory:{npc_id}:"
+		],
+		"required_successful_date": true,
+		"required_perfect_or_excellent_date": true
+	},
+	"lyria": {
+		"name": "Pacto de confianza",
+		"proposal_label": "Proponer un pacto íntimo con Lyria",
+		"required_total_affinity": 98,
+		"required_loyalty": 75,
+		"max_jealousy": 30,
+		"required_info_categories": {
+			"final": 3,
+			"romance": 2,
+			"emotional_shadow": 1,
+			"responsibility_cost": 1,
+			"desire_chemistry": 2
+		},
+		"required_collectibles": [
+			"emotional_memory:lyria:page_that_should_not_exist"
+		],
+		"success_text": "Lyria no responde de inmediato.\n\nPrimero te mira como si buscara la trampa en tus palabras. Luego, por primera vez, deja de protegerse con silencio.\n\nAceptar no significa exhibirse ante el mundo. Significa darte una llave que nunca entregaría por impulso.\n\nLyria acepta el pacto.",
+		"failure_text": "Lyria escucha la propuesta con una calma que no logra esconder la herida.\n\nNo dice que no porque no te quiera. Dice que todavía no puede entregarte una verdad final si no está segura de que sabrás protegerla."
+	},
+	"aeris": {
+		"name": "Compañía de destino",
+		"proposal_label": "Pedir a Aeris caminar contigo hasta el final",
+		"required_total_affinity": 98,
+		"required_loyalty": 75,
+		"max_jealousy": 35,
+		"required_info_categories": {
+			"final": 3,
+			"romance": 2,
+			"emotional_shadow": 1,
+			"responsibility_cost": 1,
+			"history": 2
+		},
+		"required_collectibles": [
+			"emotional_memory:aeris:observer_no_longer_neutral"
+		],
+		"success_text": "Aeris mira el cielo antes de mirarte.\n\nNo busca permiso en las estrellas. Esta vez no.\n\n\"Si camino contigo\", dice, \"no será porque el destino lo escribió. Será porque lo elegí sabiendo el costo.\"\n\nAeris acepta.",
+		"failure_text": "Aeris no se aparta, pero su mirada se vuelve triste.\n\nTodavía hay verdades que no has sostenido con ella. Y pedirle un final sin aceptar esas verdades sería otra forma de manipular el Velo."
+	},
+	"eryon": {
+		"name": "Historia elegida",
+		"proposal_label": "Elegir una historia definitiva con Eryon",
+		"required_total_affinity": 98,
+		"required_loyalty": 65,
+		"max_jealousy": 40,
+		"required_info_categories": {
+			"final": 3,
+			"romance": 2,
+			"emotional_shadow": 2,
+			"history": 1
+		},
+		"required_collectibles": [
+			"emotional_memory:eryon:prophecy_learned_your_tone"
+		],
+		"success_text": "Eryon sonríe como si fuera a convertirlo todo en broma.\n\nNo lo hace.\n\n\"Qué irresponsable\", murmura. \"Elegirme incluso sabiendo que pude haber editado la escena.\"\n\nLuego toma tu mano.\n\n\"Entonces hagámosla real.\"",
+		"failure_text": "Eryon ríe suave, demasiado suave.\n\nTodavía no sabe si quieres elegirlo o resolverlo. Y él no aceptará ser el misterio que guardas para sentirte brillante."
+	},
+	"rhea": {
+		"name": "Lealtad bajo peligro",
+		"proposal_label": "Elegir a Rhea como compañera definitiva",
+		"required_total_affinity": 98,
+		"required_loyalty": 80,
+		"max_jealousy": 35,
+		"required_info_categories": {
+			"final": 2,
+			"romance": 2,
+			"responsibility_cost": 2,
+			"emotional_shadow": 1
+		},
+		"success_text": "Rhea no llora. Casi.\n\nTe golpea el hombro con menos fuerza de la que pretende y luego te abraza como si el mundo pudiera intentar arrancarte de allí.\n\n\"No me elijas para que te proteja\", dice. \"Elígeme porque también vas a quedarte cuando yo necesite bajar la guardia.\"\n\nRhea acepta.",
+		"failure_text": "Rhea aprieta la mandíbula.\n\nNo duda de lo que siente. Duda de si entiendes el costo de tener su lealtad completa. Amar a Rhea no puede ser solo dejar que ella cargue el peligro."
+	},
+	"nova": {
+		"name": "Caos elegido",
+		"proposal_label": "Elegir el caos de Nova con ojos abiertos",
+		"required_total_affinity": 98,
+		"required_loyalty": 65,
+		"max_jealousy": 45,
+		"required_info_categories": {
+			"final": 2,
+			"desire_chemistry": 3,
+			"emotional_shadow": 1,
+			"responsibility_cost": 1
+		},
+		"required_collectibles": [
+			"emotional_memory:nova:spark_too_personal"
+		],
+		"success_text": "Nova abre la boca para hacer un chiste.\n\nNada sale.\n\nEso la asusta más que cualquier prototipo.\n\n\"No digas que no te advertí\", murmura.\n\nPero sonríe. Y esta vez no parece estar huyendo.\n\nNova acepta.",
+		"failure_text": "Nova se ríe, pero el sonido no prende.\n\nTodavía siente que quieres la chispa sin aceptar el incendio. Y ella no va a dejar que la conviertan en una versión segura de sí misma."
+	},
+	"seraphine": {
+		"name": "Voto redefinido",
+		"proposal_label": "Pedir a Seraphine redefinir su voto contigo",
+		"required_total_affinity": 98,
+		"required_loyalty": 80,
+		"max_jealousy": 25,
+		"required_info_categories": {
+			"final": 3,
+			"romance": 2,
+			"emotional_shadow": 2,
+			"desire_chemistry": 2
+		},
+		"required_collectibles": [
+			"emotional_memory:seraphine:vow_learned_to_tremble"
+		],
+		"success_text": "Seraphine cierra los ojos.\n\nPor un instante parece rezar contra ti.\n\nLuego entiendes que no está rezando contra el deseo, sino por la fuerza de nombrarlo sin destruirse.\n\n\"No quiero romperme para amar\", dice.\n\nY toma tu mano.\n\nSeraphine acepta.",
+		"failure_text": "Seraphine te mira con ternura y dolor.\n\nNo puede aceptar una propuesta que convierta su conflicto en victoria tuya. Si la eliges, también debes entender aquello que no puede abandonar."
+	},
+	"kael": {
+		"name": "Juramento silencioso",
+		"proposal_label": "Pedir a Kael que se quede",
+		"required_total_affinity": 98,
+		"required_loyalty": 75,
+		"max_jealousy": 30,
+		"required_info_categories": {
+			"final": 2,
+			"history": 2,
+			"emotional_shadow": 2,
+			"romance": 1
+		},
+		"success_text": "Kael tarda tanto en responder que por un momento parece que ya se fue.\n\nPero sigue ahí.\n\n\"No soy bueno prometiendo\", dice.\n\nLuego deja su mano sobre la tuya.\n\n\"Pero puedo quedarme. Si eso basta, me quedo.\"\n\nKael acepta.",
+		"failure_text": "Kael baja la mirada.\n\nNo es rechazo. Es miedo viejo. Todavía no sabe si quedarse contigo lo volverá hogar o amenaza."
+	},
+	"myr": {
+		"name": "Vínculo mutable",
+		"proposal_label": "Elegir a Myr sin exigir una forma definitiva",
+		"required_total_affinity": 98,
+		"required_loyalty": 70,
+		"max_jealousy": 40,
+		"required_info_categories": {
+			"final": 3,
+			"desire_chemistry": 3,
+			"emotional_shadow": 1,
+			"romance": 1
+		},
+		"required_collectibles": [
+			"emotional_memory:myr:shape_answered_your_gaze"
+		],
+		"success_text": "Myr cambia tres veces antes de responder.\n\nNinguna forma parece suficiente. Ninguna parece falsa.\n\n\"No me pidas quedarme igual\", dice.\n\nCuando aceptas eso, sonríe con una forma que nunca habías visto.\n\nMyr acepta.",
+		"failure_text": "Myr escucha la propuesta y se vuelve casi transparente.\n\nTodavía hay una parte de ti que busca la versión definitiva. Myr no puede aceptar una jaula con forma de promesa."
+	},
+	"axiom": {
+		"name": "Ancla existencial",
+		"proposal_label": "Elegir a Axiom como ancla imposible",
+		"required_total_affinity": 98,
+		"required_loyalty": 65,
+		"max_jealousy": 30,
+		"required_info_categories": {
+			"final": 3,
+			"history": 1,
+			"emotional_shadow": 1,
+			"romance": 1
+		},
+		"required_collectibles": [
+			"emotional_memory:axiom:threshold_spoke_your_name"
+		],
+		"success_text": "Axiom repite tu propuesta como si intentara aprender la forma exacta de una decisión.\n\n\"Si acepto\", dice, \"algo termina. Algo empieza. No sé distinguir cuál debería doler.\"\n\nLuego sonríe con una humanidad imperfecta.\n\nAxiom acepta.",
+		"failure_text": "Axiom no entiende del todo por qué duele.\n\nPero entiende que aún no sabes si quieres amarle o conservar la maravilla de tenerle cerca."
+	},
+	"taren": {
+		"name": "Contrato emocional",
+		"proposal_label": "Pedir a Taren un vínculo definitivo",
+		"required_total_affinity": 98,
+		"required_loyalty": 80,
+		"max_jealousy": 25,
+		"required_info_categories": {
+			"final": 3,
+			"responsibility_cost": 2,
+			"romance": 2,
+			"emotional_shadow": 1
+		},
+		"required_collectibles": [
+			"emotional_memory:taren:unsigned_report"
+		],
+		"success_text": "Taren escucha como si estuviera evaluando un tratado imposible.\n\nLuego deja de parecer líder del gremio.\n\nSolo por un instante.\n\n\"No me pidas que abandone mi deber\", dice. \"Pero si entiendes el peso de compartirlo... sí.\"\n\nTaren acepta.",
+		"failure_text": "Taren no se permite suavidad suficiente para decir que duele.\n\nTodavía no sabe si entiendes que elegirle también vuelve política tu vida privada."
+	},
+	"rhein": {
+		"name": "Raíces compartidas",
+		"proposal_label": "Pedir a Rhein echar raíces contigo",
+		"required_total_affinity": 98,
+		"required_loyalty": 75,
+		"max_jealousy": 30,
+		"required_info_categories": {
+			"final": 2,
+			"history": 2,
+			"responsibility_cost": 2,
+			"romance": 1
+		},
+		"required_collectibles": [
+			"emotional_memory:rhein:forest_remembered_first"
+		],
+		"success_text": "Rhein toca la corteza de un árbol antes de responder.\n\nNo busca permiso. Busca paciencia.\n\n\"Si eliges esto, eliges también lo que cuido\", dice.\n\nCuando asientes, el bosque parece respirar más hondo.\n\nRhein acepta.",
+		"failure_text": "Rhein no se aparta, pero el bosque parece más lejos.\n\nTodavía no sabes si quieres sus raíces o solo su sombra."
+	},
+	"selene": {
+		"name": "Neutralidad abandonada",
+		"proposal_label": "Pedir a Selene que elija contigo",
+		"required_total_affinity": 98,
+		"required_loyalty": 80,
+		"max_jealousy": 25,
+		"required_info_categories": {
+			"final": 3,
+			"responsibility_cost": 2,
+			"romance": 2,
+			"emotional_shadow": 1
+		},
+		"required_collectibles": [
+			"emotional_memory:selene:first_warning_carried"
+		],
+		"success_text": "Selene mira hacia la puerta, como si esperara un mensajero que le prohíba responder.\n\nNo llega nadie.\n\n\"Entonces esta vez el mensaje es mío\", dice.\n\nY elige.\n\nSelene acepta.",
+		"failure_text": "Selene guarda silencio demasiado tiempo.\n\nNo puede abandonar la neutralidad por alguien que aún no entiende todo lo que esa renuncia puede costar."
+	},
+	"elara": {
+		"name": "Amante declarada",
+		"proposal_label": "Elegir a Elara sin esconderla",
+		"required_total_affinity": 98,
+		"required_loyalty": 70,
+		"max_jealousy": 45,
+		"required_info_categories": {
+			"final": 2,
+			"romance": 2,
+			"desire_chemistry": 2,
+			"emotional_shadow": 1
+		},
+		"required_collectibles": [
+			"emotional_memory:elara:rumor_learned_to_smile"
+		],
+		"success_text": "Elara sonríe como si fuera a convertirlo en espectáculo.\n\nPero no lo hace.\n\nPor una vez, guarda el rumor para después.\n\n\"Dilo otra vez\", pide. \"Pero esta vez no como juego.\"\n\nCuando lo haces, Elara acepta.",
+		"failure_text": "Elara ríe, y por eso sabes que dolió.\n\nTodavía no sabe si la eliges de verdad o si solo te gusta cómo se ve el mundo cuando ella te mira."
+	}
+}
