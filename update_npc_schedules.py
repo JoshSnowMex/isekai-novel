@@ -1,394 +1,100 @@
 import json
 from pathlib import Path
 
-path = Path("data/npcs.json")
+path = Path("data/npc_story_profiles.json")
 
 with path.open("r", encoding="utf-8") as f:
-    npcs = json.load(f)
+    profiles = json.load(f)
 
-schedules = {
+preferences = {
     "lyria": {
-        "default": {
-            "morning": "library",
-            "afternoon": "library",
-            "night": "private_study"
-        },
-        "saturday": {
-            "morning": "archives",
-            "afternoon": "library",
-            "night": "private_study"
-        },
-        "sunday": {
-            "morning": "private_study",
-            "afternoon": "plaza",
-            "night": ""
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "relationship": {
-                        "npc_id": "lyria",
-                        "state": "dating"
-                    }
-                },
-                "night": "library"
-            }
-        ]
+        "loves": ["subtle", "gentle", "slow_tension", "intellectual", "respectful"],
+        "likes": ["romantic", "private", "verbal", "emotional"],
+        "dislikes": ["public", "bold", "risky", "playful"],
+        "hates": ["exhibitionist", "crude", "forceful", "sexual"]
     },
     "aeris": {
-        "default": {
-            "morning": "observatory",
-            "afternoon": "arcane_library",
-            "night": "private_study"
-        },
-        "saturday": {
-            "morning": "observatory",
-            "afternoon": "library",
-            "night": "observatory"
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "observatory",
-            "night": "observatory"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "world_flags": {
-                        "has_all": ["aeris_suspects_anchor"]
-                    }
-                },
-                "night": "observatory"
-            }
-        ]
+        "loves": ["gentle", "emotional", "respectful", "slow_tension"],
+        "likes": ["romantic", "private", "vulnerable", "verbal"],
+        "dislikes": ["bold", "public", "risky"],
+        "hates": ["forceful", "possessive"]
     },
     "eryon": {
-        "default": {
-            "morning": "archives",
-            "afternoon": "plaza",
-            "night": "private_study"
-        },
-        "saturday": {
-            "morning": "archives",
-            "afternoon": "tavern",
-            "night": "plaza"
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "archives",
-            "night": "tavern"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "relationship": {
-                        "npc_id": "eryon",
-                        "state": "dating"
-                    }
-                },
-                "night": "private_study"
-            }
-        ]
+        "loves": ["verbal", "teasing", "flirty", "slow_tension"],
+        "likes": ["bold", "playful", "private", "romantic"],
+        "dislikes": ["possessive", "simple", "gentle"],
+        "hates": ["forceful"]
     },
     "rhea": {
-        "default": {
-            "morning": "guild",
-            "afternoon": "market",
-            "night": "tavern"
-        },
-        "saturday": {
-            "morning": "guild",
-            "afternoon": "forest",
-            "night": "tavern"
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "plaza",
-            "night": "tavern"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "world_flags": {
-                        "has_all": ["village_security_weakened"]
-                    }
-                },
-                "morning": "guild",
-                "afternoon": "guild",
-                "night": "guild"
-            }
-        ]
+        "loves": ["physical", "bold", "clear", "playful"],
+        "likes": ["romantic", "private", "teasing", "direct"],
+        "dislikes": ["overly_formal", "passive", "subtle"],
+        "hates": ["humiliation", "manipulative"]
     },
     "nova": {
-        "default": {
-            "morning": "workshop",
-            "afternoon": "workshop",
-            "night": "plaza"
-        },
-        "saturday": {
-            "morning": "workshop",
-            "afternoon": "market",
-            "night": "tavern"
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "workshop",
-            "night": "plaza"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "world_flags": {
-                        "has_all": ["unstable_prototype_awakened"]
-                    }
-                },
-                "night": "workshop"
-            }
-        ]
+        "loves": ["playful", "teasing", "bold", "risky"],
+        "likes": ["flirty", "clever", "physical", "private"],
+        "dislikes": ["traditional", "possessive", "gentle"],
+        "hates": ["controlling", "forceful"]
     },
     "seraphine": {
-        "default": {
-            "morning": "sanctuary",
-            "afternoon": "sanctuary",
-            "night": "library"
-        },
-        "saturday": {
-            "morning": "sanctuary",
-            "afternoon": "plaza",
-            "night": "sanctuary"
-        },
-        "sunday": {
-            "morning": "sanctuary",
-            "afternoon": "sanctuary",
-            "night": ""
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "relationship": {
-                        "npc_id": "seraphine",
-                        "state": "lovers"
-                    }
-                },
-                "night": "library"
-            }
-        ]
+        "loves": ["gentle", "respectful", "emotional", "slow_tension"],
+        "likes": ["romantic", "private", "vulnerable"],
+        "dislikes": ["public", "bold", "teasing", "sexual"],
+        "hates": ["crude", "mocking_faith", "forceful", "exhibitionist"]
     },
     "kael": {
-        "default": {
-            "morning": "guild",
-            "afternoon": "forest",
-            "night": "tavern"
-        },
-        "saturday": {
-            "morning": "forest",
-            "afternoon": "guild",
-            "night": "tavern"
-        },
-        "sunday": {
-            "morning": "forest",
-            "afternoon": "",
-            "night": "tavern"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "relationship": {
-                        "npc_id": "kael",
-                        "state": "dating"
-                    }
-                },
-                "night": "forest"
-            }
-        ]
+        "loves": ["quiet", "physical", "gentle", "clear"],
+        "likes": ["private", "romantic", "slow_tension"],
+        "dislikes": ["public", "verbal", "teasing"],
+        "hates": ["performative", "forceful"]
     },
     "myr": {
-        "default": {
-            "morning": "workshop",
-            "afternoon": "plaza",
-            "night": "threshold"
-        },
-        "saturday": {
-            "morning": "market",
-            "afternoon": "workshop",
-            "night": "threshold"
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "forest",
-            "night": "threshold"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "relationship": {
-                        "npc_id": "myr",
-                        "state": "lovers"
-                    }
-                },
-                "night": "workshop"
-            }
-        ]
+        "loves": ["playful", "sensual", "curious", "private"],
+        "likes": ["flirty", "bold", "gentle", "risky"],
+        "dislikes": ["possessive", "traditional"],
+        "hates": ["controlling", "objectifying"]
     },
     "axiom": {
-        "default": {
-            "morning": "threshold",
-            "afternoon": "observatory",
-            "night": "threshold"
-        },
-        "saturday": {
-            "morning": "threshold",
-            "afternoon": "",
-            "night": "threshold"
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "threshold",
-            "night": "threshold"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "relationship": {
-                        "npc_id": "axiom",
-                        "state": "partner"
-                    }
-                },
-                "afternoon": "threshold",
-                "night": "threshold"
-            }
-        ]
+        "loves": ["gentle", "curious", "emotional", "respectful"],
+        "likes": ["private", "romantic", "vulnerable"],
+        "dislikes": ["sexual", "public", "teasing"],
+        "hates": ["possessive", "objectifying"]
     },
     "taren": {
-        "default": {
-            "morning": "guild",
-            "afternoon": "council_hall",
-            "night": "tavern"
-        },
-        "saturday": {
-            "morning": "guild",
-            "afternoon": "guild",
-            "night": ""
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "council_hall",
-            "night": "tavern"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "world_flags": {
-                        "has_all": ["guild_order_weakened"]
-                    }
-                },
-                "morning": "guild",
-                "afternoon": "guild"
-            }
-        ]
+        "loves": ["respectful", "mature", "private", "clear"],
+        "likes": ["romantic", "slow_tension", "verbal"],
+        "dislikes": ["public", "playful", "risky"],
+        "hates": ["humiliation", "irresponsible"]
     },
     "rhein": {
-        "default": {
-            "morning": "forest",
-            "afternoon": "forest",
-            "night": "sanctuary"
-        },
-        "saturday": {
-            "morning": "forest",
-            "afternoon": "plaza",
-            "night": "forest"
-        },
-        "sunday": {
-            "morning": "forest",
-            "afternoon": "",
-            "night": "threshold"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "world_state": {
-                        "world_instability": {
-                            "min": 20
-                        }
-                    }
-                },
-                "night": "forest"
-            }
-        ]
+        "loves": ["gentle", "slow_tension", "natural", "respectful"],
+        "likes": ["physical", "private", "romantic"],
+        "dislikes": ["public", "rushed", "bold"],
+        "hates": ["disrespectful", "forceful"]
     },
     "selene": {
-        "default": {
-            "morning": "council_hall",
-            "afternoon": "plaza",
-            "night": "library"
-        },
-        "saturday": {
-            "morning": "council_hall",
-            "afternoon": "market",
-            "night": ""
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "sanctuary",
-            "night": "council_hall"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "world_flags": {
-                        "has_all": ["council_is_watching"]
-                    }
-                },
-                "afternoon": "council_hall",
-                "night": "council_hall"
-            }
-        ]
+        "loves": ["subtle", "respectful", "private", "verbal"],
+        "likes": ["romantic", "slow_tension", "clear"],
+        "dislikes": ["public", "bold", "risky"],
+        "hates": ["politically_reckless", "forceful"]
     },
     "elara": {
-        "default": {
-            "morning": "market",
-            "afternoon": "plaza",
-            "night": "tavern"
-        },
-        "saturday": {
-            "morning": "market",
-            "afternoon": "tavern",
-            "night": "tavern"
-        },
-        "sunday": {
-            "morning": "",
-            "afternoon": "plaza",
-            "night": "tavern"
-        },
-        "conditions": [
-            {
-                "conditions": {
-                    "world_state": {
-                        "romantic_pressure": {
-                            "min": 20
-                        }
-                    }
-                },
-                "afternoon": "plaza",
-                "night": "tavern"
-            }
-        ]
+        "loves": ["flirty", "playful", "public", "teasing"],
+        "likes": ["bold", "physical", "romantic", "sexual"],
+        "dislikes": ["ashamed", "cold"],
+        "hates": ["using_her", "humiliation"]
     }
 }
 
-missing = []
-
-for npc_id, schedule in schedules.items():
-    if npc_id not in npcs:
-        missing.append(npc_id)
+for npc_id, prefs in preferences.items():
+    if npc_id not in profiles:
+        print(f"ADVERTENCIA: perfil no encontrado: {npc_id}")
         continue
 
-    npcs[npc_id]["schedule"] = schedule
+    profiles[npc_id]["date_move_preferences"] = prefs
 
 with path.open("w", encoding="utf-8") as f:
-    json.dump(npcs, f, ensure_ascii=False, indent="\t")
+    json.dump(profiles, f, ensure_ascii=False, indent="\t")
 
-if missing:
-    print("NPCs no encontrados:", ", ".join(missing))
-else:
-    print("npcs.json actualizado correctamente.")
+print("npc_story_profiles.json actualizado con preferencias de movimientos.")

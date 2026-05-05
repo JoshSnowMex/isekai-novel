@@ -1,8 +1,13 @@
 {
 	"lyria": {
 		"romanceable": true,
-		"preferred_genders": ["man"],
-		"open_genders": ["woman", "non_binary"],
+		"preferred_genders": [
+			"man"
+		],
+		"open_genders": [
+			"woman",
+			"non_binary"
+		],
 		"preference_strength": 12,
 		"story_role": {
 			"responsibility": "archives_truth",
@@ -11,11 +16,42 @@
 			"romantic_disruption": 45
 		},
 		"final_union_style": "pacto íntimo de confianza",
-		"postgame_role": "Puede revelar registros nuevos, pero eso puede tensar la relación final si el jugador oculta información."
+		"postgame_role": "Puede revelar registros nuevos, pero eso puede tensar la relación final si el jugador oculta información.",
+		"date_move_preferences": {
+			"loves": [
+				"subtle",
+				"gentle",
+				"slow_tension",
+				"intellectual",
+				"respectful"
+			],
+			"likes": [
+				"romantic",
+				"private",
+				"verbal",
+				"emotional"
+			],
+			"dislikes": [
+				"public",
+				"bold",
+				"risky",
+				"playful"
+			],
+			"hates": [
+				"exhibitionist",
+				"crude",
+				"forceful",
+				"sexual"
+			]
+		}
 	},
 	"aeris": {
 		"romanceable": true,
-		"preferred_genders": ["man", "woman", "non_binary"],
+		"preferred_genders": [
+			"man",
+			"woman",
+			"non_binary"
+		],
 		"open_genders": [],
 		"preference_strength": 0,
 		"story_role": {
@@ -25,11 +61,38 @@
 			"romantic_disruption": 65
 		},
 		"final_union_style": "compañera de destino y pacto de verdad",
-		"postgame_role": "Puede estabilizar o alterar el Velo según si el jugador mantiene honestidad con la unión final."
+		"postgame_role": "Puede estabilizar o alterar el Velo según si el jugador mantiene honestidad con la unión final.",
+		"date_move_preferences": {
+			"loves": [
+				"gentle",
+				"emotional",
+				"respectful",
+				"slow_tension"
+			],
+			"likes": [
+				"romantic",
+				"private",
+				"vulnerable",
+				"verbal"
+			],
+			"dislikes": [
+				"bold",
+				"public",
+				"risky"
+			],
+			"hates": [
+				"forceful",
+				"possessive"
+			]
+		}
 	},
 	"eryon": {
 		"romanceable": true,
-		"preferred_genders": ["man", "woman", "non_binary"],
+		"preferred_genders": [
+			"man",
+			"woman",
+			"non_binary"
+		],
 		"open_genders": [],
 		"preference_strength": 0,
 		"story_role": {
@@ -39,12 +102,39 @@
 			"romantic_disruption": 70
 		},
 		"final_union_style": "elegir una historia falsa hasta volverla real",
-		"postgame_role": "Puede reinterpretar eventos pasados y abrir lore alternativo con costos de confianza."
+		"postgame_role": "Puede reinterpretar eventos pasados y abrir lore alternativo con costos de confianza.",
+		"date_move_preferences": {
+			"loves": [
+				"verbal",
+				"teasing",
+				"flirty",
+				"slow_tension"
+			],
+			"likes": [
+				"bold",
+				"playful",
+				"private",
+				"romantic"
+			],
+			"dislikes": [
+				"possessive",
+				"simple",
+				"gentle"
+			],
+			"hates": [
+				"forceful"
+			]
+		}
 	},
 	"rhea": {
 		"romanceable": true,
-		"preferred_genders": ["woman", "non_binary"],
-		"open_genders": ["man"],
+		"preferred_genders": [
+			"woman",
+			"non_binary"
+		],
+		"open_genders": [
+			"man"
+		],
 		"preference_strength": 10,
 		"story_role": {
 			"responsibility": "direct_protection",
@@ -53,11 +143,38 @@
 			"romantic_disruption": 80
 		},
 		"final_union_style": "compañera protectora y lealtad bajo peligro",
-		"postgame_role": "Puede proteger la unión final o crear tensión si siente que el jugador juega con riesgos innecesarios."
+		"postgame_role": "Puede proteger la unión final o crear tensión si siente que el jugador juega con riesgos innecesarios.",
+		"date_move_preferences": {
+			"loves": [
+				"physical",
+				"bold",
+				"clear",
+				"playful"
+			],
+			"likes": [
+				"romantic",
+				"private",
+				"teasing",
+				"direct"
+			],
+			"dislikes": [
+				"overly_formal",
+				"passive",
+				"subtle"
+			],
+			"hates": [
+				"humiliation",
+				"manipulative"
+			]
+		}
 	},
 	"nova": {
 		"romanceable": true,
-		"preferred_genders": ["man", "woman", "non_binary"],
+		"preferred_genders": [
+			"man",
+			"woman",
+			"non_binary"
+		],
 		"open_genders": [],
 		"preference_strength": 0,
 		"story_role": {
@@ -67,12 +184,40 @@
 			"romantic_disruption": 75
 		},
 		"final_union_style": "vínculo caótico sin domesticación",
-		"postgame_role": "Puede crear nuevo lore con prototipos peligrosos que tensen o fortalezcan la unión final."
+		"postgame_role": "Puede crear nuevo lore con prototipos peligrosos que tensen o fortalezcan la unión final.",
+		"date_move_preferences": {
+			"loves": [
+				"playful",
+				"teasing",
+				"bold",
+				"risky"
+			],
+			"likes": [
+				"flirty",
+				"clever",
+				"physical",
+				"private"
+			],
+			"dislikes": [
+				"traditional",
+				"possessive",
+				"gentle"
+			],
+			"hates": [
+				"controlling",
+				"forceful"
+			]
+		}
 	},
 	"seraphine": {
 		"romanceable": true,
-		"preferred_genders": ["man"],
-		"open_genders": ["woman", "non_binary"],
+		"preferred_genders": [
+			"man"
+		],
+		"open_genders": [
+			"woman",
+			"non_binary"
+		],
 		"preference_strength": 14,
 		"story_role": {
 			"responsibility": "faith_vows",
@@ -81,12 +226,42 @@
 			"romantic_disruption": 80
 		},
 		"final_union_style": "voto redefinido por deseo honesto",
-		"postgame_role": "Puede abrir consecuencias religiosas y sociales si el jugador desafía su fe o la protege mal."
+		"postgame_role": "Puede abrir consecuencias religiosas y sociales si el jugador desafía su fe o la protege mal.",
+		"date_move_preferences": {
+			"loves": [
+				"gentle",
+				"respectful",
+				"emotional",
+				"slow_tension"
+			],
+			"likes": [
+				"romantic",
+				"private",
+				"vulnerable"
+			],
+			"dislikes": [
+				"public",
+				"bold",
+				"teasing",
+				"sexual"
+			],
+			"hates": [
+				"crude",
+				"mocking_faith",
+				"forceful",
+				"exhibitionist"
+			]
+		}
 	},
 	"kael": {
 		"romanceable": true,
-		"preferred_genders": ["woman"],
-		"open_genders": ["man", "non_binary"],
+		"preferred_genders": [
+			"woman"
+		],
+		"open_genders": [
+			"man",
+			"non_binary"
+		],
 		"preference_strength": 12,
 		"story_role": {
 			"responsibility": "silent_guardianship",
@@ -95,11 +270,37 @@
 			"romantic_disruption": 65
 		},
 		"final_union_style": "juramento silencioso de protección",
-		"postgame_role": "Puede descubrir amenazas tardías, pero su protección puede volverse tensión si la unión final se siente vigilada."
+		"postgame_role": "Puede descubrir amenazas tardías, pero su protección puede volverse tensión si la unión final se siente vigilada.",
+		"date_move_preferences": {
+			"loves": [
+				"quiet",
+				"physical",
+				"gentle",
+				"clear"
+			],
+			"likes": [
+				"private",
+				"romantic",
+				"slow_tension"
+			],
+			"dislikes": [
+				"public",
+				"verbal",
+				"teasing"
+			],
+			"hates": [
+				"performative",
+				"forceful"
+			]
+		}
 	},
 	"myr": {
 		"romanceable": true,
-		"preferred_genders": ["man", "woman", "non_binary"],
+		"preferred_genders": [
+			"man",
+			"woman",
+			"non_binary"
+		],
 		"open_genders": [],
 		"preference_strength": 0,
 		"story_role": {
@@ -109,11 +310,37 @@
 			"romantic_disruption": 70
 		},
 		"final_union_style": "vínculo mutable sin jaula",
-		"postgame_role": "Puede transformar consecuencias emocionales en nuevo lore, pero castiga la posesividad."
+		"postgame_role": "Puede transformar consecuencias emocionales en nuevo lore, pero castiga la posesividad.",
+		"date_move_preferences": {
+			"loves": [
+				"playful",
+				"sensual",
+				"curious",
+				"private"
+			],
+			"likes": [
+				"flirty",
+				"bold",
+				"gentle",
+				"risky"
+			],
+			"dislikes": [
+				"possessive",
+				"traditional"
+			],
+			"hates": [
+				"controlling",
+				"objectifying"
+			]
+		}
 	},
 	"axiom": {
 		"romanceable": true,
-		"preferred_genders": ["man", "woman", "non_binary"],
+		"preferred_genders": [
+			"man",
+			"woman",
+			"non_binary"
+		],
 		"open_genders": [],
 		"preference_strength": 0,
 		"story_role": {
@@ -123,12 +350,39 @@
 			"romantic_disruption": 90
 		},
 		"final_union_style": "ancla existencial",
-		"postgame_role": "Puede alterar el significado del final mismo si la unión final no soporta su presencia."
+		"postgame_role": "Puede alterar el significado del final mismo si la unión final no soporta su presencia.",
+		"date_move_preferences": {
+			"loves": [
+				"gentle",
+				"curious",
+				"emotional",
+				"respectful"
+			],
+			"likes": [
+				"private",
+				"romantic",
+				"vulnerable"
+			],
+			"dislikes": [
+				"sexual",
+				"public",
+				"teasing"
+			],
+			"hates": [
+				"possessive",
+				"objectifying"
+			]
+		}
 	},
 	"taren": {
 		"romanceable": true,
-		"preferred_genders": ["woman"],
-		"open_genders": ["man", "non_binary"],
+		"preferred_genders": [
+			"woman"
+		],
+		"open_genders": [
+			"man",
+			"non_binary"
+		],
 		"preference_strength": 16,
 		"story_role": {
 			"responsibility": "council_order",
@@ -137,11 +391,37 @@
 			"romantic_disruption": 75
 		},
 		"final_union_style": "contrato emocional imposible",
-		"postgame_role": "Puede proteger políticamente la unión final, pero distraerlo puede debilitar el orden del gremio."
+		"postgame_role": "Puede proteger políticamente la unión final, pero distraerlo puede debilitar el orden del gremio.",
+		"date_move_preferences": {
+			"loves": [
+				"respectful",
+				"mature",
+				"private",
+				"clear"
+			],
+			"likes": [
+				"romantic",
+				"slow_tension",
+				"verbal"
+			],
+			"dislikes": [
+				"public",
+				"playful",
+				"risky"
+			],
+			"hates": [
+				"humiliation",
+				"irresponsible"
+			]
+		}
 	},
 	"rhein": {
 		"romanceable": true,
-		"preferred_genders": ["man", "woman", "non_binary"],
+		"preferred_genders": [
+			"man",
+			"woman",
+			"non_binary"
+		],
 		"open_genders": [],
 		"preference_strength": 0,
 		"story_role": {
@@ -151,12 +431,39 @@
 			"romantic_disruption": 50
 		},
 		"final_union_style": "raíces compartidas",
-		"postgame_role": "Puede revelar memoria natural del mundo y consecuencias ecológicas de vínculos inestables."
+		"postgame_role": "Puede revelar memoria natural del mundo y consecuencias ecológicas de vínculos inestables.",
+		"date_move_preferences": {
+			"loves": [
+				"gentle",
+				"slow_tension",
+				"natural",
+				"respectful"
+			],
+			"likes": [
+				"physical",
+				"private",
+				"romantic"
+			],
+			"dislikes": [
+				"public",
+				"rushed",
+				"bold"
+			],
+			"hates": [
+				"disrespectful",
+				"forceful"
+			]
+		}
 	},
 	"selene": {
 		"romanceable": true,
-		"preferred_genders": ["woman", "non_binary"],
-		"open_genders": ["man"],
+		"preferred_genders": [
+			"woman",
+			"non_binary"
+		],
+		"open_genders": [
+			"man"
+		],
 		"preference_strength": 10,
 		"story_role": {
 			"responsibility": "council_messages",
@@ -165,11 +472,37 @@
 			"romantic_disruption": 65
 		},
 		"final_union_style": "neutralidad abandonada",
-		"postgame_role": "Puede abrir o cerrar canales del Consejo según la confianza con la unión final."
+		"postgame_role": "Puede abrir o cerrar canales del Consejo según la confianza con la unión final.",
+		"date_move_preferences": {
+			"loves": [
+				"subtle",
+				"respectful",
+				"private",
+				"verbal"
+			],
+			"likes": [
+				"romantic",
+				"slow_tension",
+				"clear"
+			],
+			"dislikes": [
+				"public",
+				"bold",
+				"risky"
+			],
+			"hates": [
+				"politically_reckless",
+				"forceful"
+			]
+		}
 	},
 	"elara": {
 		"romanceable": true,
-		"preferred_genders": ["man", "woman", "non_binary"],
+		"preferred_genders": [
+			"man",
+			"woman",
+			"non_binary"
+		],
 		"open_genders": [],
 		"preference_strength": 0,
 		"story_role": {
@@ -179,6 +512,28 @@
 			"romantic_disruption": 75
 		},
 		"final_union_style": "amante declarada ante el mundo",
-		"postgame_role": "Puede convertir nuevo contenido en rumores, presión social o aceptación pública."
+		"postgame_role": "Puede convertir nuevo contenido en rumores, presión social o aceptación pública.",
+		"date_move_preferences": {
+			"loves": [
+				"flirty",
+				"playful",
+				"public",
+				"teasing"
+			],
+			"likes": [
+				"bold",
+				"physical",
+				"romantic",
+				"sexual"
+			],
+			"dislikes": [
+				"ashamed",
+				"cold"
+			],
+			"hates": [
+				"using_her",
+				"humiliation"
+			]
+		}
 	}
 }

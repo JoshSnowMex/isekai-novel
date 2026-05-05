@@ -2,271 +2,257 @@
 	"plaza_date": {
 		"name": "Paseo por la Plaza",
 		"location_id": "plaza",
-		"description": "Una cita pública, luminosa y segura. Ideal para empezar a conocerse sin demasiada presión.",
+		"description": "Una cita pública, luminosa y segura. Sirve para medir interés sin prometer intimidad.",
+		"date_category": "public_casual",
+		"required_relationship_state": "none",
 		"min_total_affinity": 15,
-		"starting_progress": 52,
+		"starting_progress": 54,
 		"success_threshold": 70,
-		"mood_tags": ["public", "casual", "social"],
+		"mood_tags": ["public", "casual", "social", "crowded"],
 		"preferred_npcs": ["elara", "rhea", "selene"],
-		"bad_fit_npcs": ["axiom"],
-		"success_rewards": {
-			"friendship": 5,
-			"tension": 4,
-			"loyalty": 1
-		},
-		"excellent_rewards": {
-			"friendship": 7,
-			"tension": 6,
-			"loyalty": 2
-		},
-		"perfect_rewards": {
-			"friendship": 9,
-			"tension": 8,
-			"loyalty": 3
-		},
-		"collectible_id": "date_memory:plaza"
+		"bad_fit_npcs": ["axiom", "lyria"],
+		"success_rewards": {"friendship": 5, "tension": 3, "loyalty": 1},
+		"excellent_rewards": {"friendship": 7, "tension": 5, "loyalty": 2},
+		"perfect_rewards": {"friendship": 9, "tension": 6, "loyalty": 3}
 	},
 	"market_date": {
 		"name": "Recorrido por el Mercado",
 		"location_id": "market",
-		"description": "Una cita viva, llena de ruido, comida y excusas para rozarse entre la multitud.",
+		"description": "Ruido, comida, miradas ajenas y excusas para perderse entre puestos.",
+		"date_category": "public_playful",
+		"required_relationship_state": "none",
 		"min_total_affinity": 15,
-		"starting_progress": 50,
+		"starting_progress": 52,
 		"success_threshold": 70,
-		"mood_tags": ["public", "playful", "social"],
+		"mood_tags": ["public", "playful", "social", "crowded", "food"],
 		"preferred_npcs": ["elara", "nova", "rhea"],
-		"bad_fit_npcs": ["taren", "axiom"],
-		"success_rewards": {
-			"friendship": 5,
-			"tension": 5,
-			"loyalty": 0
-		},
-		"excellent_rewards": {
-			"friendship": 7,
-			"tension": 7,
-			"loyalty": 1
-		},
-		"perfect_rewards": {
-			"friendship": 9,
-			"tension": 9,
-			"loyalty": 2
-		},
-		"collectible_id": "date_memory:market"
+		"bad_fit_npcs": ["taren", "axiom", "lyria"],
+		"success_rewards": {"friendship": 5, "tension": 4, "loyalty": 0},
+		"excellent_rewards": {"friendship": 7, "tension": 6, "loyalty": 1},
+		"perfect_rewards": {"friendship": 9, "tension": 8, "loyalty": 2}
+	},
+	"tea_room_date": {
+		"name": "Té en una Sala Tranquila",
+		"location_id": "library",
+		"description": "Una cita discreta, íntima sin ser atrevida, perfecta para escuchar más de lo que se dice.",
+		"date_category": "quiet_personal",
+		"required_relationship_state": "none",
+		"min_total_affinity": 20,
+		"starting_progress": 53,
+		"success_threshold": 72,
+		"mood_tags": ["quiet", "private_soft", "tea", "slow_tension", "intellectual"],
+		"preferred_npcs": ["lyria", "aeris", "seraphine", "selene"],
+		"bad_fit_npcs": ["rhea"],
+		"success_rewards": {"friendship": 6, "tension": 3, "loyalty": 2},
+		"excellent_rewards": {"friendship": 8, "tension": 5, "loyalty": 3},
+		"perfect_rewards": {"friendship": 10, "tension": 7, "loyalty": 4}
 	},
 	"library_date": {
 		"name": "Rincón de la Biblioteca",
 		"location_id": "library",
-		"description": "Una cita discreta entre libros, silencios largos y miradas que duran más de lo prudente.",
-		"min_total_affinity": 20,
-		"starting_progress": 50,
+		"description": "Libros, silencio y una cercanía que parece accidental hasta que deja de serlo.",
+		"date_category": "quiet_personal",
+		"required_relationship_state": "none",
+		"min_total_affinity": 25,
+		"starting_progress": 51,
 		"success_threshold": 72,
-		"mood_tags": ["quiet", "intellectual", "intimate_soft"],
+		"mood_tags": ["quiet", "intellectual", "private_soft", "slow_tension"],
 		"preferred_npcs": ["lyria", "aeris", "eryon"],
 		"bad_fit_npcs": ["rhea", "kael"],
-		"success_rewards": {
-			"friendship": 6,
-			"tension": 4,
-			"loyalty": 1
-		},
-		"excellent_rewards": {
-			"friendship": 8,
-			"tension": 6,
-			"loyalty": 2
-		},
-		"perfect_rewards": {
-			"friendship": 10,
-			"tension": 8,
-			"loyalty": 3
-		},
-		"collectible_id": "date_memory:library"
+		"success_rewards": {"friendship": 6, "tension": 4, "loyalty": 1},
+		"excellent_rewards": {"friendship": 8, "tension": 6, "loyalty": 2},
+		"perfect_rewards": {"friendship": 10, "tension": 8, "loyalty": 3}
+	},
+	"garden_walk_date": {
+		"name": "Paseo por Jardines Apartados",
+		"location_id": "plaza",
+		"description": "Un paseo más reservado, suficientemente público para ser seguro y suficientemente apartado para ser peligroso.",
+		"date_category": "romantic_soft",
+		"required_relationship_state": "interest",
+		"min_total_affinity": 35,
+		"starting_progress": 50,
+		"success_threshold": 73,
+		"mood_tags": ["romantic", "quiet", "private_soft", "nature", "gentle"],
+		"preferred_npcs": ["seraphine", "lyria", "aeris", "rhein"],
+		"bad_fit_npcs": ["nova"],
+		"success_rewards": {"friendship": 6, "tension": 5, "loyalty": 2},
+		"excellent_rewards": {"friendship": 8, "tension": 7, "loyalty": 3},
+		"perfect_rewards": {"friendship": 10, "tension": 9, "loyalty": 4}
 	},
 	"tavern_date": {
 		"name": "Mesa Apartada en la Taberna",
 		"location_id": "tavern",
-		"description": "Una cita cálida, peligrosa y más coqueta de lo que cualquiera admitiría sobrio.",
+		"description": "Una cita cálida, ruidosa y más coqueta de lo que cualquiera admitiría sobrio.",
+		"date_category": "social_flirty",
+		"required_relationship_state": "interest",
 		"min_total_affinity": 35,
 		"starting_progress": 48,
 		"success_threshold": 72,
-		"mood_tags": ["warm", "flirty", "social", "suggestive"],
+		"mood_tags": ["warm", "flirty", "social", "suggestive", "public"],
 		"preferred_npcs": ["elara", "eryon", "kael", "rhea"],
-		"bad_fit_npcs": ["seraphine", "selene"],
-		"success_rewards": {
-			"friendship": 5,
-			"tension": 7,
-			"loyalty": 0
-		},
-		"excellent_rewards": {
-			"friendship": 7,
-			"tension": 9,
-			"loyalty": 1
-		},
-		"perfect_rewards": {
-			"friendship": 8,
-			"tension": 11,
-			"loyalty": 2
-		},
-		"collectible_id": "date_memory:tavern"
-	},
-	"observatory_date": {
-		"name": "Noche en el Observatorio",
-		"location_id": "observatory",
-		"description": "Una cita bajo un cielo imposible. Hermosa, intensa y llena de verdades que nadie pidió.",
-		"min_total_affinity": 35,
-		"starting_progress": 47,
-		"success_threshold": 74,
-		"mood_tags": ["lore", "stars", "intimate_soft", "melancholic"],
-		"preferred_npcs": ["aeris", "nova", "axiom", "eryon"],
-		"bad_fit_npcs": ["rhea"],
-		"success_rewards": {
-			"friendship": 6,
-			"tension": 5,
-			"loyalty": 2
-		},
-		"excellent_rewards": {
-			"friendship": 8,
-			"tension": 7,
-			"loyalty": 3
-		},
-		"perfect_rewards": {
-			"friendship": 10,
-			"tension": 9,
-			"loyalty": 4
-		},
-		"collectible_id": "date_memory:observatory"
+		"bad_fit_npcs": ["seraphine", "selene", "lyria"],
+		"success_rewards": {"friendship": 5, "tension": 7, "loyalty": 0},
+		"excellent_rewards": {"friendship": 7, "tension": 9, "loyalty": 1},
+		"perfect_rewards": {"friendship": 8, "tension": 11, "loyalty": 2}
 	},
 	"forest_date": {
 		"name": "Sendero del Bosque Herido",
 		"location_id": "forest",
 		"description": "Una cita apartada, silenciosa y vulnerable. La naturaleza escucha incluso lo que no se dice.",
+		"date_category": "private_nature",
+		"required_relationship_state": "interest",
 		"min_total_affinity": 35,
-		"starting_progress": 46,
+		"starting_progress": 48,
 		"success_threshold": 74,
 		"mood_tags": ["nature", "quiet", "private", "vulnerable"],
 		"preferred_npcs": ["rhein", "kael", "rhea", "myr"],
 		"bad_fit_npcs": ["taren", "elara"],
-		"success_rewards": {
-			"friendship": 6,
-			"tension": 5,
-			"loyalty": 2
-		},
-		"excellent_rewards": {
-			"friendship": 8,
-			"tension": 7,
-			"loyalty": 3
-		},
-		"perfect_rewards": {
-			"friendship": 10,
-			"tension": 9,
-			"loyalty": 4
-		},
-		"collectible_id": "date_memory:forest"
+		"success_rewards": {"friendship": 6, "tension": 5, "loyalty": 2},
+		"excellent_rewards": {"friendship": 8, "tension": 7, "loyalty": 3},
+		"perfect_rewards": {"friendship": 10, "tension": 9, "loyalty": 4}
+	},
+	"observatory_date": {
+		"name": "Noche en el Observatorio",
+		"location_id": "observatory",
+		"description": "Una cita bajo un cielo imposible. Hermosa, intensa y llena de verdades que nadie pidió.",
+		"date_category": "lore_romantic",
+		"required_relationship_state": "interest",
+		"min_total_affinity": 40,
+		"starting_progress": 47,
+		"success_threshold": 74,
+		"mood_tags": ["lore", "stars", "private_soft", "melancholic", "romantic"],
+		"preferred_npcs": ["aeris", "nova", "axiom", "eryon"],
+		"bad_fit_npcs": ["rhea"],
+		"success_rewards": {"friendship": 6, "tension": 5, "loyalty": 2},
+		"excellent_rewards": {"friendship": 8, "tension": 7, "loyalty": 3},
+		"perfect_rewards": {"friendship": 10, "tension": 9, "loyalty": 4}
+	},
+	"beach_date": {
+		"name": "Paseo por la Playa Lejana",
+		"location_id": "",
+		"description": "Una salida fuera del pueblo. El mar vuelve más honestas algunas conversaciones y más visibles algunos silencios.",
+		"date_category": "travel_romantic",
+		"required_relationship_state": "dating",
+		"min_total_affinity": 55,
+		"starting_progress": 46,
+		"success_threshold": 76,
+		"mood_tags": ["travel", "nature", "romantic", "open_air", "vulnerable"],
+		"preferred_npcs": ["rhea", "elara", "rhein", "aeris"],
+		"bad_fit_npcs": ["lyria", "taren"],
+		"success_rewards": {"friendship": 7, "tension": 5, "loyalty": 3},
+		"excellent_rewards": {"friendship": 9, "tension": 7, "loyalty": 4},
+		"perfect_rewards": {"friendship": 11, "tension": 9, "loyalty": 5}
+	},
+	"mountain_date": {
+		"name": "Excursión a las Montañas",
+		"location_id": "",
+		"description": "Una cita física, exigente y lejos de las miradas. El cansancio vuelve difícil fingir.",
+		"date_category": "travel_adventure",
+		"required_relationship_state": "dating",
+		"min_total_affinity": 55,
+		"starting_progress": 45,
+		"success_threshold": 76,
+		"mood_tags": ["travel", "adventure", "physical", "nature", "private"],
+		"preferred_npcs": ["rhea", "kael", "rhein"],
+		"bad_fit_npcs": ["lyria", "seraphine"],
+		"success_rewards": {"friendship": 6, "tension": 6, "loyalty": 3},
+		"excellent_rewards": {"friendship": 8, "tension": 8, "loyalty": 4},
+		"perfect_rewards": {"friendship": 10, "tension": 10, "loyalty": 5}
 	},
 	"sanctuary_date": {
 		"name": "Jardín del Santuario",
 		"location_id": "sanctuary",
 		"description": "Una cita contenida y emocional. Aquí incluso un roce puede sentirse como una confesión.",
+		"date_category": "sacred_romantic",
+		"required_relationship_state": "dating",
 		"min_total_affinity": 55,
 		"starting_progress": 45,
 		"success_threshold": 76,
-		"mood_tags": ["sacred", "quiet", "emotional", "restrained"],
+		"mood_tags": ["sacred", "quiet", "emotional", "restrained", "gentle"],
 		"preferred_npcs": ["seraphine", "taren", "rhein", "selene"],
-		"bad_fit_npcs": ["elara"],
-		"success_rewards": {
-			"friendship": 6,
-			"tension": 4,
-			"loyalty": 4
-		},
-		"excellent_rewards": {
-			"friendship": 8,
-			"tension": 6,
-			"loyalty": 5
-		},
-		"perfect_rewards": {
-			"friendship": 10,
-			"tension": 8,
-			"loyalty": 6
-		},
-		"collectible_id": "date_memory:sanctuary"
+		"bad_fit_npcs": ["elara", "nova"],
+		"success_rewards": {"friendship": 6, "tension": 4, "loyalty": 4},
+		"excellent_rewards": {"friendship": 8, "tension": 6, "loyalty": 5},
+		"perfect_rewards": {"friendship": 10, "tension": 8, "loyalty": 6}
 	},
 	"arcane_date": {
 		"name": "Sala Reservada del Ateneo",
 		"location_id": "arcane_library",
 		"description": "Una cita privada entre símbolos arcanos, tensión intelectual y peligros que se sienten demasiado íntimos.",
-		"min_total_affinity": 55,
+		"date_category": "private_lore",
+		"required_relationship_state": "dating",
+		"min_total_affinity": 60,
 		"starting_progress": 44,
 		"success_threshold": 77,
-		"mood_tags": ["arcane", "intellectual", "private", "dangerous"],
+		"mood_tags": ["arcane", "intellectual", "private", "dangerous", "lore"],
 		"preferred_npcs": ["aeris", "lyria", "eryon", "nova", "myr"],
 		"bad_fit_npcs": ["rhea"],
-		"success_rewards": {
-			"friendship": 6,
-			"tension": 6,
-			"loyalty": 2
-		},
-		"excellent_rewards": {
-			"friendship": 8,
-			"tension": 8,
-			"loyalty": 3
-		},
-		"perfect_rewards": {
-			"friendship": 10,
-			"tension": 10,
-			"loyalty": 4
-		},
-		"collectible_id": "date_memory:arcane"
+		"success_rewards": {"friendship": 6, "tension": 6, "loyalty": 2},
+		"excellent_rewards": {"friendship": 8, "tension": 8, "loyalty": 3},
+		"perfect_rewards": {"friendship": 10, "tension": 10, "loyalty": 4}
 	},
 	"private_study_date": {
 		"name": "Estudio Privado",
 		"location_id": "private_study",
 		"description": "Una cita íntima y cerrada. No hay público, no hay excusas y cada silencio se vuelve más denso.",
+		"date_category": "private_intimate",
+		"required_relationship_state": "lovers",
 		"min_total_affinity": 75,
 		"starting_progress": 42,
 		"success_threshold": 80,
-		"mood_tags": ["private", "intimate", "suggestive", "vulnerable"],
+		"mood_tags": ["private", "intimate", "suggestive", "vulnerable", "slow_tension"],
 		"preferred_npcs": ["lyria", "eryon", "aeris", "seraphine", "myr"],
-		"bad_fit_npcs": ["selene", "taren"],
-		"success_rewards": {
-			"friendship": 6,
-			"tension": 8,
-			"loyalty": 3
-		},
-		"excellent_rewards": {
-			"friendship": 8,
-			"tension": 10,
-			"loyalty": 4
-		},
-		"perfect_rewards": {
-			"friendship": 10,
-			"tension": 12,
-			"loyalty": 5
-		},
-		"collectible_id": "date_memory:private_study"
+		"bad_fit_npcs": ["selene", "taren", "rhea"],
+		"success_rewards": {"friendship": 6, "tension": 8, "loyalty": 3},
+		"excellent_rewards": {"friendship": 8, "tension": 10, "loyalty": 4},
+		"perfect_rewards": {"friendship": 10, "tension": 12, "loyalty": 5}
+	},
+	"hot_springs_date": {
+		"name": "Baño Termal Privado",
+		"location_id": "",
+		"description": "Vapor, cercanía y límites que deben conocerse antes de jugar con ellos.",
+		"date_category": "private_sensual",
+		"required_relationship_state": "lovers",
+		"min_total_affinity": 80,
+		"starting_progress": 40,
+		"success_threshold": 82,
+		"mood_tags": ["private", "intimate", "sensual", "vulnerable", "body"],
+		"preferred_npcs": ["elara", "rhea", "myr", "aeris"],
+		"bad_fit_npcs": ["lyria", "seraphine", "taren"],
+		"success_rewards": {"friendship": 5, "tension": 10, "loyalty": 3},
+		"excellent_rewards": {"friendship": 7, "tension": 12, "loyalty": 4},
+		"perfect_rewards": {"friendship": 9, "tension": 14, "loyalty": 5}
+	},
+	"forbidden_archive_date": {
+		"name": "Archivo Prohibido de Noche",
+		"location_id": "archives",
+		"description": "Una cita peligrosa donde el deseo, la curiosidad y la desobediencia caminan juntos.",
+		"date_category": "forbidden_lore",
+		"required_relationship_state": "lovers",
+		"min_total_affinity": 80,
+		"starting_progress": 40,
+		"success_threshold": 82,
+		"mood_tags": ["private", "forbidden", "dangerous", "intellectual", "night"],
+		"preferred_npcs": ["lyria", "eryon", "aeris"],
+		"bad_fit_npcs": ["rhea", "seraphine"],
+		"success_rewards": {"friendship": 6, "tension": 9, "loyalty": 4},
+		"excellent_rewards": {"friendship": 8, "tension": 11, "loyalty": 5},
+		"perfect_rewards": {"friendship": 10, "tension": 13, "loyalty": 6}
 	},
 	"threshold_date": {
 		"name": "Encuentro en el Umbral",
 		"location_id": "threshold",
 		"description": "Una cita imposible. El mundo se siente delgado y cualquier emoción podría dejar marca en la realidad.",
+		"date_category": "metaphysical_final",
+		"required_relationship_state": "partner",
 		"min_total_affinity": 90,
 		"starting_progress": 40,
 		"success_threshold": 84,
-		"mood_tags": ["metaphysical", "dangerous", "intimate", "fate"],
+		"mood_tags": ["metaphysical", "dangerous", "intimate", "fate", "final"],
 		"preferred_npcs": ["axiom", "aeris", "myr"],
 		"bad_fit_npcs": ["rhea", "elara", "kael"],
-		"success_rewards": {
-			"friendship": 7,
-			"tension": 8,
-			"loyalty": 5
-		},
-		"excellent_rewards": {
-			"friendship": 9,
-			"tension": 11,
-			"loyalty": 6
-		},
-		"perfect_rewards": {
-			"friendship": 12,
-			"tension": 14,
-			"loyalty": 8
-		},
-		"collectible_id": "date_memory:threshold"
+		"success_rewards": {"friendship": 7, "tension": 8, "loyalty": 5},
+		"excellent_rewards": {"friendship": 9, "tension": 11, "loyalty": 6},
+		"perfect_rewards": {"friendship": 12, "tension": 14, "loyalty": 8}
 	}
 }

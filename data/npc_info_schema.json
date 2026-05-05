@@ -46,7 +46,7 @@
 		}
 	},
 	"personal_profile": {
-		"title": "Íntimo / perfil personal",
+		"title": "Perfil personal",
 		"tier": 60,
 		"keys": {
 			"height": "Altura",
@@ -57,9 +57,22 @@
 			"romantic_boundary": "Límite romántico"
 		}
 	},
+	"desire_chemistry": {
+		"title": "Deseo / química",
+		"tier": 70,
+		"keys": {
+			"flirt_turn_on": "Tipo de coqueteo que le provoca",
+			"enjoyed_tension": "Tipo de tensión que disfruta",
+			"intimate_pace": "Ritmo íntimo preferido",
+			"accepted_provocation": "Provocación aceptada",
+			"uncomfortable_provocation": "Provocación que incomoda",
+			"interest_signal": "Señal de interés",
+			"space_signal": "Señal de que necesita espacio"
+		}
+	},
 	"history": {
 		"title": "Historia",
-		"tier": 70,
+		"tier": 75,
 		"keys": {
 			"important_memory": "Recuerdo importante",
 			"emotional_wound": "Herida emocional",
@@ -68,16 +81,40 @@
 			"future_goal": "Meta a futuro"
 		}
 	},
+	"responsibility_cost": {
+		"title": "Responsabilidad / costo",
+		"tier": 85,
+		"keys": {
+			"main_responsibility": "Responsabilidad principal",
+			"people_depending_on_them": "Quién depende de este personaje",
+			"could_neglect_for_love": "Qué podría descuidar por amor",
+			"public_cost_of_bond": "Costo público del vínculo",
+			"private_cost_of_bond": "Costo privado del vínculo"
+		}
+	},
 	"romance": {
 		"title": "Romance",
-		"tier": 80,
+		"tier": 90,
 		"keys": {
 			"accepted_affection": "Gesto romántico aceptado",
 			"uncomfortable_gesture": "Gesto que incomoda",
 			"ideal_date": "Cita ideal",
 			"partner_expectation": "Qué espera de una pareja",
 			"emotional_fear": "Qué teme en una relación",
-			"romantic_desire": "Deseo romántico"
+			"romantic_desire": "Deseo romántico",
+			"commitment_style": "Forma de compromiso que entiende"
+		}
+	},
+	"emotional_shadow": {
+		"title": "Sombra emocional",
+		"tier": 95,
+		"keys": {
+			"harmful_pattern": "Patrón dañino bajo presión",
+			"self_lie": "Mentira que se cuenta",
+			"hurts_when_afraid": "Cómo hiere cuando tiene miedo",
+			"jealousy_reaction": "Reacción ante celos",
+			"abandonment_reaction": "Reacción ante abandono",
+			"breaking_point": "Punto de ruptura"
 		}
 	},
 	"final": {
@@ -86,7 +123,10 @@
 		"keys": {
 			"intimate_secret": "Secreto importante",
 			"emotional_truth": "Verdad emocional",
-			"partner_condition": "Condición para ser pareja"
+			"partner_condition": "Condición para ser pareja",
+			"final_union_condition": "Condición para unión final",
+			"cost_of_choosing_them": "Costo de elegirle",
+			"final_date_need": "Qué necesita escuchar en la cita final"
 		}
 	}
 }
