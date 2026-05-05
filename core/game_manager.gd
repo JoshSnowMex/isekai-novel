@@ -369,7 +369,7 @@ func get_info_candidates_by_strategy(npc_id: String, options: Dictionary = {}) -
 				return get_advanced_info_candidates(npc_id)
 			return get_missing_info_for_next_relationship_step(npc_id, max_tier)
 		_:
-			break
+			pass
 
 	var fallback: Array = []
 
