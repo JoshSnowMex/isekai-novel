@@ -30,11 +30,18 @@ func build_ui() -> void:
 	var action_label: Label = UIFactory.body("Acciones")
 	root.add_child(action_label)
 
+	var action_scroll: ScrollContainer = ScrollContainer.new()
+	action_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	root.add_child(action_scroll)
+
 	action_container = VBoxContainer.new()
 	action_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	action_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	action_container.add_theme_constant_override("separation", 10)
-	root.add_child(action_container)
+	action_scroll.add_child(action_container)
 
 	var npc_label: Label = UIFactory.body("Personas aquí")
 	root.add_child(npc_label)
@@ -98,11 +105,14 @@ func build_npcs() -> void:
 	for npc_id in DataManager.npcs.keys():
 		var npc: Dictionary = DataManager.get_npc(npc_id)
 		var time: String = GameManager.current_time_block
-		var schedule: Dictionary = npc.get("schedule", {})
+		var npc_location_id: String = ScheduleSystem.get_npc_location(npc_id)
 
-		if schedule.get(time, "") == current_location_id:
+		if npc_location_id == current_location_id:
 			GameManager.mark_npc_seen(npc_id)
-			GameManager.reveal_npc_schedule(npc_id, time)
+			GameManager.reveal_npc_schedule(npc_id, "%s:%s" % [
+				ScheduleSystem.get_day_type(),
+				time
+			])
 
 			var button: Button = UIFactory.button(npc.get("name", npc_id))
 			button.pressed.connect(func(): interact_npc(npc_id))
@@ -176,18 +186,20 @@ func interact_npc(npc_id: String) -> void:
 
 	if step_id != "":
 		var step: Dictionary = DataManager.get_relationship_step(step_id)
-		var special_button: Button = UIFactory.button("Cita especial: %s" % step.get("name", step_id))
 		var can_start_special: bool = RelationshipSystem.can_start_step(npc_id, step_id)
 
+		var special_button: Button = UIFactory.button("Avance de relación: %s" % step.get("name", step_id))
 		special_button.disabled = GameManager.is_day_exhausted() or not can_start_special
 		special_button.pressed.connect(func(): SceneRouter.go_to_date(npc_id, "", "special", step_id))
 		action_container.add_child(special_button)
 
-		if not can_start_special:
+		if can_start_special:
+			action_container.add_child(UIFactory.body("Puedes intentar avanzar la relación. Esta cita especial pondrá a prueba cuánto conoces realmente a %s." % npc.get("name", npc_id)))
+		else:
 			var reason: String = RelationshipSystem.get_blocked_reason(npc_id, step_id)
 
 			if reason != "":
-				action_container.add_child(UIFactory.body(reason))
+				action_container.add_child(UIFactory.body("Avance bloqueado:\n%s" % reason))
 	
 	var petition_button: Button = UIFactory.button("Pedir favor")
 	petition_button.disabled = GameManager.is_day_exhausted() or not PetitionSystem.has_any_available_petition(npc_id)

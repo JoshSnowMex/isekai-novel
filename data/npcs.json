@@ -5,20 +5,63 @@
 		"romanceable": true,
 		"description": "Reservada, elegante y difícil de impresionar. Sus silencios suelen decir más que sus palabras.",
 		"personality": "Callada, observadora y emocionalmente contenida. Le cuesta confiar, pero cuando lo hace, su intensidad puede ser abrumadora.",
-		"values": ["conocimiento", "discreción", "verdad", "autocontrol"],
-		"boundaries": ["No tolera invasiones bruscas a su intimidad.", "No traicionaría la biblioteca sin una razón emocional poderosa."],
+		"values": [
+			"conocimiento",
+			"discreción",
+			"verdad",
+			"autocontrol"
+		],
+		"boundaries": [
+			"No tolera invasiones bruscas a su intimidad.",
+			"No traicionaría la biblioteca sin una razón emocional poderosa."
+		],
 		"narrative_function": "Conserva información inicial sobre el Velo y puede ocultar registros prohibidos por el jugador.",
 		"romance_tone": "Lento, íntimo, cargado de silencios y tensión adulta contenida.",
 		"schedule": {
-			"morning": "library",
-			"afternoon": "library",
-			"night": "private_study"
+			"default": {
+				"morning": "library",
+				"afternoon": "library",
+				"night": "private_study"
+			},
+			"saturday": {
+				"morning": "archives",
+				"afternoon": "library",
+				"night": "private_study"
+			},
+			"sunday": {
+				"morning": "private_study",
+				"afternoon": "plaza",
+				"night": ""
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"relationship": {
+							"npc_id": "lyria",
+							"state": "dating"
+						}
+					},
+					"night": "library"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["ancient_books", "special_tea"],
-			"likes": ["blank_diaries", "flowers"],
-			"neutral": ["desserts", "simple_jewels"],
-			"hates": ["weapons", "wine"]
+			"loves": [
+				"ancient_books",
+				"special_tea"
+			],
+			"likes": [
+				"blank_diaries",
+				"flowers"
+			],
+			"neutral": [
+				"desserts",
+				"simple_jewels"
+			],
+			"hates": [
+				"weapons",
+				"wine"
+			]
 		},
 		"info": {
 			"favorite_place": "La sala antigua de la biblioteca",
@@ -47,20 +90,64 @@
 		"romanceable": true,
 		"description": "Una erudita del cielo que intenta mantenerse objetiva mientras sus emociones traicionan su vocación.",
 		"personality": "Calmada, analítica y empática. Evita involucrarse, pero sus silencios revelan más de lo que pretende.",
-		"values": ["conocimiento", "equilibrio", "responsabilidad", "verdad"],
-		"boundaries": ["No alteraría el Velo sin justificación mayor.", "No manipularía sentimientos conscientemente."],
+		"values": [
+			"conocimiento",
+			"equilibrio",
+			"responsabilidad",
+			"verdad"
+		],
+		"boundaries": [
+			"No alteraría el Velo sin justificación mayor.",
+			"No manipularía sentimientos conscientemente."
+		],
 		"narrative_function": "Revela verdades sobre el isekai, la profecía y los puntos de ruptura del Velo.",
 		"romance_tone": "Íntimo, emocional, tenso y melancólico.",
 		"schedule": {
-			"morning": "observatory",
-			"afternoon": "arcane_library",
-			"night": "private_study"
+			"default": {
+				"morning": "observatory",
+				"afternoon": "arcane_library",
+				"night": "private_study"
+			},
+			"saturday": {
+				"morning": "observatory",
+				"afternoon": "library",
+				"night": "observatory"
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "observatory",
+				"night": "observatory"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"world_flags": {
+							"has_all": [
+								"aeris_suspects_anchor"
+							]
+						}
+					},
+					"night": "observatory"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["ancient_books", "maps"],
-			"likes": ["special_tea", "blank_diaries"],
-			"neutral": ["desserts", "flowers"],
-			"hates": ["weapons", "wine"]
+			"loves": [
+				"ancient_books",
+				"maps"
+			],
+			"likes": [
+				"special_tea",
+				"blank_diaries"
+			],
+			"neutral": [
+				"desserts",
+				"flowers"
+			],
+			"hates": [
+				"weapons",
+				"wine"
+			]
 		},
 		"info": {
 			"favorite_place": "La terraza superior del Observatorio del Velo",
@@ -89,20 +176,63 @@
 		"romanceable": true,
 		"description": "Un observador elegante que disfruta provocar incluso al destino.",
 		"personality": "Encantador, irónico, verbalmente provocador y peligrosamente perceptivo.",
-		"values": ["curiosidad", "belleza", "ambigüedad", "verdades incómodas"],
-		"boundaries": ["No interviene directamente en el flujo del Velo.", "No soporta ser convertido en una respuesta simple."],
+		"values": [
+			"curiosidad",
+			"belleza",
+			"ambigüedad",
+			"verdades incómodas"
+		],
+		"boundaries": [
+			"No interviene directamente en el flujo del Velo.",
+			"No soporta ser convertido en una respuesta simple."
+		],
 		"narrative_function": "Ofrece atajos narrativos, versiones alternativas de hitos pasados y manipulación de consecuencias.",
 		"romance_tone": "Juego mental, coqueteo peligroso y tensión intelectual.",
 		"schedule": {
-			"morning": "archives",
-			"afternoon": "plaza",
-			"night": "private_study"
+			"default": {
+				"morning": "archives",
+				"afternoon": "plaza",
+				"night": "private_study"
+			},
+			"saturday": {
+				"morning": "archives",
+				"afternoon": "tavern",
+				"night": "plaza"
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "archives",
+				"night": "tavern"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"relationship": {
+							"npc_id": "eryon",
+							"state": "dating"
+						}
+					},
+					"night": "private_study"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["symbolic_art", "narrative_secrets"],
-			"likes": ["wine", "music_box"],
-			"neutral": ["simple_jewels", "flowers"],
-			"hates": ["sacred_objects", "weapons"]
+			"loves": [
+				"symbolic_art",
+				"narrative_secrets"
+			],
+			"likes": [
+				"wine",
+				"music_box"
+			],
+			"neutral": [
+				"simple_jewels",
+				"flowers"
+			],
+			"hates": [
+				"sacred_objects",
+				"weapons"
+			]
 		},
 		"info": {
 			"favorite_place": "El corredor inferior de los Archivos del Velo",
@@ -131,20 +261,66 @@
 		"romanceable": true,
 		"description": "Fuerza, risa y miedo a perder a quienes ama.",
 		"personality": "Directa, intensa, apasionada y protectora. Vive como si detenerse fuera una forma de rendirse.",
-		"values": ["lealtad", "honestidad", "acción", "protección"],
-		"boundaries": ["No perdona traiciones prolongadas.", "No tolera que usen su afecto como arma."],
+		"values": [
+			"lealtad",
+			"honestidad",
+			"acción",
+			"protección"
+		],
+		"boundaries": [
+			"No perdona traiciones prolongadas.",
+			"No tolera que usen su afecto como arma."
+		],
 		"narrative_function": "Resuelve hitos mediante riesgo, fuerza y decisiones impulsivas con consecuencias reales.",
 		"romance_tone": "Pasional, físico, protector y frontal.",
 		"schedule": {
-			"morning": "guild",
-			"afternoon": "market",
-			"night": "tavern"
+			"default": {
+				"morning": "guild",
+				"afternoon": "market",
+				"night": "tavern"
+			},
+			"saturday": {
+				"morning": "guild",
+				"afternoon": "forest",
+				"night": "tavern"
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "plaza",
+				"night": "tavern"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"world_flags": {
+							"has_all": [
+								"village_security_weakened"
+							]
+						}
+					},
+					"morning": "guild",
+					"afternoon": "guild",
+					"night": "guild"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["weapons", "trophies"],
-			"likes": ["wine", "clothes"],
-			"neutral": ["desserts", "coins"],
-			"hates": ["flowers", "simple_jewels"]
+			"loves": [
+				"weapons",
+				"trophies"
+			],
+			"likes": [
+				"wine",
+				"clothes"
+			],
+			"neutral": [
+				"desserts",
+				"coins"
+			],
+			"hates": [
+				"flowers",
+				"simple_jewels"
+			]
 		},
 		"info": {
 			"favorite_place": "La mesa del fondo de la taberna",
@@ -173,20 +349,64 @@
 		"romanceable": true,
 		"description": "Sarcasmo afilado ocultando fracturas profundas.",
 		"personality": "Ingeniosa, desafiante, divertida y vulnerable cuando nadie espera que lo sea.",
-		"values": ["libertad", "creatividad", "autoexpresión", "irreverencia"],
-		"boundaries": ["No tolera control ni idealización.", "No acepta que la traten como proyecto a reparar."],
+		"values": [
+			"libertad",
+			"creatividad",
+			"autoexpresión",
+			"irreverencia"
+		],
+		"boundaries": [
+			"No tolera control ni idealización.",
+			"No acepta que la traten como proyecto a reparar."
+		],
 		"narrative_function": "Rompe reglas del mundo, altera sistemas y descubre grietas prácticas en la realidad.",
 		"romance_tone": "Travieso, intenso, caótico y emocionalmente más frágil de lo que admite.",
 		"schedule": {
-			"morning": "workshop",
-			"afternoon": "workshop",
-			"night": "plaza"
+			"default": {
+				"morning": "workshop",
+				"afternoon": "workshop",
+				"night": "plaza"
+			},
+			"saturday": {
+				"morning": "workshop",
+				"afternoon": "market",
+				"night": "tavern"
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "workshop",
+				"night": "plaza"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"world_flags": {
+							"has_all": [
+								"unstable_prototype_awakened"
+							]
+						}
+					},
+					"night": "workshop"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["gadgets", "tech_prototypes"],
-			"likes": ["music_box", "sweets"],
-			"neutral": ["coins", "mana_gems"],
-			"hates": ["sacred_objects", "flowers"]
+			"loves": [
+				"gadgets",
+				"tech_prototypes"
+			],
+			"likes": [
+				"music_box",
+				"sweets"
+			],
+			"neutral": [
+				"coins",
+				"mana_gems"
+			],
+			"hates": [
+				"sacred_objects",
+				"flowers"
+			]
 		},
 		"info": {
 			"favorite_place": "El rincón más desordenado del taller",
@@ -215,20 +435,63 @@
 		"romanceable": true,
 		"description": "Una mujer de fe impecable cuyo deseo empieza a rezar en voz baja.",
 		"personality": "Serena, compasiva, disciplinada y atravesada por culpas que no siempre le pertenecen.",
-		"values": ["fe", "sacrificio", "pureza", "protección"],
-		"boundaries": ["No profanaría un juramento sin una razón que le rompa el alma.", "Detesta que conviertan su culpa en juego."],
+		"values": [
+			"fe",
+			"sacrificio",
+			"pureza",
+			"protección"
+		],
+		"boundaries": [
+			"No profanaría un juramento sin una razón que le rompa el alma.",
+			"Detesta que conviertan su culpa en juego."
+		],
 		"narrative_function": "Da acceso espiritual al Velo y permite comprender sus costos sagrados.",
 		"romance_tone": "Culposo, intenso, prohibido y lleno de contención.",
 		"schedule": {
-			"morning": "sanctuary",
-			"afternoon": "sanctuary",
-			"night": "library"
+			"default": {
+				"morning": "sanctuary",
+				"afternoon": "sanctuary",
+				"night": "library"
+			},
+			"saturday": {
+				"morning": "sanctuary",
+				"afternoon": "plaza",
+				"night": "sanctuary"
+			},
+			"sunday": {
+				"morning": "sanctuary",
+				"afternoon": "sanctuary",
+				"night": ""
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"relationship": {
+							"npc_id": "seraphine",
+							"state": "lovers"
+						}
+					},
+					"night": "library"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["sacred_objects", "flowers"],
-			"likes": ["special_tea", "blank_diaries"],
-			"neutral": ["desserts", "music_box"],
-			"hates": ["wine", "weapons"]
+			"loves": [
+				"sacred_objects",
+				"flowers"
+			],
+			"likes": [
+				"special_tea",
+				"blank_diaries"
+			],
+			"neutral": [
+				"desserts",
+				"music_box"
+			],
+			"hates": [
+				"wine",
+				"weapons"
+			]
 		},
 		"info": {
 			"favorite_place": "La capilla lateral donde nadie la interrumpe",
@@ -257,20 +520,63 @@
 		"romanceable": true,
 		"description": "Un superviviente cansado que aprendió a quedarse solo antes de que alguien pudiera abandonarlo.",
 		"personality": "Seco, observador, protector en silencio y más tierno de lo que sus cicatrices permiten sospechar.",
-		"values": ["supervivencia", "deuda", "honor práctico", "silencio"],
-		"boundaries": ["No perdona promesas hechas a la ligera.", "No mata por capricho romántico."],
+		"values": [
+			"supervivencia",
+			"deuda",
+			"honor práctico",
+			"silencio"
+		],
+		"boundaries": [
+			"No perdona promesas hechas a la ligera.",
+			"No mata por capricho romántico."
+		],
 		"narrative_function": "Permite resolver hitos con sacrificios violentos o protección extrema.",
 		"romance_tone": "Íntimo, silencioso, áspero y profundamente leal cuando se rompe su defensa.",
 		"schedule": {
-			"morning": "guild",
-			"afternoon": "forest",
-			"night": "tavern"
+			"default": {
+				"morning": "guild",
+				"afternoon": "forest",
+				"night": "tavern"
+			},
+			"saturday": {
+				"morning": "forest",
+				"afternoon": "guild",
+				"night": "tavern"
+			},
+			"sunday": {
+				"morning": "forest",
+				"afternoon": "",
+				"night": "tavern"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"relationship": {
+							"npc_id": "kael",
+							"state": "dating"
+						}
+					},
+					"night": "forest"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["weapons", "maps"],
-			"likes": ["wine", "trophies"],
-			"neutral": ["coins", "clothes"],
-			"hates": ["simple_jewels", "flowers"]
+			"loves": [
+				"weapons",
+				"maps"
+			],
+			"likes": [
+				"wine",
+				"trophies"
+			],
+			"neutral": [
+				"coins",
+				"clothes"
+			],
+			"hates": [
+				"simple_jewels",
+				"flowers"
+			]
 		},
 		"info": {
 			"favorite_place": "El borde del bosque, donde puede ver venir a cualquiera",
@@ -299,20 +605,63 @@
 		"romanceable": true,
 		"description": "Una presencia cambiante, brillante e incómodamente honesta sobre el deseo de ser vista sin ser definida.",
 		"personality": "Curiose, sensual, experimental y profundamente sensible a cualquier intento de encasillamiento.",
-		"values": ["transformación", "libertad", "autenticidad", "juego"],
-		"boundaries": ["Detesta la tradición usada como jaula.", "No acepta ser tratado como rareza exótica."],
+		"values": [
+			"transformación",
+			"libertad",
+			"autenticidad",
+			"juego"
+		],
+		"boundaries": [
+			"Detesta la tradición usada como jaula.",
+			"No acepta ser tratado como rareza exótica."
+		],
 		"narrative_function": "Altera leyes físicas y emocionales, desbloqueando consecuencias extrañas.",
 		"romance_tone": "Exploratorio, ambiguo, íntimo y desafiante.",
 		"schedule": {
-			"morning": "workshop",
-			"afternoon": "plaza",
-			"night": "threshold"
+			"default": {
+				"morning": "workshop",
+				"afternoon": "plaza",
+				"night": "threshold"
+			},
+			"saturday": {
+				"morning": "market",
+				"afternoon": "workshop",
+				"night": "threshold"
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "forest",
+				"night": "threshold"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"relationship": {
+							"npc_id": "myr",
+							"state": "lovers"
+						}
+					},
+					"night": "workshop"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["tech_prototypes", "mana_gems"],
-			"likes": ["gadgets", "symbolic_art"],
-			"neutral": ["sweets", "flowers"],
-			"hates": ["sacred_objects", "clothes"]
+			"loves": [
+				"tech_prototypes",
+				"mana_gems"
+			],
+			"likes": [
+				"gadgets",
+				"symbolic_art"
+			],
+			"neutral": [
+				"sweets",
+				"flowers"
+			],
+			"hates": [
+				"sacred_objects",
+				"clothes"
+			]
 		},
 		"info": {
 			"favorite_place": "La mesa alquímica donde nada conserva la misma forma mucho tiempo",
@@ -341,20 +690,64 @@
 		"romanceable": true,
 		"description": "Una existencia no humana que mira el amor como si fuera una forma hermosa de desaparecer.",
 		"personality": "Serene, extrañe, literal a veces y devastadoramente vulnerable cuando intenta comprender el deseo.",
-		"values": ["existencia", "verdad esencial", "elección", "permanencia imposible"],
-		"boundaries": ["No comprende la posesión.", "No puede amar sin alterar algo fundamental."],
+		"values": [
+			"existencia",
+			"verdad esencial",
+			"elección",
+			"permanencia imposible"
+		],
+		"boundaries": [
+			"No comprende la posesión.",
+			"No puede amar sin alterar algo fundamental."
+		],
 		"narrative_function": "Determina finales existenciales y revela la naturaleza profunda del Umbral.",
 		"romance_tone": "Metafísico, extraño, tierno y peligrosamente absoluto.",
 		"schedule": {
-			"morning": "threshold",
-			"afternoon": "observatory",
-			"night": "threshold"
+			"default": {
+				"morning": "threshold",
+				"afternoon": "observatory",
+				"night": "threshold"
+			},
+			"saturday": {
+				"morning": "threshold",
+				"afternoon": "",
+				"night": "threshold"
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "threshold",
+				"night": "threshold"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"relationship": {
+							"npc_id": "axiom",
+							"state": "partner"
+						}
+					},
+					"afternoon": "threshold",
+					"night": "threshold"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["narrative_secrets", "mana_gems"],
-			"likes": ["maps", "symbolic_art"],
-			"neutral": ["flowers", "blank_diaries"],
-			"hates": ["weapons", "coins"]
+			"loves": [
+				"narrative_secrets",
+				"mana_gems"
+			],
+			"likes": [
+				"maps",
+				"symbolic_art"
+			],
+			"neutral": [
+				"flowers",
+				"blank_diaries"
+			],
+			"hates": [
+				"weapons",
+				"coins"
+			]
 		},
 		"info": {
 			"favorite_place": "El punto exacto donde el mundo deja de tener borde",
@@ -383,20 +776,65 @@
 		"romanceable": true,
 		"description": "Un líder práctico que aprendió a convertir el afecto en disciplina antes de que alguien lo usara en su contra.",
 		"personality": "Autoritario, justo, cansado y secretamente hambriento de ternura no negociada.",
-		"values": ["orden", "responsabilidad", "protección", "reputación"],
-		"boundaries": ["No pondría al gremio en peligro por un capricho.", "No tolera manipulación política disfrazada de romance."],
+		"values": [
+			"orden",
+			"responsabilidad",
+			"protección",
+			"reputación"
+		],
+		"boundaries": [
+			"No pondría al gremio en peligro por un capricho.",
+			"No tolera manipulación política disfrazada de romance."
+		],
 		"narrative_function": "Control político, permisos del gremio, consecuencias públicas y acceso a contratos importantes.",
 		"romance_tone": "Maduro, contenido, con tensión de poder y vulnerabilidad privada.",
 		"schedule": {
-			"morning": "guild",
-			"afternoon": "council_hall",
-			"night": "tavern"
+			"default": {
+				"morning": "guild",
+				"afternoon": "council_hall",
+				"night": "tavern"
+			},
+			"saturday": {
+				"morning": "guild",
+				"afternoon": "guild",
+				"night": ""
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "council_hall",
+				"night": "tavern"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"world_flags": {
+							"has_all": [
+								"guild_order_weakened"
+							]
+						}
+					},
+					"morning": "guild",
+					"afternoon": "guild"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["maps", "weapons"],
-			"likes": ["wine", "ancient_books"],
-			"neutral": ["coins", "clothes"],
-			"hates": ["gadgets", "sweets"]
+			"loves": [
+				"maps",
+				"weapons"
+			],
+			"likes": [
+				"wine",
+				"ancient_books"
+			],
+			"neutral": [
+				"coins",
+				"clothes"
+			],
+			"hates": [
+				"gadgets",
+				"sweets"
+			]
 		},
 		"info": {
 			"favorite_place": "El balcón del gremio después de cerrar contratos",
@@ -425,20 +863,65 @@
 		"romanceable": true,
 		"description": "Una confidente peligrosa que sirve bebidas, rumores y verdades con la misma sonrisa.",
 		"personality": "Cálida, astuta, sensual, protectora y más peligrosa cuando parece relajada.",
-		"values": ["confianza", "placer", "información", "cuidado práctico"],
-		"boundaries": ["No perdona que usen sus secretos contra inocentes.", "No compite por amor; observa y decide."],
+		"values": [
+			"confianza",
+			"placer",
+			"información",
+			"cuidado práctico"
+		],
+		"boundaries": [
+			"No perdona que usen sus secretos contra inocentes.",
+			"No compite por amor; observa y decide."
+		],
 		"narrative_function": "Rumores, celos, información social y consecuencias que llegan antes de parecer oficiales.",
 		"romance_tone": "Cercano, coqueto, adulto, con ternura y filo.",
 		"schedule": {
-			"morning": "market",
-			"afternoon": "tavern",
-			"night": "tavern"
+			"default": {
+				"morning": "market",
+				"afternoon": "plaza",
+				"night": "tavern"
+			},
+			"saturday": {
+				"morning": "market",
+				"afternoon": "tavern",
+				"night": "tavern"
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "plaza",
+				"night": "tavern"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"world_state": {
+							"romantic_pressure": {
+								"min": 20
+							}
+						}
+					},
+					"afternoon": "plaza",
+					"night": "tavern"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["wine", "music_box"],
-			"likes": ["flowers", "desserts"],
-			"neutral": ["coins", "simple_jewels"],
-			"hates": ["weapons", "sacred_objects"]
+			"loves": [
+				"wine",
+				"music_box"
+			],
+			"likes": [
+				"flowers",
+				"desserts"
+			],
+			"neutral": [
+				"coins",
+				"simple_jewels"
+			],
+			"hates": [
+				"weapons",
+				"sacred_objects"
+			]
 		},
 		"info": {
 			"favorite_place": "La barra cuando la taberna ya cerró",
@@ -467,20 +950,64 @@
 		"romanceable": true,
 		"description": "Un hombre marcado por una naturaleza herida que parece confiar más en árboles rotos que en personas enteras.",
 		"personality": "Paciente, melancólico, territorial y dulce cuando baja la defensa.",
-		"values": ["naturaleza", "paciencia", "reciprocidad", "silencio"],
-		"boundaries": ["No permitirá dañar el bosque por ambición.", "No soporta promesas que ignoran el costo de sanar."],
+		"values": [
+			"naturaleza",
+			"paciencia",
+			"reciprocidad",
+			"silencio"
+		],
+		"boundaries": [
+			"No permitirá dañar el bosque por ambición.",
+			"No soporta promesas que ignoran el costo de sanar."
+		],
 		"narrative_function": "Rutas naturales, secretos del bosque, consecuencias ambientales y sanación lenta.",
 		"romance_tone": "Lento, sensorial, melancólico y profundamente protector.",
 		"schedule": {
-			"morning": "forest",
-			"afternoon": "forest",
-			"night": "sanctuary"
+			"default": {
+				"morning": "forest",
+				"afternoon": "forest",
+				"night": "sanctuary"
+			},
+			"saturday": {
+				"morning": "forest",
+				"afternoon": "plaza",
+				"night": "forest"
+			},
+			"sunday": {
+				"morning": "forest",
+				"afternoon": "",
+				"night": "threshold"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"world_state": {
+							"world_instability": {
+								"min": 20
+							}
+						}
+					},
+					"night": "forest"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["flowers", "maps"],
-			"likes": ["special_tea", "sacred_objects"],
-			"neutral": ["desserts", "clothes"],
-			"hates": ["weapons", "tech_prototypes"]
+			"loves": [
+				"flowers",
+				"maps"
+			],
+			"likes": [
+				"special_tea",
+				"sacred_objects"
+			],
+			"neutral": [
+				"desserts",
+				"clothes"
+			],
+			"hates": [
+				"weapons",
+				"tech_prototypes"
+			]
 		},
 		"info": {
 			"favorite_place": "Un claro donde los árboles crecieron torcidos pero vivos",
@@ -509,20 +1036,65 @@
 		"romanceable": true,
 		"description": "Una observadora de voz suave que llega siempre antes de que una consecuencia tenga nombre.",
 		"personality": "Discreta, precisa, elegante y emocionalmente más implicada de lo que permite su cargo.",
-		"values": ["prudencia", "memoria", "deber", "claridad"],
-		"boundaries": ["No falsificaría un mensaje oficial sin una razón extrema.", "No tolera que confundan calma con falta de deseo."],
+		"values": [
+			"prudencia",
+			"memoria",
+			"deber",
+			"claridad"
+		],
+		"boundaries": [
+			"No falsificaría un mensaje oficial sin una razón extrema.",
+			"No tolera que confundan calma con falta de deseo."
+		],
 		"narrative_function": "Consecuencias retardadas, mensajes del consejo, advertencias y rutas políticas.",
 		"romance_tone": "Sutil, reservado, lleno de espera y tensión bajo control.",
 		"schedule": {
-			"morning": "council_hall",
-			"afternoon": "plaza",
-			"night": "archives"
+			"default": {
+				"morning": "council_hall",
+				"afternoon": "plaza",
+				"night": "library"
+			},
+			"saturday": {
+				"morning": "council_hall",
+				"afternoon": "market",
+				"night": ""
+			},
+			"sunday": {
+				"morning": "",
+				"afternoon": "sanctuary",
+				"night": "council_hall"
+			},
+			"conditions": [
+				{
+					"conditions": {
+						"world_flags": {
+							"has_all": [
+								"council_is_watching"
+							]
+						}
+					},
+					"afternoon": "council_hall",
+					"night": "council_hall"
+				}
+			]
 		},
 		"gift_preferences": {
-			"loves": ["blank_diaries", "simple_jewels"],
-			"likes": ["special_tea", "maps"],
-			"neutral": ["flowers", "desserts"],
-			"hates": ["wine", "weapons"]
+			"loves": [
+				"blank_diaries",
+				"simple_jewels"
+			],
+			"likes": [
+				"special_tea",
+				"maps"
+			],
+			"neutral": [
+				"flowers",
+				"desserts"
+			],
+			"hates": [
+				"wine",
+				"weapons"
+			]
 		},
 		"info": {
 			"favorite_place": "La escalinata del consejo cuando queda vacía",

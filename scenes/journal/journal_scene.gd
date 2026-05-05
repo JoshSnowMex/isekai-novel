@@ -187,7 +187,10 @@ func show_npc_detail(npc_id: String) -> void:
 		for item_id in known_gifts:
 			var item: Dictionary = DataManager.get_item(str(item_id))
 			text += "- %s\n" % item.get("name", item_id)
-
+	
+	text += "\nHorarios conocidos:\n"
+	text += build_known_schedule_text(npc_id)
+	
 	text += "\nColeccionables:\n"
 
 	var date_memories: Array = collectibles.get("date_memories", [])
@@ -263,6 +266,71 @@ func build_progression_text(npc_id: String) -> String:
 
 	return text
 
+func build_known_schedule_text(npc_id: String) -> String:
+	GameManager.ensure_npc_knowledge(npc_id)
+
+	var knowledge: Dictionary = GameManager.player["known_npc_info"].get(npc_id, {})
+	var known_schedule: Array = knowledge.get("schedule", [])
+
+	for old_key in ["morning", "afternoon", "night"]:
+		if known_schedule.has(old_key):
+			var migrated_key: String = "weekday:%s" % old_key
+
+			if not known_schedule.has(migrated_key):
+				known_schedule.append(migrated_key)
+
+	if known_schedule.is_empty():
+		return "- No has registrado horarios todavía.\n"
+
+	var text: String = ""
+
+	var day_types: Array = ["weekday", "saturday", "sunday"]
+	var time_blocks: Array = ["morning", "afternoon", "night"]
+
+	for day_type in day_types:
+		var day_text: String = ""
+		var day_has_info: bool = false
+
+		for time_block in time_blocks:
+			var key: String = "%s:%s" % [day_type, time_block]
+
+			if not known_schedule.has(key):
+				continue
+
+			var location_id: String = ScheduleSystem.get_schedule_location_for(npc_id, day_type, time_block)
+
+			if location_id == "":
+				continue
+
+			var location: Dictionary = DataManager.get_location(location_id)
+
+			day_text += "- %s: %s\n" % [
+				ScheduleSystem.get_time_block_label(time_block),
+				location.get("name", location_id)
+			]
+
+			day_has_info = true
+
+		if day_has_info:
+			text += "%s:\n" % get_day_type_label(day_type)
+			text += day_text
+
+	if text == "":
+		return "- Has visto a este personaje, pero todavía no tienes una rutina clara.\n"
+
+	return text
+
+func get_day_type_label(day_type: String) -> String:
+	match day_type:
+		"weekday":
+			return "Lunes a viernes"
+		"saturday":
+			return "Sábado"
+		"sunday":
+			return "Domingo"
+		_:
+			return day_type
+			
 func clear_container(container: VBoxContainer) -> void:
 	for child in container.get_children():
 		child.queue_free()

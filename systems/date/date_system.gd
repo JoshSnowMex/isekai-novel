@@ -223,7 +223,7 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 			"Una cita incómoda en %s dejó una distancia temporal." % date_location.get("name", date_location_id)
 		)
 
-		summary = "La cita termina con una sensación incómoda.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nAmistad -4\nTensión -5\nCelos +4%s" % [
+		summary = "La cita termina con una sensación incómoda.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nAmistad -4\nTensión -5\nLealtad -2%s" % [
 			date_location.get("name", date_location_id),
 			progress,
 			mistakes,
@@ -253,13 +253,14 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 	var reveal_text: String = reveal_date_reward_info(npc_id, success_level)
 	var collectible_text: String = grant_date_collectible(npc_id, date_location_id)
 	var successful_date_text: String = register_successful_date(npc_id, date_location_id, success_level)
-
+	var rivalry_text: String = process_successful_date_rivalries(npc_id, success_level)
+	
 	GameManager.add_npc_note(
 		npc_id,
 		"La cita en %s dejó una memoria difícil de ignorar." % date_location.get("name", date_location_id)
 	)
 
-	summary = "La cita fue %s.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nRecompensas aplicadas:%s%s%s%s" % [
+	summary = "La cita fue %s.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nRecompensas aplicadas:%s%s%s%s%s" % [
 		get_success_label(success_level),
 		date_location.get("name", date_location_id),
 		progress,
@@ -267,7 +268,8 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 		format_reward_text(rewards),
 		reveal_text,
 		collectible_text,
-		successful_date_text
+		successful_date_text,
+		rivalry_text
 	]
 
 	if reward_text != "":
@@ -378,5 +380,45 @@ func format_reward_text(rewards: Dictionary) -> String:
 				label = "Celos"
 
 		text += "\n- %s %+d" % [label, int(rewards[key])]
+
+	return text
+
+func process_successful_date_rivalries(npc_id: String, success_level: String) -> String:
+	var rivalry_amount: int = 0
+
+	match success_level:
+		"success":
+			rivalry_amount = 5
+		"excellent":
+			rivalry_amount = 8
+		"perfect":
+			rivalry_amount = 12
+		_:
+			rivalry_amount = 0
+
+	if rivalry_amount <= 0:
+		return ""
+
+	var rivalry_results: Array = RivalrySystem.process_affinity_change(npc_id, rivalry_amount)
+
+	if rivalry_results.is_empty():
+		return ""
+
+	var text: String = ""
+
+	for result in rivalry_results:
+		var affected_npc_id: String = result.get("affected_npc_id", "")
+		var affected_npc: Dictionary = DataManager.get_npc(affected_npc_id)
+		var penalty: int = int(result.get("penalty", 0))
+
+		if affected_npc_id == "":
+			continue
+
+		GameManager.add_relationship_value(affected_npc_id, "jealousy", penalty)
+
+		text += "\n%s parece haber notado lo bien que fue la cita. Celos +%s" % [
+			affected_npc.get("name", affected_npc_id),
+			penalty
+		]
 
 	return text

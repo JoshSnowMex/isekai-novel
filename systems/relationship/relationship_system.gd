@@ -86,14 +86,14 @@ func get_blocked_reason(npc_id: String, step_id: String) -> String:
 
 	if step.get("required_successful_date", false):
 		if not GameManager.has_world_flag("successful_date:%s" % npc_id):
-			return "Necesitas tener primero una cita normal exitosa con este personaje."
+			return "Necesitas tener primero una cita normal exitosa con este personaje. Una cita fallida no cuenta para avanzar la relación."
 
 	var required_tier: int = int(step.get("required_info_tier", 0))
 	var required_count: int = int(step.get("required_known_info_count", 0))
 	var known_count: int = get_known_info_count_for_tier(npc_id, required_tier)
 
 	if required_tier > 0 and required_count > 0 and known_count < required_count:
-		return "Necesitas conocer más información del tier %s. Conoces %s/%s." % [
+		return "Necesitas conocer más información personal de nivel %s. Conoces %s/%s. Hablar, tener citas exitosas y dar regalos adecuados puede revelar información nueva." % [
 			required_tier,
 			known_count,
 			required_count
