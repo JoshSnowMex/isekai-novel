@@ -26,10 +26,18 @@ func build_ui() -> void:
 	left_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	main.add_child(left_panel)
 
+	var text_scroll: ScrollContainer = ScrollContainer.new()
+	text_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	text_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	text_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	left_panel.add_child(text_scroll)
+
 	text_label = UIFactory.body()
 	text_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	left_panel.add_child(text_label)
+	text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text_scroll.add_child(text_label)
 
 	var right_panel: VBoxContainer = VBoxContainer.new()
 	right_panel.custom_minimum_size = Vector2(360, 1)

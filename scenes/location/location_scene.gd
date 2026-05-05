@@ -172,15 +172,13 @@ func interact_npc(npc_id: String) -> void:
 	gift_button.pressed.connect(func(): show_gift_selection(npc_id))
 	action_container.add_child(gift_button)
 
-	var date_button: Button = UIFactory.button("Invitar a cita")
 	var can_date: bool = GameManager.can_invite_to_date(npc_id)
-	date_button.disabled = GameManager.is_day_exhausted() or not can_date
-	date_button.pressed.connect(func(): show_date_location_selection(npc_id))
-	action_container.add_child(date_button)
 
-	if not can_date:
-		var hint_label: Label = UIFactory.body(GameManager.get_date_blocked_reason(npc_id))
-		action_container.add_child(hint_label)
+	if can_date:
+		var date_button: Button = UIFactory.button("Invitar a cita")
+		date_button.disabled = GameManager.is_day_exhausted()
+		date_button.pressed.connect(func(): show_date_location_selection(npc_id))
+		action_container.add_child(date_button)
 	
 	var step_id: String = RelationshipSystem.get_next_step_id(npc_id)
 
@@ -459,7 +457,7 @@ func show_date_location_selection(npc_id: String) -> void:
 	action_container.add_child(UIFactory.title("Invitar a cita a %s" % npc.get("name", npc_id)))
 
 	if available_locations.is_empty():
-		description_label.text = "Aún no hay suficiente cercanía para proponer una cita."
+		description_label.text = "Hay intención de invitarle, pero todavía no tienes un lugar adecuado para esta cita. Mejora el vínculo, descubre más información o prueba en otro momento."
 	else:
 		description_label.text = "Elige un lugar. El ambiente puede cambiarlo todo."
 

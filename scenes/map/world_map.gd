@@ -52,10 +52,18 @@ func build_ui() -> void:
 	right_panel.add_theme_constant_override("separation", 10)
 	main.add_child(right_panel)
 
+	var info_scroll: ScrollContainer = ScrollContainer.new()
+	info_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	info_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	info_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	right_panel.add_child(info_scroll)
+
 	info_label = UIFactory.body("Selecciona una ubicación.")
 	info_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	info_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	right_panel.add_child(info_label)
+	info_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info_scroll.add_child(info_label)
 
 	var journal_button: Button = UIFactory.button("Bitácora")
 	journal_button.pressed.connect(func(): SceneRouter.go_to_journal())
