@@ -339,20 +339,18 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 		"La cita en %s dejó una memoria difícil de ignorar." % date_location.get("name", date_location_id)
 	)
 
-	summary = "La cita fue %s.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nRecompensas aplicadas:%s%s%s%s%s" % [
+	summary = "La cita fue %s.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nRecompensas aplicadas:%s%s%s%s%s%s" % [
 		get_success_label(success_level),
 		date_location.get("name", date_location_id),
 		progress,
 		mistakes,
-		format_reward_text(rewards),
+		format_reward_text(resolved_rewards),
+		location_bonus_text,
 		reveal_text,
 		collectible_text,
 		successful_date_text,
 		rivalry_text
 	]
-
-	if reward_text != "":
-		summary += reward_text
 
 	return {
 		"success": true,
@@ -463,22 +461,11 @@ func format_reward_text(rewards: Dictionary) -> String:
 	var text: String = ""
 
 	for key in rewards.keys():
-		var label: String = key
-
-		match key:
-			"friendship":
-				label = "Amistad"
-			"tension":
-				label = "Tensión"
-			"loyalty":
-				label = "Lealtad"
-			"jealousy":
-				label = "Celos"
-
+		var label: String = get_relationship_key_label(str(key))
 		text += "\n- %s %+d" % [label, int(rewards[key])]
 
 	return text
-
+	
 func process_successful_date_rivalries(npc_id: String, success_level: String) -> String:
 	var rivalry_amount: int = 0
 
