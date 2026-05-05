@@ -1,45 +1,92 @@
 {
-	"profile": {
-		"title": "Perfil",
+	"basic": {
+		"title": "Básico",
+		"tier": 20,
 		"keys": {
+			"birthday": "Cumpleaños",
+			"age": "Edad",
+			"occupation": "Ocupación",
 			"favorite_place": "Lugar favorito",
-			"hobby": "Hobby",
-			"favorite_color": "Color favorito",
-			"favorite_food": "Comida favorita"
+			"favorite_food": "Comida favorita",
+			"favorite_drink": "Bebida favorita"
 		}
 	},
-	"closeness": {
-		"title": "Cercanía",
+	"likes": {
+		"title": "Gustos",
+		"tier": 30,
+		"keys": {
+			"loved_gifts": "Regalos amados",
+			"liked_gifts": "Regalos gustados",
+			"neutral_gifts": "Regalos neutrales",
+			"hated_gifts": "Regalos odiados",
+			"favorite_color": "Color favorito",
+			"hobby": "Hobby",
+			"favorite_music": "Música favorita"
+		}
+	},
+	"personality": {
+		"title": "Personalidad",
+		"tier": 40,
+		"keys": {
+			"temperament": "Temperamento",
+			"annoyance": "Qué le molesta",
+			"soothing": "Qué le tranquiliza",
+			"admiration": "Qué admira en otros",
+			"affection_expression": "Cómo expresa afecto"
+		}
+	},
+	"contact": {
+		"title": "Contacto",
+		"tier": 50,
 		"keys": {
 			"phone": "Contacto",
-			"routine": "Rutina",
-			"light_romantic_preference": "Gusto romántico ligero",
-			"annoyance": "Qué le molesta"
+			"preferred_call_time": "Horario preferido para llamadas",
+			"favorite_call_topic": "Tema favorito por llamada",
+			"bad_call_reaction": "Respuesta si llamas en mal momento"
 		}
 	},
-	"trust": {
-		"title": "Confianza",
+	"personal_profile": {
+		"title": "Íntimo / perfil personal",
+		"tier": 60,
 		"keys": {
 			"height": "Altura",
-			"favorite_style": "Estilo favorito",
-			"minor_insecurity": "Inseguridad menor",
-			"accepted_affection": "Gesto afectivo aceptado"
-		}
-	},
-	"intimacy": {
-		"title": "Intimidad emocional",
-		"keys": {
 			"measurements": "Medidas",
-			"emotional_fear": "Miedo emocional",
-			"romantic_desire": "Deseo romántico",
-			"ideal_date": "Cita ideal"
+			"favorite_style": "Estilo de ropa favorito",
+			"proud_physical_trait": "Rasgo físico del que se siente orgullo",
+			"minor_insecurity": "Inseguridad personal",
+			"romantic_boundary": "Límite romántico"
 		}
 	},
-	"bond": {
-		"title": "Vínculo profundo",
+	"history": {
+		"title": "Historia",
+		"tier": 70,
 		"keys": {
-			"intimate_secret": "Secreto íntimo",
-			"partner_condition": "Condición de relación"
+			"important_memory": "Recuerdo importante",
+			"emotional_wound": "Herida emocional",
+			"personal_dream": "Sueño personal",
+			"family_relationship": "Relación familiar",
+			"future_goal": "Meta a futuro"
+		}
+	},
+	"romance": {
+		"title": "Romance",
+		"tier": 80,
+		"keys": {
+			"accepted_affection": "Gesto romántico aceptado",
+			"uncomfortable_gesture": "Gesto que incomoda",
+			"ideal_date": "Cita ideal",
+			"partner_expectation": "Qué espera de una pareja",
+			"emotional_fear": "Qué teme en una relación",
+			"romantic_desire": "Deseo romántico"
+		}
+	},
+	"final": {
+		"title": "Final",
+		"tier": 100,
+		"keys": {
+			"intimate_secret": "Secreto importante",
+			"emotional_truth": "Verdad emocional",
+			"partner_condition": "Condición para ser pareja"
 		}
 	}
 }

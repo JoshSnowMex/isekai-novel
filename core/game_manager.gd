@@ -688,53 +688,12 @@ func get_collectibles() -> Array:
 	return player["collectibles"]
 
 func get_info_tier(info_key: String) -> int:
-	var tier_20: Array = [
-		"favorite_place",
-		"hobby",
-		"favorite_color",
-		"favorite_food"
-	]
+	for section_id in DataManager.npc_info_schema.keys():
+		var section: Dictionary = DataManager.npc_info_schema[section_id]
+		var keys: Dictionary = section.get("keys", {})
 
-	var tier_40: Array = [
-		"phone",
-		"routine",
-		"light_romantic_preference",
-		"dislikes"
-	]
-
-	var tier_60: Array = [
-		"height",
-		"favorite_style",
-		"minor_insecurity",
-		"accepted_affectionate_gesture"
-	]
-
-	var tier_80: Array = [
-		"measurements",
-		"emotional_fear",
-		"romantic_desire",
-		"ideal_date"
-	]
-
-	var tier_100: Array = [
-		"intimate_secret",
-		"partner_condition"
-	]
-
-	if tier_20.has(info_key):
-		return 20
-
-	if tier_40.has(info_key):
-		return 40
-
-	if tier_60.has(info_key):
-		return 60
-
-	if tier_80.has(info_key):
-		return 80
-
-	if tier_100.has(info_key):
-		return 100
+		if keys.has(info_key):
+			return int(section.get("tier", 0))
 
 	return 0
 
@@ -832,6 +791,10 @@ func get_collectible_label(collectible_id: String) -> String:
 	if collectible_id.begins_with("emotional_memory:") and parts.size() >= 3:
 		var npc_id: String = parts[1]
 		var memory_id: String = parts[2]
+
+		if npc_id == "world":
+			return "Memoria del mundo: %s" % memory_id.replace("_", " ")
+
 		var npc: Dictionary = DataManager.get_npc(npc_id)
 
 		return "Memoria emocional de %s: %s" % [

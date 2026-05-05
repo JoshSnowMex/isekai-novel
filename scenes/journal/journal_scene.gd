@@ -58,6 +58,11 @@ func build_ui() -> void:
 
 func show_npc_list() -> void:
 	clear_container(list_container)
+	
+	var world_button: Button = UIFactory.button("Estado del mundo")
+	world_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	world_button.pressed.connect(show_world_state_detail)
+	list_container.add_child(world_button)
 
 	for npc_id in DataManager.npcs.keys():
 		var npc: Dictionary = DataManager.get_npc(npc_id)
@@ -137,6 +142,149 @@ func show_unknown_npc_detail() -> void:
 
 	detail_label.text = text
 
+func show_world_state_detail() -> void:
+	GameManager.ensure_world_state()
+
+	var global_tension: int = GameManager.get_world_state_value("global_tension")
+	var world_instability: int = GameManager.get_world_state_value("world_instability")
+	var romantic_pressure: int = GameManager.get_world_state_value("romantic_pressure")
+
+	var text: String = ""
+	text += "Estado del mundo\n\n"
+
+	text += "Lectura general:\n"
+	text += "- Tensión global: %s · %s\n" % [
+		global_tension,
+		get_world_state_level_label(global_tension)
+	]
+	text += "- Inestabilidad del Velo: %s · %s\n" % [
+		world_instability,
+		get_world_state_level_label(world_instability)
+	]
+	text += "- Presión romántica: %s · %s\n\n" % [
+		romantic_pressure,
+		get_world_state_level_label(romantic_pressure)
+	]
+
+	text += "Interpretación:\n"
+	text += build_world_state_interpretation(global_tension, world_instability, romantic_pressure)
+	text += "\n"
+
+	text += "Eje dominante del Velo:\n"
+	text += build_veil_axis_text()
+	text += "\n"
+
+	text += "Consecuencias activas:\n"
+	text += build_active_world_consequences_text()
+	text += "\n"
+
+	text += "Memorias del mundo:\n"
+	text += build_world_memories_text()
+
+	detail_label.text = text
+
+
+func get_world_state_level_label(value: int) -> String:
+	if value >= 80:
+		return "crítico"
+	if value >= 60:
+		return "alto"
+	if value >= 35:
+		return "medio"
+	if value >= 15:
+		return "leve"
+
+	return "estable"
+
+
+func build_world_state_interpretation(global_tension: int, world_instability: int, romantic_pressure: int) -> String:
+	var text: String = ""
+
+	if global_tension <= 10 and world_instability <= 10 and romantic_pressure <= 10:
+		text += "- Luminaria todavía parece estable. Las consecuencias existen, pero aún no pesan sobre todos.\n"
+	else:
+		if global_tension >= world_instability and global_tension >= romantic_pressure:
+			text += "- La presión social domina el ambiente. El Consejo, el gremio o los rumores empiezan a importar más que los accidentes aislados.\n"
+		elif world_instability >= global_tension and world_instability >= romantic_pressure:
+			text += "- El Velo muestra señales de tensión. La realidad conserva coherencia, pero ya no parece completamente obediente.\n"
+		else:
+			text += "- Los vínculos personales están alterando la superficie pública del mundo. El deseo, los celos y las promesas empiezan a tener consecuencias visibles.\n"
+
+	if global_tension >= 50:
+		text += "- La aldea está alerta. Algunas decisiones privadas podrían tener costos públicos.\n"
+
+	if world_instability >= 50:
+		text += "- El Velo está inestable. Recuerdos, registros o presencias podrían contradecirse.\n"
+
+	if romantic_pressure >= 50:
+		text += "- La vida romántica del Forastero ya no pasa desapercibida.\n"
+
+	return text
+
+
+func build_veil_axis_text() -> String:
+	var axes := {
+		"story_axis:veil_interpretation:aeris": "Aeris interpreta el Velo como memoria viva y responsabilidad observada.",
+		"story_axis:veil_interpretation:lyria": "Lyria interpreta el Velo como archivo contradictorio y verdad protegida.",
+		"story_axis:veil_interpretation:eryon": "Eryon interpreta el Velo como profecía mutable y narración peligrosa.",
+		"story_axis:veil_interpretation:nova": "Nova interpreta el Velo como sistema alterable, inestable y emocionalmente reactivo.",
+		"story_axis:veil_interpretation:axiom": "Axiom interpreta el Velo como frontera existencial y reconocimiento imposible.",
+		"story_axis:veil_interpretation:myr": "Myr interpreta el Velo como identidad mutable y forma sensible al deseo.",
+		"story_axis:veil_interpretation:rhein": "Rhein interpreta el Velo como memoria natural anterior a la gente."
+	}
+
+	for flag in axes.keys():
+		if GameManager.has_world_flag(flag):
+			return "- %s\n" % axes[flag]
+
+	return "- Todavía no hay una interpretación dominante. El mundo espera a que tus vínculos le den forma.\n"
+
+
+func build_active_world_consequences_text() -> String:
+	var known_consequences := {
+		"council_is_watching": "El Consejo está observando tus movimientos.",
+		"social_pressure_rising": "Los rumores sobre el Forastero empiezan a circular.",
+		"village_security_weakened": "La seguridad de la aldea quedó debilitada por una decisión emocional.",
+		"village_attack_happened": "La aldea sufrió un ataque como consecuencia de una guardia ausente.",
+		"guild_order_weakened": "El orden del gremio quedó debilitado.",
+		"guild_confusion_seen": "El gremio sufrió confusión por órdenes cruzadas.",
+		"faith_pressure_rising": "La tensión espiritual empieza a sentirse alrededor del Santuario.",
+		"unstable_prototype_awakened": "Un prototipo inestable despertó por una reacción emocional.",
+		"threshold_recognized_player": "El Umbral reconoció al Forastero.",
+		"forest_remembers_player": "El bosque recuerda al Forastero de una forma imposible."
+	}
+
+	var text: String = ""
+	var found: bool = false
+
+	for flag in known_consequences.keys():
+		if GameManager.has_world_flag(flag):
+			text += "- %s\n" % known_consequences[flag]
+			found = true
+
+	if not found:
+		text += "- No hay consecuencias globales activas registradas.\n"
+
+	return text
+
+func build_world_memories_text() -> String:
+	GameManager.ensure_collectibles()
+
+	var text: String = ""
+	var found: bool = false
+
+	for collectible_id in GameManager.get_collectibles():
+		var id: String = str(collectible_id)
+
+		if id.begins_with("emotional_memory:world:"):
+			text += "- %s\n" % GameManager.get_collectible_label(id)
+			found = true
+
+	if not found:
+		text += "- Ninguna memoria del mundo registrada todavía.\n"
+
+	return text
+
 func show_npc_detail(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
 	GameManager.ensure_npc_knowledge(npc_id)
@@ -166,17 +314,7 @@ func show_npc_detail(npc_id: String) -> void:
 	text += "\n"
 
 	text += "Información descubierta:\n"
-	var known_info: Array = knowledge.get("info", [])
-
-	if known_info.is_empty():
-		text += "- No has descubierto información personal todavía.\n"
-	else:
-		for info_key in known_info:
-			var key: String = str(info_key)
-			var label: String = GameManager.get_info_label(key)
-			var value: String = str(npc.get("info", {}).get(key, ""))
-			var tier: int = GameManager.get_info_tier(key)
-			text += "- [%s] %s: %s\n" % [tier, label, value]
+	text += build_known_info_text(npc_id)
 
 	text += "\nGustos de regalos descubiertos:\n"
 	var known_gifts: Array = knowledge.get("gifts", [])
@@ -249,6 +387,50 @@ func show_npc_detail(npc_id: String) -> void:
 
 	detail_label.text = text
 
+func build_known_info_text(npc_id: String) -> String:
+	GameManager.ensure_npc_knowledge(npc_id)
+
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var knowledge: Dictionary = GameManager.player["known_npc_info"][npc_id]
+	var known_info: Array = knowledge.get("info", [])
+	var info_data: Dictionary = npc.get("info", {})
+
+	if known_info.is_empty():
+		return "- No has descubierto información personal todavía.\n"
+
+	var text: String = ""
+
+	for section_id in DataManager.npc_info_schema.keys():
+		var section: Dictionary = DataManager.npc_info_schema[section_id]
+		var keys: Dictionary = section.get("keys", {})
+		var section_text: String = ""
+		var has_section_info: bool = false
+
+		for info_key in keys.keys():
+			var key: String = str(info_key)
+
+			if not known_info.has(key):
+				continue
+
+			if not info_data.has(key):
+				continue
+
+			section_text += "- %s: %s\n" % [
+				keys.get(key, key),
+				str(info_data.get(key, ""))
+			]
+			has_section_info = true
+
+		if has_section_info:
+			text += "%s:\n" % section.get("title", section_id)
+			text += section_text
+			text += "\n"
+
+	if text == "":
+		return "- Has descubierto información, pero no coincide con el esquema actual.\n"
+
+	return text
+	
 func build_progression_text(npc_id: String) -> String:
 	var text: String = "Próximo avance:\n"
 	var step_id: String = RelationshipSystem.get_next_step_id(npc_id)
