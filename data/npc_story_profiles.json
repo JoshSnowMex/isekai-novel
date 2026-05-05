@@ -1,0 +1,184 @@
+{
+	"lyria": {
+		"romanceable": true,
+		"preferred_genders": ["man"],
+		"open_genders": ["woman", "non_binary"],
+		"preference_strength": 12,
+		"story_role": {
+			"responsibility": "archives_truth",
+			"veil_sensitivity": 55,
+			"social_risk": 35,
+			"romantic_disruption": 45
+		},
+		"final_union_style": "pacto íntimo de confianza",
+		"postgame_role": "Puede revelar registros nuevos, pero eso puede tensar la relación final si el jugador oculta información."
+	},
+	"aeris": {
+		"romanceable": true,
+		"preferred_genders": ["man", "woman", "non_binary"],
+		"open_genders": [],
+		"preference_strength": 0,
+		"story_role": {
+			"responsibility": "veil_research",
+			"veil_sensitivity": 90,
+			"social_risk": 50,
+			"romantic_disruption": 65
+		},
+		"final_union_style": "compañera de destino y pacto de verdad",
+		"postgame_role": "Puede estabilizar o alterar el Velo según si el jugador mantiene honestidad con la unión final."
+	},
+	"eryon": {
+		"romanceable": true,
+		"preferred_genders": ["man", "woman", "non_binary"],
+		"open_genders": [],
+		"preference_strength": 0,
+		"story_role": {
+			"responsibility": "prophecy_narrative",
+			"veil_sensitivity": 75,
+			"social_risk": 55,
+			"romantic_disruption": 70
+		},
+		"final_union_style": "elegir una historia falsa hasta volverla real",
+		"postgame_role": "Puede reinterpretar eventos pasados y abrir lore alternativo con costos de confianza."
+	},
+	"rhea": {
+		"romanceable": true,
+		"preferred_genders": ["woman", "non_binary"],
+		"open_genders": ["man"],
+		"preference_strength": 10,
+		"story_role": {
+			"responsibility": "direct_protection",
+			"veil_sensitivity": 25,
+			"social_risk": 55,
+			"romantic_disruption": 80
+		},
+		"final_union_style": "compañera protectora y lealtad bajo peligro",
+		"postgame_role": "Puede proteger la unión final o crear tensión si siente que el jugador juega con riesgos innecesarios."
+	},
+	"nova": {
+		"romanceable": true,
+		"preferred_genders": ["man", "woman", "non_binary"],
+		"open_genders": [],
+		"preference_strength": 0,
+		"story_role": {
+			"responsibility": "arcane_experiments",
+			"veil_sensitivity": 85,
+			"social_risk": 45,
+			"romantic_disruption": 75
+		},
+		"final_union_style": "vínculo caótico sin domesticación",
+		"postgame_role": "Puede crear nuevo lore con prototipos peligrosos que tensen o fortalezcan la unión final."
+	},
+	"seraphine": {
+		"romanceable": true,
+		"preferred_genders": ["man"],
+		"open_genders": ["woman", "non_binary"],
+		"preference_strength": 14,
+		"story_role": {
+			"responsibility": "faith_vows",
+			"veil_sensitivity": 60,
+			"social_risk": 70,
+			"romantic_disruption": 80
+		},
+		"final_union_style": "voto redefinido por deseo honesto",
+		"postgame_role": "Puede abrir consecuencias religiosas y sociales si el jugador desafía su fe o la protege mal."
+	},
+	"kael": {
+		"romanceable": true,
+		"preferred_genders": ["woman"],
+		"open_genders": ["man", "non_binary"],
+		"preference_strength": 12,
+		"story_role": {
+			"responsibility": "silent_guardianship",
+			"veil_sensitivity": 35,
+			"social_risk": 45,
+			"romantic_disruption": 65
+		},
+		"final_union_style": "juramento silencioso de protección",
+		"postgame_role": "Puede descubrir amenazas tardías, pero su protección puede volverse tensión si la unión final se siente vigilada."
+	},
+	"myr": {
+		"romanceable": true,
+		"preferred_genders": ["man", "woman", "non_binary"],
+		"open_genders": [],
+		"preference_strength": 0,
+		"story_role": {
+			"responsibility": "identity_alchemy",
+			"veil_sensitivity": 80,
+			"social_risk": 40,
+			"romantic_disruption": 70
+		},
+		"final_union_style": "vínculo mutable sin jaula",
+		"postgame_role": "Puede transformar consecuencias emocionales en nuevo lore, pero castiga la posesividad."
+	},
+	"axiom": {
+		"romanceable": true,
+		"preferred_genders": ["man", "woman", "non_binary"],
+		"open_genders": [],
+		"preference_strength": 0,
+		"story_role": {
+			"responsibility": "existential_anchor",
+			"veil_sensitivity": 100,
+			"social_risk": 30,
+			"romantic_disruption": 90
+		},
+		"final_union_style": "ancla existencial",
+		"postgame_role": "Puede alterar el significado del final mismo si la unión final no soporta su presencia."
+	},
+	"taren": {
+		"romanceable": true,
+		"preferred_genders": ["woman"],
+		"open_genders": ["man", "non_binary"],
+		"preference_strength": 16,
+		"story_role": {
+			"responsibility": "council_order",
+			"veil_sensitivity": 30,
+			"social_risk": 85,
+			"romantic_disruption": 75
+		},
+		"final_union_style": "contrato emocional imposible",
+		"postgame_role": "Puede proteger políticamente la unión final, pero distraerlo puede debilitar el orden del gremio."
+	},
+	"rhein": {
+		"romanceable": true,
+		"preferred_genders": ["man", "woman", "non_binary"],
+		"open_genders": [],
+		"preference_strength": 0,
+		"story_role": {
+			"responsibility": "natural_memory",
+			"veil_sensitivity": 70,
+			"social_risk": 30,
+			"romantic_disruption": 50
+		},
+		"final_union_style": "raíces compartidas",
+		"postgame_role": "Puede revelar memoria natural del mundo y consecuencias ecológicas de vínculos inestables."
+	},
+	"selene": {
+		"romanceable": true,
+		"preferred_genders": ["woman", "non_binary"],
+		"open_genders": ["man"],
+		"preference_strength": 10,
+		"story_role": {
+			"responsibility": "council_messages",
+			"veil_sensitivity": 45,
+			"social_risk": 80,
+			"romantic_disruption": 65
+		},
+		"final_union_style": "neutralidad abandonada",
+		"postgame_role": "Puede abrir o cerrar canales del Consejo según la confianza con la unión final."
+	},
+	"elara": {
+		"romanceable": true,
+		"preferred_genders": ["man", "woman", "non_binary"],
+		"open_genders": [],
+		"preference_strength": 0,
+		"story_role": {
+			"responsibility": "social_rumors",
+			"veil_sensitivity": 20,
+			"social_risk": 90,
+			"romantic_disruption": 75
+		},
+		"final_union_style": "amante declarada ante el mundo",
+		"postgame_role": "Puede convertir nuevo contenido en rumores, presión social o aceptación pública."
+	}
+}

@@ -3,6 +3,7 @@ extends Control
 var text_label: Label
 var option_container: VBoxContainer
 var selected_class_id: String = ""
+var selected_gender_identity: String = "man"
 
 func _ready() -> void:
 	setup_fullscreen_root()
@@ -101,8 +102,63 @@ func select_class(class_id: String) -> void:
 	option_container.add_child(back_button)
 
 func confirm_class() -> void:
-	GameManager.start_new_game("Forastero", selected_class_id)
-	SaveManager.save_game()
+	show_gender_options()
+
+func show_gender_options() -> void:
+	text_label.text = "Antes de cruzar del todo el umbral, el mundo intenta entender cómo nombrarte.\n\nEsta elección afecta algunas primeras impresiones románticas, pero no encierra tu historia. En Luminaria, los vínculos pesan más que las etiquetas."
+
+	clear_options()
+
+	add_gender_option("Hombre", "man")
+	add_gender_option("Mujer", "woman")
+	add_gender_option("No binario", "non_binary")
+
+	var back_button: Button = UIFactory.button("Volver a clase")
+	back_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	back_button.pressed.connect(func(): select_class(selected_class_id))
+	option_container.add_child(back_button)
+
+
+func add_gender_option(label: String, gender_identity: String) -> void:
+	var gender_button: Button = UIFactory.button(label)
+	gender_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	gender_button.pressed.connect(func(): select_gender_identity(gender_identity))
+	option_container.add_child(gender_button)
+
+
+func select_gender_identity(gender_identity: String) -> void:
+	selected_gender_identity = gender_identity
+
+	var label: String = ""
+
+	match gender_identity:
+		"man":
+			label = "Hombre"
+		"woman":
+			label = "Mujer"
+		"non_binary":
+			label = "No binario"
+		_:
+			label = "Hombre"
+
+	text_label.text = "El mundo recordará tu identidad como: %s.\n\nNo será una jaula. Será solo una de las muchas formas en que algunas personas intentarán entenderte antes de conocerte de verdad.\n\n¿Comenzar esta vida?" % label
+
+	clear_options()
+
+	var start_button: Button = UIFactory.button("Comenzar")
+	start_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	start_button.pressed.connect(start_game)
+	option_container.add_child(start_button)
+
+	var back_button: Button = UIFactory.button("Elegir otra identidad")
+	back_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	back_button.pressed.connect(show_gender_options)
+	option_container.add_child(back_button)
+
+
+func start_game() -> void:
+	GameManager.start_new_game("Forastero", selected_class_id, selected_gender_identity)
+	SaveManager.autosave_game()
 	SceneRouter.go_to_world_map()
 
 func clear_options() -> void:

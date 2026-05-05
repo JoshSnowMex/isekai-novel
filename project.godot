@@ -29,6 +29,7 @@ PetitionSystem="*uid://7w03dhndrbg2"
 DialogueSystem="*uid://dmqvesu5yci1w"
 DateSystem="*uid://d30brvtftx2fc"
 RelationshipSystem="*uid://fio7tg36dwr2"
+StoryletSystem="*uid://deb16mky1wf7v"
 
 [physics]
 

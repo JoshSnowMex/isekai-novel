@@ -15,6 +15,8 @@ var petitions: Dictionary = {}
 var date_locations: Dictionary = {}
 var date_moves: Dictionary = {}
 var relationship_steps: Dictionary = {}
+var npc_story_profiles: Dictionary = {}
+var storylets: Dictionary = {}
 	
 
 func _ready() -> void:
@@ -36,6 +38,8 @@ func load_all_data() -> void:
 	date_locations = load_json("res://data/date_locations.json")
 	date_moves = load_json("res://data/date_moves.json")
 	relationship_steps = load_json("res://data/relationship_steps.json")
+	npc_story_profiles = load_json("res://data/npc_story_profiles.json")
+	storylets = load_json("res://data/storylets.json")
 
 func load_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -89,3 +93,9 @@ func get_date_move(date_move_id: String) -> Dictionary:
 
 func get_relationship_step(step_id: String) -> Dictionary:
 	return relationship_steps.get(step_id, {})
+
+func get_npc_story_profile(npc_id: String) -> Dictionary:
+	return npc_story_profiles.get(npc_id, {})
+
+func get_storylet(storylet_id: String) -> Dictionary:
+	return storylets.get(storylet_id, {})

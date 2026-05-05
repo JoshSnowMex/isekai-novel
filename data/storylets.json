@@ -1,0 +1,247 @@
+{
+	"aeris_first_veil_consequence": {
+		"title": "La observadora deja de ser neutral",
+		"npc_id": "aeris",
+		"category": "main_story",
+		"consequence_type": "mixed",
+		"priority": 70,
+		"repeatable": false,
+		"blocks": [
+			"lyria_first_archive_consequence",
+			"eryon_first_prophecy_consequence",
+			"nova_first_experiment_consequence"
+		],
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 18 },
+				"loyalty": { "min": 6 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:aeris_first_veil_consequence",
+					"story_axis:veil_interpretation:lyria",
+					"story_axis:veil_interpretation:eryon",
+					"story_axis:veil_interpretation:nova"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"story_axis:veil_interpretation:aeris",
+				"aeris_observation_compromised"
+			],
+			"world_state": {
+				"world_instability": 2,
+				"global_tension": 1
+			},
+			"relationship": {
+				"loyalty": 2
+			},
+			"collectibles": [
+				"emotional_memory:aeris:observer_no_longer_neutral"
+			]
+		},
+		"text": "Aeris intenta explicarte una anomalía del Velo con la serenidad de siempre.\n\nPero se detiene a mitad de frase.\n\nNo porque no entienda lo que ve, sino porque por primera vez parece preguntarse si decirte toda la verdad podría hacerte daño.\n\nEl Velo no cambia solo porque lo observes. Cambia cuando alguien decide proteger una versión de ti."
+	},
+	"lyria_first_archive_consequence": {
+		"title": "Una página que no debería existir",
+		"npc_id": "lyria",
+		"category": "main_story",
+		"consequence_type": "mixed",
+		"priority": 70,
+		"repeatable": false,
+		"blocks": [
+			"aeris_first_veil_consequence",
+			"eryon_first_prophecy_consequence",
+			"nova_first_experiment_consequence"
+		],
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 18 },
+				"loyalty": { "min": 6 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:lyria_first_archive_consequence",
+					"story_axis:veil_interpretation:aeris",
+					"story_axis:veil_interpretation:eryon",
+					"story_axis:veil_interpretation:nova"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"story_axis:veil_interpretation:lyria",
+				"lyria_archives_contaminated"
+			],
+			"world_state": {
+				"world_instability": 1,
+				"global_tension": 2
+			},
+			"relationship": {
+				"loyalty": 2
+			},
+			"collectibles": [
+				"emotional_memory:lyria:page_that_should_not_exist"
+			]
+		},
+		"text": "Lyria encuentra tu nombre escrito en un registro anterior a tu llegada.\n\nNo lo dice en voz alta al principio. Pasa los dedos por la tinta, como si pudiera convencerla de haber sido otra cosa.\n\nLuego arranca la página.\n\nNo para destruirla. Para esconderla contigo.\n\nLa biblioteca acaba de perder neutralidad."
+	},
+	"eryon_first_prophecy_consequence": {
+		"title": "La profecía aprende tu tono",
+		"npc_id": "eryon",
+		"category": "main_story",
+		"consequence_type": "mixed",
+		"priority": 70,
+		"repeatable": false,
+		"blocks": [
+			"aeris_first_veil_consequence",
+			"lyria_first_archive_consequence",
+			"nova_first_experiment_consequence"
+		],
+		"conditions": {
+			"relationship": {
+				"friendship": { "min": 14 },
+				"tension": { "min": 8 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:eryon_first_prophecy_consequence",
+					"story_axis:veil_interpretation:aeris",
+					"story_axis:veil_interpretation:lyria",
+					"story_axis:veil_interpretation:nova"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"story_axis:veil_interpretation:eryon",
+				"prophecy_started_flirting_with_truth"
+			],
+			"world_state": {
+				"world_instability": 2,
+				"romantic_pressure": 2
+			},
+			"relationship": {
+				"tension": 2
+			},
+			"collectibles": [
+				"emotional_memory:eryon:prophecy_learned_your_tone"
+			]
+		},
+		"text": "Eryon te lee una línea de la profecía.\n\nLa primera vez, dice una cosa.\n\nLa segunda, cambia una palabra.\n\nLa tercera, parece estar hablando de ti y de él, aunque ninguno quiera admitirlo.\n\nEryon sonríe, pero no parece divertido. Parece preocupado de que la historia haya empezado a coquetear de vuelta."
+	},
+	"rhea_protection_cost": {
+		"title": "La guardia que no ocurrió",
+		"npc_id": "rhea",
+		"category": "consequence",
+		"consequence_type": "cost",
+		"priority": 65,
+		"repeatable": false,
+		"conditions": {
+			"relationship": {
+				"loyalty": { "min": 45 },
+				"tension": { "min": 25 }
+			},
+			"world_state": {
+				"global_tension": { "min": 8 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:rhea_protection_cost"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"rhea_prioritized_player_over_patrol",
+				"village_security_weakened"
+			],
+			"world_state": {
+				"global_tension": 5,
+				"romantic_pressure": 2
+			},
+			"relationship": {
+				"loyalty": 2,
+				"jealousy": 2
+			},
+			"collectibles": [
+				"emotional_memory:rhea:guard_that_did_not_happen"
+			]
+		},
+		"text": "Rhea aparece antes de que puedas llamarla.\n\nNo dice que abandonó una patrulla para comprobar que estabas bien. No hace falta.\n\nHoras después, la noticia corre por la plaza: algo cruzó el lindero mientras nadie vigilaba.\n\nRhea no se arrepiente de haber ido contigo.\n\nEso lo vuelve más grave."
+	},
+	"taren_order_cost": {
+		"title": "Un informe sin firmar",
+		"npc_id": "taren",
+		"category": "consequence",
+		"consequence_type": "cost",
+		"priority": 65,
+		"repeatable": false,
+		"conditions": {
+			"relationship": {
+				"loyalty": { "min": 40 },
+				"tension": { "min": 25 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:taren_order_cost"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"taren_neglected_guild_order",
+				"guild_order_weakened"
+			],
+			"world_state": {
+				"global_tension": 6,
+				"romantic_pressure": 2
+			},
+			"relationship": {
+				"loyalty": 2
+			},
+			"collectibles": [
+				"emotional_memory:taren:unsigned_report"
+			]
+		},
+		"text": "Taren deja un informe sin firmar porque eligió quedarse un poco más contigo.\n\nNo fue una gran traición. No fue una escena dramática.\n\nSolo una demora.\n\nAl día siguiente, el gremio actúa con información incompleta y alguien toma una mala decisión en su nombre.\n\nA veces el mundo no se rompe por amor. A veces se desordena."
+	},
+	"nova_experiment_cost": {
+		"title": "Una chispa demasiado personal",
+		"npc_id": "nova",
+		"category": "consequence",
+		"consequence_type": "escalation",
+		"priority": 65,
+		"repeatable": false,
+		"conditions": {
+			"relationship": {
+				"tension": { "min": 30 },
+				"loyalty": { "min": 20 }
+			},
+			"world_flags": {
+				"missing_all": [
+					"storylet_completed:nova_experiment_cost"
+				]
+			}
+		},
+		"effects": {
+			"add_world_flags": [
+				"nova_used_player_as_emotional_constant",
+				"unstable_prototype_awakened"
+			],
+			"world_state": {
+				"world_instability": 5,
+				"romantic_pressure": 3
+			},
+			"relationship": {
+				"tension": 2,
+				"jealousy": 1
+			},
+			"collectibles": [
+				"emotional_memory:nova:spark_too_personal"
+			]
+		},
+		"text": "Nova jura que el prototipo era seguro.\n\nLuego admite que era seguro antes de calibrarlo con una emoción que no quiso nombrar.\n\nLa máquina responde a tu presencia como si te reconociera.\n\nNova ríe primero.\n\nDespués apaga todo con manos temblorosas."
+	}
+}

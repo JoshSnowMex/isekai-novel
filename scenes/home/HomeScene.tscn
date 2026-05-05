@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://dod33yule4jxm"]
 
-[ext_resource type="Script" path="res://scenes/home/home_scene.gd" id="1_home_scene"]
+[ext_resource type="Script" uid="uid://dk3vt6p2f40dl" path="res://scenes/home/home_scene.gd" id="1_home_scene"]
 
-[node name="HomeScene" type="Control"]
+[node name="HomeScene" type="Control" unique_id=589013657]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

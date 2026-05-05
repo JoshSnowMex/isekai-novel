@@ -147,6 +147,8 @@ func perform_move(date_state: Dictionary, move_id: String) -> Dictionary:
 	if jealousy >= 50:
 		score -= 15
 
+	score += GameManager.get_romantic_move_modifier(npc_id)
+
 	if progress >= 95:
 		score += 12
 

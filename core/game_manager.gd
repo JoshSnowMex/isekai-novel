@@ -34,12 +34,13 @@ const ACTIONS_PER_BLOCK := {
 	"night": 2
 }
 
-func start_new_game(player_name: String, class_id: String) -> void:
+func start_new_game(player_name: String, class_id: String, gender_identity: String = "man") -> void:
 	var class_data := DataManager.get_player_class(class_id)
 
 	player = {
 		"name": player_name,
 		"class_id": class_id,
+		"gender_identity": gender_identity,
 		"money": 100,
 		"stamina": 100,
 		"max_stamina": 100,
@@ -127,6 +128,13 @@ func sleep_until_next_day() -> void:
 	current_location_id = "home"
 
 	reset_daily_relationship_flags()
+
+	var storylet_results: Array = StoryletSystem.process_storylets({
+		"trigger": "day_started"
+	})
+
+	for storylet_text in storylet_results:
+		add_pending_narrative_message(storylet_text)
 
 	var milestone_results: Array = MilestoneSystem.process_milestones({
 		"trigger": "day_started"
@@ -424,7 +432,7 @@ func add_relationship_value(npc_id: String, key: String, amount: int) -> String:
 	var relation: Dictionary = player["relationships"][npc_id]
 
 	var old_value: int = int(relation.get(key, 0))
-	var modified_amount: int = apply_relationship_modifier(key, amount)
+	var modified_amount: int = apply_relationship_modifier(npc_id, key, amount)
 	var new_value: int = clamp(old_value + modified_amount, 0, 100)
 
 	relation[key] = new_value
@@ -455,6 +463,11 @@ func add_relationship_value(npc_id: String, key: String, amount: int) -> String:
 
 		for milestone in milestone_results:
 			add_pending_narrative_message(milestone)
+			
+		var storylet_results: Array = StoryletSystem.process_storylets(event_context)
+
+		for storylet_text in storylet_results:
+			add_pending_narrative_message(storylet_text)
 
 	if key == "tension" and real_change > 0:
 		var rivalry_results: Array = RivalrySystem.process_affinity_change(npc_id, real_change)
@@ -486,6 +499,8 @@ func get_total_affinity(npc_id: String) -> int:
 	return int((friendship * 0.4) + (tension * 0.4) + (loyalty * 0.2))
 
 func can_invite_to_date(npc_id: String) -> bool:
+	if not is_npc_romanceable(npc_id):
+		return false
 	ensure_relationship(npc_id)
 
 	var relation: Dictionary = player["relationships"][npc_id]
@@ -587,7 +602,7 @@ func get_action_blocked_message(required_stamina: int = 0) -> String:
 
 	return ""
 
-func apply_relationship_modifier(key: String, amount: int) -> int:
+func apply_relationship_modifier(npc_id: String, key: String, amount: int) -> int:
 	if amount == 0:
 		return 0
 
@@ -596,6 +611,10 @@ func apply_relationship_modifier(key: String, amount: int) -> int:
 	var modifiers: Dictionary = class_data.get("relationship_modifiers", {})
 
 	var modifier: float = float(modifiers.get(key, 1.0))
+
+	if key == "tension" and amount > 0:
+		modifier *= get_tension_gain_modifier(npc_id)
+
 	var modified: int = int(round(float(amount) * modifier))
 
 	if amount > 0:
@@ -622,6 +641,8 @@ func get_stat_label(stat: String) -> String:
 			return stat
 
 func get_date_blocked_reason(npc_id: String) -> String:
+	if not is_npc_romanceable(npc_id):
+		return "Este personaje no está disponible como ruta romántica."
 	ensure_relationship(npc_id)
 
 	var relation: Dictionary = player["relationships"][npc_id]
@@ -790,5 +811,126 @@ func get_collectible_label(collectible_id: String) -> String:
 		var npc: Dictionary = DataManager.get_npc(npc_id)
 
 		return "Trofeo de vínculo: %s" % npc.get("name", npc_id)
+	
+	if collectible_id.begins_with("emotional_memory:") and parts.size() >= 3:
+		var npc_id: String = parts[1]
+		var memory_id: String = parts[2]
+		var npc: Dictionary = DataManager.get_npc(npc_id)
 
+		return "Memoria emocional de %s: %s" % [
+			npc.get("name", npc_id),
+			memory_id.replace("_", " ")
+		]
+
+	if collectible_id.begins_with("union_token:") and parts.size() >= 3:
+		var npc_id: String = parts[1]
+		var token_id: String = parts[2]
+		var npc: Dictionary = DataManager.get_npc(npc_id)
+
+		return "Prueba de unión de %s: %s" % [
+			npc.get("name", npc_id),
+			token_id.replace("_", " ")
+		]
+	
 	return collectible_id
+
+func get_gender_identity() -> String:
+	return str(player.get("gender_identity", "man"))
+
+
+func get_gender_identity_label() -> String:
+	match get_gender_identity():
+		"man":
+			return "Hombre"
+		"woman":
+			return "Mujer"
+		"non_binary":
+			return "No binario"
+		_:
+			return "Hombre"
+
+
+func get_romantic_compatibility(npc_id: String) -> Dictionary:
+	var profile: Dictionary = DataManager.get_npc_story_profile(npc_id)
+
+	if profile.is_empty():
+		return {
+			"level": "neutral",
+			"modifier": 0,
+			"description": "No hay perfil narrativo definido."
+		}
+
+	if not bool(profile.get("romanceable", true)):
+		return {
+			"level": "not_romanceable",
+			"modifier": -50,
+			"description": "Este personaje no está disponible como ruta romántica."
+		}
+
+	var gender_identity: String = get_gender_identity()
+	var preferred: Array = profile.get("preferred_genders", [])
+	var open: Array = profile.get("open_genders", [])
+	var strength: int = int(profile.get("preference_strength", 0))
+
+	if preferred.has(gender_identity):
+		return {
+			"level": "preferred",
+			"modifier": strength,
+			"description": "La atracción inicial fluye con naturalidad."
+		}
+
+	if open.has(gender_identity):
+		return {
+			"level": "open",
+			"modifier": 0,
+			"description": "No hay una inclinación inicial clara, pero tampoco una resistencia importante."
+		}
+
+	return {
+		"level": "unexpected",
+		"modifier": -strength,
+		"description": "La atracción inicial no encaja con sus preferencias habituales, pero el vínculo puede cambiar lo que las etiquetas no alcanzan a explicar."
+	}
+
+func get_tension_gain_modifier(npc_id: String) -> float:
+	var compatibility: Dictionary = get_romantic_compatibility(npc_id)
+	var modifier: int = int(compatibility.get("modifier", 0))
+
+	if modifier == 0:
+		return 1.0
+
+	GameManager.ensure_relationship(npc_id)
+
+	var friendship: int = get_relationship_value(npc_id, "friendship")
+	var loyalty: int = get_relationship_value(npc_id, "loyalty")
+	var total: int = get_total_affinity(npc_id)
+
+	var relationship_softening: int = int((friendship * 0.25) + (loyalty * 0.35) + (total * 0.2))
+	var adjusted_modifier: int = modifier
+
+	if modifier < 0:
+		adjusted_modifier = min(0, modifier + relationship_softening)
+
+	return clamp(1.0 + (float(adjusted_modifier) / 100.0), 0.75, 1.25)
+
+func get_romantic_move_modifier(npc_id: String) -> int:
+	var compatibility: Dictionary = get_romantic_compatibility(npc_id)
+	var modifier: int = int(compatibility.get("modifier", 0))
+
+	if modifier >= 0:
+		return int(round(float(modifier) * 0.4))
+
+	var friendship: int = get_relationship_value(npc_id, "friendship")
+	var loyalty: int = get_relationship_value(npc_id, "loyalty")
+	var softened: int = min(0, modifier + int((friendship * 0.2) + (loyalty * 0.3)))
+
+	return int(round(float(softened) * 0.4))
+
+func is_npc_romanceable(npc_id: String) -> bool:
+	var profile: Dictionary = DataManager.get_npc_story_profile(npc_id)
+
+	if profile.is_empty():
+		var npc: Dictionary = DataManager.get_npc(npc_id)
+		return bool(npc.get("romanceable", true))
+
+	return bool(profile.get("romanceable", true))
