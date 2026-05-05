@@ -278,17 +278,210 @@ func get_available_info_to_reveal(npc_id: String) -> Array:
 	return available
 
 func reveal_random_npc_info(npc_id: String) -> String:
+	return reveal_npc_info_by_strategy(npc_id, {
+		"strategy": "general"
+	})
+
+func reveal_npc_info_by_strategy(npc_id: String, options: Dictionary = {}) -> String:
+	ensure_npc_knowledge(npc_id)
+
+	var candidates: Array = get_info_candidates_by_strategy(npc_id, options)
+
+	if candidates.is_empty():
+		return ""
+
+	var selected: String = str(candidates.pick_random())
+	reveal_npc_info(npc_id, selected)
+
+	return selected
+
+
+func get_info_candidates_by_strategy(npc_id: String, options: Dictionary = {}) -> Array:
+	var strategy: String = str(options.get("strategy", "general"))
+	var preferred_categories: Array = options.get("preferred_categories", [])
+	var include_next_step_missing: bool = bool(options.get("include_next_step_missing", true))
+	var max_tier: int = int(options.get("max_tier", 100))
+	var allow_advanced: bool = bool(options.get("allow_advanced", false))
+
 	var available: Array = get_available_info_to_reveal(npc_id)
 
 	if available.is_empty():
+		return []
+
+	var prioritized: Array = []
+
+	if include_next_step_missing:
+		prioritized = get_missing_info_for_next_relationship_step(npc_id, max_tier)
+
+		if not prioritized.is_empty():
+			return prioritized
+
+	if not preferred_categories.is_empty():
+		var category_matches: Array = []
+
+		for info_key in available:
+			var key: String = str(info_key)
+			var category_id: String = get_info_category_id_for_key(key)
+			var tier: int = get_info_tier(key)
+
+			if preferred_categories.has(category_id) and tier <= max_tier:
+				category_matches.append(key)
+
+		if not category_matches.is_empty():
+			return category_matches
+
+	match strategy:
+		"talk":
+			return filter_available_info_by_categories(npc_id, [
+				"basic",
+				"likes",
+				"personality",
+				"contact"
+			], max_tier)
+		"gift_loved":
+			return filter_available_info_by_categories(npc_id, [
+				"likes",
+				"personality",
+				"romance",
+				"desire_chemistry"
+			], max_tier)
+		"gift_liked":
+			return filter_available_info_by_categories(npc_id, [
+				"likes",
+				"personality",
+				"basic"
+			], max_tier)
+		"gift_neutral":
+			return filter_available_info_by_categories(npc_id, [
+				"basic",
+				"likes"
+			], 50)
+		"gift_hated":
+			return filter_available_info_by_categories(npc_id, [
+				"personality",
+				"emotional_shadow",
+				"romance"
+			], max_tier)
+		"date_success":
+			return get_missing_info_for_next_relationship_step(npc_id, max_tier)
+		"date_excellent":
+			if allow_advanced:
+				return get_advanced_info_candidates(npc_id)
+			return get_missing_info_for_next_relationship_step(npc_id, max_tier)
+		_:
+			break
+
+	var fallback: Array = []
+
+	for info_key in available:
+		var key: String = str(info_key)
+
+		if get_info_tier(key) <= max_tier:
+			fallback.append(key)
+
+	if not fallback.is_empty():
+		return fallback
+
+	return available
+
+
+func get_missing_info_for_next_relationship_step(npc_id: String, max_tier: int = 100) -> Array:
+	var step_id: String = RelationshipSystem.get_next_step_id(npc_id)
+
+	if step_id == "":
+		return []
+
+	var step: Dictionary = DataManager.get_relationship_step(step_id)
+	var requirements: Dictionary = step.get("required_info_categories", {})
+
+	if requirements.is_empty():
+		return []
+
+	var available: Array = get_available_info_to_reveal(npc_id)
+	var result: Array = []
+
+	for category_id in requirements.keys():
+		var category: String = str(category_id)
+		var required_count: int = int(requirements[category])
+		var known_count: int = get_known_info_count_for_category(npc_id, category)
+
+		if known_count >= required_count:
+			continue
+
+		var category_keys: Array = get_info_keys_for_category(category)
+
+		for info_key in available:
+			var key: String = str(info_key)
+
+			if not category_keys.has(key):
+				continue
+
+			if get_info_tier(key) > max_tier:
+				continue
+
+			if not result.has(key):
+				result.append(key)
+
+	return result
+
+
+func filter_available_info_by_categories(npc_id: String, categories: Array, max_tier: int = 100) -> Array:
+	var available: Array = get_available_info_to_reveal(npc_id)
+	var result: Array = []
+
+	for info_key in available:
+		var key: String = str(info_key)
+		var category_id: String = get_info_category_id_for_key(key)
+
+		if categories.has(category_id) and get_info_tier(key) <= max_tier:
+			result.append(key)
+
+	if not result.is_empty():
+		return result
+
+	var fallback: Array = []
+
+	for info_key in available:
+		var key: String = str(info_key)
+
+		if get_info_tier(key) <= max_tier:
+			fallback.append(key)
+
+	return fallback
+
+
+func get_advanced_info_candidates(npc_id: String) -> Array:
+	var advanced: Array = filter_available_info_by_categories(npc_id, [
+		"desire_chemistry",
+		"history",
+		"responsibility_cost",
+		"romance",
+		"emotional_shadow",
+		"final"
+	], 100)
+
+	if not advanced.is_empty():
+		return advanced
+
+	return get_available_info_to_reveal(npc_id)
+
+
+func format_discovered_info(npc_id: String, info_key: String, prefix: String = "Nueva información descubierta") -> String:
+	if info_key == "":
 		return ""
 
-	var index: int = randi_range(0, available.size() - 1)
-	var info_key: String = available[index]
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var info_data: Dictionary = npc.get("info", {})
+	var label: String = get_info_label(info_key)
+	var category: String = get_info_category_title_for_key(info_key)
+	var value: String = str(info_data.get(info_key, ""))
 
-	reveal_npc_info(npc_id, info_key)
-
-	return info_key
+	return "%s:\n%s · %s: %s" % [
+		prefix,
+		category,
+		label,
+		value
+	]
 
 func get_info_label(info_key: String) -> String:
 	for section_id in DataManager.npc_info_schema.keys():

@@ -241,15 +241,20 @@ func talk_to_npc(npc_id: String) -> void:
 
 	message += relationship_text
 
-	if randf() < 0.35:
-		var info_key: String = GameManager.reveal_random_npc_info(npc_id)
+	var reveal_chance: float = 0.45
+
+	if not GameManager.get_missing_info_for_next_relationship_step(npc_id, 60).is_empty():
+		reveal_chance = 0.75
+
+	if randf() < reveal_chance:
+		var info_key: String = GameManager.reveal_npc_info_by_strategy(npc_id, {
+			"strategy": "talk",
+			"max_tier": 70,
+			"include_next_step_missing": true
+		})
 
 		if info_key != "":
-			var label: String = GameManager.get_info_label(info_key)
-			var info_data: Dictionary = npc.get("info", {})
-			var value: String = str(info_data.get(info_key, ""))
-
-			message += "\n\nNueva información descubierta:\n%s: %s" % [label, value]
+			message += "\n\n" + GameManager.format_discovered_info(npc_id, info_key)
 
 	GameManager.add_npc_note(
 		npc_id,
@@ -321,19 +326,24 @@ func give_gift(npc_id: String, item_id: String) -> void:
 
 	var result: int = 0
 	var reaction: String = ""
+	var gift_strategy: String = "gift_neutral"
 
 	if item_id in prefs.get("loves", []):
 		result = randi_range(5, 6)
 		reaction = "Su reacción lo dice todo. Has tocado una fibra muy personal."
+		gift_strategy = "gift_loved"
 	elif item_id in prefs.get("likes", []):
 		result = randi_range(3, 4)
 		reaction = "Acepta el regalo con una calidez difícil de fingir."
+		gift_strategy = "gift_liked"
 	elif item_id in prefs.get("hates", []):
 		result = randi_range(-5, -4)
 		reaction = "La incomodidad aparece de inmediato. Fue una mala elección."
+		gift_strategy = "gift_hated"
 	else:
 		result = randi_range(1, 2)
 		reaction = "Acepta el gesto con cortesía."
+		gift_strategy = "gift_neutral"
 
 	var relationship_text: String = ""
 
@@ -358,6 +368,28 @@ func give_gift(npc_id: String, item_id: String) -> void:
 		result,
 		relationship_text
 	]
+	
+	var reveal_chance: float = 0.25
+
+	match gift_strategy:
+		"gift_loved":
+			reveal_chance = 0.85
+		"gift_liked":
+			reveal_chance = 0.60
+		"gift_neutral":
+			reveal_chance = 0.25
+		"gift_hated":
+			reveal_chance = 0.55
+	
+	if randf() < reveal_chance:
+		var info_key: String = GameManager.reveal_npc_info_by_strategy(npc_id, {
+			"strategy": gift_strategy,
+			"max_tier": 90,
+			"include_next_step_missing": true
+		})
+
+		if info_key != "":
+			message += "\n\n" + GameManager.format_discovered_info(npc_id, info_key)
 
 	GameManager.consume_action(5)
 	SaveManager.autosave_game()

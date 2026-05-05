@@ -252,7 +252,7 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 		var relationship_text: String = ""
 		relationship_text += GameManager.add_relationship_value(npc_id, "friendship", -4)
 		relationship_text += GameManager.add_relationship_value(npc_id, "tension", -5)
-		relationship_text += GameManager.add_relationship_value(npc_id, "jealousy", -2)
+		relationship_text += GameManager.add_relationship_value(npc_id, "loyalty", -2)
 
 		GameManager.add_npc_note(
 			npc_id,
@@ -330,16 +330,33 @@ func register_successful_date(npc_id: String, date_location_id: String, success_
 
 func reveal_date_reward_info(npc_id: String, success_level: String) -> String:
 	var reveal_text: String = ""
+	var strategy: String = "date_success"
+	var allow_advanced: bool = false
+	var max_tier: int = 90
 
-	var info_key: String = GameManager.reveal_random_npc_info(npc_id)
+	match success_level:
+		"success":
+			strategy = "date_success"
+			allow_advanced = false
+			max_tier = 85
+		"excellent":
+			strategy = "date_excellent"
+			allow_advanced = true
+			max_tier = 100
+		"perfect":
+			strategy = "date_excellent"
+			allow_advanced = true
+			max_tier = 100
+
+	var info_key: String = GameManager.reveal_npc_info_by_strategy(npc_id, {
+		"strategy": strategy,
+		"max_tier": max_tier,
+		"allow_advanced": allow_advanced,
+		"include_next_step_missing": true
+	})
 
 	if info_key != "":
-		var npc: Dictionary = DataManager.get_npc(npc_id)
-		var label: String = GameManager.get_info_label(info_key)
-		var info_data: Dictionary = npc.get("info", {})
-		var value: String = str(info_data.get(info_key, ""))
-
-		reveal_text += "\n\nInformación descubierta:\n%s: %s" % [label, value]
+		reveal_text += "\n\n" + GameManager.format_discovered_info(npc_id, info_key, "Información descubierta durante la cita")
 
 	if success_level == "excellent" or success_level == "perfect":
 		var gift_id: String = reveal_random_gift_preference(npc_id)
