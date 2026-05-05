@@ -151,6 +151,9 @@ func show_world_state_detail() -> void:
 
 	var text: String = ""
 	text += "Estado del mundo\n\n"
+	text += "Postgame:\n"
+	text += build_postgame_status_text()
+	text += "\n"
 	text += "Unión definitiva:\n"
 	text += build_final_union_text()
 	text += "\n"
@@ -303,6 +306,24 @@ func build_final_union_text() -> String:
 		requirement.get("name", "Unión final")
 	]
 	
+func build_postgame_status_text() -> String:
+	if not PostgameSystem.is_postgame_started():
+		return "- No ha comenzado. La historia aún no tiene una unión definitiva.\n"
+
+	var text: String = PostgameSystem.get_postgame_status_text()
+	text += "\n"
+
+	var stability: int = PostgameSystem.get_postgame_state_value("final_union_stability")
+
+	if stability <= 35:
+		text += "- Advertencia: la unión definitiva necesita atención urgente.\n"
+	elif stability <= 55:
+		text += "- La unión resiste, pero hay tensión acumulada.\n"
+	else:
+		text += "- La unión se mantiene estable.\n"
+
+	return text
+	
 func show_npc_detail(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
 	GameManager.ensure_npc_knowledge(npc_id)
@@ -332,6 +353,9 @@ func show_npc_detail(npc_id: String) -> void:
 	text += "\n"
 	
 	text += build_final_union_progress_text(npc_id)
+	text += "\n"
+	
+	text += build_npc_postgame_text(npc_id)
 	text += "\n"
 
 	text += "Fechas importantes:\n"
@@ -688,5 +712,23 @@ func build_global_emotional_calendar_summary() -> String:
 
 	if not found:
 		return "- Todavía no hay fechas emocionales registradas.\n"
+
+	return text
+
+func build_npc_postgame_text(npc_id: String) -> String:
+	if not PostgameSystem.is_postgame_started():
+		return ""
+
+	if PostgameSystem.get_partner_id() != npc_id:
+		return ""
+
+	var config: Dictionary = DataManager.get_postgame_partner_config(npc_id)
+	var text: String = "Postgame personal:\n"
+	text += "- Ruta: %s\n" % config.get("postgame_title", "Unión final")
+	text += "- Tema: %s\n" % config.get("pressure_theme", "La unión definitiva empieza a tener consecuencias.")
+	text += "- %s: %s\n" % [
+		config.get("stability_label", "Estabilidad de unión"),
+		PostgameSystem.get_postgame_state_value("final_union_stability")
+	]
 
 	return text

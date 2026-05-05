@@ -18,6 +18,8 @@ var relationship_steps: Dictionary = {}
 var npc_story_profiles: Dictionary = {}
 var storylets: Dictionary = {}
 var final_union_requirements: Dictionary = {}
+var postgame_config: Dictionary = {}
+var postgame_storylets: Dictionary = {}
 	
 
 func _ready() -> void:
@@ -42,6 +44,8 @@ func load_all_data() -> void:
 	npc_story_profiles = load_json("res://data/npc_story_profiles.json")
 	storylets = load_json("res://data/storylets.json")
 	final_union_requirements = load_json("res://data/final_union_requirements.json")
+	postgame_config = load_json("res://data/postgame_config.json")
+	postgame_storylets = load_json("res://data/postgame_storylets.json")
 
 func load_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -111,3 +115,22 @@ func get_final_union_requirement(npc_id: String) -> Dictionary:
 		result[key] = npc_data[key]
 
 	return result
+
+func get_postgame_default_config() -> Dictionary:
+	return postgame_config.get("default", {})
+
+
+func get_postgame_partner_config(npc_id: String) -> Dictionary:
+	var partners: Dictionary = postgame_config.get("partners", {})
+	var default_data: Dictionary = postgame_config.get("default", {})
+	var partner_data: Dictionary = partners.get(npc_id, {})
+	var result: Dictionary = default_data.duplicate(true)
+
+	for key in partner_data.keys():
+		result[key] = partner_data[key]
+
+	return result
+
+
+func get_postgame_storylet(storylet_id: String) -> Dictionary:
+	return postgame_storylets.get(storylet_id, {})

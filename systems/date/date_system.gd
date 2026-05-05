@@ -333,13 +333,14 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 	var collectible_text: String = grant_date_collectible(npc_id, date_location_id)
 	var successful_date_text: String = register_successful_date(npc_id, date_location_id, success_level)
 	var rivalry_text: String = process_successful_date_rivalries(npc_id, success_level)
+	var postgame_union_text: String = process_postgame_union_date(npc_id, success_level)
 	
 	GameManager.add_npc_note(
 		npc_id,
 		"La cita en %s dejó una memoria difícil de ignorar." % date_location.get("name", date_location_id)
 	)
 
-	summary = "La cita fue %s.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nRecompensas aplicadas:%s%s%s%s%s%s" % [
+	summary = "La cita fue %s.\n\nLugar: %s\nProgreso final: %s\nErrores: %s\n\nRecompensas aplicadas:%s%s%s%s%s%s%s" % [
 		get_success_label(success_level),
 		date_location.get("name", date_location_id),
 		progress,
@@ -349,7 +350,8 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 		reveal_text,
 		collectible_text,
 		successful_date_text,
-		rivalry_text
+		rivalry_text,
+		postgame_union_text
 	]
 
 	return {
@@ -674,4 +676,53 @@ func apply_location_fit_bonus_to_resolved_rewards(
 
 	resolved_rewards["loyalty"] = int(resolved_rewards.get("loyalty", 0)) + bonus
 
-	return "\n%s Lealtad +%s" % [reason, bonus]
+	return "\n- %s Lealtad +%s" % [reason, bonus]
+
+func process_postgame_union_date(npc_id: String, success_level: String) -> String:
+	if not PostgameSystem.is_postgame_started():
+		return ""
+
+	var partner_id: String = PostgameSystem.get_partner_id()
+
+	if partner_id != npc_id:
+		var strain: int = 0
+
+		match success_level:
+			"success":
+				strain = 1
+			"excellent":
+				strain = 2
+			"perfect":
+				strain = 4
+			_:
+				strain = 0
+
+		if strain <= 0:
+			return ""
+
+		PostgameSystem.add_postgame_state_value("outside_temptation", strain + 2)
+
+		return "\n\n" + PostgameSystem.strain_final_union(
+			strain,
+			"Salir con alguien más después de una unión definitiva genera tensión."
+		)
+
+	var amount: int = 0
+
+	match success_level:
+		"success":
+			amount = 2
+		"excellent":
+			amount = 4
+		"perfect":
+			amount = 7
+		_:
+			amount = 0
+
+	if amount <= 0:
+		return ""
+
+	return "\n\n" + PostgameSystem.strengthen_final_union(
+		amount,
+		"Compartir tiempo con tu unión definitiva reafirma la elección."
+	)

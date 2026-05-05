@@ -82,6 +82,9 @@ func load_from_path(path: String) -> bool:
 	if not GameManager.player.has("emotional_calendar"):
 		GameManager.player["emotional_calendar"] = {}
 		
+	if not GameManager.player.has("postgame_state"):
+		GameManager.player["postgame_state"] = {}
+		
 	return true
 
 

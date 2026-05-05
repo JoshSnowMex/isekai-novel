@@ -398,6 +398,10 @@ func give_gift(npc_id: String, item_id: String) -> void:
 		if info_key != "":
 			message += "\n\n" + GameManager.format_discovered_info(npc_id, info_key)
 
+	var postgame_gift_text: String = process_postgame_gift_effect(npc_id, gift_strategy)
+
+	if postgame_gift_text != "":
+		message += "\n\n" + postgame_gift_text
 	GameManager.consume_action(5)
 	SaveManager.autosave_game()
 	reload_scene(message)
@@ -510,3 +514,49 @@ func show_date_location_selection(npc_id: String) -> void:
 	var back_button: Button = UIFactory.button("Volver")
 	back_button.pressed.connect(func(): interact_npc(npc_id))
 	action_container.add_child(back_button)
+
+func process_postgame_gift_effect(npc_id: String, gift_strategy: String) -> String:
+	if not PostgameSystem.is_postgame_started():
+		return ""
+
+	var partner_id: String = PostgameSystem.get_partner_id()
+
+	if partner_id == npc_id:
+		match gift_strategy:
+			"gift_loved":
+				return PostgameSystem.strengthen_final_union(
+					4,
+					"El regalo tocó algo importante en tu unión definitiva."
+				)
+			"gift_liked":
+				return PostgameSystem.strengthen_final_union(
+					2,
+					"El gesto cuidó la unión definitiva."
+				)
+			"gift_hated":
+				return PostgameSystem.strain_final_union(
+					4,
+					"El regalo hirió una zona sensible de la unión definitiva."
+				)
+			_:
+				return ""
+
+	var strain: int = 0
+
+	match gift_strategy:
+		"gift_loved":
+			strain = 2
+		"gift_liked":
+			strain = 1
+		_:
+			strain = 0
+
+	if strain <= 0:
+		return ""
+
+	PostgameSystem.add_postgame_state_value("outside_temptation", strain)
+
+	return PostgameSystem.strain_final_union(
+		strain,
+		"Dar regalos significativos a otra persona después de una unión definitiva genera tensión."
+	)

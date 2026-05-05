@@ -1,0 +1,236 @@
+{
+	"default": {
+		"starting_final_union_stability": 70,
+		"starting_postgame_pressure": 10,
+		"starting_outside_temptation": 5,
+		"daily_postgame_pressure_gain": 1,
+		"daily_outside_temptation_gain": 1,
+		"daily_stability_loss_from_pressure": {
+			"pressure_min": 60,
+			"loss": 2
+		},
+		"daily_stability_loss_from_temptation": {
+			"temptation_min": 60,
+			"loss": 2
+		},
+		"high_jealousy_threshold": 45,
+		"very_high_jealousy_threshold": 70,
+		"jealousy_pressure_gain": 2,
+		"advanced_route_pressure_gain": 3,
+		"advanced_route_states": [
+			"dating",
+			"lovers",
+			"partner"
+		]
+	},
+	"partners": {
+		"lyria": {
+			"postgame_title": "Pacto bajo llave",
+			"stability_label": "Confianza privada",
+			"pressure_theme": "La biblioteca, el Consejo y los secretos empiezan a pesar sobre la unión.",
+			"starting_final_union_stability": 74,
+			"starting_postgame_pressure": 14,
+			"starting_outside_temptation": 4,
+			"world_state_on_start": {
+				"global_tension": 3,
+				"world_instability": 2,
+				"romantic_pressure": 5
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:lyria",
+				"library_neutrality_questioned"
+			]
+		},
+		"aeris": {
+			"postgame_title": "Destino observado",
+			"stability_label": "Verdad compartida",
+			"pressure_theme": "El Velo responde a una observadora que ya no es neutral.",
+			"starting_final_union_stability": 72,
+			"starting_postgame_pressure": 12,
+			"starting_outside_temptation": 5,
+			"world_state_on_start": {
+				"world_instability": 5,
+				"romantic_pressure": 4
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:aeris",
+				"veil_observer_bound"
+			]
+		},
+		"eryon": {
+			"postgame_title": "Historia elegida",
+			"stability_label": "Confianza en la ambigüedad",
+			"pressure_theme": "La relación se vuelve historia pública, y toda historia puede editarse.",
+			"starting_final_union_stability": 68,
+			"starting_postgame_pressure": 13,
+			"starting_outside_temptation": 8,
+			"world_state_on_start": {
+				"global_tension": 2,
+				"romantic_pressure": 6
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:eryon",
+				"chosen_story_unstable"
+			]
+		},
+		"rhea": {
+			"postgame_title": "Lealtad en guardia",
+			"stability_label": "Lealtad compartida",
+			"pressure_theme": "El pueblo nota si Rhea mira más hacia ti que hacia el lindero.",
+			"starting_final_union_stability": 76,
+			"starting_postgame_pressure": 16,
+			"starting_outside_temptation": 5,
+			"world_state_on_start": {
+				"global_tension": 5,
+				"romantic_pressure": 5
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:rhea",
+				"rhea_priority_questioned"
+			]
+		},
+		"nova": {
+			"postgame_title": "Caos elegido",
+			"stability_label": "Libertad compartida",
+			"pressure_theme": "La emoción se vuelve variable arcana. Lo que sienten puede encender cosas.",
+			"starting_final_union_stability": 66,
+			"starting_postgame_pressure": 12,
+			"starting_outside_temptation": 10,
+			"world_state_on_start": {
+				"world_instability": 6,
+				"romantic_pressure": 6
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:nova",
+				"emotional_prototype_resonance"
+			]
+		},
+		"seraphine": {
+			"postgame_title": "Voto redefinido",
+			"stability_label": "Fe sin negación",
+			"pressure_theme": "El Santuario no sabe si mirar la unión como milagro, escándalo o prueba.",
+			"starting_final_union_stability": 73,
+			"starting_postgame_pressure": 17,
+			"starting_outside_temptation": 4,
+			"world_state_on_start": {
+				"global_tension": 4,
+				"romantic_pressure": 5
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:seraphine",
+				"sanctuary_vow_questioned"
+			]
+		},
+		"kael": {
+			"postgame_title": "Quedarse sin huir",
+			"stability_label": "Presencia elegida",
+			"pressure_theme": "El pasado de Kael y su costumbre de alejarse ponen a prueba la unión.",
+			"starting_final_union_stability": 70,
+			"starting_postgame_pressure": 11,
+			"starting_outside_temptation": 5,
+			"world_state_on_start": {
+				"global_tension": 3
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:kael",
+				"kael_chose_to_stay"
+			]
+		},
+		"myr": {
+			"postgame_title": "Forma mutable",
+			"stability_label": "Amor sin jaula",
+			"pressure_theme": "La relación debe aprender a cambiar sin volverse insegura.",
+			"starting_final_union_stability": 69,
+			"starting_postgame_pressure": 10,
+			"starting_outside_temptation": 9,
+			"world_state_on_start": {
+				"world_instability": 3,
+				"romantic_pressure": 5
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:myr",
+				"mutable_union_started"
+			]
+		},
+		"axiom": {
+			"postgame_title": "Ancla imposible",
+			"stability_label": "Existencia compartida",
+			"pressure_theme": "Amar a Axiom vuelve menos clara la frontera entre final, deseo y mundo.",
+			"starting_final_union_stability": 65,
+			"starting_postgame_pressure": 15,
+			"starting_outside_temptation": 6,
+			"world_state_on_start": {
+				"world_instability": 9,
+				"romantic_pressure": 4
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:axiom",
+				"threshold_union_active"
+			]
+		},
+		"taren": {
+			"postgame_title": "Contrato emocional",
+			"stability_label": "Deber compartido",
+			"pressure_theme": "La unión con Taren convierte la intimidad en asunto político.",
+			"starting_final_union_stability": 72,
+			"starting_postgame_pressure": 18,
+			"starting_outside_temptation": 4,
+			"world_state_on_start": {
+				"global_tension": 6,
+				"romantic_pressure": 4
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:taren",
+				"guild_watches_union"
+			]
+		},
+		"rhein": {
+			"postgame_title": "Raíces compartidas",
+			"stability_label": "Permanencia natural",
+			"pressure_theme": "El bosque se vuelve parte de la relación, no escenario.",
+			"starting_final_union_stability": 75,
+			"starting_postgame_pressure": 10,
+			"starting_outside_temptation": 4,
+			"world_state_on_start": {
+				"world_instability": 2,
+				"global_tension": 2
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:rhein",
+				"forest_accepts_witness"
+			]
+		},
+		"selene": {
+			"postgame_title": "Mensaje propio",
+			"stability_label": "Elección sin neutralidad",
+			"pressure_theme": "Cada mensaje que Selene entrega ahora parece tener doble lectura.",
+			"starting_final_union_stability": 70,
+			"starting_postgame_pressure": 17,
+			"starting_outside_temptation": 5,
+			"world_state_on_start": {
+				"global_tension": 5,
+				"romantic_pressure": 4
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:selene",
+				"council_questions_messenger"
+			]
+		},
+		"elara": {
+			"postgame_title": "Amante declarada",
+			"stability_label": "Orgullo público",
+			"pressure_theme": "La unión vive en voz alta. Eso la protege y la expone.",
+			"starting_final_union_stability": 68,
+			"starting_postgame_pressure": 16,
+			"starting_outside_temptation": 11,
+			"world_state_on_start": {
+				"romantic_pressure": 8,
+				"global_tension": 3
+			},
+			"add_world_flags_on_start": [
+				"postgame_partner:elara",
+				"rumor_claimed_union"
+			]
+		}
+	}
+}

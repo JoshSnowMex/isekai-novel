@@ -204,10 +204,17 @@ func complete_final_union(npc_id: String) -> Dictionary:
 	if social_risk >= 70:
 		GameManager.add_world_state_value("global_tension", 4)
 
+	var final_text: String = requirement.get(
+		"success_text",
+		"%s acepta la unión definitiva." % npc.get("name", npc_id)
+	)
+
+	var postgame_messages: Array = PostgameSystem.start_postgame(npc_id)
+
+	for message in postgame_messages:
+		final_text += "\n\n" + str(message)
+
 	return {
 		"success": true,
-		"text": requirement.get(
-			"success_text",
-			"%s acepta la unión definitiva." % npc.get("name", npc_id)
-		)
+		"text": final_text
 	}

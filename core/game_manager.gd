@@ -74,6 +74,7 @@ func start_new_game(player_name: String, class_id: String, gender_identity: Stri
 		"collectibles": [],
 		"final_union_npc_id": "",
 		"emotional_calendar": {},
+		"postgame_state": {},
 	}
 
 	if class_data.has("starting_stats"):
@@ -153,6 +154,11 @@ func sleep_until_next_day() -> void:
 
 	for milestone in milestone_results:
 		add_pending_narrative_message(milestone)
+	
+	var postgame_results: Array = PostgameSystem.process_daily_postgame()
+
+	for postgame_text in postgame_results:
+		add_pending_narrative_message(postgame_text)
 
 	emit_signal("time_changed")
 	emit_signal("player_changed")
