@@ -298,19 +298,36 @@ func finish_date(date_state: Dictionary) -> Dictionary:
 			"Primera cita perfecta"
 		)
 
-	var reward_key: String = "success_rewards"
-
-	if success_level == "excellent":
-		reward_key = "excellent_rewards"
-	elif success_level == "perfect":
-		reward_key = "perfect_rewards"
-
+	var reward_key: String = "%s_rewards" % success_level
 	var rewards: Dictionary = date_location.get(reward_key, {})
+	var resolved_rewards: Dictionary = {}
 	var reward_text: String = ""
 
 	for key in rewards.keys():
-		var amount: int = int(rewards[key])
-		reward_text += GameManager.add_relationship_value(npc_id, key, amount)
+		var amount: int = resolve_reward_amount(rewards[key])
+
+		if amount == 0:
+			continue
+
+		resolved_rewards[str(key)] = amount
+
+	var location_bonus_text: String = apply_location_fit_bonus_to_resolved_rewards(
+		npc_id,
+		date_location,
+		success_level,
+		resolved_rewards
+	)
+
+	for key in resolved_rewards.keys():
+		var amount: int = int(resolved_rewards[key])
+		reward_text += "\n%s %+d" % [
+			get_relationship_key_label(str(key)),
+			amount
+		]
+		reward_text += GameManager.add_relationship_value(npc_id, str(key), amount)
+
+	if location_bonus_text != "":
+		reward_text += location_bonus_text
 
 	var reveal_text: String = reveal_date_reward_info(npc_id, success_level)
 	var collectible_text: String = grant_date_collectible(npc_id, date_location_id)
@@ -602,3 +619,72 @@ func apply_move_world_pressure(move: Dictionary, mood_tags: Array, was_positive:
 
 	if move_tags.has("sexual") or move_tags.has("intense"):
 		GameManager.add_world_state_value("romantic_pressure", 1)
+
+func resolve_reward_amount(value) -> int:
+	if typeof(value) == TYPE_DICTIONARY:
+		var min_value: int = int(value.get("min", 0))
+		var max_value: int = int(value.get("max", min_value))
+
+		if max_value < min_value:
+			max_value = min_value
+
+		return randi_range(min_value, max_value)
+
+	return int(value)
+
+
+func get_relationship_key_label(key: String) -> String:
+	match key:
+		"friendship":
+			return "Amistad"
+		"tension":
+			return "Tensión"
+		"loyalty":
+			return "Lealtad"
+		"jealousy":
+			return "Celos"
+		_:
+			return key.capitalize()
+
+
+func apply_location_fit_bonus_to_resolved_rewards(
+	npc_id: String,
+	date_location: Dictionary,
+	success_level: String,
+	resolved_rewards: Dictionary
+) -> String:
+	if success_level != "excellent" and success_level != "perfect":
+		return ""
+
+	var preferred_npcs: Array = date_location.get("preferred_npcs", [])
+	var bad_fit_npcs: Array = date_location.get("bad_fit_npcs", [])
+
+	if bad_fit_npcs.has(npc_id):
+		return ""
+
+	var bonus: int = 0
+	var reason: String = ""
+
+	if preferred_npcs.has(npc_id):
+		match success_level:
+			"excellent":
+				bonus = randi_range(2, 4)
+			"perfect":
+				bonus = randi_range(4, 7)
+
+		reason = "El lugar encajó especialmente bien con este personaje."
+	else:
+		match success_level:
+			"excellent":
+				bonus = randi_range(1, 2)
+			"perfect":
+				bonus = randi_range(2, 4)
+
+		reason = "La calidad de la cita fortaleció la confianza."
+
+	if bonus <= 0:
+		return ""
+
+	resolved_rewards["loyalty"] = int(resolved_rewards.get("loyalty", 0)) + bonus
+
+	return "\n%s Lealtad +%s" % [reason, bonus]
