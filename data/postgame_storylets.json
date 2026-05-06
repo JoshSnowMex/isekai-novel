@@ -26,6 +26,57 @@
 		},
 		"text": "Lyria empieza a recibir solicitudes muy educadas de acceso a registros que antes nadie se atrevía a nombrar.\n\nNo las envían a ella por ser archivista.\n\nLas envían porque ahora saben que tú puedes tocar una parte de ella que el Consejo no alcanza.\n\nLyria guarda las cartas bajo llave, pero no puede guardar el peso de saber que amarte también la volvió punto de entrada."
 	},
+	"postgame_lyria_private_truth": {
+		"title": "Una verdad sin testigos",
+		"partner_id": "lyria",
+		"priority": 82,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:lyria"],
+				"missing_all": ["postgame_storylet_completed:postgame_lyria_private_truth"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 72 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 4,
+				"postgame_pressure": -2
+			},
+			"collectibles": ["emotional_memory:lyria:postgame_truth_without_witnesses"]
+		},
+		"text": "Lyria te muestra una nota que nadie más debería leer.\n\nNo contiene un secreto del mundo. No revela una conspiración.\n\nEs peor: contiene algo suyo.\n\nUna frase escrita y tachada demasiadas veces hasta quedar casi ilegible: \"Quiero que alguien se quede incluso cuando ya no necesite respuestas.\"\n\nCuando levanta la mirada, entiendes que esta vez no está compartiendo información.\n\nEstá compartiendo riesgo."
+	},
+	"postgame_lyria_council_test": {
+		"title": "La pregunta del Consejo",
+		"partner_id": "lyria",
+		"priority": 88,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:lyria", "library_pressure_active"],
+				"missing_all": ["postgame_storylet_completed:postgame_lyria_council_test"]
+			},
+			"world_state": {
+				"global_tension": { "min": 12 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -2,
+				"postgame_pressure": 5
+			},
+			"world_state": {
+				"global_tension": 3
+			},
+			"add_world_flags": ["council_tested_lyria_union"],
+			"collectibles": ["emotional_memory:lyria:postgame_council_question"]
+		},
+		"text": "Un consejero pregunta por ti usando el nombre de Lyria.\n\nNo pregunta dónde estás. Pregunta qué sabes.\n\nLyria responde sin mentir y sin entregar nada.\n\nDespués, en privado, apoya la frente contra una estantería.\n\n\"Esto es lo que temía\", dice. \"No que me usaran contra ti. Que intentaran usarte para medir cuánto sigo siendo mía.\""
+	},
+
 	"postgame_aeris_observer_bound": {
 		"title": "La estrella parcial",
 		"partner_id": "aeris",
@@ -53,6 +104,57 @@
 		},
 		"text": "Aeris mide el Velo tres veces.\n\nLas tres lecturas son diferentes.\n\nLa cuarta vez no mira el instrumento, te mira a ti.\n\n\"No sé si el Velo cambió porque te amo\", dice. \"O si ahora por fin soy capaz de ver dónde siempre te estaba buscando.\""
 	},
+	"postgame_aeris_truth_kept": {
+		"title": "La verdad que no protege mintiendo",
+		"partner_id": "aeris",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:aeris"],
+				"missing_all": ["postgame_storylet_completed:postgame_aeris_truth_kept"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 68 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 4,
+				"postgame_pressure": -2
+			},
+			"collectibles": ["emotional_memory:aeris:postgame_truth_kept"]
+		},
+		"text": "Aeris te cuenta una lectura del Velo que habría sido más fácil ocultar.\n\nNo es cómoda. No es romántica. No te deja tranquilo.\n\nPrecisamente por eso importa.\n\n\"Antes confundía proteger con callar\", dice. \"Hoy elegí confiar en que puedes quedarte incluso con miedo.\""
+	},
+	"postgame_aeris_veil_answer": {
+		"title": "La respuesta que mira de vuelta",
+		"partner_id": "aeris",
+		"priority": 92,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:aeris", "aeris_observation_bias_confirmed"],
+				"missing_all": ["postgame_storylet_completed:postgame_aeris_veil_answer"]
+			},
+			"world_state": {
+				"world_instability": { "min": 14 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -3,
+				"postgame_pressure": 4
+			},
+			"world_state": {
+				"world_instability": 5
+			},
+			"add_world_flags": ["veil_answered_aeris_union"],
+			"collectibles": ["emotional_memory:aeris:postgame_veil_answered"]
+		},
+		"text": "La estrella que Aeris observa cambia cuando dices su nombre.\n\nNo cuando ella lo dice. No cuando el instrumento apunta.\n\nCuando lo dices tú.\n\nAeris no toca el telescopio durante un largo rato.\n\n\"Esto ya no es observación\", murmura. \"Es correspondencia.\""
+	},
+
 	"postgame_eryon_story_claim": {
 		"title": "El narrador celoso de su final",
 		"partner_id": "eryon",
@@ -80,6 +182,57 @@
 		},
 		"text": "Eryon empieza a escribir versiones alternativas de la noche en que lo elegiste.\n\nEn una, te vas.\n\nEn otra, él se ríe primero.\n\nEn la tercera, nadie se atreve a decir la verdad.\n\nCuando le preguntas por qué lo hace, sonríe sin teatro.\n\n\"Porque si puedo imaginar todos los finales donde me abandonas, quizá el real duela menos.\""
 	},
+	"postgame_eryon_real_scene": {
+		"title": "La escena sin edición",
+		"partner_id": "eryon",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:eryon"],
+				"missing_all": ["postgame_storylet_completed:postgame_eryon_real_scene"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 68 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"outside_temptation": -2
+			},
+			"collectibles": ["emotional_memory:eryon:postgame_scene_without_edit"]
+		},
+		"text": "Eryon empieza una frase con el tono de siempre.\n\nLuego se detiene.\n\nNo hay ironía. No hay máscara. No hay remate elegante esperando al final.\n\n\"Tengo miedo\", dice.\n\nLa escena no queda bonita.\n\nPor eso, quizá, por fin parece verdadera."
+	},
+	"postgame_eryon_public_version": {
+		"title": "La versión que todos prefieren",
+		"partner_id": "eryon",
+		"priority": 88,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:eryon", "eryon_tests_chosen_story"],
+				"missing_all": ["postgame_storylet_completed:postgame_eryon_public_version"]
+			},
+			"world_state": {
+				"romantic_pressure": { "min": 12 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -2,
+				"postgame_pressure": 4
+			},
+			"world_state": {
+				"romantic_pressure": 3
+			},
+			"add_world_flags": ["public_story_distorted_eryon_union"],
+			"collectibles": ["emotional_memory:eryon:postgame_public_version"]
+		},
+		"text": "La gente empieza a contar una versión de tu unión con Eryon que suena mejor que la verdad.\n\nMás divertida. Más peligrosa. Más fácil de repetir.\n\nEryon la escucha con una sonrisa impecable.\n\nDespués te pregunta, sin mirarte:\n\n\"¿Te gusta más esa versión?\""
+	},
+
 	"postgame_rhea_patrol_gap": {
 		"title": "La patrulla que esperó",
 		"partner_id": "rhea",
@@ -107,6 +260,57 @@
 		},
 		"text": "Rhea llega tarde a una patrulla.\n\nNo mucho. Lo suficiente para que todos sepan por qué.\n\nNadie te acusa. Nadie la acusa.\n\nEso es peor.\n\nRhea se quita los guantes con rabia contenida. \"No voy a pedir perdón por amarte\", dice. \"Pero tampoco quiero que alguien pague por eso.\""
 	},
+	"postgame_rhea_guarded_by_you": {
+		"title": "Cuando ella baja la guardia",
+		"partner_id": "rhea",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:rhea"],
+				"missing_all": ["postgame_storylet_completed:postgame_rhea_guarded_by_you"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 70 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"postgame_pressure": -2
+			},
+			"collectibles": ["emotional_memory:rhea:postgame_guard_down"]
+		},
+		"text": "Rhea se queda dormida antes que tú.\n\nParece imposible. Casi injusto verla sin tensión en los hombros.\n\nDurante un rato, nadie necesita que ella sea la primera en levantarse.\n\nCuando despierta y nota que estuviste vigilando la puerta, intenta bromear.\n\nNo le sale.\n\n\"Gracias\", dice, como si la palabra pesara más que su espada."
+	},
+	"postgame_rhea_border_choice": {
+		"title": "El lindero o tu puerta",
+		"partner_id": "rhea",
+		"priority": 92,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:rhea", "postgame_patrol_gap_seen"],
+				"missing_all": ["postgame_storylet_completed:postgame_rhea_border_choice"]
+			},
+			"world_state": {
+				"global_tension": { "min": 15 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -3,
+				"postgame_pressure": 5
+			},
+			"world_state": {
+				"global_tension": 5
+			},
+			"add_world_flags": ["rhea_postgame_border_choice_active"],
+			"collectibles": ["emotional_memory:rhea:postgame_border_or_door"]
+		},
+		"text": "Dos avisos llegan al mismo tiempo.\n\nUna señal en el lindero.\n\nUna amenaza cerca de tu casa.\n\nRhea no pregunta qué hacer. Eso sería más fácil.\n\nSolo te mira, furiosa por vivir en un mundo donde amar también puede partir una guardia en dos."
+	},
+
 	"postgame_nova_resonance": {
 		"title": "El prototipo que aprendió celos",
 		"partner_id": "nova",
@@ -134,6 +338,57 @@
 		},
 		"text": "Nova insiste en que el prototipo no puede sentir celos.\n\nLuego el prototipo intenta cerrar la puerta cuando alguien más se acerca a ti.\n\nNova se ríe.\n\nDespués deja de reír.\n\n\"Bueno\", dice, \"tal vez le enseñamos demasiado bien qué significa querer que alguien se quede.\""
 	},
+	"postgame_nova_not_a_cage": {
+		"title": "No soy tu jaula",
+		"partner_id": "nova",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:nova"],
+				"missing_all": ["postgame_storylet_completed:postgame_nova_not_a_cage"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 66 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"outside_temptation": -2
+			},
+			"collectibles": ["emotional_memory:nova:postgame_not_a_cage"]
+		},
+		"text": "Nova desaparece una tarde entera.\n\nCuando vuelve, trae una pieza inútil, tres manchas de hollín y una mirada demasiado defensiva.\n\nAntes de que preguntes, suelta:\n\n\"Quería comprobar si podía irme y seguir queriendo volver.\"\n\nLuego deja la pieza en tu mesa.\n\n\"Pésima noticia: sí.\""
+	},
+	"postgame_nova_experiment_cost": {
+		"title": "La variable prohibida",
+		"partner_id": "nova",
+		"priority": 91,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:nova", "prototype_learned_jealousy"],
+				"missing_all": ["postgame_storylet_completed:postgame_nova_experiment_cost"]
+			},
+			"world_state": {
+				"world_instability": { "min": 14 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -3,
+				"postgame_pressure": 4
+			},
+			"world_state": {
+				"world_instability": 5
+			},
+			"add_world_flags": ["nova_postgame_variable_forbidden"],
+			"collectibles": ["emotional_memory:nova:postgame_forbidden_variable"]
+		},
+		"text": "Nova borra tu nombre de una fórmula.\n\nNo porque no importe.\n\nPorque importa demasiado.\n\n\"Te usé como constante una vez\", dice. \"No voy a hacerlo otra vez solo porque funcionó.\"\n\nEl prototipo tiembla como si no estuviera de acuerdo."
+	},
+
 	"postgame_seraphine_sanctuary_murmur": {
 		"title": "El murmullo del Santuario",
 		"partner_id": "seraphine",
@@ -161,6 +416,58 @@
 		},
 		"text": "El Santuario no condena a Seraphine.\n\nEso sería más fácil de enfrentar.\n\nSolo baja la voz cuando ella pasa.\n\nSeraphine mantiene la cabeza alta hasta que están solos. Entonces toma aire como si la fe y el deseo estuvieran aprendiendo a compartir el mismo pecho."
 	},
+	"postgame_seraphine_chosen_prayer": {
+		"title": "Una oración elegida",
+		"partner_id": "seraphine",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:seraphine"],
+				"missing_all": ["postgame_storylet_completed:postgame_seraphine_chosen_prayer"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 70 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"postgame_pressure": -2
+			},
+			"collectibles": ["emotional_memory:seraphine:postgame_chosen_prayer"]
+		},
+		"text": "Seraphine reza contigo sin pedirte que cierres los ojos.\n\nNo intenta purificar el deseo.\n\nNo intenta esconderlo.\n\nSolo lo coloca junto a la gratitud, el miedo y la esperanza, como si todas esas cosas pudieran compartir altar.\n\n\"Hoy no recé para dejar de amarte\", dice. \"Recé para hacerlo bien.\""
+	},
+	"postgame_seraphine_public_vow": {
+		"title": "El voto escuchado",
+		"partner_id": "seraphine",
+		"priority": 91,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:seraphine", "sanctuary_murmur_active"],
+				"missing_all": ["postgame_storylet_completed:postgame_seraphine_public_vow"]
+			},
+			"world_state": {
+				"global_tension": { "min": 12 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -2,
+				"postgame_pressure": 5
+			},
+			"world_state": {
+				"romantic_pressure": 3,
+				"global_tension": 2
+			},
+			"add_world_flags": ["seraphine_public_vow_questioned"],
+			"collectibles": ["emotional_memory:seraphine:postgame_vow_heard"]
+		},
+		"text": "Alguien pregunta a Seraphine si su voto sigue siendo puro.\n\nElla no mira al suelo.\n\n\"No\", responde.\n\nEl Santuario queda inmóvil.\n\nLuego añade:\n\n\"Ahora es honesto.\""
+	},
+
 	"postgame_kael_staying_cost": {
 		"title": "El trabajo rechazado",
 		"partner_id": "kael",
@@ -188,6 +495,57 @@
 		},
 		"text": "Kael rechaza un trabajo antes de que terminen de explicarlo.\n\nNo mira hacia ti al hacerlo.\n\nEso lo vuelve más obvio.\n\nCuando le preguntas si está seguro, responde con sequedad: \"No estoy huyendo. Estoy practicando.\""
 	},
+	"postgame_kael_door_open": {
+		"title": "La puerta sin cerrojo",
+		"partner_id": "kael",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:kael"],
+				"missing_all": ["postgame_storylet_completed:postgame_kael_door_open"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 68 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"postgame_pressure": -2
+			},
+			"collectibles": ["emotional_memory:kael:postgame_unlocked_door"]
+		},
+		"text": "Kael deja la puerta sin cerrojo.\n\nNo lo anuncia. No lo convierte en ceremonia.\n\nPero sabes lo que significa para alguien que ha sobrevivido cerrando siempre la salida antes de dormir.\n\nCuando se acuesta, de espaldas a la puerta abierta, murmura:\n\n\"No me acostumbro todavía. Pero quiero hacerlo.\""
+	},
+	"postgame_kael_old_debt": {
+		"title": "La deuda que encuentra camino",
+		"partner_id": "kael",
+		"priority": 90,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:kael", "kael_rejected_job_to_stay"],
+				"missing_all": ["postgame_storylet_completed:postgame_kael_old_debt"]
+			},
+			"world_state": {
+				"global_tension": { "min": 10 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -3,
+				"postgame_pressure": 4
+			},
+			"world_state": {
+				"global_tension": 3
+			},
+			"add_world_flags": ["kael_old_debt_active"],
+			"collectibles": ["emotional_memory:kael:postgame_old_debt"]
+		},
+		"text": "El trabajo que Kael rechazó encuentra otra forma de llegar.\n\nUn nombre de su pasado aparece escrito en una nota doblada con demasiada precisión.\n\nKael la lee una vez.\n\nLuego la dobla igual que estaba.\n\n\"Te dije que quedarme podía traer cosas\", dice.\n\nNo suena a advertencia.\n\nSuena a vergüenza."
+	},
+
 	"postgame_myr_shape_doubt": {
 		"title": "La forma que teme gustarte demasiado",
 		"partner_id": "myr",
@@ -215,6 +573,58 @@
 		},
 		"text": "Myr adopta una forma que sabe que te gusta.\n\nLuego otra.\n\nLuego otra.\n\nAl final se detiene, casi moleste consigo misme.\n\n\"No quiero convertirme en una respuesta correcta\", dice. \"Ni siquiera para ti.\""
 	},
+	"postgame_myr_loved_change": {
+		"title": "Amar el cambio",
+		"partner_id": "myr",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:myr"],
+				"missing_all": ["postgame_storylet_completed:postgame_myr_loved_change"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 68 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"outside_temptation": -2
+			},
+			"collectibles": ["emotional_memory:myr:postgame_loved_change"]
+		},
+		"text": "Myr cambia de forma a mitad de una conversación importante.\n\nAntes, eso habría sido una fuga.\n\nAhora espera.\n\nTú también.\n\nCuando la conversación sigue sin que nadie exija volver a la forma anterior, Myr sonríe con algo que no pertenece a una sola cara.\n\n\"Ah\", dice. \"Así se siente no tener que elegir una sola versión para ser queride.\""
+	},
+	"postgame_myr_alchemy_mirror": {
+		"title": "El espejo alquímico",
+		"partner_id": "myr",
+		"priority": 88,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:myr", "myr_tests_preferred_shape"],
+				"missing_all": ["postgame_storylet_completed:postgame_myr_alchemy_mirror"]
+			},
+			"postgame_state": {
+				"outside_temptation": { "min": 16 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -2,
+				"outside_temptation": 4
+			},
+			"world_state": {
+				"romantic_pressure": 2,
+				"world_instability": 2
+			},
+			"add_world_flags": ["myr_alchemy_mirror_active"],
+			"collectibles": ["emotional_memory:myr:postgame_alchemy_mirror"]
+		},
+		"text": "Myr crea un espejo que muestra la forma que más deseas ver.\n\nEl problema no es que funcione.\n\nEl problema es que tarda en apagarse.\n\nMyr no mira el reflejo. Te mira a ti.\n\n\"No quiero odiar una forma mía solo porque te gustó demasiado.\""
+	},
+
 	"postgame_axiom_threshold_thin": {
 		"title": "El borde demasiado cerca",
 		"partner_id": "axiom",
@@ -242,6 +652,60 @@
 		},
 		"text": "Axiom toca tu nombre y el aire se abre un poco.\n\nNo una puerta. No todavía.\n\nSolo una posibilidad con dientes.\n\n\"Creo que estar contigo me vuelve más real\", dice. \"Y al mundo, menos seguro.\""
 	},
+	"postgame_axiom_name_anchor": {
+		"title": "El nombre como ancla",
+		"partner_id": "axiom",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:axiom"],
+				"missing_all": ["postgame_storylet_completed:postgame_axiom_name_anchor"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 65 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"postgame_pressure": -2
+			},
+			"world_state": {
+				"world_instability": -1
+			},
+			"collectibles": ["emotional_memory:axiom:postgame_name_anchor"]
+		},
+		"text": "Axiom te pide que repitas su nombre.\n\nNo porque lo haya olvidado.\n\nPorque cada vez que lo dices, su forma deja de temblar un poco.\n\n\"Ser nombrade por ti no me encierra\", dice. \"Me sostiene.\""
+	},
+	"postgame_axiom_door_dream": {
+		"title": "El sueño de la puerta abierta",
+		"partner_id": "axiom",
+		"priority": 96,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:axiom", "threshold_too_close"],
+				"missing_all": ["postgame_storylet_completed:postgame_axiom_door_dream"]
+			},
+			"world_state": {
+				"world_instability": { "min": 18 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -5,
+				"postgame_pressure": 5
+			},
+			"world_state": {
+				"world_instability": 8
+			},
+			"add_world_flags": ["axiom_door_dream_active"],
+			"collectibles": ["emotional_memory:axiom:postgame_door_dream"]
+		},
+		"text": "Sueñas con una puerta que no debería existir.\n\nAxiom está del otro lado.\n\nTambién está junto a ti.\n\nTambién es la puerta.\n\nAl despertar, Axiom pronuncia una frase que no recuerda haber aprendido:\n\n\"Un final abierto también puede devorar.\""
+	},
+
 	"postgame_taren_guild_suspicion": {
 		"title": "Favoritismo",
 		"partner_id": "taren",
@@ -269,6 +733,57 @@
 		},
 		"text": "Nadie acusa a Taren de favorecerte.\n\nSolo empiezan a medir cada decisión suya contra tu sombra.\n\nÉl lo nota, por supuesto.\n\n\"Amarte no me vuelve injusto\", dice.\n\nPero ambos saben que en política no basta con ser justo. También hay que parecerlo."
 	},
+	"postgame_taren_rest_without_guilt": {
+		"title": "Descansar sin pedir permiso",
+		"partner_id": "taren",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:taren"],
+				"missing_all": ["postgame_storylet_completed:postgame_taren_rest_without_guilt"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 70 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"postgame_pressure": -2
+			},
+			"collectibles": ["emotional_memory:taren:postgame_rest_without_guilt"]
+		},
+		"text": "Taren se queda sentado después de terminar el informe.\n\nNo toma otro documento.\n\nNo llama a nadie.\n\nNo llena el silencio con deber.\n\nCuando notas el esfuerzo que le cuesta, dice:\n\n\"No sé descansar sin sentir que alguien va a pagar por ello. Pero contigo... quiero aprender.\""
+	},
+	"postgame_taren_public_decision": {
+		"title": "La decisión pública",
+		"partner_id": "taren",
+		"priority": 92,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:taren", "guild_suspects_favoritism"],
+				"missing_all": ["postgame_storylet_completed:postgame_taren_public_decision"]
+			},
+			"world_state": {
+				"global_tension": { "min": 16 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -2,
+				"postgame_pressure": 5
+			},
+			"world_state": {
+				"global_tension": 4
+			},
+			"add_world_flags": ["taren_public_decision_scrutinized"],
+			"collectibles": ["emotional_memory:taren:postgame_public_decision"]
+		},
+		"text": "Taren toma una decisión correcta.\n\nEso no basta.\n\nPorque la decisión te beneficia indirectamente.\n\nEl gremio lo sabe. Tú lo sabes. Él lo sabe.\n\n\"La justicia no debería necesitar actuar como si no amara a nadie\", dice.\n\nPero esa frase no cabe en un acta oficial."
+	},
+
 	"postgame_rhein_forest_participates": {
 		"title": "Raíces en la puerta",
 		"partner_id": "rhein",
@@ -296,6 +811,57 @@
 		},
 		"text": "Un brote aparece junto a tu puerta.\n\nRhein no parece sorprendido.\n\n\"El bosque no aprueba como una persona\", explica. \"Pero recuerda dónde se siente cuidado.\"\n\nLa raíz no entra.\n\nSolo espera."
 	},
+	"postgame_rhein_slow_promise": {
+		"title": "La promesa lenta",
+		"partner_id": "rhein",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:rhein"],
+				"missing_all": ["postgame_storylet_completed:postgame_rhein_slow_promise"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 68 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"postgame_pressure": -1
+			},
+			"collectibles": ["emotional_memory:rhein:postgame_slow_promise"]
+		},
+		"text": "Rhein no promete para siempre.\n\nPromete mañana.\n\nLuego, cuando llega mañana, promete caminar contigo hasta la tarde.\n\nY cuando llega la tarde, prepara un lugar donde puedas sentarte.\n\nCon él, la eternidad no se declara.\n\nSe cultiva."
+	},
+	"postgame_rhein_forest_claim": {
+		"title": "Lo que el bosque reclama",
+		"partner_id": "rhein",
+		"priority": 90,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:rhein", "forest_participates_in_union"],
+				"missing_all": ["postgame_storylet_completed:postgame_rhein_forest_claim"]
+			},
+			"world_state": {
+				"world_instability": { "min": 8 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -2,
+				"postgame_pressure": 4
+			},
+			"world_state": {
+				"world_instability": 3
+			},
+			"add_world_flags": ["forest_claims_place_in_union"],
+			"collectibles": ["emotional_memory:rhein:postgame_forest_claim"]
+		},
+		"text": "Una raíz cruza el umbral de tu casa.\n\nRhein no la corta.\n\nTú tampoco.\n\n\"No quiere invadir\", dice. \"Quiere participar.\"\n\nEl problema es que algunas formas de amor no saben quedarse fuera."
+	},
+
 	"postgame_selene_message_choice": {
 		"title": "El mensaje que no entregó",
 		"partner_id": "selene",
@@ -323,6 +889,57 @@
 		},
 		"text": "Selene no entrega un mensaje.\n\nNo lo destruye. No lo altera.\n\nSolo decide que hoy no.\n\nCuando te lo cuenta, no pide absolución.\n\n\"Antes mi neutralidad decidía por mí\", dice. \"Ahora tengo que cargar con cada elección.\""
 	},
+	"postgame_selene_message_for_herself": {
+		"title": "El mensaje propio",
+		"partner_id": "selene",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:selene"],
+				"missing_all": ["postgame_storylet_completed:postgame_selene_message_for_herself"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 68 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"postgame_pressure": -2
+			},
+			"collectibles": ["emotional_memory:selene:postgame_message_for_herself"]
+		},
+		"text": "Selene escribe un mensaje y no se lo entrega a nadie.\n\nLo deja sobre la mesa para que lo leas.\n\nNo tiene sello. No tiene destinatario oficial.\n\nSolo una frase:\n\n\"Esta vez elijo sin protocolo.\"\n\nCuando vuelves a mirarla, no parece menos diplomática.\n\nParece más viva."
+	},
+	"postgame_selene_council_pressure": {
+		"title": "Canales contaminados",
+		"partner_id": "selene",
+		"priority": 91,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:selene", "selene_withheld_council_message"],
+				"missing_all": ["postgame_storylet_completed:postgame_selene_council_pressure"]
+			},
+			"world_state": {
+				"global_tension": { "min": 14 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -3,
+				"postgame_pressure": 5
+			},
+			"world_state": {
+				"global_tension": 4
+			},
+			"add_world_flags": ["council_channels_contaminated"],
+			"collectibles": ["emotional_memory:selene:postgame_channels_contaminated"]
+		},
+		"text": "El Consejo empieza a enviar mensajes duplicados.\n\nUno por Selene.\n\nUno por otra ruta.\n\nNo lo llaman desconfianza. Lo llaman redundancia.\n\nSelene lee ambos con una calma perfecta.\n\nLuego rompe el segundo.\n\n\"Qué curioso\", dice. \"Todavía creen que neutralidad significa obediencia.\""
+	},
+
 	"postgame_elara_public_claim": {
 		"title": "La copa levantada",
 		"partner_id": "elara",
@@ -350,6 +967,58 @@
 		},
 		"text": "Elara levanta una copa cuando entras.\n\nLa taberna entiende antes que tú.\n\nAlguien ríe. Alguien murmura. Alguien mira con demasiada curiosidad.\n\nElara no baja la copa.\n\n\"Que hablen\", dice. \"Esta vez, al menos, sabrán que fui elegida.\""
 	},
+	"postgame_elara_private_respect": {
+		"title": "Cuando nadie mira",
+		"partner_id": "elara",
+		"priority": 84,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:elara"],
+				"missing_all": ["postgame_storylet_completed:postgame_elara_private_respect"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 66 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 5,
+				"outside_temptation": -2
+			},
+			"collectibles": ["emotional_memory:elara:postgame_when_no_one_looks"]
+		},
+		"text": "Elara no coquetea cuando están solos.\n\nNo al principio.\n\nSolo se sienta cerca y deja que el silencio descubra una parte suya que la taberna nunca ve.\n\n\"Es raro\", dice. \"Que alguien me mire menos y me vea más.\""
+	},
+	"postgame_elara_rumor_blade": {
+		"title": "El rumor como cuchillo",
+		"partner_id": "elara",
+		"priority": 91,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_partner:elara", "elara_declared_union_publicly"],
+				"missing_all": ["postgame_storylet_completed:postgame_elara_rumor_blade"]
+			},
+			"world_state": {
+				"romantic_pressure": { "min": 16 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": -2,
+				"outside_temptation": 5
+			},
+			"world_state": {
+				"romantic_pressure": 4,
+				"global_tension": 2
+			},
+			"add_world_flags": ["elara_rumor_blade_active"],
+			"collectibles": ["emotional_memory:elara:postgame_rumor_blade"]
+		},
+		"text": "El rumor cambia de filo.\n\nAntes decía que Elara había ganado.\n\nAhora pregunta cuánto tardarás en cansarte de ella.\n\nElara se ríe más alto que todos.\n\nPero cuando nadie mira, aprieta tu mano como si odiara necesitar confirmación."
+	},
+
 	"postgame_general_high_temptation": {
 		"title": "La vida no dejó de mirar",
 		"partner_id": "",
@@ -397,5 +1066,52 @@
 			}
 		},
 		"text": "La unión no se rompe.\n\nNo todavía.\n\nPero algo en ella empieza a pedir cuidado urgente. Las promesas no son paredes: son puertas que hay que seguir eligiendo abrir."
+	},
+	"postgame_general_recovery": {
+		"title": "La promesa vuelve a respirar",
+		"partner_id": "",
+		"priority": 75,
+		"repeatable": true,
+		"cooldown_days": 10,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started", "postgame_union_crisis_warned"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 65 },
+				"postgame_pressure": { "max": 45 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 4,
+				"postgame_pressure": -5
+			},
+			"add_world_flags": ["postgame_union_recovered_once"]
+		},
+		"text": "No hubo una gran escena de salvación.\n\nSolo pequeños actos repetidos hasta que la promesa dejó de sonar como algo a punto de romperse.\n\nA veces una unión se salva no por una declaración perfecta, sino por volver a elegirla cuando ya no era fácil."
+	},
+	"postgame_general_stable_union": {
+		"title": "Una elección que aprendió a quedarse",
+		"partner_id": "",
+		"priority": 60,
+		"repeatable": false,
+		"conditions": {
+			"world_flags": {
+				"has_all": ["postgame_started"],
+				"missing_all": ["postgame_storylet_completed:postgame_general_stable_union"]
+			},
+			"postgame_state": {
+				"final_union_stability": { "min": 90 },
+				"postgame_pressure": { "max": 35 }
+			}
+		},
+		"effects": {
+			"postgame_state": {
+				"final_union_stability": 3
+			},
+			"collectibles": ["emotional_memory:world:postgame_stable_union"]
+		},
+		"text": "La unión definitiva no volvió sencillo al mundo.\n\nPero sí cambió la forma en que lo atraviesas.\n\nHay miradas, rumores, deberes, tentaciones, heridas antiguas.\n\nY aun así, algo permanece.\n\nNo como premio.\n\nComo elección practicada."
 	}
 }
