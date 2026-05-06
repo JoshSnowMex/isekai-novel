@@ -456,15 +456,26 @@ func get_success_label(success_level: String) -> String:
 		_:
 			return "fallida"
 
-func format_reward_text(rewards: Dictionary) -> String:
-	if rewards.is_empty():
+func format_reward_text(resolved_rewards: Dictionary) -> String:
+	if resolved_rewards.is_empty():
 		return "\n- Sin recompensa."
 
 	var text: String = ""
 
-	for key in rewards.keys():
+	for key in resolved_rewards.keys():
+		var amount: int = int(resolved_rewards[key])
+
+		if amount == 0:
+			continue
+
 		var label: String = get_relationship_key_label(str(key))
-		text += "\n- %s %+d" % [label, int(rewards[key])]
+		text += "\n- %s %+d" % [
+			label,
+			amount
+		]
+
+	if text == "":
+		return "\n- Sin recompensa."
 
 	return text
 	
