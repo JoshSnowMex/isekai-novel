@@ -358,11 +358,39 @@ func add_approach_npc_action(npc_id: String) -> void:
 	var locked_npc_id: String = npc_id
 	var display_name: String = get_npc_display_name(locked_npc_id)
 
-	add_bottom_action(
+	var button: Button = add_bottom_action(
 		"Acercarse a %s" % display_name,
 		func(): select_npc(locked_npc_id)
 	)
+
+	button.tooltip_text = ""
+
+	button.mouse_entered.connect(func():
+		show_npc_approach_preview(locked_npc_id)
+	)
+
+	button.focus_entered.connect(func():
+		show_npc_approach_preview(locked_npc_id)
+	)
+
+	button.mouse_exited.connect(func():
+		restore_location_overview_text()
+	)
 	
+func show_npc_approach_preview(npc_id: String) -> void:
+	if selected_npc_id != "":
+		return
+
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var display_name: String = get_npc_display_name(npc_id)
+
+	bottom_title_label.text = display_name
+
+	if is_npc_known(npc_id):
+		bottom_description_label.text = "Acercarte a %s te permite hablar, dar regalos, pedir favores o invitarle a una cita si hay confianza suficiente." % npc.get("name", npc_id)
+	else:
+		bottom_description_label.text = "Aún no sabes quién es. Acercarte revelará su identidad y abrirá opciones de interacción."
+		
 func add_location_activity_actions(location_data: Dictionary) -> void:
 	var actions: Dictionary = location_data.get("actions", {})
 	var activities: Array = location_data.get("activities", [])
@@ -372,7 +400,18 @@ func add_location_activity_actions(location_data: Dictionary) -> void:
 			GameManager.current_location_id = "home"
 			SceneRouter.go_to_home()
 		)
-		home_button.tooltip_text = "Ya no tienes acciones disponibles. Vuelve a casa para cerrar el día o descansar."
+		home_button.tooltip_text = ""
+		home_button.mouse_entered.connect(func():
+			bottom_title_label.text = "Ir a casa"
+			bottom_description_label.text = "Ya no tienes acciones disponibles. Vuelve a casa para cerrar el día o descansar."
+		)
+		home_button.focus_entered.connect(func():
+			bottom_title_label.text = "Ir a casa"
+			bottom_description_label.text = "Ya no tienes acciones disponibles. Vuelve a casa para cerrar el día o descansar."
+		)
+		home_button.mouse_exited.connect(func():
+			restore_location_overview_text()
+		)
 		return
 		
 	for activity_id in activities:
@@ -381,19 +420,63 @@ func add_location_activity_actions(location_data: Dictionary) -> void:
 
 	if actions.get("train", false):
 		var train_button: Button = add_bottom_action("Entrenar", func(): do_train(location_data))
-		train_button.tooltip_text = "Mejora una estadística de entrenamiento y consume resistencia."
+		train_button.tooltip_text = ""
+		train_button.mouse_entered.connect(func():
+			bottom_title_label.text = "Entrenar"
+			bottom_description_label.text = "Mejora una estadística de entrenamiento y consume resistencia."
+		)
+		train_button.focus_entered.connect(func():
+			bottom_title_label.text = "Entrenar"
+			bottom_description_label.text = "Mejora una estadística de entrenamiento y consume resistencia."
+		)
+		train_button.mouse_exited.connect(func():
+			restore_location_overview_text()
+		)
 
 	if actions.get("work_full", false):
 		var work_full_button: Button = add_bottom_action("Trabajar jornada completa", func(): do_work_full())
-		work_full_button.tooltip_text = "+20 Lúmenes · -25 Resistencia"
+		work_full_button.tooltip_text = ""
+		work_full_button.mouse_entered.connect(func():
+			bottom_title_label.text = "Trabajar jornada completa"
+			bottom_description_label.text = "Ganas Lúmenes a cambio de una gran cantidad de resistencia."
+		)
+		work_full_button.focus_entered.connect(func():
+			bottom_title_label.text = "Trabajar jornada completa"
+			bottom_description_label.text = "Ganas Lúmenes a cambio de una gran cantidad de resistencia."
+		)
+		work_full_button.mouse_exited.connect(func():
+			restore_location_overview_text()
+		)
 
 	if actions.get("work_half", false):
 		var work_half_button: Button = add_bottom_action("Trabajar medio turno", func(): do_work_half())
-		work_half_button.tooltip_text = "+10 Lúmenes · -15 Resistencia"
+		work_half_button.tooltip_text = ""
+		work_half_button.mouse_entered.connect(func():
+			bottom_title_label.text = "Trabajar medio turno"
+			bottom_description_label.text = "Ganas algunos Lúmenes a cambio de resistencia."
+		)	
+		work_half_button.focus_entered.connect(func():
+			bottom_title_label.text = "Trabajar medio turno"
+			bottom_description_label.text = "Ganas algunos Lúmenes a cambio de resistencia."
+		)
+		work_half_button.mouse_exited.connect(func():
+			restore_location_overview_text()
+		)
 
 	if actions.get("rest", false):
 		var rest_button: Button = add_bottom_action("Descansar", func(): do_rest())
-		rest_button.tooltip_text = "+20 Resistencia · consume tiempo"
+		rest_button.tooltip_text = ""
+		rest_button.mouse_entered.connect(func():
+			bottom_title_label.text = "Descansar"
+			bottom_description_label.text = "Recuperas resistencia, pero consumes tiempo."
+		)
+		rest_button.focus_entered.connect(func():
+			bottom_title_label.text = "Descansar"
+			bottom_description_label.text = "Recuperas resistencia, pero consumes tiempo."
+		)
+		rest_button.mouse_exited.connect(func():
+			restore_location_overview_text()
+		)
 
 	if actions.get("shop", false):
 		add_bottom_action("Comprar", func(): SceneRouter.go_to_shop())
@@ -406,8 +489,7 @@ func add_activity_action_button(activity_id: String) -> void:
 		func(): do_activity(locked_activity_id)
 	)
 
-	var tooltip_text: String = get_activity_tooltip(locked_activity_id)
-	button.tooltip_text = tooltip_text
+	button.tooltip_text = ""
 
 	button.mouse_entered.connect(func():
 		show_activity_preview(locked_activity_id)
@@ -415,6 +497,10 @@ func add_activity_action_button(activity_id: String) -> void:
 
 	button.focus_entered.connect(func():
 		show_activity_preview(locked_activity_id)
+	)
+
+	button.mouse_exited.connect(func():
+		restore_location_overview_text()
 	)
 	
 
@@ -426,6 +512,18 @@ func show_activity_preview(activity_id: String) -> void:
 
 	bottom_title_label.text = str(activity.get("name", activity_id))
 	bottom_description_label.text = get_activity_tooltip(activity_id)
+	
+func restore_location_overview_text() -> void:
+	if selected_npc_id != "":
+		return
+
+	var location_data: Dictionary = DataManager.get_location(current_location_id)
+
+	bottom_title_label.text = str(location_data.get("name", current_location_id))
+	bottom_description_label.text = str(location_data.get("description", ""))
+
+	if GameManager.is_day_exhausted():
+		bottom_description_label.text += "\n\nYa no tienes acciones disponibles. Lo mejor es volver a casa o usar el mapa para revisar otras opciones."
 	
 func has_location_activity_actions(location_data: Dictionary) -> bool:
 	var actions: Dictionary = location_data.get("actions", {})
