@@ -20,7 +20,7 @@ var storylets: Dictionary = {}
 var final_union_requirements: Dictionary = {}
 var postgame_config: Dictionary = {}
 var postgame_storylets: Dictionary = {}
-	
+var ui_assets: Dictionary = {}
 
 func _ready() -> void:
 	load_all_data()
@@ -46,6 +46,7 @@ func load_all_data() -> void:
 	final_union_requirements = load_json("res://data/final_union_requirements.json")
 	postgame_config = load_json("res://data/postgame_config.json")
 	postgame_storylets = load_json("res://data/postgame_storylets.json")
+	ui_assets = load_json("res://data/ui_assets.json")
 
 func load_json(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
@@ -134,3 +135,24 @@ func get_postgame_partner_config(npc_id: String) -> Dictionary:
 
 func get_postgame_storylet(storylet_id: String) -> Dictionary:
 	return postgame_storylets.get(storylet_id, {})
+
+func get_ui_asset_section(section_id: String) -> Dictionary:
+	return ui_assets.get(section_id, {})
+
+
+func get_location_ui(location_id: String) -> Dictionary:
+	var locations_ui: Dictionary = ui_assets.get("locations", {})
+	return locations_ui.get(location_id, {})
+
+
+func get_npc_ui(npc_id: String) -> Dictionary:
+	var npcs_ui: Dictionary = ui_assets.get("npcs", {})
+	return npcs_ui.get(npc_id, {})
+
+
+func get_world_map_ui() -> Dictionary:
+	return ui_assets.get("world_map", {})
+
+
+func get_ui_theme_assets() -> Dictionary:
+	return ui_assets.get("ui", {})

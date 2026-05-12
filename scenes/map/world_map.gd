@@ -1,9 +1,12 @@
 extends Control
 
-var header_label: Label
-var status_label: Label
-var location_container: VBoxContainer
-var info_label: Label
+
+var map_layer: Control
+var location_layer: Control
+var fallback_location_container: VBoxContainer
+var status_panel: WorldStatusPanel
+var selected_location_id: String = ""
+
 
 func _ready() -> void:
 	setup_fullscreen_root()
@@ -11,92 +14,255 @@ func _ready() -> void:
 	refresh_screen()
 	show_pending_narrative_messages()
 
+
 func build_ui() -> void:
-	var root: VBoxContainer = ScreenRoot.create(self)
+	var root: HBoxContainer = HBoxContainer.new()
+	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.offset_left = 0
+	root.offset_top = 0
+	root.offset_right = 0
+	root.offset_bottom = 0
+	root.add_theme_constant_override("separation", 12)
+	add_child(root)
 
-	header_label = UIFactory.title("")
-	root.add_child(header_label)
+	var map_frame: PanelContainer = PanelContainer.new()
+	map_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	map_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(map_frame)
 
-	status_label = UIFactory.body("")
-	root.add_child(status_label)
+	var map_margin: MarginContainer = MarginContainer.new()
+	map_margin.add_theme_constant_override("margin_left", 10)
+	map_margin.add_theme_constant_override("margin_top", 10)
+	map_margin.add_theme_constant_override("margin_right", 10)
+	map_margin.add_theme_constant_override("margin_bottom", 10)
+	map_frame.add_child(map_margin)
 
-	var main: HBoxContainer = HBoxContainer.new()
-	main.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	main.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	main.add_theme_constant_override("separation", 20)
-	root.add_child(main)
+	map_layer = Control.new()
+	map_layer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	map_layer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	map_layer.clip_contents = true
+	map_margin.add_child(map_layer)
 
-	var left_panel: VBoxContainer = VBoxContainer.new()
-	left_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	left_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	main.add_child(left_panel)
+	build_map_background()
+	build_location_layer()
+	build_fallback_location_list()
 
-	var location_label: Label = UIFactory.body("Ubicaciones")
-	left_panel.add_child(location_label)
+	status_panel = WorldStatusPanel.new()
+	status_panel.build()
+	root.add_child(status_panel)
 
-	var location_scroll: ScrollContainer = ScrollContainer.new()
-	location_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	location_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	location_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	location_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	left_panel.add_child(location_scroll)
+	build_panel_actions()
 
-	location_container = VBoxContainer.new()
-	location_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	location_container.add_theme_constant_override("separation", 8)
-	location_scroll.add_child(location_container)
 
-	var right_panel: VBoxContainer = VBoxContainer.new()
-	right_panel.custom_minimum_size = Vector2(340, 1)
-	right_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	right_panel.add_theme_constant_override("separation", 10)
-	main.add_child(right_panel)
+func build_map_background() -> void:
+	var world_map_ui: Dictionary = DataManager.get_world_map_ui()
+	var background_path: String = str(world_map_ui.get("background", ""))
+	var fallback_title: String = str(world_map_ui.get("fallback_title", "Mapa de Luminaria"))
 
-	var info_scroll: ScrollContainer = ScrollContainer.new()
-	info_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	info_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	info_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	right_panel.add_child(info_scroll)
+	var background: Control = VisualAsset.make_texture_or_placeholder(
+		background_path,
+		fallback_title,
+		"Fondo final: world_map_luminaria.png"
+	)
 
-	info_label = UIFactory.body("Selecciona una ubicación.")
-	info_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	info_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info_scroll.add_child(info_label)
+	background.set_anchors_preset(Control.PRESET_FULL_RECT)
+	background.offset_left = 0
+	background.offset_top = 0
+	background.offset_right = 0
+	background.offset_bottom = 0
+	map_layer.add_child(background)
 
-	var journal_button: Button = UIFactory.button("Bitácora")
-	journal_button.pressed.connect(func(): SceneRouter.go_to_journal())
-	right_panel.add_child(journal_button)
 
-	var menu_button: Button = UIFactory.button("Volver al menú")
-	menu_button.pressed.connect(_on_menu_pressed)
-	right_panel.add_child(menu_button)
+func build_location_layer() -> void:
+	location_layer = Control.new()
+	location_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	location_layer.offset_left = 0
+	location_layer.offset_top = 0
+	location_layer.offset_right = 0
+	location_layer.offset_bottom = 0
+	map_layer.add_child(location_layer)
+
+
+func build_fallback_location_list() -> void:
+	var fallback_panel: PanelContainer = PanelContainer.new()
+	fallback_panel.anchor_left = 0.02
+	fallback_panel.anchor_top = 0.02
+	fallback_panel.anchor_right = 0.32
+	fallback_panel.anchor_bottom = 0.98
+	fallback_panel.offset_left = 0
+	fallback_panel.offset_top = 0
+	fallback_panel.offset_right = 0
+	fallback_panel.offset_bottom = 0
+	map_layer.add_child(fallback_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	fallback_panel.add_child(margin)
+
+	var root: VBoxContainer = VBoxContainer.new()
+	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_theme_constant_override("separation", 6)
+	margin.add_child(root)
+
+	var label: Label = UIFactory.body("Ubicaciones")
+	root.add_child(label)
+
+	var scroll: ScrollContainer = ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	root.add_child(scroll)
+
+	fallback_location_container = VBoxContainer.new()
+	fallback_location_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fallback_location_container.add_theme_constant_override("separation", 6)
+	scroll.add_child(fallback_location_container)
+
+
+func build_panel_actions() -> void:
+	status_panel.clear_actions()
+
+	status_panel.add_action("Entrar a ubicación", func():
+		if selected_location_id != "":
+			visit_location(selected_location_id)
+	)
+
+	status_panel.add_action("Casa del Forastero", func():
+		visit_location("home")
+	)
+
+	status_panel.add_action("Bitácora", func():
+		SceneRouter.go_to_journal()
+	)
+
+	status_panel.add_action("Guardar partida", func():
+		SaveManager.save_game()
+		status_panel.set_info("Partida guardada manualmente.")
+	)
+
+	status_panel.add_action("Volver al menú", func():
+		SceneRouter.go_to_main_menu()
+	)
+
 
 func refresh_screen() -> void:
-	header_label.text = "Mes %s · Día %s · %s · %s" % [
-		GameManager.current_month,
-		GameManager.current_day,
-		GameManager.get_weekday_name(),
-		GameManager.get_time_label()
-	]
+	status_panel.set_header()
+	rebuild_locations()
 
-	status_label.text = "Resistencia: %s/%s   |   Dinero: %s   |   Acciones restantes: %s" % [
-		GameManager.player.get("stamina", 0),
-		GameManager.player.get("max_stamina", 0),
-		GameManager.player.get("money", 0),
-		GameManager.get_actions_remaining()
-	]
+	if selected_location_id == "":
+		status_panel.set_info(build_world_intro_text())
+	else:
+		status_panel.set_info(build_location_info_text(selected_location_id))
 
-	for child in location_container.get_children():
+
+func rebuild_locations() -> void:
+	for child in location_layer.get_children():
+		child.queue_free()
+
+	for child in fallback_location_container.get_children():
 		child.queue_free()
 
 	for location_id in DataManager.locations.keys():
-		var location_data: Dictionary = DataManager.get_location(location_id)
-		var button: Button = UIFactory.button(location_data.get("name", location_id))
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.pressed.connect(func(): visit_location(location_id))
-		location_container.add_child(button)
+		create_visual_location_button(str(location_id))
+		create_fallback_location_button(str(location_id))
+
+
+func create_visual_location_button(location_id: String) -> void:
+	var location_data: Dictionary = DataManager.get_location(location_id)
+	var location_ui: Dictionary = DataManager.get_location_ui(location_id)
+
+	var position_data: Dictionary = location_ui.get("position", {})
+	var size_data: Dictionary = location_ui.get("size", {})
+
+	var button: LocationMapButton = LocationMapButton.new()
+	button.setup(
+		location_id,
+		str(location_data.get("name", location_id)),
+		str(location_ui.get("accent", ""))
+	)
+
+	button.position = Vector2(
+		float(position_data.get("x", 40)),
+		float(position_data.get("y", 40))
+	)
+
+	button.custom_minimum_size = Vector2(
+		float(size_data.get("x", 170)),
+		float(size_data.get("y", 86))
+	)
+
+	button.size = button.custom_minimum_size
+	button.pressed.connect(func(): select_location(location_id))
+	location_layer.add_child(button)
+
+
+func create_fallback_location_button(location_id: String) -> void:
+	var location_data: Dictionary = DataManager.get_location(location_id)
+	var button: Button = UIFactory.button(str(location_data.get("name", location_id)))
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.pressed.connect(func(): select_location(location_id))
+	fallback_location_container.add_child(button)
+
+
+func select_location(location_id: String) -> void:
+	selected_location_id = location_id
+	status_panel.set_info(build_location_info_text(location_id))
+
+
+func build_world_intro_text() -> String:
+	var text: String = "Mapa de Luminaria\n\n"
+	text += "Selecciona una ubicación del mapa para ver sus detalles o entrar.\n\n"
+	text += "Los marcadores actuales son placeholders funcionales con nombres definitivos. Cuando existan los assets finales, se reemplazarán por edificios y zonas clicables sin cambiar el gameplay."
+
+	return text
+
+
+func build_location_info_text(location_id: String) -> String:
+	var location_data: Dictionary = DataManager.get_location(location_id)
+	var location_ui: Dictionary = DataManager.get_location_ui(location_id)
+
+	var text: String = "%s\n\n" % location_data.get("name", location_id)
+	text += "%s\n\n" % location_data.get("description", "")
+
+	text += "Asset previsto:\n"
+	text += "- Mapa: %s\n" % str(location_ui.get("map_icon", "sin asignar"))
+	text += "- Fondo: %s\n\n" % str(location_ui.get("background", "sin asignar"))
+
+	var present_npcs: Array = get_present_npcs_for_location(location_id)
+
+	if present_npcs.is_empty():
+		text += "Personajes presentes:\n- Nadie visible en este momento.\n"
+	else:
+		text += "Personajes presentes:\n"
+
+		for npc_id in present_npcs:
+			var npc: Dictionary = DataManager.get_npc(str(npc_id))
+			text += "- %s\n" % npc.get("name", npc_id)
+
+	if location_id == "home":
+		text += "\nLa Casa del Forastero permite descansar, dormir, guardar y gestionar decisiones íntimas."
+
+	return text
+
+
+func get_present_npcs_for_location(location_id: String) -> Array:
+	var result: Array = []
+
+	for npc_id in DataManager.npcs.keys():
+		var npc: Dictionary = DataManager.get_npc(str(npc_id))
+		var schedule: Dictionary = npc.get("schedule", {})
+		var current_location: String = str(schedule.get(GameManager.current_time_block, ""))
+
+		if current_location == location_id:
+			result.append(str(npc_id))
+
+	return result
+
 
 func visit_location(location_id: String) -> void:
 	GameManager.current_location_id = location_id
@@ -107,8 +273,6 @@ func visit_location(location_id: String) -> void:
 
 	SceneRouter.go_to_location()
 
-func _on_menu_pressed() -> void:
-	SceneRouter.go_to_main_menu()
 
 func show_pending_narrative_messages() -> void:
 	var messages: Array = GameManager.consume_pending_narrative_messages()
@@ -122,7 +286,7 @@ func show_pending_narrative_messages() -> void:
 		combined_text += format_narrative_message(message)
 		combined_text += "\n\n"
 
-	info_label.text = combined_text.strip_edges()
+	status_panel.set_info(combined_text.strip_edges())
 	SaveManager.autosave_game()
 
 
@@ -138,6 +302,7 @@ func format_narrative_message(message: Variant) -> String:
 		return "%s\n\n%s" % [title, text]
 
 	return "El Velo se agita\n\n%s" % str(message)
+
 
 func setup_fullscreen_root() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
