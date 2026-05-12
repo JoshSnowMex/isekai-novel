@@ -19,6 +19,8 @@ var item_grid: GridContainer
 var current_message: String = ""
 var preview_item_id: String = ""
 
+var vendor_placeholder: PanelContainer
+var vendor_label: Label
 
 func _ready() -> void:
 	setup_fullscreen_root()
@@ -71,6 +73,7 @@ func build_ui() -> void:
 	build_info_panel()
 	build_global_action_panel()
 	build_shop_panel()
+	build_vendor_placeholder()
 
 	call_deferred("refresh_layout_after_frame")
 
@@ -315,22 +318,26 @@ func show_item_preview(item_id: String) -> void:
 	var owned: int = get_inventory_amount(item_id)
 	var money: int = int(GameManager.player.get("money", 0))
 
-	var text: String = "%s · %s Lúmenes" % [
+	var text: String = "%s · %s L" % [
 		item_name,
 		price
 	]
-
-	if description != "":
-		text += " · %s" % description
 
 	if owned > 0:
 		text += " · Tienes %s" % owned
 
 	if money < price:
-		text += " · Faltan %s Lúmenes" % max(price - money, 0)
+		text += " · Faltan %s L" % max(price - money, 0)
+
+	var short_description: String = description
+
+	if short_description.length() > 74:
+		short_description = short_description.substr(0, 71) + "..."
+
+	if short_description != "":
+		text += " · %s" % short_description
 
 	info_label.text = text
-
 
 func buy_item(item_id: String) -> void:
 	var item: Dictionary = DataManager.get_item(item_id)
@@ -480,8 +487,17 @@ func layout_overlay_controls() -> void:
 		top_y
 	)
 
-	var panel_width: float = max(360.0, shop_layer.size.x - 24.0)
-	var panel_height: float = max(300.0, shop_layer.size.y - top_height - 36.0)
+	var vendor_reserved_width: float = 210.0
+
+	if shop_layer.size.x < 900:
+		vendor_reserved_width = 0.0
+
+	var panel_width: float = max(
+		360.0,
+		shop_layer.size.x - vendor_reserved_width - 36.0
+	)
+
+	var panel_height: float = max(300.0, shop_layer.size.y - top_height - 34.0)
 
 	shop_panel.size = Vector2(panel_width, panel_height)
 	shop_panel.position = Vector2(
@@ -489,17 +505,28 @@ func layout_overlay_controls() -> void:
 		top_y + top_height + 12.0
 	)
 
-	if panel_width >= 980:
-		item_grid.columns = 7
-	elif panel_width >= 820:
+	if panel_width >= 860:
 		item_grid.columns = 6
-	elif panel_width >= 680:
+	elif panel_width >= 700:
 		item_grid.columns = 5
 	elif panel_width >= 540:
 		item_grid.columns = 4
 	else:
 		item_grid.columns = 3
 
+	if vendor_placeholder != null:
+		if vendor_reserved_width <= 0.0:
+			vendor_placeholder.visible = false
+		else:
+			vendor_placeholder.visible = true
+			vendor_placeholder.size = Vector2(
+				vendor_reserved_width - 24.0,
+				panel_height
+			)
+			vendor_placeholder.position = Vector2(
+				shop_panel.position.x + panel_width + 12.0,
+				shop_panel.position.y
+			)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
@@ -527,3 +554,22 @@ func update_scroll_visibility() -> void:
 		item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	else:
 		item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+
+func build_vendor_placeholder() -> void:
+	vendor_placeholder = PanelContainer.new()
+	vendor_placeholder.custom_minimum_size = Vector2(190, 300)
+	shop_layer.add_child(vendor_placeholder)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	vendor_placeholder.add_child(margin)
+
+	vendor_label = Label.new()
+	vendor_label.text = "Arte futuro:\nTendero del Umbral"
+	vendor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vendor_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	vendor_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	margin.add_child(vendor_label)
