@@ -110,6 +110,9 @@ func build_global_action_panel() -> void:
 			"El progreso fue guardado manualmente.\nPuedes continuar explorando esta zona."
 		)
 	)
+	add_global_action("Cargar", func():
+		SceneRouter.go_to_main_menu()
+	)
 
 
 func build_bottom_panel() -> void:
@@ -334,6 +337,9 @@ func show_location_overview(location_data: Dictionary, clear_message: bool = fal
 
 	bottom_title_label.text = str(location_data.get("name", current_location_id))
 	bottom_description_label.text = str(location_data.get("description", ""))
+	
+	if GameManager.is_day_exhausted():
+		bottom_description_label.text += "\n\nYa no tienes acciones disponibles. Lo mejor es volver a casa o usar el mapa para revisar otras opciones."
 
 	if last_message != "":
 		bottom_description_label.text = last_message
@@ -361,6 +367,14 @@ func add_location_activity_actions(location_data: Dictionary) -> void:
 	var actions: Dictionary = location_data.get("actions", {})
 	var activities: Array = location_data.get("activities", [])
 
+	if GameManager.is_day_exhausted():
+		var home_button: Button = add_bottom_action("Ir a casa", func():
+			GameManager.current_location_id = "home"
+			SceneRouter.go_to_home()
+		)
+		home_button.tooltip_text = "Ya no tienes acciones disponibles. Vuelve a casa para cerrar el día o descansar."
+		return
+		
 	for activity_id in activities:
 		var id: String = str(activity_id)
 		var activity: Dictionary = DataManager.get_activity(id)
@@ -1176,9 +1190,9 @@ func layout_overlay_controls() -> void:
 
 	var margin: float = 10.0
 
-	var global_width: float = 360.0
+	var global_width: float = 430.0
 	if location_layer.size.x < 760:
-		global_width = 270.0
+		global_width = 330.0
 
 	global_action_panel.size = Vector2(global_width, 46)
 	global_action_panel.position = Vector2(
