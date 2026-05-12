@@ -1,10 +1,38 @@
 extends Control
 
-var title_label: Label
-var description_label: Label
-var action_container: VBoxContainer
+
+var hud_bar: WorldHudBar
+
+var date_frame: PanelContainer
+var date_layer: Control
+var background_layer: Control
+
+var top_info_panel: PanelContainer
+var top_info_label: Label
+
+var global_action_panel: PanelContainer
+var global_action_buttons: HBoxContainer
+
+var scene_panel: PanelContainer
+var scene_title_label: Label
+var scene_description_label: Label
+
+var npc_panel: PanelContainer
+var npc_name_label: Label
+var npc_portrait_holder: Control
+var npc_status_label: Label
+
+var narrative_panel: PanelContainer
+var narrative_label: Label
+
+var action_panel: PanelContainer
+var action_buttons: HBoxContainer
 
 var current_date: Dictionary = {}
+var current_mode: String = "normal"
+var current_narrative: String = ""
+var selected_move_id: String = ""
+
 
 func _ready() -> void:
 	setup_fullscreen_root()
@@ -15,38 +43,240 @@ func _ready() -> void:
 	else:
 		start_date(SceneRouter.temp_npc_id, SceneRouter.temp_date_location_id)
 
+
 func build_ui() -> void:
-	var root: VBoxContainer = ScreenRoot.create(self)
+	var root: VBoxContainer = VBoxContainer.new()
+	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.offset_left = 0
+	root.offset_top = 0
+	root.offset_right = 0
+	root.offset_bottom = 0
+	root.add_theme_constant_override("separation", 4)
+	add_child(root)
 
-	title_label = UIFactory.title("")
-	root.add_child(title_label)
+	hud_bar = WorldHudBar.new()
+	hud_bar.build()
+	root.add_child(hud_bar)
 
-	var description_scroll: ScrollContainer = ScrollContainer.new()
-	description_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	description_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	root.add_child(description_scroll)
+	date_frame = PanelContainer.new()
+	date_frame.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	date_frame.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(date_frame)
 
-	description_label = UIFactory.body("")
-	description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	description_scroll.add_child(description_label)
+	var frame_margin: MarginContainer = MarginContainer.new()
+	frame_margin.add_theme_constant_override("margin_left", 6)
+	frame_margin.add_theme_constant_override("margin_top", 6)
+	frame_margin.add_theme_constant_override("margin_right", 6)
+	frame_margin.add_theme_constant_override("margin_bottom", 6)
+	date_frame.add_child(frame_margin)
 
-	var action_scroll: ScrollContainer = ScrollContainer.new()
-	action_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	root.add_child(action_scroll)
+	date_layer = Control.new()
+	date_layer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	date_layer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	date_layer.clip_contents = true
+	frame_margin.add_child(date_layer)
 
-	action_container = VBoxContainer.new()
-	action_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_container.alignment = BoxContainer.ALIGNMENT_CENTER
-	action_container.add_theme_constant_override("separation", 10)
-	action_scroll.add_child(action_container)
+	background_layer = Control.new()
+	background_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	background_layer.offset_left = 0
+	background_layer.offset_top = 0
+	background_layer.offset_right = 0
+	background_layer.offset_bottom = 0
+	date_layer.add_child(background_layer)
+
+	build_background()
+	build_top_info_panel()
+	build_global_action_panel()
+	build_scene_panel()
+	build_npc_panel()
+	build_narrative_panel()
+	build_action_panel()
+
+	call_deferred("refresh_layout_after_frame")
+
+
+func build_background() -> void:
+	clear_children(background_layer)
+
+	var background: Control = VisualAsset.make_texture_or_placeholder(
+		"res://assets/backgrounds/date_scene_default.png",
+		"Cita",
+		"Fondo final: date_scene_default.png"
+	)
+
+	background.set_anchors_preset(Control.PRESET_FULL_RECT)
+	background.offset_left = 0
+	background.offset_top = 0
+	background.offset_right = 0
+	background.offset_bottom = 0
+	background_layer.add_child(background)
+
+
+func build_top_info_panel() -> void:
+	top_info_panel = PanelContainer.new()
+	top_info_panel.custom_minimum_size = Vector2(560, 46)
+	date_layer.add_child(top_info_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 6)
+	top_info_panel.add_child(margin)
+
+	top_info_label = Label.new()
+	top_info_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_info_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	top_info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	top_info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	top_info_label.clip_text = true
+	margin.add_child(top_info_label)
+
+
+func build_global_action_panel() -> void:
+	global_action_panel = PanelContainer.new()
+	global_action_panel.custom_minimum_size = Vector2(330, 46)
+	date_layer.add_child(global_action_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 6)
+	global_action_panel.add_child(margin)
+
+	global_action_buttons = HBoxContainer.new()
+	global_action_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	global_action_buttons.add_theme_constant_override("separation", 8)
+	margin.add_child(global_action_buttons)
+
+	add_global_action("Guardar", func():
+		SaveManager.save_game()
+		show_date_message("Partida guardada", "Guardaste durante la cita. El momento queda suspendido en la memoria.")
+	)
+
+	add_global_action("Cargar", func(): SceneRouter.go_to_main_menu())
+
+
+func build_scene_panel() -> void:
+	scene_panel = PanelContainer.new()
+	scene_panel.custom_minimum_size = Vector2(520, 210)
+	date_layer.add_child(scene_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	scene_panel.add_child(margin)
+
+	var box: VBoxContainer = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 8)
+	margin.add_child(box)
+
+	scene_title_label = Label.new()
+	scene_title_label.custom_minimum_size = Vector2(1, 26)
+	scene_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scene_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	scene_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	scene_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(scene_title_label)
+
+	scene_description_label = Label.new()
+	scene_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scene_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scene_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	scene_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	scene_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(scene_description_label)
+
+
+func build_npc_panel() -> void:
+	npc_panel = PanelContainer.new()
+	npc_panel.custom_minimum_size = Vector2(300, 300)
+	date_layer.add_child(npc_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	npc_panel.add_child(margin)
+
+	var box: VBoxContainer = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 8)
+	margin.add_child(box)
+
+	npc_name_label = Label.new()
+	npc_name_label.custom_minimum_size = Vector2(1, 26)
+	npc_name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	npc_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	npc_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	npc_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(npc_name_label)
+
+	npc_portrait_holder = Control.new()
+	npc_portrait_holder.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	npc_portrait_holder.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_child(npc_portrait_holder)
+
+	npc_status_label = Label.new()
+	npc_status_label.custom_minimum_size = Vector2(1, 54)
+	npc_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	npc_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	npc_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	npc_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(npc_status_label)
+
+
+func build_narrative_panel() -> void:
+	narrative_panel = PanelContainer.new()
+	narrative_panel.custom_minimum_size = Vector2(760, 128)
+	date_layer.add_child(narrative_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	narrative_panel.add_child(margin)
+
+	narrative_label = Label.new()
+	narrative_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	narrative_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	narrative_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	narrative_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	narrative_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	margin.add_child(narrative_label)
+
+
+func build_action_panel() -> void:
+	action_panel = PanelContainer.new()
+	action_panel.custom_minimum_size = Vector2(760, 62)
+	date_layer.add_child(action_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	action_panel.add_child(margin)
+
+	action_buttons = HBoxContainer.new()
+	action_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_buttons.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	action_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	action_buttons.add_theme_constant_override("separation", 8)
+	margin.add_child(action_buttons)
+
 
 func start_date(npc_id: String, date_location_id: String = "") -> void:
+	current_mode = "normal"
+
 	if date_location_id == "":
 		var available: Array = DateSystem.get_available_date_locations(npc_id)
 
@@ -61,113 +291,233 @@ func start_date(npc_id: String, date_location_id: String = "") -> void:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
 
-	title_label.text = "Cita con %s" % npc.get("name", npc_id)
-
-	description_label.text = "%s\n\n%s\n\nProgreso inicial: %s" % [
-		date_location.get("name", date_location_id),
+	current_narrative = "%s\n\n%s" % [
 		date_location.get("description", ""),
-		current_date.get("progress", 0)
+		"La cita comienza con una tensión suave. Todavía hay espacio para equivocarse o para convertir este momento en memoria."
 	]
 
+	refresh_date_view()
 	build_actions()
 
+
 func start_special_date(npc_id: String, step_id: String) -> void:
+	current_mode = "special"
 	current_date = RelationshipSystem.create_special_date_state(npc_id, step_id)
 
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	var step: Dictionary = DataManager.get_relationship_step(step_id)
 
-	title_label.text = "Cita especial con %s" % npc.get("name", npc_id)
-
-	description_label.text = "%s\n\n%s\n\nPara avanzar, deberás responder correctamente sobre lo que conoces de %s." % [
-		step.get("name", step_id),
+	current_narrative = "%s\n\nPara avanzar, deberás responder desde lo que realmente conoces de %s." % [
 		step.get("description", ""),
 		npc.get("name", npc_id)
 	]
 
+	refresh_date_view()
 	build_special_actions()
 
-func build_actions() -> void:
-	clear_container(action_container)
 
-	var talk_button: Button = UIFactory.button("Hablar")
-	talk_button.disabled = not DateSystem.can_talk(current_date)
-	talk_button.pressed.connect(func(): do_talk())
-	action_container.add_child(talk_button)
+func refresh_date_view() -> void:
+	hud_bar.refresh()
 
-	var gift_button: Button = UIFactory.button("Dar regalo")
-	gift_button.disabled = not DateSystem.can_gift(current_date)
-	gift_button.pressed.connect(func(): do_gift())
-	action_container.add_child(gift_button)
+	var npc_id: String = current_date.get("npc_id", "")
+	var npc: Dictionary = DataManager.get_npc(npc_id)
 
-	var move_button: Button = UIFactory.button("Hacer movimiento")
-	move_button.disabled = not DateSystem.can_move(current_date)
-	move_button.pressed.connect(func(): show_move_selection())
-	action_container.add_child(move_button)
+	npc_name_label.text = str(npc.get("name", npc_id))
 
-	add_action("Terminar cita", func(): end_date())
-
-func build_special_actions() -> void:
-	clear_container(action_container)
-
-	if RelationshipSystem.is_special_date_complete(current_date):
-		add_action("Cerrar la conversación", func(): end_special_date())
+	if current_mode == "special":
+		refresh_special_header()
 	else:
-		add_action("Responder", func(): do_special_question())
-		add_action("Cancelar", func(): cancel_special_date())
+		refresh_normal_header()
 
-func add_action(text: String, callback: Callable) -> void:
-	var button: Button = UIFactory.button(text)
-	button.pressed.connect(callback)
-	action_container.add_child(button)
+	narrative_label.text = current_narrative
+	build_npc_portrait()
+	call_deferred("refresh_layout_after_frame")
 
-func clear_container(container: VBoxContainer) -> void:
-	for child in container.get_children():
-		child.queue_free()
 
-func do_special_question() -> void:
-	var q: Dictionary = RelationshipSystem.build_special_question(current_date)
+func refresh_normal_header() -> void:
+	var npc_id: String = current_date.get("npc_id", "")
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var date_location_id: String = current_date.get("date_location_id", "")
+	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
+	var progress: int = int(current_date.get("progress", 0))
+	var threshold: int = int(date_location.get("success_threshold", 70))
 
-	if q.is_empty():
-		description_label.text = "Aunque has llegado hasta aquí, aún no conoces suficiente información aplicable para sostener esta conversación."
-		build_special_actions()
-		return
+	top_info_label.text = "Cita con %s · Progreso %s/%s" % [
+		npc.get("name", npc_id),
+		progress,
+		threshold
+	]
 
-	clear_container(action_container)
+	scene_title_label.text = str(date_location.get("name", date_location_id))
+	scene_description_label.text = build_date_scene_summary(date_location)
 
-	description_label.text = q.get("question", "")
+	npc_status_label.text = build_npc_status_text(npc_id)
 
-	for option in q.get("options", []):
-		var value: String = str(option)
-		var button: Button = UIFactory.button(value)
-		button.pressed.connect(func(): answer_special_question(q, value))
-		action_container.add_child(button)
 
-func answer_special_question(question: Dictionary, selected: String) -> void:
-	var result: Dictionary = RelationshipSystem.answer_special_question(current_date, question, selected)
+func refresh_special_header() -> void:
+	var npc_id: String = current_date.get("npc_id", "")
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var step_id: String = str(current_date.get("relationship_step_id", current_date.get("step_id", "")))
+	var step: Dictionary = DataManager.get_relationship_step(step_id)
 
-	description_label.text = "%s\n\nProgreso especial: %s/%s\nErrores: %s" % [
-		result.get("text", ""),
+	top_info_label.text = "Cita especial con %s" % npc.get("name", npc_id)
+	scene_title_label.text = str(step.get("name", "Avance de relación"))
+	scene_description_label.text = str(step.get("description", "Una conversación importante."))
+	npc_status_label.text = "Progreso especial: %s/%s\nErrores: %s" % [
 		current_date.get("progress", 0),
 		current_date.get("questions_required", 0),
 		current_date.get("mistakes", 0)
 	]
 
-	GameManager.consume_action(3)
-	SaveManager.save_game()
-	build_special_actions()
 
-func end_special_date() -> void:
-	var result: Dictionary = RelationshipSystem.finish_special_date(current_date)
-	SaveManager.save_game()
-	show_final_summary(result.get("text", "La cita especial terminó."))
+func build_date_scene_summary(date_location: Dictionary) -> String:
+	var text: String = ""
+	text += str(date_location.get("description", ""))
 
-func cancel_special_date() -> void:
-	show_final_summary("Decides no continuar con esta cita especial por ahora.\n\nA veces, no forzar una respuesta también protege el vínculo.")
+	var mood_tags: Array = date_location.get("mood_tags", [])
+
+	if not mood_tags.is_empty():
+		text += "\n\nAmbiente: %s" % ", ".join(mood_tags)
+
+	return text
+
+
+func build_npc_status_text(npc_id: String) -> String:
+	GameManager.ensure_relationship(npc_id)
+
+	var relation: Dictionary = GameManager.player["relationships"][npc_id]
+	var state: String = str(relation.get("relationship_state", "none"))
+
+	return "%s\nVínculo %s · Tensión %s · Celos %s" % [
+		GameManager.get_relationship_state_label(state),
+		GameManager.get_total_affinity(npc_id),
+		int(relation.get("tension", 0)),
+		int(relation.get("jealousy", 0))
+	]
+
+
+func build_npc_portrait() -> void:
+	clear_children(npc_portrait_holder)
+
+	var npc_id: String = current_date.get("npc_id", "")
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var npc_ui: Dictionary = DataManager.get_npc_ui(npc_id)
+
+	var portrait_path: String = str(npc_ui.get("talking", npc_ui.get("portrait", "")))
+	var final_asset_name: String = portrait_path.get_file()
+
+	if final_asset_name == "":
+		final_asset_name = "%s_talking.png" % str(npc.get("name", npc_id)).capitalize()
+
+	var portrait: Control = VisualAsset.make_texture_or_placeholder(
+		portrait_path,
+		str(npc.get("name", npc_id)),
+		"Arte final: %s" % final_asset_name
+	)
+
+	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
+	portrait.offset_left = 0
+	portrait.offset_top = 0
+	portrait.offset_right = 0
+	portrait.offset_bottom = 0
+	npc_portrait_holder.add_child(portrait)
+
+
+func build_actions() -> void:
+	clear_children(action_buttons)
+
+	add_action_button(
+		"Hablar",
+		func(): do_talk(),
+		not DateSystem.can_talk(current_date),
+		"Conversar puede mejorar el progreso de la cita o abrir una pregunta sobre lo que sabes."
+	)
+
+	add_action_button(
+		"Regalar",
+		func(): show_gift_selection(),
+		not DateSystem.can_gift(current_date),
+		"Entrega un regalo de tu inventario. Un gusto correcto puede cambiar mucho el tono."
+	)
+
+	add_action_button(
+		"Gesto",
+		func(): show_move_selection(),
+		not DateSystem.can_move(current_date),
+		"Elige un movimiento más intencional. Algunos gestos dependen del ambiente y del vínculo."
+	)
+
+	add_action_button(
+		"Terminar cita",
+		func(): end_date(),
+		false,
+		"Cierra la cita y registra sus consecuencias."
+	)
+
+
+func build_special_actions() -> void:
+	clear_children(action_buttons)
+
+	if RelationshipSystem.is_special_date_complete(current_date):
+		add_action_button(
+			"Cerrar conversación",
+			func(): end_special_date(),
+			false,
+			"Termina esta cita especial y aplica sus consecuencias."
+		)
+	else:
+		add_action_button(
+			"Responder",
+			func(): do_special_question(),
+			false,
+			"Responde usando información que ya descubriste."
+		)
+
+		add_action_button(
+			"Cancelar",
+			func(): cancel_special_date(),
+			false,
+			"Salir sin forzar el avance."
+		)
+
+
+func add_action_button(text: String, callback: Callable, disabled: bool = false, hint: String = "") -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.disabled = disabled
+	button.focus_mode = Control.FOCUS_ALL
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.custom_minimum_size = Vector2(120, 38)
+
+	if not disabled:
+		button.pressed.connect(callback)
+
+	if hint != "":
+		button.mouse_entered.connect(func(): show_hint(hint))
+		button.focus_entered.connect(func(): show_hint(hint))
+
+	action_buttons.add_child(button)
+	return button
+
+
+func show_hint(text: String) -> void:
+	if current_mode == "special":
+		scene_description_label.text = text
+		return
+
+	var date_location_id: String = current_date.get("date_location_id", "")
+	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
+	scene_description_label.text = text + "\n\n" + build_date_scene_summary(date_location)
+
+
+func clear_children(node: Node) -> void:
+	for child in node.get_children():
+		child.queue_free()
+
 
 func do_talk() -> void:
 	if not DateSystem.can_talk(current_date):
-		description_label.text = "La conversación ya dio todo lo que podía dar en esta cita."
+		show_date_message("La conversación se agota", "La conversación ya dio todo lo que podía dar en esta cita.")
 		build_actions()
 		return
 
@@ -185,6 +535,25 @@ func do_talk() -> void:
 	else:
 		do_question()
 
+
+func do_random_dialogue() -> void:
+	var npc_id: String = current_date["npc_id"]
+	var dialogue_line: String = DialogueSystem.get_dialogue_line(npc_id, "casual")
+
+	current_date["progress"] = clamp(int(current_date["progress"]) + 5, 0, 100)
+
+	current_narrative = "%s\n\nLa conversación acerca la cita.\nProgreso +5\nConversaciones usadas: %s/%s" % [
+		dialogue_line,
+		current_date.get("talks_used", 0),
+		DateSystem.NORMAL_DATE_MAX_TALKS
+	]
+
+	GameManager.consume_action(3)
+	SaveManager.save_game()
+	refresh_date_view()
+	build_actions()
+
+
 func do_question() -> void:
 	if not DateSystem.can_question(current_date):
 		do_random_dialogue()
@@ -198,38 +567,61 @@ func do_question() -> void:
 		return
 
 	DateSystem.register_question(current_date)
-	clear_container(action_container)
+	clear_children(action_buttons)
 
-	description_label.text = q["question"]
+	current_narrative = q["question"]
+	refresh_date_view()
 
 	for option in q["options"]:
 		var value: String = str(option)
-		var button: Button = UIFactory.button(value)
-		button.pressed.connect(func(): answer_question(q, value))
-		action_container.add_child(button)
+		add_action_button(value, func(): answer_question(q, value), false, "Responder: %s" % value)
 
-	var back_button: Button = UIFactory.button("No responder")
-	back_button.pressed.connect(func(): build_actions())
-	action_container.add_child(back_button)
+	add_action_button("No responder", func():
+		current_narrative = "Decides no responder todavía. Algunas preguntas pesan más cuando se entienden a medias."
+		refresh_date_view()
+		build_actions()
+	)
 
-func do_gift() -> void:
+
+func answer_question(question: Dictionary, selected: String) -> void:
+	var correct: String = question["correct"]
+	var npc_id: String = current_date["npc_id"]
+
+	if selected == correct:
+		var relationship_text: String = GameManager.add_relationship_value(npc_id, "friendship", 2)
+		current_date["progress"] = clamp(current_date["progress"] + 15, 0, 100)
+		current_narrative = "Respondes sin dudar.\nLa reacción es inmediata… y claramente favorable.\n\nAmistad +2%s" % relationship_text
+	else:
+		var relationship_text: String = GameManager.add_relationship_value(npc_id, "friendship", -2)
+		current_date["progress"] = clamp(current_date["progress"] - 12, 0, 100)
+		current_date["mistakes"] = int(current_date.get("mistakes", 0)) + 1
+		current_narrative = "Tu respuesta no coincide.\nLa distancia entre ambos se hace evidente.\n\nAmistad -2%s" % relationship_text
+
+	GameManager.consume_action(3)
+	SaveManager.save_game()
+
+	refresh_date_view()
+	build_actions()
+
+
+func show_gift_selection() -> void:
 	if not DateSystem.can_gift(current_date):
-		description_label.text = "Ya diste un regalo durante esta cita."
+		show_date_message("Regalo agotado", "Ya diste un regalo durante esta cita.")
 		build_actions()
 		return
 
 	var gifts: Array = GameManager.get_gift_items_in_inventory()
 
-	clear_container(action_container)
+	clear_children(action_buttons)
 
 	if gifts.is_empty():
-		description_label.text = "No tienes regalos disponibles."
-		var back_button: Button = UIFactory.button("Volver")
-		back_button.pressed.connect(func(): build_actions())
-		action_container.add_child(back_button)
+		current_narrative = "No tienes regalos disponibles.\n\nLa intención existe, pero la mochila no ayuda."
+		refresh_date_view()
+		add_action_button("Volver", func(): build_actions())
 		return
 
-	description_label.text = "Elige un regalo para la cita."
+	current_narrative = "Elige un regalo para esta cita. No todos los regalos dicen lo mismo."
+	refresh_date_view()
 
 	for entry in gifts:
 		var item_entry: Dictionary = entry
@@ -237,27 +629,30 @@ func do_gift() -> void:
 		var amount: int = int(item_entry.get("amount", 0))
 		var item_data: Dictionary = DataManager.get_item(item_id)
 
-		var button: Button = UIFactory.button("%s x%s" % [
-			item_data.get("name", item_id),
-			amount
-		])
-		button.pressed.connect(func(): give_date_gift(item_id))
-		action_container.add_child(button)
+		add_action_button(
+			"%s x%s" % [item_data.get("name", item_id), amount],
+			func(): give_date_gift(item_id),
+			false,
+			str(item_data.get("description", "Un regalo."))
+		)
 
-	var back_button: Button = UIFactory.button("Volver")
-	back_button.pressed.connect(func(): build_actions())
-	action_container.add_child(back_button)
+	add_action_button("Volver", func():
+		current_narrative = "Guardas el regalo por ahora."
+		refresh_date_view()
+		build_actions()
+	)
+
 
 func give_date_gift(item_id: String) -> void:
 	if not DateSystem.can_gift(current_date):
-		description_label.text = "Ya diste un regalo durante esta cita."
+		show_date_message("Regalo agotado", "Ya diste un regalo durante esta cita.")
 		build_actions()
 		return
 
 	var npc_id: String = current_date["npc_id"]
 
 	if not GameManager.has_item(item_id):
-		description_label.text = "Ya no tienes ese objeto."
+		show_date_message("Objeto perdido", "Ya no tienes ese objeto.")
 		build_actions()
 		return
 
@@ -299,35 +694,59 @@ func give_date_gift(item_id: String) -> void:
 	GameManager.consume_action(3)
 	SaveManager.save_game()
 
-	description_label.text = "%s\nRegalo: %s\nProgreso %+d" % [
+	current_narrative = "%s\n\nRegalo: %s\nProgreso %+d" % [
 		message,
 		item.get("name", item_id),
 		progress_change
 	]
 
+	refresh_date_view()
 	build_actions()
-	refresh()
+
 
 func show_move_selection() -> void:
-	clear_container(action_container)
+	clear_children(action_buttons)
 
 	var move_ids: Array = DateSystem.get_available_moves(current_date)
 
-	description_label.text = "Elige un gesto. No todos los movimientos son buena idea solo porque puedas intentarlos."
+	current_narrative = "Elige un gesto. No todos los movimientos son buena idea solo porque puedas intentarlos."
+	refresh_date_view()
 
 	if move_ids.is_empty():
-		description_label.text = "Ya no conviene intentar más movimientos en esta cita."
+		current_narrative = "Ya no conviene intentar más movimientos en esta cita."
+		refresh_date_view()
 	else:
 		for move_id in move_ids:
 			var id: String = str(move_id)
 			var move: Dictionary = DataManager.get_date_move(id)
-			var button: Button = UIFactory.button(move.get("name", id))
-			button.pressed.connect(func(): perform_move(id))
-			action_container.add_child(button)
 
-	var back_button: Button = UIFactory.button("Volver")
-	back_button.pressed.connect(func(): build_actions())
-	action_container.add_child(back_button)
+			add_action_button(
+				move.get("name", id),
+				func(): perform_move(id),
+				false,
+				build_move_hint(id)
+			)
+
+	add_action_button("Volver", func():
+		current_narrative = "Dejas pasar el gesto por ahora."
+		refresh_date_view()
+		build_actions()
+	)
+
+
+func build_move_hint(move_id: String) -> String:
+	var move: Dictionary = DataManager.get_date_move(move_id)
+	var text: String = str(move.get("name", move_id))
+
+	text += " · Progreso mínimo %s" % int(move.get("min_progress", 0))
+	text += " · Tensión mínima %s" % int(move.get("min_tension", 0))
+
+	var preferred: Array = move.get("preferred_moods", [])
+	if not preferred.is_empty():
+		text += "\nEncaja con: %s" % ", ".join(preferred)
+
+	return text
+
 
 func perform_move(move_id: String) -> void:
 	var result: Dictionary = DateSystem.perform_move(current_date, move_id)
@@ -335,50 +754,87 @@ func perform_move(move_id: String) -> void:
 	GameManager.consume_action(4)
 	SaveManager.save_game()
 
-	description_label.text = "%s\n\nProgreso actual: %s\nMovimientos usados: %s/%s" % [
+	current_narrative = "%s\n\nProgreso actual: %s\nMovimientos usados: %s/%s" % [
 		result.get("text", ""),
 		current_date.get("progress", 0),
 		current_date.get("moves_used", []).size(),
 		DateSystem.NORMAL_DATE_MAX_MOVES
 	]
 
+	refresh_date_view()
 	build_actions()
-	refresh()
+
 
 func end_date() -> void:
 	var result: Dictionary = DateSystem.finish_date(current_date)
 	SaveManager.save_game()
 	show_final_summary(result.get("text", "La cita terminó."))
 
-func refresh() -> void:
-	current_date["progress"] = clamp(current_date["progress"], 0, 100)
 
-	var npc_id: String = current_date.get("npc_id", "")
-	var npc: Dictionary = DataManager.get_npc(npc_id)
-	var date_location_id: String = current_date.get("date_location_id", "")
-	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
+func do_special_question() -> void:
+	var q: Dictionary = RelationshipSystem.build_special_question(current_date)
 
-	title_label.text = "Cita con %s · %s · Progreso: %s" % [
-		npc.get("name", npc_id),
-		date_location.get("name", date_location_id),
-		current_date["progress"]
-	]
+	if q.is_empty():
+		current_narrative = "Aunque has llegado hasta aquí, aún no conoces suficiente información aplicable para sostener esta conversación."
+		refresh_date_view()
+		build_special_actions()
+		return
 
-func do_random_dialogue() -> void:
-	var npc_id: String = current_date["npc_id"]
-	var dialogue_line: String = DialogueSystem.get_dialogue_line(npc_id, "casual")
+	clear_children(action_buttons)
 
-	current_date["progress"] = clamp(int(current_date["progress"]) + 5, 0, 100)
-	description_label.text = "%s\n\nLa conversación acerca la cita.\nProgreso +5\nConversaciones usadas: %s/%s" % [
-		dialogue_line,
-		current_date.get("talks_used", 0),
-		DateSystem.NORMAL_DATE_MAX_TALKS
+	current_narrative = q.get("question", "")
+	refresh_date_view()
+
+	for option in q.get("options", []):
+		var value: String = str(option)
+		add_action_button(value, func(): answer_special_question(q, value))
+
+	add_action_button("No responder", func():
+		current_narrative = "Decides no forzar la respuesta todavía."
+		refresh_date_view()
+		build_special_actions()
+	)
+
+
+func answer_special_question(question: Dictionary, selected: String) -> void:
+	var result: Dictionary = RelationshipSystem.answer_special_question(current_date, question, selected)
+
+	current_narrative = "%s\n\nProgreso especial: %s/%s\nErrores: %s" % [
+		result.get("text", ""),
+		current_date.get("progress", 0),
+		current_date.get("questions_required", 0),
+		current_date.get("mistakes", 0)
 	]
 
 	GameManager.consume_action(3)
 	SaveManager.save_game()
-	refresh()
-	build_actions()
+
+	refresh_date_view()
+	build_special_actions()
+
+
+func end_special_date() -> void:
+	var result: Dictionary = RelationshipSystem.finish_special_date(current_date)
+	SaveManager.save_game()
+	show_final_summary(result.get("text", "La cita especial terminó."))
+
+
+func cancel_special_date() -> void:
+	show_final_summary("Decides no continuar con esta cita especial por ahora.\n\nA veces, no forzar una respuesta también protege el vínculo.")
+
+
+func show_date_message(title: String, message: String) -> void:
+	current_narrative = "%s\n\n%s" % [title, message]
+	refresh_date_view()
+
+
+func show_final_summary(summary_text: String) -> void:
+	current_narrative = summary_text
+	refresh_date_view()
+	clear_children(action_buttons)
+
+	add_action_button("Continuar", func(): SceneRouter.go_to_world_map())
+
 
 func build_question(npc_id: String) -> Dictionary:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
@@ -422,29 +878,82 @@ func build_question(npc_id: String) -> Dictionary:
 		"options": options
 	}
 
-func answer_question(question: Dictionary, selected: String) -> void:
-	var correct: String = question["correct"]
-	var npc_id: String = current_date["npc_id"]
 
-	clear_container(action_container)
+func layout_overlay_controls() -> void:
+	if date_layer == null:
+		return
 
-	if selected == correct:
-		var relationship_text: String = GameManager.add_relationship_value(npc_id, "friendship", 2)
+	var margin: float = 10.0
+	var top_y: float = 10.0
+	var top_height: float = 46.0
 
-		current_date["progress"] = clamp(current_date["progress"] + 15, 0, 100)
-		description_label.text = "Respondes sin dudar.\nLa reacción es inmediata… y claramente favorable.\nAmistad +2%s" % relationship_text
-	else:
-		var relationship_text: String = GameManager.add_relationship_value(npc_id, "friendship", -2)
+	var global_width: float = 330.0
+	if date_layer.size.x < 760:
+		global_width = 260.0
 
-		current_date["progress"] = clamp(current_date["progress"] - 12, 0, 100)
-		current_date["mistakes"] = int(current_date.get("mistakes", 0)) + 1
-		description_label.text = "Tu respuesta no coincide.\nLa distancia entre ambos se hace evidente.\nAmistad -2%s" % relationship_text
+	global_action_panel.size = Vector2(global_width, top_height)
+	global_action_panel.position = Vector2(
+		max(margin, date_layer.size.x - global_width - margin),
+		top_y
+	)
 
-	GameManager.consume_action(3)
-	SaveManager.save_game()
+	var info_width: float = max(260.0, date_layer.size.x - global_width - (margin * 3.0))
+	top_info_panel.size = Vector2(info_width, top_height)
+	top_info_panel.position = Vector2(margin, top_y)
 
-	build_actions()
-	refresh()
+	var content_top: float = top_y + top_height + 12.0
+	var bottom_action_height: float = 66.0
+	var narrative_height: float = 132.0
+	var gap: float = 10.0
+
+	var available_width: float = date_layer.size.x - 24.0
+	var available_height: float = date_layer.size.y - content_top - bottom_action_height - narrative_height - (gap * 3.0) - 12.0
+
+	var npc_width: float = 300.0
+	var scene_width: float = max(360.0, available_width - npc_width - 12.0)
+
+	if date_layer.size.x < 880:
+		npc_width = 240.0
+		scene_width = max(320.0, available_width - npc_width - 12.0)
+
+	scene_panel.size = Vector2(scene_width, max(210.0, available_height))
+	scene_panel.position = Vector2(12.0, content_top)
+
+	npc_panel.size = Vector2(npc_width, max(210.0, available_height))
+	npc_panel.position = Vector2(scene_panel.position.x + scene_width + 12.0, content_top)
+
+	narrative_panel.size = Vector2(available_width, narrative_height)
+	narrative_panel.position = Vector2(
+		12.0,
+		content_top + max(210.0, available_height) + gap
+	)
+
+	action_panel.size = Vector2(available_width, bottom_action_height)
+	action_panel.position = Vector2(
+		12.0,
+		narrative_panel.position.y + narrative_height + gap
+	)
+
+
+func refresh_layout_after_frame() -> void:
+	await get_tree().process_frame
+	layout_overlay_controls()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		if date_layer != null:
+			call_deferred("refresh_layout_after_frame")
+
+
+func add_global_action(text: String, callback: Callable) -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_ALL
+	button.pressed.connect(callback)
+	global_action_buttons.add_child(button)
+	return button
+
 
 func setup_fullscreen_root() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -452,12 +961,3 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
-
-func show_final_summary(summary_text: String) -> void:
-	description_label.text = summary_text
-
-	clear_container(action_container)
-
-	var continue_button: Button = UIFactory.button("Continuar")
-	continue_button.pressed.connect(func(): SceneRouter.go_to_world_map())
-	action_container.add_child(continue_button)
