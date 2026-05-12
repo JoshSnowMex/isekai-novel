@@ -7,8 +7,7 @@ var shop_layer: Control
 var background_layer: Control
 
 var info_panel: PanelContainer
-var info_title_label: Label
-var info_description_label: Label
+var info_label: Label
 
 var global_action_panel: PanelContainer
 var global_action_buttons: HBoxContainer
@@ -109,31 +108,20 @@ func build_info_panel() -> void:
 	shop_layer.add_child(info_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 4)
-	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_bottom", 4)
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_bottom", 6)
 	info_panel.add_child(margin)
 
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 0)
-	margin.add_child(box)
-
-	info_title_label = Label.new()
-	info_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	info_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	info_title_label.clip_text = true
-	box.add_child(info_title_label)
-
-	info_description_label = Label.new()
-	info_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info_description_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	info_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	info_description_label.clip_text = true
-	box.add_child(info_description_label)
+	info_label = Label.new()
+	info_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	info_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	info_label.clip_text = true
+	margin.add_child(info_label)
 
 
 func build_global_action_panel() -> void:
@@ -175,7 +163,7 @@ func build_shop_panel() -> void:
 	item_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	item_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	margin.add_child(item_scroll)
 
 	item_grid = GridContainer.new()
@@ -194,7 +182,7 @@ func refresh_shop(message: String = "") -> void:
 	refresh_info_panel()
 	refresh_items()
 
-	call_deferred("refresh_layout_after_frame")
+	call_deferred("update_scroll_visibility")
 
 
 func refresh_info_panel() -> void:
@@ -203,12 +191,10 @@ func refresh_info_panel() -> void:
 		return
 
 	if current_message != "":
-		info_title_label.text = "Tienda del Umbral"
-		info_description_label.text = current_message
+		info_label.text = current_message
 		return
 
-	info_title_label.text = "Tienda del Umbral"
-	info_description_label.text = "Click en un regalo para comprarlo. Pasa el cursor para ver detalles."
+	info_label.text = "Tienda del Umbral · Click en un regalo para comprarlo. Pasa el cursor para ver detalles."
 
 
 func refresh_items() -> void:
@@ -264,8 +250,10 @@ func add_item_card(item_id: String) -> void:
 
 	var button: Button = Button.new()
 	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(118, 118)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	button.custom_minimum_size = Vector2(92, 92)
+	button.size = Vector2(92, 92)
 	button.disabled = not can_buy
 	button.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
 
@@ -295,18 +283,29 @@ func add_item_card(item_id: String) -> void:
 func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
 	var text: String = ""
 
-	text += "[Icono]\n"
+	text += "▣\n"
 	text += "%s\n" % item_name
 	text += "%s L" % price
 
 	if owned > 0:
-		text += "\n×%s" % owned
+		text += " · ×%s" % owned
 
 	if not can_buy:
-		text += "\nFaltan %s" % max(price - player_money, 0)
+		text += "\n-%s L" % max(price - player_money, 0)
 
 	return text
 
+func get_item_card_size() -> Vector2:
+	var panel_width: float = max(shop_panel.size.x, 1.0)
+	var columns: int = max(item_grid.columns, 1)
+	var spacing: float = 8.0 * float(max(columns - 1, 0))
+	var inner_margin: float = 48.0
+	var available_width: float = max(panel_width - inner_margin - spacing, 120.0)
+	var raw_size: float = floor(available_width / float(columns))
+
+	var size_value: float = clamp(raw_size, 92.0, 116.0)
+
+	return Vector2(size_value, size_value)
 
 func show_item_preview(item_id: String) -> void:
 	var item: Dictionary = DataManager.get_item(item_id)
@@ -316,23 +315,21 @@ func show_item_preview(item_id: String) -> void:
 	var owned: int = get_inventory_amount(item_id)
 	var money: int = int(GameManager.player.get("money", 0))
 
-	info_title_label.text = "%s · %s Lúmenes" % [
+	var text: String = "%s · %s Lúmenes" % [
 		item_name,
 		price
 	]
 
-	var text: String = description
-
-	if text == "":
-		text = "Un objeto de la tienda."
+	if description != "":
+		text += " · %s" % description
 
 	if owned > 0:
-		text += " Tienes %s." % owned
+		text += " · Tienes %s" % owned
 
 	if money < price:
-		text += " Faltan %s Lúmenes." % max(price - money, 0)
+		text += " · Faltan %s Lúmenes" % max(price - money, 0)
 
-	info_description_label.text = text
+	info_label.text = text
 
 
 func buy_item(item_id: String) -> void:
@@ -383,11 +380,9 @@ func get_inventory_amount(item_id: String) -> int:
 
 
 func show_shop_message(title: String, message: String) -> void:
-	current_message = message
+	current_message = "%s · %s" % [title, message]
 	preview_item_id = ""
-
-	info_title_label.text = title
-	info_description_label.text = message
+	info_label.text = current_message
 
 
 func show_pending_narrative_messages() -> void:
@@ -486,7 +481,7 @@ func layout_overlay_controls() -> void:
 	)
 
 	var panel_width: float = max(360.0, shop_layer.size.x - 24.0)
-	var panel_height: float = max(300.0, shop_layer.size.y - top_height - 34.0)
+	var panel_height: float = max(300.0, shop_layer.size.y - top_height - 36.0)
 
 	shop_panel.size = Vector2(panel_width, panel_height)
 	shop_panel.position = Vector2(
@@ -495,19 +490,21 @@ func layout_overlay_controls() -> void:
 	)
 
 	if panel_width >= 980:
+		item_grid.columns = 7
+	elif panel_width >= 820:
+		item_grid.columns = 6
+	elif panel_width >= 680:
 		item_grid.columns = 5
-	elif panel_width >= 780:
+	elif panel_width >= 540:
 		item_grid.columns = 4
-	elif panel_width >= 600:
-		item_grid.columns = 3
 	else:
-		item_grid.columns = 2
+		item_grid.columns = 3
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		if shop_layer != null:
-			call_deferred("refresh_layout_after_frame")
+			call_deferred("update_scroll_visibility")
 
 
 func setup_fullscreen_root() -> void:
@@ -516,3 +513,17 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func update_scroll_visibility() -> void:
+	await get_tree().process_frame
+
+	if item_scroll == null or item_grid == null:
+		return
+
+	var content_height: float = item_grid.size.y
+	var viewport_height: float = item_scroll.size.y
+
+	if content_height > viewport_height + 4.0:
+		item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	else:
+		item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER

@@ -313,7 +313,11 @@ func visit_location(location_id: String) -> void:
 	if location_id == "home":
 		SceneRouter.go_to_home()
 		return
-
+	
+	if location_id == "shop":
+		SceneRouter.go_to_shop()
+		return
+		
 	SceneRouter.go_to_location()
 
 

@@ -73,11 +73,13 @@ func set_location(location_id: String) -> void:
 		npc_label.text = "Personajes presentes: %s" % ", ".join(names)
 
 	if location_id == "home":
-		hint_label.text = "Click para entrar a la Casa del Forastero."
+		hint_label.text = "Click para entrar a casa."
 	elif location_id == "shop":
-		hint_label.text = "Click para entrar a la Tienda del Umbral."
+		description_label.text = "Compra regalos para usarlos con personajes cuando estén presentes."
+		npc_label.text = ""
+		hint_label.text = "Click para abrir la tienda."
 	else:
-		hint_label.text = "Click para viajar a esta ubicación."
+		hint_label.text = "Click para viajar."
 
 
 func get_present_npcs_for_location(location_id: String) -> Array:
