@@ -9,7 +9,7 @@ var hint_label: Label
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(455, 126)
+	custom_minimum_size = Vector2(455, 112)
 	size = custom_minimum_size
 	visible = false
 
@@ -25,7 +25,7 @@ func build() -> void:
 	var root: VBoxContainer = VBoxContainer.new()
 	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	root.add_theme_constant_override("separation", 3)
+	root.add_theme_constant_override("separation", 2)
 	margin.add_child(root)
 
 	title_label = UIFactory.body("Mapa de Luminaria")

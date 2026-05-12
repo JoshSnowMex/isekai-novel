@@ -53,6 +53,7 @@ func build_ui() -> void:
 	build_hover_card()
 
 	call_deferred("layout_overlay_controls")
+	call_deferred("refresh_overlay_layout_after_frame")
 
 
 func build_map_background() -> void:
@@ -120,6 +121,12 @@ func build_hover_card() -> void:
 func layout_overlay_controls() -> void:
 	layout_action_panel()
 
+	if hover_card != null and hover_card.visible:
+		position_hover_card_bottom_left()
+
+func refresh_overlay_layout_after_frame() -> void:
+	await get_tree().process_frame
+	layout_overlay_controls()
 
 func layout_action_panel() -> void:
 	var margin: float = 12.0
@@ -216,13 +223,20 @@ func hide_hover_card() -> void:
 
 
 func position_hover_card_bottom_left() -> void:
-	var margin: float = 12.0
+	var margin: float = 14.0
+	var bottom_safe_margin: float = 48.0
 	var card_size: Vector2 = hover_card.custom_minimum_size
+
+	var y_position: float = map_layer.size.y - card_size.y - bottom_safe_margin
+
+	if y_position < margin:
+		y_position = margin
 
 	hover_card.position = Vector2(
 		margin,
-		max(margin, map_layer.size.y - card_size.y - margin)
+		y_position
 	)
+
 	hover_card.size = card_size
 
 
