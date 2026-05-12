@@ -309,27 +309,28 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 
 	button.set_meta("name_label", name_label)
 
-func show_location_overview(location_data: Dictionary) -> void:
+func show_location_overview(location_data: Dictionary, clear_message: bool = false) -> void:
 	selected_npc_id = ""
 	clear_bottom_actions()
 
+	if clear_message:
+		last_message = ""
+
 	bottom_title_label.text = str(location_data.get("name", current_location_id))
+	bottom_description_label.text = str(location_data.get("description", ""))
 
 	if last_message != "":
 		bottom_description_label.text = last_message
-	else:
-		bottom_description_label.text = str(location_data.get("description", ""))
 
 	var present_npcs: Array = get_present_npcs()
 
 	for npc_id in present_npcs:
 		add_approach_npc_action(str(npc_id))
 
-	if present_npcs.is_empty():
-		add_bottom_action("No hay nadie", func(): pass, true)
+	add_location_activity_actions(location_data)
 
-	add_bottom_action("Acciones del lugar", func(): show_location_actions(location_data))
-	add_bottom_action("Volver al mapa", func(): _on_back_pressed())
+	if present_npcs.is_empty() and not has_location_activity_actions(location_data):
+		add_bottom_action("No hay nada especial que hacer ahora", func(): pass, true)
 
 func add_approach_npc_action(npc_id: String) -> void:
 	var locked_npc_id: String = npc_id
@@ -339,6 +340,80 @@ func add_approach_npc_action(npc_id: String) -> void:
 		"Acercarse a %s" % display_name,
 		func(): select_npc(locked_npc_id)
 	)
+	
+func add_location_activity_actions(location_data: Dictionary) -> void:
+	var actions: Dictionary = location_data.get("actions", {})
+	var activities: Array = location_data.get("activities", [])
+
+	for activity_id in activities:
+		var id: String = str(activity_id)
+		var activity: Dictionary = DataManager.get_activity(id)
+		add_bottom_action(get_activity_button_text(id), func(): do_activity(id))
+
+	if actions.get("train", false):
+		add_bottom_action("Entrenar", func(): do_train(location_data))
+
+	if actions.get("work_full", false):
+		add_bottom_action("Trabajar jornada completa · +20 Lúmenes · -25 Res.", func(): do_work_full())
+
+	if actions.get("work_half", false):
+		add_bottom_action("Trabajar medio turno · +10 Lúmenes · -15 Res.", func(): do_work_half())
+
+	if actions.get("rest", false):
+		add_bottom_action("Descansar · +20 Res. · consume tiempo", func(): do_rest())
+
+	if actions.get("shop", false):
+		add_bottom_action("Comprar", func(): SceneRouter.go_to_shop())
+
+
+func has_location_activity_actions(location_data: Dictionary) -> bool:
+	var actions: Dictionary = location_data.get("actions", {})
+	var activities: Array = location_data.get("activities", [])
+
+	if not activities.is_empty():
+		return true
+
+	if actions.get("train", false):
+		return true
+
+	if actions.get("work_full", false):
+		return true
+
+	if actions.get("work_half", false):
+		return true
+
+	if actions.get("rest", false):
+		return true
+
+	if actions.get("shop", false):
+		return true
+
+	return false
+
+
+func get_activity_button_text(activity_id: String) -> String:
+	var activity: Dictionary = DataManager.get_activity(activity_id)
+	var name: String = str(activity.get("name", activity_id))
+	var parts: Array = [name]
+
+	var stat: String = str(activity.get("stat", ""))
+	var stat_gain: int = int(activity.get("base_stat_gain", activity.get("base_gain", 0)))
+	var money_gain: int = int(activity.get("base_money_gain", activity.get("money_gain", 0)))
+	var stamina_cost: int = int(activity.get("stamina_cost", 0))
+
+	if stat != "" and stat_gain > 0:
+		parts.append("+%s %s" % [
+			stat_gain,
+			GameManager.get_stat_label(stat)
+		])
+
+	if money_gain > 0:
+		parts.append("+%s Lúmenes" % money_gain)
+
+	if stamina_cost > 0:
+		parts.append("-%s Res." % stamina_cost)
+
+	return " · ".join(parts)
 	
 func show_location_actions(location_data: Dictionary) -> void:
 	selected_npc_id = ""
@@ -373,7 +448,7 @@ func show_location_actions(location_data: Dictionary) -> void:
 	if bottom_actions.get_child_count() == 0:
 		bottom_description_label.text = "No hay acciones disponibles aquí por ahora."
 
-	add_bottom_action("Volver", func(): show_location_overview(DataManager.get_location(current_location_id)))
+	add_bottom_action("Volver", func(): show_location_overview(DataManager.get_location(current_location_id), true))
 
 
 func show_character_preview(npc_id: String) -> void:
@@ -458,11 +533,34 @@ func interact_npc(npc_id: String) -> void:
 			if reason != "":
 				bottom_description_label.text += "\n\nAvance especial bloqueado por ahora."
 
-	add_bottom_action("Cerrar", func():
+	add_bottom_action("Volver a la ubicación", func():
 		selected_npc_id = ""
-		show_location_overview(DataManager.get_location(current_location_id))
+		show_location_overview(DataManager.get_location(current_location_id), true)
 	)
 
+func show_npc_result(npc_id: String, message: String) -> void:
+	selected_npc_id = npc_id
+	clear_bottom_actions()
+
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var npc_name: String = str(npc.get("name", npc_id))
+
+	bottom_title_label.text = npc_name
+	bottom_description_label.text = message
+
+	add_bottom_action("Hablar otra vez", func(): talk_to_npc(npc_id), GameManager.is_day_exhausted())
+	add_bottom_action("Regalar", func(): show_gift_selection(npc_id), GameManager.is_day_exhausted())
+
+	var petition_disabled: bool = GameManager.is_day_exhausted() or not PetitionSystem.has_any_available_petition(npc_id)
+	add_bottom_action("Pedir favor", func(): show_petitions(npc_id), petition_disabled)
+
+	var date_disabled: bool = GameManager.is_day_exhausted() or not GameManager.can_invite_to_date(npc_id)
+	add_bottom_action("Invitar a cita", func(): show_date_location_selection(npc_id), date_disabled)
+
+	add_bottom_action("Volver a la ubicación", func():
+		selected_npc_id = ""
+		show_location_overview(DataManager.get_location(current_location_id), true)
+	)
 
 func show_gift_selection(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
@@ -656,7 +754,7 @@ func give_gift(npc_id: String, item_id: String) -> void:
 
 	GameManager.consume_action(5)
 	SaveManager.autosave_game()
-	reload_scene(message)
+	show_npc_result(npc_id, message)
 
 
 func talk_to_npc(npc_id: String) -> void:
@@ -714,7 +812,7 @@ func talk_to_npc(npc_id: String) -> void:
 
 	GameManager.consume_action(5)
 	SaveManager.autosave_game()
-	reload_scene(message)
+	show_npc_result(npc_id, message)
 
 
 func do_activity(activity_id: String) -> void:
@@ -822,18 +920,16 @@ func process_postgame_gift_effect(npc_id: String, gift_strategy: String) -> Stri
 
 func reload_scene(message: String = "") -> void:
 	SaveManager.autosave_game()
+	hud_bar.refresh()
 
 	if message == "":
-		show_location_overview(DataManager.get_location(current_location_id))
+		show_location_overview(DataManager.get_location(current_location_id), true)
 		return
 
-	last_message = message
 	show_location_message(
 		DataManager.get_location(current_location_id).get("name", current_location_id),
 		message
 	)
-
-	hud_bar.refresh()
 	
 func show_location_message(title: String, message: String) -> void:
 	selected_npc_id = ""
@@ -843,16 +939,9 @@ func show_location_message(title: String, message: String) -> void:
 	bottom_description_label.text = message
 
 	add_bottom_action(
-		"Continuar en la ubicación",
-		func(): show_location_overview(DataManager.get_location(current_location_id))
+		"Continuar",
+		func(): show_location_overview(DataManager.get_location(current_location_id), true)
 	)
-
-	add_bottom_action(
-		"Acciones del lugar",
-		func(): show_location_actions(DataManager.get_location(current_location_id))
-	)
-
-	add_bottom_action("Volver al mapa", func(): _on_back_pressed())
 
 func show_pending_narrative_messages() -> void:
 	var messages: Array = GameManager.consume_pending_narrative_messages()
