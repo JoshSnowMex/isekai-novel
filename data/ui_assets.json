@@ -7,113 +7,113 @@
 	"home": {
 	  "map_icon": "res://assets/backgrounds/map_home_forastero.png",
 	  "background": "res://assets/backgrounds/location_home_forastero.png",
-	  "position": { "x": 72, "y": 392 },
-	  "size": { "x": 165, "y": 82 },
+	  "position": { "x": 60, "y": 350 },
+	  "size": { "x": 145, "y": 66 },
 	  "accent": "Casa"
 	},
 	"library": {
 	  "map_icon": "res://assets/backgrounds/map_library_alba.png",
 	  "background": "res://assets/backgrounds/location_library_alba.png",
-	  "position": { "x": 215, "y": 115 },
-	  "size": { "x": 180, "y": 86 },
+	  "position": { "x": 205, "y": 85 },
+	  "size": { "x": 155, "y": 66 },
 	  "accent": "Saber"
 	},
 	"market": {
 	  "map_icon": "res://assets/backgrounds/map_market_puente_rojo.png",
 	  "background": "res://assets/backgrounds/location_market_puente_rojo.png",
-	  "position": { "x": 438, "y": 350 },
-	  "size": { "x": 195, "y": 84 },
+	  "position": { "x": 405, "y": 305 },
+	  "size": { "x": 165, "y": 66 },
 	  "accent": "Comercio"
 	},
 	"shop": {
 	  "map_icon": "res://assets/backgrounds/map_shop_umbral.png",
 	  "background": "res://assets/backgrounds/location_shop_umbral.png",
-	  "position": { "x": 650, "y": 385 },
-	  "size": { "x": 155, "y": 76 },
+	  "position": { "x": 585, "y": 335 },
+	  "size": { "x": 130, "y": 60 },
 	  "accent": "Tienda"
 	},
 	"observatory": {
 	  "map_icon": "res://assets/backgrounds/map_observatory_velo.png",
 	  "background": "res://assets/backgrounds/location_observatory_velo.png",
-	  "position": { "x": 685, "y": 105 },
-	  "size": { "x": 170, "y": 88 },
+	  "position": { "x": 645, "y": 75 },
+	  "size": { "x": 145, "y": 66 },
 	  "accent": "Velo"
 	},
 	"arcane_library": {
 	  "map_icon": "res://assets/backgrounds/map_arcane_library_ateneo.png",
 	  "background": "res://assets/backgrounds/location_arcane_library_ateneo.png",
-	  "position": { "x": 420, "y": 120 },
-	  "size": { "x": 185, "y": 82 },
+	  "position": { "x": 385, "y": 90 },
+	  "size": { "x": 160, "y": 64 },
 	  "accent": "Arcano"
 	},
 	"private_study": {
 	  "map_icon": "res://assets/backgrounds/map_private_study.png",
 	  "background": "res://assets/backgrounds/location_private_study.png",
-	  "position": { "x": 610, "y": 215 },
-	  "size": { "x": 150, "y": 72 },
+	  "position": { "x": 585, "y": 185 },
+	  "size": { "x": 130, "y": 58 },
 	  "accent": "Privado"
 	},
 	"archives": {
 	  "map_icon": "res://assets/backgrounds/map_archives_velo.png",
 	  "background": "res://assets/backgrounds/location_archives_velo.png",
-	  "position": { "x": 190, "y": 235 },
-	  "size": { "x": 175, "y": 78 },
+	  "position": { "x": 185, "y": 205 },
+	  "size": { "x": 150, "y": 62 },
 	  "accent": "Archivo"
 	},
 	"plaza": {
 	  "map_icon": "res://assets/backgrounds/map_plaza_luminaria.png",
 	  "background": "res://assets/backgrounds/location_plaza_luminaria.png",
-	  "position": { "x": 420, "y": 245 },
-	  "size": { "x": 195, "y": 84 },
+	  "position": { "x": 380, "y": 215 },
+	  "size": { "x": 165, "y": 66 },
 	  "accent": "Social"
 	},
 	"guild": {
 	  "map_icon": "res://assets/backgrounds/map_guild_alba_roja.png",
 	  "background": "res://assets/backgrounds/location_guild_alba_roja.png",
-	  "position": { "x": 72, "y": 275 },
-	  "size": { "x": 175, "y": 82 },
+	  "position": { "x": 60, "y": 250 },
+	  "size": { "x": 150, "y": 64 },
 	  "accent": "Gremio"
 	},
 	"tavern": {
 	  "map_icon": "res://assets/backgrounds/map_tavern_puente_rojo.png",
 	  "background": "res://assets/backgrounds/location_tavern_puente_rojo.png",
-	  "position": { "x": 262, "y": 370 },
-	  "size": { "x": 160, "y": 78 },
+	  "position": { "x": 230, "y": 325 },
+	  "size": { "x": 140, "y": 60 },
 	  "accent": "Rumores"
 	},
 	"workshop": {
 	  "map_icon": "res://assets/backgrounds/map_workshop_arcano.png",
 	  "background": "res://assets/backgrounds/location_workshop_arcano.png",
-	  "position": { "x": 630, "y": 300 },
-	  "size": { "x": 165, "y": 82 },
+	  "position": { "x": 585, "y": 260 },
+	  "size": { "x": 145, "y": 64 },
 	  "accent": "Caos"
 	},
 	"sanctuary": {
 	  "map_icon": "res://assets/backgrounds/map_sanctuary_velo_quieto.png",
 	  "background": "res://assets/backgrounds/location_sanctuary_velo_quieto.png",
-	  "position": { "x": 815, "y": 278 },
-	  "size": { "x": 170, "y": 84 },
+	  "position": { "x": 765, "y": 240 },
+	  "size": { "x": 145, "y": 64 },
 	  "accent": "Santuario"
 	},
 	"forest": {
 	  "map_icon": "res://assets/backgrounds/map_forest_herido.png",
 	  "background": "res://assets/backgrounds/location_forest_herido.png",
-	  "position": { "x": 810, "y": 430 },
-	  "size": { "x": 185, "y": 88 },
+	  "position": { "x": 755, "y": 360 },
+	  "size": { "x": 160, "y": 66 },
 	  "accent": "Bosque"
 	},
 	"council_hall": {
 	  "map_icon": "res://assets/backgrounds/map_council_hall.png",
 	  "background": "res://assets/backgrounds/location_council_hall.png",
-	  "position": { "x": 55, "y": 150 },
-	  "size": { "x": 160, "y": 78 },
+	  "position": { "x": 55, "y": 130 },
+	  "size": { "x": 140, "y": 60 },
 	  "accent": "Consejo"
 	},
 	"threshold": {
 	  "map_icon": "res://assets/backgrounds/map_threshold_umbral.png",
 	  "background": "res://assets/backgrounds/location_threshold_umbral.png",
-	  "position": { "x": 780, "y": 570 },
-	  "size": { "x": 165, "y": 78 },
+	  "position": { "x": 760, "y": 455 },
+	  "size": { "x": 145, "y": 62 },
 	  "accent": "Imposible"
 	}
   },

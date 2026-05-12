@@ -8,40 +8,42 @@ var world_label: Label
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(1, 64)
+	custom_minimum_size = Vector2(1, 44)
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 
 func build() -> void:
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 8)
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 4)
 	add_child(margin)
 
 	var root: HBoxContainer = HBoxContainer.new()
 	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.alignment = BoxContainer.ALIGNMENT_CENTER
-	root.add_theme_constant_override("separation", 24)
+	root.add_theme_constant_override("separation", 10)
 	margin.add_child(root)
 
-	date_label = make_hud_label()
+	date_label = make_hud_label(HORIZONTAL_ALIGNMENT_LEFT)
 	root.add_child(date_label)
 
-	player_label = make_hud_label()
+	player_label = make_hud_label(HORIZONTAL_ALIGNMENT_CENTER)
 	root.add_child(player_label)
 
-	world_label = make_hud_label()
+	world_label = make_hud_label(HORIZONTAL_ALIGNMENT_RIGHT)
 	root.add_child(world_label)
 
 
-func make_hud_label() -> Label:
+func make_hud_label(alignment: HorizontalAlignment) -> Label:
 	var label: Label = Label.new()
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.horizontal_alignment = alignment
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.clip_text = true
 	return label
 
 
@@ -53,7 +55,7 @@ func refresh() -> void:
 		GameManager.get_time_label()
 	]
 
-	player_label.text = "Resistencia %s/%s · Dinero %s · Acciones %s" % [
+	player_label.text = "Res %s/%s · Oro %s · Acc %s" % [
 		GameManager.player.get("stamina", 0),
 		GameManager.player.get("max_stamina", 0),
 		GameManager.player.get("money", 0),

@@ -22,7 +22,7 @@ func build_ui() -> void:
 	root.offset_top = 0
 	root.offset_right = 0
 	root.offset_bottom = 0
-	root.add_theme_constant_override("separation", 8)
+	root.add_theme_constant_override("separation", 4)
 	add_child(root)
 
 	hud_bar = WorldHudBar.new()
@@ -35,10 +35,10 @@ func build_ui() -> void:
 	root.add_child(map_frame)
 
 	var map_margin: MarginContainer = MarginContainer.new()
-	map_margin.add_theme_constant_override("margin_left", 10)
-	map_margin.add_theme_constant_override("margin_top", 10)
-	map_margin.add_theme_constant_override("margin_right", 10)
-	map_margin.add_theme_constant_override("margin_bottom", 10)
+	map_margin.add_theme_constant_override("margin_left", 6)
+	map_margin.add_theme_constant_override("margin_top", 6)
+	map_margin.add_theme_constant_override("margin_right", 6)
+	map_margin.add_theme_constant_override("margin_bottom", 6)
 	map_frame.add_child(map_margin)
 
 	map_layer = Control.new()
@@ -51,6 +51,8 @@ func build_ui() -> void:
 	build_location_layer()
 	build_action_panel()
 	build_hover_card()
+
+	call_deferred("layout_overlay_controls")
 
 
 func build_map_background() -> void:
@@ -85,7 +87,6 @@ func build_location_layer() -> void:
 func build_action_panel() -> void:
 	action_panel = WorldActionPanel.new()
 	action_panel.build()
-	action_panel.position = Vector2(880, 24)
 	map_layer.add_child(action_panel)
 
 	action_panel.clear_actions()
@@ -96,10 +97,11 @@ func build_action_panel() -> void:
 
 	action_panel.add_action("Guardar", func():
 		SaveManager.save_game()
-		hover_card.title_label.text = "Partida guardada"
-		hover_card.description_label.text = "El progreso fue guardado manualmente."
-		hover_card.npc_label.text = ""
-		hover_card.hint_label.text = "Puedes continuar explorando Luminaria."
+		show_system_hover_message(
+			"Partida guardada",
+			"El progreso fue guardado manualmente.",
+			"Puedes continuar explorando Luminaria."
+		)
 	)
 
 	action_panel.add_action("Menú", func():
@@ -110,15 +112,30 @@ func build_action_panel() -> void:
 func build_hover_card() -> void:
 	hover_card = LocationHoverCard.new()
 	hover_card.build()
-	hover_card.position = Vector2(24, 510)
 	map_layer.add_child(hover_card)
 	hover_card.set_intro()
+	hover_card.visible = false
+
+
+func layout_overlay_controls() -> void:
+	layout_action_panel()
+
+
+func layout_action_panel() -> void:
+	var margin: float = 12.0
+	var panel_size: Vector2 = action_panel.custom_minimum_size
+	var x: float = max(margin, map_layer.size.x - panel_size.x - margin)
+	var y: float = margin
+
+	action_panel.position = Vector2(x, y)
+	action_panel.size = panel_size
 
 
 func refresh_screen() -> void:
 	hud_bar.refresh()
 	rebuild_locations()
-	hover_card.set_intro()
+	hover_card.visible = false
+	call_deferred("layout_overlay_controls")
 
 
 func rebuild_locations() -> void:
@@ -149,18 +166,26 @@ func create_visual_location_button(location_id: String) -> void:
 	)
 
 	button.custom_minimum_size = Vector2(
-		float(size_data.get("x", 170)),
-		float(size_data.get("y", 86))
+		float(size_data.get("x", 150)),
+		float(size_data.get("y", 72))
 	)
 
 	button.size = button.custom_minimum_size
 
 	button.mouse_entered.connect(func():
-		hover_card.set_location(location_id)
+		show_location_hover(location_id)
+	)
+
+	button.mouse_exited.connect(func():
+		hide_hover_card()
 	)
 
 	button.focus_entered.connect(func():
-		hover_card.set_location(location_id)
+		show_location_hover(location_id)
+	)
+
+	button.focus_exited.connect(func():
+		hide_hover_card()
 	)
 
 	button.pressed.connect(func():
@@ -168,6 +193,56 @@ func create_visual_location_button(location_id: String) -> void:
 	)
 
 	location_layer.add_child(button)
+
+
+func show_location_hover(location_id: String) -> void:
+	hover_card.set_location(location_id)
+	hover_card.visible = true
+	position_hover_card_near_mouse()
+
+
+func show_system_hover_message(title: String, description: String, hint: String) -> void:
+	hover_card.title_label.text = title
+	hover_card.description_label.text = description
+	hover_card.npc_label.text = ""
+	hover_card.hint_label.text = hint
+	hover_card.visible = true
+	position_hover_card_bottom_left()
+
+
+func hide_hover_card() -> void:
+	hover_card.visible = false
+
+
+func position_hover_card_near_mouse() -> void:
+	var margin: float = 12.0
+	var mouse_position: Vector2 = map_layer.get_local_mouse_position()
+	var card_size: Vector2 = hover_card.custom_minimum_size
+
+	var target_position: Vector2 = mouse_position + Vector2(18, 18)
+
+	if target_position.x + card_size.x > map_layer.size.x - margin:
+		target_position.x = mouse_position.x - card_size.x - 18
+
+	if target_position.y + card_size.y > map_layer.size.y - margin:
+		target_position.y = mouse_position.y - card_size.y - 18
+
+	target_position.x = clamp(target_position.x, margin, max(margin, map_layer.size.x - card_size.x - margin))
+	target_position.y = clamp(target_position.y, margin, max(margin, map_layer.size.y - card_size.y - margin))
+
+	hover_card.position = target_position
+	hover_card.size = card_size
+
+
+func position_hover_card_bottom_left() -> void:
+	var margin: float = 12.0
+	var card_size: Vector2 = hover_card.custom_minimum_size
+
+	hover_card.position = Vector2(
+		margin,
+		max(margin, map_layer.size.y - card_size.y - margin)
+	)
+	hover_card.size = card_size
 
 
 func visit_location(location_id: String) -> void:
@@ -192,10 +267,11 @@ func show_pending_narrative_messages() -> void:
 		combined_text += format_narrative_message(message)
 		combined_text += "\n\n"
 
-	hover_card.title_label.text = "El Velo se agita"
-	hover_card.description_label.text = combined_text.strip_edges()
-	hover_card.npc_label.text = ""
-	hover_card.hint_label.text = "Continúa explorando para ver cómo responde el mundo."
+	show_system_hover_message(
+		"El Velo se agita",
+		combined_text.strip_edges(),
+		"Continúa explorando para ver cómo responde el mundo."
+	)
 
 	SaveManager.autosave_game()
 
@@ -212,6 +288,12 @@ func format_narrative_message(message: Variant) -> String:
 		return "%s\n\n%s" % [title, text]
 
 	return str(message)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		if action_panel != null and map_layer != null:
+			layout_overlay_controls()
 
 
 func setup_fullscreen_root() -> void:

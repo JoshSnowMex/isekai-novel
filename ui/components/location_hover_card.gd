@@ -9,24 +9,28 @@ var hint_label: Label
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(500, 145)
+	custom_minimum_size = Vector2(420, 132)
+	size = custom_minimum_size
+	visible = false
 
 
 func build() -> void:
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 8)
 	add_child(margin)
 
 	var root: VBoxContainer = VBoxContainer.new()
 	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	root.add_theme_constant_override("separation", 5)
+	root.add_theme_constant_override("separation", 3)
 	margin.add_child(root)
 
-	title_label = UIFactory.title("Mapa de Luminaria")
+	title_label = UIFactory.body("Mapa de Luminaria")
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(title_label)
 
 	description_label = UIFactory.body("Pasa el cursor por una ubicación para ver detalles.")
@@ -37,7 +41,8 @@ func build() -> void:
 	npc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(npc_label)
 
-	hint_label = UIFactory.body("Click en una ubicación para viajar.")
+	hint_label = UIFactory.body("Click para viajar.")
+	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(hint_label)
 
 
