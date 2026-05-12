@@ -8,6 +8,7 @@ var background_layer: Control
 var character_layer: Control
 var bottom_panel: PanelContainer
 var bottom_title_label: Label
+var bottom_description_scroll: ScrollContainer
 var bottom_description_label: Label
 var bottom_actions: HBoxContainer
 var global_action_panel: PanelContainer
@@ -113,7 +114,7 @@ func build_global_action_panel() -> void:
 
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(620, 132)
+	bottom_panel.custom_minimum_size = Vector2(760, 190)
 	location_layer.add_child(bottom_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -130,24 +131,35 @@ func build_bottom_panel() -> void:
 	margin.add_child(box)
 
 	bottom_title_label = Label.new()
+	bottom_title_label.custom_minimum_size = Vector2(1, 24)
+	bottom_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_title_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	bottom_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	bottom_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	bottom_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(bottom_title_label)
 
+	bottom_description_scroll = ScrollContainer.new()
+	bottom_description_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_description_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bottom_description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	bottom_description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	box.add_child(bottom_description_scroll)
+
 	bottom_description_label = Label.new()
 	bottom_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bottom_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bottom_description_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	bottom_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	bottom_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(bottom_description_label)
+	bottom_description_scroll.add_child(bottom_description_label)
 
 	bottom_actions = HBoxContainer.new()
+	bottom_actions.custom_minimum_size = Vector2(1, 40)
 	bottom_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_actions.size_flags_vertical = Control.SIZE_SHRINK_END
 	bottom_actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	bottom_actions.add_theme_constant_override("separation", 8)
 	box.add_child(bottom_actions)
-
 
 func load_location(location_id: String, message: String = "") -> void:
 	current_location_id = location_id
@@ -444,7 +456,7 @@ func interact_npc(npc_id: String) -> void:
 			var reason: String = RelationshipSystem.get_blocked_reason(npc_id, step_id)
 
 			if reason != "":
-				bottom_description_label.text += "\n\nAvance bloqueado:\n%s" % reason
+				bottom_description_label.text += "\n\nAvance especial bloqueado por ahora."
 
 	add_bottom_action("Cerrar", func():
 		selected_npc_id = ""
@@ -1000,9 +1012,9 @@ func get_character_position(index: int, total: int, character_size: Vector2) -> 
 
 func get_bottom_panel_reserved_height() -> float:
 	if location_layer.size.x < 760:
-		return 138.0
+		return 220.0
 
-	return 154.0
+	return 204.0
 
 
 func get_location_scale() -> float:
@@ -1036,11 +1048,12 @@ func layout_overlay_controls() -> void:
 		margin
 	)
 
-	var panel_width: float = min(720.0, max(360.0, location_layer.size.x - 24.0))
-	var panel_height: float = 132.0
+	var panel_width: float = min(820.0, max(420.0, location_layer.size.x - 24.0))
+	var panel_height: float = 190.0
 
 	if location_layer.size.x < 760:
-		panel_height = 144.0
+		panel_width = max(360.0, location_layer.size.x - 24.0)
+		panel_height = 206.0
 
 	bottom_panel.size = Vector2(panel_width, panel_height)
 	bottom_panel.position = Vector2(
