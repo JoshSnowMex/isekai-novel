@@ -224,6 +224,7 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.flat = true
 	button.focus_mode = Control.FOCUS_ALL
 	button.tooltip_text = display_name
+	button.set_meta("npc_id", npc_id)
 	button.mouse_entered.connect(func(): show_character_preview(npc_id))
 	button.focus_entered.connect(func(): show_character_preview(npc_id))
 	button.pressed.connect(func(): select_npc(npc_id))
@@ -293,6 +294,8 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	name_label.clip_text = true
 	name_margin.add_child(name_label)
+
+	button.set_meta("name_label", name_label)
 
 func show_location_overview(location_data: Dictionary) -> void:
 	selected_npc_id = ""
@@ -389,10 +392,22 @@ func select_npc(npc_id: String) -> void:
 		GameManager.current_time_block
 	])
 
+	refresh_character_labels()
 	interact_npc(npc_id)
-	rebuild_characters()
 
+func refresh_character_labels() -> void:
+	for character_button in character_layer.get_children():
+		if not character_button.has_meta("npc_id"):
+			continue
 
+		var npc_id: String = str(character_button.get_meta("npc_id"))
+		var label: Label = character_button.get_meta("name_label") as Label
+
+		if label != null:
+			label.text = get_npc_display_name(npc_id)
+
+		character_button.tooltip_text = get_npc_display_name(npc_id)
+		
 func interact_npc(npc_id: String) -> void:
 	clear_bottom_actions()
 
