@@ -44,7 +44,7 @@ func build() -> void:
 	info_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	root.add_child(info_scroll)
 
-	info_label = UIFactory.body("Selecciona una ubicación.")
+	info_label = UIFactory.body("Elige una zona del mapa para viajar.")
 	info_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	info_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	info_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

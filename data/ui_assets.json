@@ -1,192 +1,192 @@
 {
-	"world_map": {
-		"background": "res://assets/backgrounds/world_map_luminaria.png",
-		"fallback_title": "Mapa de Luminaria"
+  "world_map": {
+	"background": "res://assets/backgrounds/world_map_luminaria.png",
+	"fallback_title": "Mapa de Luminaria"
+  },
+  "locations": {
+	"home": {
+	  "map_icon": "res://assets/backgrounds/map_home_forastero.png",
+	  "background": "res://assets/backgrounds/location_home_forastero.png",
+	  "position": { "x": 72, "y": 392 },
+	  "size": { "x": 165, "y": 82 },
+	  "accent": "Casa"
 	},
-	"locations": {
-		"home": {
-			"map_icon": "res://assets/backgrounds/map_home_forastero.png",
-			"background": "res://assets/backgrounds/location_home_forastero.png",
-			"position": { "x": 70, "y": 420 },
-			"size": { "x": 180, "y": 92 },
-			"accent": "Casa"
-		},
-		"library": {
-			"map_icon": "res://assets/backgrounds/map_library_alba.png",
-			"background": "res://assets/backgrounds/location_library_alba.png",
-			"position": { "x": 230, "y": 110 },
-			"size": { "x": 190, "y": 95 },
-			"accent": "Saber"
-		},
-		"market": {
-			"map_icon": "res://assets/backgrounds/map_market_puente_rojo.png",
-			"background": "res://assets/backgrounds/location_market_puente_rojo.png",
-			"position": { "x": 440, "y": 345 },
-			"size": { "x": 210, "y": 95 },
-			"accent": "Comercio"
-		},
-		"shop": {
-			"map_icon": "res://assets/backgrounds/map_shop_umbral.png",
-			"background": "res://assets/backgrounds/location_shop_umbral.png",
-			"position": { "x": 665, "y": 365 },
-			"size": { "x": 165, "y": 88 },
-			"accent": "Tienda"
-		},
-		"observatory": {
-			"map_icon": "res://assets/backgrounds/map_observatory_velo.png",
-			"background": "res://assets/backgrounds/location_observatory_velo.png",
-			"position": { "x": 760, "y": 70 },
-			"size": { "x": 185, "y": 96 },
-			"accent": "Velo"
-		},
-		"arcane_library": {
-			"map_icon": "res://assets/backgrounds/map_arcane_library_ateneo.png",
-			"background": "res://assets/backgrounds/location_arcane_library_ateneo.png",
-			"position": { "x": 435, "y": 105 },
-			"size": { "x": 200, "y": 92 },
-			"accent": "Arcano"
-		},
-		"private_study": {
-			"map_icon": "res://assets/backgrounds/map_private_study.png",
-			"background": "res://assets/backgrounds/location_private_study.png",
-			"position": { "x": 645, "y": 170 },
-			"size": { "x": 165, "y": 82 },
-			"accent": "Privado"
-		},
-		"archives": {
-			"map_icon": "res://assets/backgrounds/map_archives_velo.png",
-			"background": "res://assets/backgrounds/location_archives_velo.png",
-			"position": { "x": 205, "y": 230 },
-			"size": { "x": 190, "y": 86 },
-			"accent": "Archivo"
-		},
-		"plaza": {
-			"map_icon": "res://assets/backgrounds/map_plaza_luminaria.png",
-			"background": "res://assets/backgrounds/location_plaza_luminaria.png",
-			"position": { "x": 440, "y": 235 },
-			"size": { "x": 210, "y": 92 },
-			"accent": "Social"
-		},
-		"guild": {
-			"map_icon": "res://assets/backgrounds/map_guild_alba_roja.png",
-			"background": "res://assets/backgrounds/location_guild_alba_roja.png",
-			"position": { "x": 70, "y": 315 },
-			"size": { "x": 190, "y": 92 },
-			"accent": "Gremio"
-		},
-		"tavern": {
-			"map_icon": "res://assets/backgrounds/map_tavern_puente_rojo.png",
-			"background": "res://assets/backgrounds/location_tavern_puente_rojo.png",
-			"position": { "x": 275, "y": 365 },
-			"size": { "x": 175, "y": 92 },
-			"accent": "Rumores"
-		},
-		"workshop": {
-			"map_icon": "res://assets/backgrounds/map_workshop_arcano.png",
-			"background": "res://assets/backgrounds/location_workshop_arcano.png",
-			"position": { "x": 665, "y": 260 },
-			"size": { "x": 180, "y": 92 },
-			"accent": "Caos"
-		},
-		"sanctuary": {
-			"map_icon": "res://assets/backgrounds/map_sanctuary_velo_quieto.png",
-			"background": "res://assets/backgrounds/location_sanctuary_velo_quieto.png",
-			"position": { "x": 850, "y": 250 },
-			"size": { "x": 190, "y": 96 },
-			"accent": "Santuario"
-		},
-		"forest": {
-			"map_icon": "res://assets/backgrounds/map_forest_herido.png",
-			"background": "res://assets/backgrounds/location_forest_herido.png",
-			"position": { "x": 890, "y": 405 },
-			"size": { "x": 190, "y": 96 },
-			"accent": "Bosque"
-		},
-		"council_hall": {
-			"map_icon": "res://assets/backgrounds/map_council_hall.png",
-			"background": "res://assets/backgrounds/location_council_hall.png",
-			"position": { "x": 55, "y": 165 },
-			"size": { "x": 170, "y": 90 },
-			"accent": "Consejo"
-		},
-		"threshold": {
-			"map_icon": "res://assets/backgrounds/map_threshold_umbral.png",
-			"background": "res://assets/backgrounds/location_threshold_umbral.png",
-			"position": { "x": 885, "y": 565 },
-			"size": { "x": 180, "y": 90 },
-			"accent": "Imposible"
-		}
+	"library": {
+	  "map_icon": "res://assets/backgrounds/map_library_alba.png",
+	  "background": "res://assets/backgrounds/location_library_alba.png",
+	  "position": { "x": 215, "y": 115 },
+	  "size": { "x": 180, "y": 86 },
+	  "accent": "Saber"
 	},
-	"npcs": {
-		"lyria": {
-			"portrait": "res://assets/portraits/Lyria_portrait_neutral.png",
-			"talking": "res://assets/portraits/Lyria_talking.png",
-			"map_sprite": "res://assets/portraits/Lyria_location_sprite.png"
-		},
-		"aeris": {
-			"portrait": "res://assets/portraits/Aeris_portrait_neutral.png",
-			"talking": "res://assets/portraits/Aeris_talking.png",
-			"map_sprite": "res://assets/portraits/Aeris_location_sprite.png"
-		},
-		"eryon": {
-			"portrait": "res://assets/portraits/Eryon_portrait_neutral.png",
-			"talking": "res://assets/portraits/Eryon_talking.png",
-			"map_sprite": "res://assets/portraits/Eryon_location_sprite.png"
-		},
-		"rhea": {
-			"portrait": "res://assets/portraits/Rhea_portrait_neutral.png",
-			"talking": "res://assets/portraits/Rhea_talking.png",
-			"map_sprite": "res://assets/portraits/Rhea_location_sprite.png"
-		},
-		"nova": {
-			"portrait": "res://assets/portraits/Nova_portrait_neutral.png",
-			"talking": "res://assets/portraits/Nova_talking.png",
-			"map_sprite": "res://assets/portraits/Nova_location_sprite.png"
-		},
-		"seraphine": {
-			"portrait": "res://assets/portraits/Seraphine_portrait_neutral.png",
-			"talking": "res://assets/portraits/Seraphine_talking.png",
-			"map_sprite": "res://assets/portraits/Seraphine_location_sprite.png"
-		},
-		"kael": {
-			"portrait": "res://assets/portraits/Kael_portrait_neutral.png",
-			"talking": "res://assets/portraits/Kael_talking.png",
-			"map_sprite": "res://assets/portraits/Kael_location_sprite.png"
-		},
-		"myr": {
-			"portrait": "res://assets/portraits/Myr_portrait_neutral.png",
-			"talking": "res://assets/portraits/Myr_talking.png",
-			"map_sprite": "res://assets/portraits/Myr_location_sprite.png"
-		},
-		"axiom": {
-			"portrait": "res://assets/portraits/Axiom_portrait_neutral.png",
-			"talking": "res://assets/portraits/Axiom_talking.png",
-			"map_sprite": "res://assets/portraits/Axiom_location_sprite.png"
-		},
-		"taren": {
-			"portrait": "res://assets/portraits/Taren_portrait_neutral.png",
-			"talking": "res://assets/portraits/Taren_talking.png",
-			"map_sprite": "res://assets/portraits/Taren_location_sprite.png"
-		},
-		"rhein": {
-			"portrait": "res://assets/portraits/Rhein_portrait_neutral.png",
-			"talking": "res://assets/portraits/Rhein_talking.png",
-			"map_sprite": "res://assets/portraits/Rhein_location_sprite.png"
-		},
-		"selene": {
-			"portrait": "res://assets/portraits/Selene_portrait_neutral.png",
-			"talking": "res://assets/portraits/Selene_talking.png",
-			"map_sprite": "res://assets/portraits/Selene_location_sprite.png"
-		},
-		"elara": {
-			"portrait": "res://assets/portraits/Elara_portrait_neutral.png",
-			"talking": "res://assets/portraits/Elara_talking.png",
-			"map_sprite": "res://assets/portraits/Elara_location_sprite.png"
-		}
+	"market": {
+	  "map_icon": "res://assets/backgrounds/map_market_puente_rojo.png",
+	  "background": "res://assets/backgrounds/location_market_puente_rojo.png",
+	  "position": { "x": 438, "y": 350 },
+	  "size": { "x": 195, "y": 84 },
+	  "accent": "Comercio"
 	},
-	"ui": {
-		"panel_texture": "res://assets/backgrounds/ui_panel_velo.png",
-		"button_texture": "res://assets/backgrounds/ui_button_default.png",
-		"button_hover_texture": "res://assets/backgrounds/ui_button_hover.png"
+	"shop": {
+	  "map_icon": "res://assets/backgrounds/map_shop_umbral.png",
+	  "background": "res://assets/backgrounds/location_shop_umbral.png",
+	  "position": { "x": 650, "y": 385 },
+	  "size": { "x": 155, "y": 76 },
+	  "accent": "Tienda"
+	},
+	"observatory": {
+	  "map_icon": "res://assets/backgrounds/map_observatory_velo.png",
+	  "background": "res://assets/backgrounds/location_observatory_velo.png",
+	  "position": { "x": 685, "y": 105 },
+	  "size": { "x": 170, "y": 88 },
+	  "accent": "Velo"
+	},
+	"arcane_library": {
+	  "map_icon": "res://assets/backgrounds/map_arcane_library_ateneo.png",
+	  "background": "res://assets/backgrounds/location_arcane_library_ateneo.png",
+	  "position": { "x": 420, "y": 120 },
+	  "size": { "x": 185, "y": 82 },
+	  "accent": "Arcano"
+	},
+	"private_study": {
+	  "map_icon": "res://assets/backgrounds/map_private_study.png",
+	  "background": "res://assets/backgrounds/location_private_study.png",
+	  "position": { "x": 610, "y": 215 },
+	  "size": { "x": 150, "y": 72 },
+	  "accent": "Privado"
+	},
+	"archives": {
+	  "map_icon": "res://assets/backgrounds/map_archives_velo.png",
+	  "background": "res://assets/backgrounds/location_archives_velo.png",
+	  "position": { "x": 190, "y": 235 },
+	  "size": { "x": 175, "y": 78 },
+	  "accent": "Archivo"
+	},
+	"plaza": {
+	  "map_icon": "res://assets/backgrounds/map_plaza_luminaria.png",
+	  "background": "res://assets/backgrounds/location_plaza_luminaria.png",
+	  "position": { "x": 420, "y": 245 },
+	  "size": { "x": 195, "y": 84 },
+	  "accent": "Social"
+	},
+	"guild": {
+	  "map_icon": "res://assets/backgrounds/map_guild_alba_roja.png",
+	  "background": "res://assets/backgrounds/location_guild_alba_roja.png",
+	  "position": { "x": 72, "y": 275 },
+	  "size": { "x": 175, "y": 82 },
+	  "accent": "Gremio"
+	},
+	"tavern": {
+	  "map_icon": "res://assets/backgrounds/map_tavern_puente_rojo.png",
+	  "background": "res://assets/backgrounds/location_tavern_puente_rojo.png",
+	  "position": { "x": 262, "y": 370 },
+	  "size": { "x": 160, "y": 78 },
+	  "accent": "Rumores"
+	},
+	"workshop": {
+	  "map_icon": "res://assets/backgrounds/map_workshop_arcano.png",
+	  "background": "res://assets/backgrounds/location_workshop_arcano.png",
+	  "position": { "x": 630, "y": 300 },
+	  "size": { "x": 165, "y": 82 },
+	  "accent": "Caos"
+	},
+	"sanctuary": {
+	  "map_icon": "res://assets/backgrounds/map_sanctuary_velo_quieto.png",
+	  "background": "res://assets/backgrounds/location_sanctuary_velo_quieto.png",
+	  "position": { "x": 815, "y": 278 },
+	  "size": { "x": 170, "y": 84 },
+	  "accent": "Santuario"
+	},
+	"forest": {
+	  "map_icon": "res://assets/backgrounds/map_forest_herido.png",
+	  "background": "res://assets/backgrounds/location_forest_herido.png",
+	  "position": { "x": 810, "y": 430 },
+	  "size": { "x": 185, "y": 88 },
+	  "accent": "Bosque"
+	},
+	"council_hall": {
+	  "map_icon": "res://assets/backgrounds/map_council_hall.png",
+	  "background": "res://assets/backgrounds/location_council_hall.png",
+	  "position": { "x": 55, "y": 150 },
+	  "size": { "x": 160, "y": 78 },
+	  "accent": "Consejo"
+	},
+	"threshold": {
+	  "map_icon": "res://assets/backgrounds/map_threshold_umbral.png",
+	  "background": "res://assets/backgrounds/location_threshold_umbral.png",
+	  "position": { "x": 780, "y": 570 },
+	  "size": { "x": 165, "y": 78 },
+	  "accent": "Imposible"
 	}
+  },
+  "npcs": {
+	"lyria": {
+	  "portrait": "res://assets/portraits/Lyria_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Lyria_talking.png",
+	  "map_sprite": "res://assets/portraits/Lyria_location_sprite.png"
+	},
+	"aeris": {
+	  "portrait": "res://assets/portraits/Aeris_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Aeris_talking.png",
+	  "map_sprite": "res://assets/portraits/Aeris_location_sprite.png"
+	},
+	"eryon": {
+	  "portrait": "res://assets/portraits/Eryon_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Eryon_talking.png",
+	  "map_sprite": "res://assets/portraits/Eryon_location_sprite.png"
+	},
+	"rhea": {
+	  "portrait": "res://assets/portraits/Rhea_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Rhea_talking.png",
+	  "map_sprite": "res://assets/portraits/Rhea_location_sprite.png"
+	},
+	"nova": {
+	  "portrait": "res://assets/portraits/Nova_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Nova_talking.png",
+	  "map_sprite": "res://assets/portraits/Nova_location_sprite.png"
+	},
+	"seraphine": {
+	  "portrait": "res://assets/portraits/Seraphine_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Seraphine_talking.png",
+	  "map_sprite": "res://assets/portraits/Seraphine_location_sprite.png"
+	},
+	"kael": {
+	  "portrait": "res://assets/portraits/Kael_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Kael_talking.png",
+	  "map_sprite": "res://assets/portraits/Kael_location_sprite.png"
+	},
+	"myr": {
+	  "portrait": "res://assets/portraits/Myr_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Myr_talking.png",
+	  "map_sprite": "res://assets/portraits/Myr_location_sprite.png"
+	},
+	"axiom": {
+	  "portrait": "res://assets/portraits/Axiom_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Axiom_talking.png",
+	  "map_sprite": "res://assets/portraits/Axiom_location_sprite.png"
+	},
+	"taren": {
+	  "portrait": "res://assets/portraits/Taren_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Taren_talking.png",
+	  "map_sprite": "res://assets/portraits/Taren_location_sprite.png"
+	},
+	"rhein": {
+	  "portrait": "res://assets/portraits/Rhein_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Rhein_talking.png",
+	  "map_sprite": "res://assets/portraits/Rhein_location_sprite.png"
+	},
+	"selene": {
+	  "portrait": "res://assets/portraits/Selene_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Selene_talking.png",
+	  "map_sprite": "res://assets/portraits/Selene_location_sprite.png"
+	},
+	"elara": {
+	  "portrait": "res://assets/portraits/Elara_portrait_neutral.png",
+	  "talking": "res://assets/portraits/Elara_talking.png",
+	  "map_sprite": "res://assets/portraits/Elara_location_sprite.png"
+	}
+  },
+  "ui": {
+	"panel_texture": "res://assets/backgrounds/ui_panel_velo.png",
+	"button_texture": "res://assets/backgrounds/ui_button_default.png",
+	"button_hover_texture": "res://assets/backgrounds/ui_button_hover.png"
+  }
 }
