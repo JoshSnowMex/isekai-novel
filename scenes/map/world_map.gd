@@ -114,6 +114,7 @@ func build_action_panel() -> void:
 func build_hover_card() -> void:
 	hover_card = LocationHoverCard.new()
 	hover_card.build()
+	hover_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	map_layer.add_child(hover_card)
 	hover_card.set_intro()
 	hover_card.visible = false

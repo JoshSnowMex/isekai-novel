@@ -55,7 +55,7 @@ func refresh() -> void:
 		GameManager.current_month,
 		GameManager.current_day,
 		GameManager.get_weekday_name(),
-		GameManager.get_time_label()
+		get_clock_label()
 	]
 
 	player_label.text = "Resistencia %s · %s Lúmenes · Acciones: %s" % [
@@ -70,7 +70,42 @@ func refresh() -> void:
 		GameManager.get_world_state_value("romantic_pressure")
 	]
 
+func get_clock_label() -> String:
+	if GameManager.is_day_exhausted():
+		return "Medianoche"
 
+	var action_index: int = GameManager.current_action_index
+
+	match GameManager.current_time_block:
+		"morning":
+			match action_index:
+				0:
+					return "08:00 · Mañana"
+				1:
+					return "10:00 · Mañana"
+				_:
+					return "Mañana"
+		"afternoon":
+			match action_index:
+				0:
+					return "12:00 · Tarde"
+				1:
+					return "15:00 · Tarde"
+				2:
+					return "18:00 · Tarde"
+				_:
+					return "Tarde"
+		"night":
+			match action_index:
+				0:
+					return "20:00 · Noche"
+				1:
+					return "22:00 · Noche"
+				_:
+					return "Noche"
+		_:
+			return GameManager.get_time_label()
+			
 func format_number(value: Variant) -> String:
 	var number: float = float(value)
 

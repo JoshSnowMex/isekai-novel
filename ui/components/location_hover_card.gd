@@ -12,6 +12,7 @@ func _init() -> void:
 	custom_minimum_size = Vector2(455, 112)
 	size = custom_minimum_size
 	visible = false
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func build() -> void:
