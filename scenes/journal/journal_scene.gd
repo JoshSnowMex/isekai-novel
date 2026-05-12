@@ -17,8 +17,8 @@ func build_ui() -> void:
 	top_bar.add_theme_constant_override("separation", 12)
 	root.add_child(top_bar)
 
-	var back_button: Button = UIFactory.button("← Volver al mapa")
-	back_button.pressed.connect(func(): SceneRouter.go_to_world_map())
+	var back_button: Button = UIFactory.button("← Volver")
+	back_button.pressed.connect(func(): SceneRouter.return_from_journal())
 	top_bar.add_child(back_button)
 
 	title_label = UIFactory.title("Bitácora")

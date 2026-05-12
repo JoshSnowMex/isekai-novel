@@ -94,7 +94,7 @@ func build_action_panel() -> void:
 	action_panel.clear_actions()
 
 	action_panel.add_action("Bitácora", func():
-		SceneRouter.go_to_journal()
+		SceneRouter.go_to_journal(SceneRouter.WORLD_MAP)
 	)
 
 	action_panel.add_action("Guardar", func():

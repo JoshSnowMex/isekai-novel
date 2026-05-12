@@ -14,33 +14,57 @@ var temp_date_location_id: String = ""
 var temp_date_type: String = "normal"
 var temp_relationship_step_id: String = ""
 
+var journal_return_scene: String = WORLD_MAP
+
+
 func go_to_main_menu() -> void:
 	get_tree().change_scene_to_file(MAIN_MENU)
+
 
 func go_to_intro() -> void:
 	get_tree().change_scene_to_file(INTRO_SCENE)
 
+
 func go_to_world_map() -> void:
 	get_tree().change_scene_to_file(WORLD_MAP)
-	
+
+
 func go_to_location() -> void:
 	get_tree().change_scene_to_file(LOCATION_SCENE)
+
 
 func go_to_home() -> void:
 	get_tree().change_scene_to_file(HOME_SCENE)
 
-func go_to_journal() -> void:
+
+func go_to_journal(return_scene: String = "") -> void:
+	if return_scene != "":
+		journal_return_scene = return_scene
+	else:
+		journal_return_scene = WORLD_MAP
+
 	get_tree().change_scene_to_file(JOURNAL_SCENE)
-	
+
+
+func return_from_journal() -> void:
+	if journal_return_scene == "":
+		get_tree().change_scene_to_file(WORLD_MAP)
+		return
+
+	get_tree().change_scene_to_file(journal_return_scene)
+
+
 func go_to_shop() -> void:
 	get_tree().change_scene_to_file(SHOP_SCENE)
 
+
 func quit_game() -> void:
 	get_tree().quit()
+
 
 func go_to_date(npc_id: String, date_location_id: String = "", date_type: String = "normal", relationship_step_id: String = "") -> void:
 	temp_npc_id = npc_id
 	temp_date_location_id = date_location_id
 	temp_date_type = date_type
 	temp_relationship_step_id = relationship_step_id
-	get_tree().change_scene_to_file("res://scenes/date/DateScene.tscn")
+	get_tree().change_scene_to_file(DATE_SCENE)

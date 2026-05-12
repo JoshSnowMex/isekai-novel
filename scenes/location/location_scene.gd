@@ -101,7 +101,7 @@ func build_global_action_panel() -> void:
 	margin.add_child(global_action_buttons)
 
 	add_global_action("Mapa", func(): _on_back_pressed())
-	add_global_action("Bitácora", func(): SceneRouter.go_to_journal())
+	add_global_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.LOCATION_SCENE))
 	add_global_action("Guardar", func():
 		SaveManager.save_game()
 		show_location_message(
@@ -294,8 +294,8 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	name_label.clip_text = true
 	name_margin.add_child(name_label)
 
-
 func show_location_overview(location_data: Dictionary) -> void:
+	selected_npc_id = ""
 	clear_bottom_actions()
 
 	bottom_title_label.text = str(location_data.get("name", current_location_id))
@@ -308,11 +308,7 @@ func show_location_overview(location_data: Dictionary) -> void:
 	var present_npcs: Array = get_present_npcs()
 
 	for npc_id in present_npcs:
-		var id: String = str(npc_id)
-		add_bottom_action(
-			"Acercarse a %s" % get_npc_display_name(id),
-			func(): select_npc(id)
-		)
+		add_approach_npc_action(str(npc_id))
 
 	if present_npcs.is_empty():
 		add_bottom_action("No hay nadie", func(): pass, true)
@@ -320,7 +316,15 @@ func show_location_overview(location_data: Dictionary) -> void:
 	add_bottom_action("Acciones del lugar", func(): show_location_actions(location_data))
 	add_bottom_action("Volver al mapa", func(): _on_back_pressed())
 
+func add_approach_npc_action(npc_id: String) -> void:
+	var locked_npc_id: String = npc_id
+	var display_name: String = get_npc_display_name(locked_npc_id)
 
+	add_bottom_action(
+		"Acercarse a %s" % display_name,
+		func(): select_npc(locked_npc_id)
+	)
+	
 func show_location_actions(location_data: Dictionary) -> void:
 	selected_npc_id = ""
 	clear_bottom_actions()
@@ -789,19 +793,39 @@ func process_postgame_gift_effect(npc_id: String, gift_strategy: String) -> Stri
 		"Dar regalos significativos a otra persona después de una unión definitiva genera tensión."
 	)
 
-
 func reload_scene(message: String = "") -> void:
 	SaveManager.autosave_game()
-	load_location(current_location_id, message)
 
+	if message == "":
+		show_location_overview(DataManager.get_location(current_location_id))
+		return
 
+	last_message = message
+	show_location_message(
+		DataManager.get_location(current_location_id).get("name", current_location_id),
+		message
+	)
+
+	hud_bar.refresh()
+	
 func show_location_message(title: String, message: String) -> void:
 	selected_npc_id = ""
 	clear_bottom_actions()
+
 	bottom_title_label.text = title
 	bottom_description_label.text = message
-	add_bottom_action("Continuar", func(): load_location(current_location_id))
 
+	add_bottom_action(
+		"Continuar en la ubicación",
+		func(): show_location_overview(DataManager.get_location(current_location_id))
+	)
+
+	add_bottom_action(
+		"Acciones del lugar",
+		func(): show_location_actions(DataManager.get_location(current_location_id))
+	)
+
+	add_bottom_action("Volver al mapa", func(): _on_back_pressed())
 
 func show_pending_narrative_messages() -> void:
 	var messages: Array = GameManager.consume_pending_narrative_messages()
