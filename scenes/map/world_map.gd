@@ -158,21 +158,37 @@ func rebuild_locations() -> void:
 	for location_id in DataManager.locations.keys():
 		create_visual_location_button(str(location_id))
 
-func scale_map_vector(value: Vector2) -> Vector2:
+func get_map_scale() -> float:
 	var safe_width: float = max(map_layer.size.x, 1.0)
 	var safe_height: float = max(map_layer.size.y, 1.0)
 
 	var scale_x: float = safe_width / BASE_MAP_SIZE.x
 	var scale_y: float = safe_height / BASE_MAP_SIZE.y
 
+	return min(scale_x, scale_y)
+
+
+func scale_map_vector(value: Vector2) -> Vector2:
+	var scale_value: float = get_map_scale()
+
 	return Vector2(
-		value.x * scale_x,
-		value.y * scale_y
+		value.x * scale_value,
+		value.y * scale_value
+	)
+
+
+func get_map_content_offset() -> Vector2:
+	var scale_value: float = get_map_scale()
+	var content_size: Vector2 = BASE_MAP_SIZE * scale_value
+
+	return Vector2(
+		max((map_layer.size.x - content_size.x) * 0.5, 0.0),
+		max((map_layer.size.y - content_size.y) * 0.5, 0.0)
 	)
 
 
 func clamp_location_position(position_value: Vector2, button_size: Vector2) -> Vector2:
-	var margin: float = 8.0
+	var margin: float = 6.0
 
 	var max_x: float = max(margin, map_layer.size.x - button_size.x - margin)
 	var max_y: float = max(margin, map_layer.size.y - button_size.y - margin)
@@ -199,12 +215,19 @@ func create_visual_location_button(location_id: String) -> void:
 		float(size_data.get("y", 92))
 	)
 
-	var scaled_position: Vector2 = scale_map_vector(base_position)
+	var content_offset: Vector2 = get_map_content_offset()
+	var scaled_position: Vector2 = content_offset + scale_map_vector(base_position)
 	var scaled_size: Vector2 = scale_map_vector(base_size)
 
-	var min_button_size: Vector2 = Vector2(56, 56)
-	scaled_size.x = max(scaled_size.x, min_button_size.x)
-	scaled_size.y = max(scaled_size.y, min_button_size.y)
+	var min_button_side: float = 38.0
+
+	if map_layer.size.x >= 900:
+		min_button_side = 52.0
+	elif map_layer.size.x >= 700:
+		min_button_side = 44.0
+
+	scaled_size.x = max(scaled_size.x, min_button_side)
+	scaled_size.y = max(scaled_size.y, min_button_side)
 
 	var button: LocationMapButton = LocationMapButton.new()
 	button.setup(
@@ -238,7 +261,7 @@ func create_visual_location_button(location_id: String) -> void:
 	)
 
 	location_layer.add_child(button)
-
+	
 func show_location_hover(location_id: String) -> void:
 	hover_card.set_location(location_id)
 	hover_card.visible = true
@@ -259,9 +282,12 @@ func hide_hover_card() -> void:
 
 
 func position_hover_card_bottom_left() -> void:
-	var margin: float = 14.0
-	var bottom_safe_margin: float = 48.0
+	var margin: float = 12.0
+	var bottom_safe_margin: float = 42.0
 	var card_size: Vector2 = hover_card.custom_minimum_size
+
+	if map_layer.size.x < 760:
+		card_size = Vector2(360, 104)
 
 	var y_position: float = map_layer.size.y - card_size.y - bottom_safe_margin
 
@@ -324,11 +350,7 @@ func format_narrative_message(message: Variant) -> String:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		if action_panel != null and map_layer != null:
-			layout_overlay_controls()
-
-			if location_layer != null:
-				rebuild_locations()
-
+			call_deferred("refresh_overlay_layout_after_frame")
 
 func setup_fullscreen_root() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)

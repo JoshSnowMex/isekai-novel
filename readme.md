@@ -1,156 +1,155 @@
-# README_CONTINUAR — Isekai Novel / Luminaria
+# Isekai Novel — Estado del Proyecto
 
-Este archivo resume el estado actual del proyecto para continuar el desarrollo en otro chat.
+## Resumen
 
-## Nota importante para el siguiente chat
+Isekai Novel es un simulador de historias basado en citas, inspirado en juegos tipo Sim Girls, pero diseñado para que las relaciones generen consecuencias narrativas reales en el mundo.
 
-El repositorio existe en GitHub, pero el conector de GitHub suele fallar con el indexado en este proyecto. Para continuar correctamente, pedir acceso directo a archivos concretos del repositorio, no búsquedas generales indexadas.
+El objetivo no es crear un dating sim plano donde subir afinidad desbloquea escenas fijas por calendario. El objetivo es crear un sistema donde la historia emerge de:
 
-Prompt sugerido para el nuevo chat:
+- vínculos con NPCs;
+- afinidad, tensión, lealtad y celos;
+- conocimiento real del personaje;
+- decisiones del jugador;
+- consecuencias sobre el mundo;
+- elección de unión final;
+- tensión postgame.
 
-> Estoy trabajando en un proyecto Godot llamado `isekai-novel`, un dating sim / story sim isekai data-driven. El conector de GitHub no está indexando bien el repositorio, así que no busques por índice: abre directamente el archivo `README_CONTINUAR.md` en la raíz del repo y úsalo como contexto principal. Después revisa directamente los archivos que te pida por ruta exacta. Quiero continuar desde el estado descrito ahí.
+La UI actual está entrando en fase final funcional. Todavía usamos placeholders, pero deben nombrarse y organizarse como assets finales para que luego solo se reemplacen imágenes, fondos y sprites sin reescribir gameplay.
 
-Repo:
-`JoshSnowMex/isekai-novel`
+---
 
-## Visión general del juego
+## Filosofía de desarrollo
 
-El juego es un dating sim / story sim isekai llamado provisionalmente Luminaria.
+Este proyecto se trabaja con filosofía de versión final desde el inicio.
 
-La historia no debe ser una ruta lineal clásica. El jugador llega a un mundo atravesado por el Velo, una capa de separación entre mundos, posibilidades y versiones de la realidad. El Velo no es solo magia: funciona como memoria del universo. Registra lo que fue, lo que pudo ser y lo que no debería ser.
+Reglas importantes:
 
-El jugador no es “el héroe elegido” clásico. Es una variable externa, alguien que no pertenece a ninguna versión previa del mundo. Su verdadero poder narrativo no es combate ni magia: son sus relaciones con los NPCs.
+1. No hacer soluciones temporales si ya sabemos que después deberán reemplazarse.
+2. No crear sistemas “por ahora” si el sistema final debe estar separado.
+3. Preferir arquitectura clara y modular desde el inicio.
+4. Evitar repetir ciclos de “primero lo hacemos simple, luego lo expandimos, luego lo separamos”.
+5. Si algo va a ser un sistema propio, se crea como sistema propio desde el principio.
+6. La UI puede usar placeholders, pero la estructura visual debe ser la final.
+7. Los placeholders deben tener nombres finales:
+   - `Lyria_talking.png`
+   - `map_library_alba.png`
+   - `world_map_luminaria.png`
+   - no `npc1.png`, `test.jpg`, `placeholder2.png`.
+8. El usuario prefiere instrucciones directas:
+   - qué archivo tocar;
+   - qué bloque reemplazar;
+   - dónde poner código nuevo;
+   - sin pedir confirmación innecesaria.
+9. Solo detenerse para decisiones creativas, narrativas o estructurales importantes.
+10. Si el usuario dice que hizo commit/checkpoint, asumir que el repo fue actualizado y revisar archivos reales antes de proponer cambios.
 
-El dating sim es el motor principal del avance narrativo. Las relaciones desbloquean historia, peticiones indebidas, consecuencias, celos, hitos y finales.
+---
 
-Tema central:
-- “¿Qué personas tocaste?”
-- “¿Qué precio tuvo quererlas?”
-- “¿El destino existe o lo fabricamos por miedo?”
+## Estado general
 
-## Lore base
+Backend/sistemas principales: cerrado para pasar a UI.
 
-### El Velo
+Ya están implementados:
 
-El Velo es una capa de separación entre mundos, posibilidades y versiones de la realidad.
+- ciclo de día;
+- bloques horarios;
+- acciones por bloque;
+- casa del Forastero;
+- descanso/dormir;
+- guardado manual;
+- autosave;
+- carga;
+- mapa;
+- ubicaciones;
+- NPC schedules;
+- diálogo;
+- regalos;
+- tienda;
+- citas;
+- movimientos de cita;
+- compatibilidad de movimientos por personalidad/lugar/intimidad;
+- revelación inteligente de información;
+- bitácora;
+- estado del mundo;
+- storylets dinámicos;
+- milestones;
+- rivalidades/celos;
+- progresión de relación;
+- final union;
+- calendario emocional;
+- postgame completo;
+- recompensas dinámicas de citas;
+- UI foundation inicial;
+- World Map visual funcional.
 
-No juzga, pero equilibra.
+---
 
-Cuando se altera demasiado la realidad:
-- aparecen contradicciones temporales
-- personas recuerdan cosas que no pasaron
-- lugares existen solo a veces
-- NPCs pueden cambiar según decisiones pasadas
-- el mundo busca coherencia y cobra costos
+## Sistemas principales
 
-### El jugador
+### Core
 
-El jugador llega porque el Velo necesitaba un punto de anclaje emocional externo.
+Ubicación:
 
-No fue invocado directamente por nadie.
+```text
+/core
+Archivos principales:
 
-### El Consejo
+core/data_manager.gd
+core/game_manager.gd
+core/save_manager.gd
+core/scene_router.gd
 
-El Consejo es ambiguo:
-- cree proteger la estabilidad
-- toma decisiones frías
-- sacrifica individuos por el bien mayor
-- no es villano simple, pero sus soluciones son moralmente cuestionables
+Responsabilidades:
 
-### La profecía
+DataManager: carga JSONs y expone getters.
+GameManager: estado global, día/hora, jugador, relaciones, mundo, inventario, conocimiento NPC, narrativa pendiente.
+SaveManager: guardado/carga/autosave.
+SceneRouter: navegación entre escenas.
+Data
 
-La profecía es autocumplida porque fue manipulada.
+Ubicación:
 
-Existía una predicción vaga, reinterpretada por generaciones. Aeris, Eryon y el Consejo han intervenido sobre ella de forma preventiva.
+/data
 
-Tema:
-> El Forastero no cumple la profecía. La profecía lo encierra.
+Archivos actuales importantes:
 
-### Amor y costo
+activities.json
+date_locations.json
+date_moves.json
+dialogues.json
+events.json
+game_config.json
+items.json
+locations.json
+milestones.json
+npcs.json
+npc_info_schema.json
+petitions.json
+player_classes.json
+relationship_steps.json
+rivalries.json
+final_union_requirements.json
+postgame_config.json
+postgame_storylets.json
+ui_assets.json
 
-Enamorar a alguien debe costar otra posibilidad:
-- pierdes confianza de otro NPC
-- alteras una decisión correcta
-- haces que alguien rompa un voto
-- vuelves el mundo más inestable
-- generas celos o consecuencias futuras
+Notas:
 
-## Arquitectura general
+ui_assets.json contiene rutas finales previstas para fondos, edificios, retratos y sprites.
+Los assets no tienen que existir todavía; si no existen, la UI usa placeholders.
+Las rutas deben conservar nombres finales.
+Relación y NPCs
 
-El proyecto está construido de forma modular y data-driven. La mayoría del contenido debe vivir en JSON, no quemado en código.
+La relación no es solo afinidad.
 
-La lógica está separada en sistemas:
-- `DataManager`
-- `GameManager`
-- `SaveManager`
-- `SceneRouter`
-- `ConditionSystem`
-- `EventSystem`
-- `MilestoneSystem`
-- `RivalrySystem`
-- `PetitionSystem`
-- `DialogueSystem`
-- `DateSystem`
-- `RelationshipSystem`
+Valores:
 
-Autoloads importantes:
-- `DataManager`
-- `GameManager`
-- `SaveManager`
-- `SceneRouter`
-- `RivalrySystem`
-- `EventSystem`
-- `ConditionSystem`
-- `MilestoneSystem`
-- `PetitionSystem`
-- `DialogueSystem`
-- `DateSystem`
-- `RelationshipSystem`
+friendship
+tension
+loyalty
+jealousy
 
-## Estado actual confirmado
-
-Ya funcionan:
-
-- Menú principal
-- Nuevo juego
-- Continuar
-- Clases del jugador
-- Ciclo de días
-- Ciclo de tiempo por bloques
-- Resistencia
-- Acciones por bloque
-- Dormir hasta el siguiente día
-- Trabajo / entrenamiento / medio tiempo
-- Modificadores de clase para stats, dinero y relaciones
-- Localizaciones con identidad
-- NPCs desde JSON
-- Regalos
-- Inventario
-- Tienda
-- Bitácora
-- NPCs desconocidos como `???`
-- Relaciones multi-eje
-- Rivalidades / celos básicos
-- Diálogos contextuales
-- Peticiones indebidas
-- Citas normales 2.0
-- Lugares de cita
-- Movimientos románticos con riesgo
-- Límites de acciones por cita
-- Regalos durante cita
-- Resumen de cita con scroll
-- Coleccionables por NPC + ubicación
-- Citas especiales
-- Progresión de relación
-- Piezas de retrato
-- Trofeo de vínculo
-- Hitos narrativos diarios del Velo
-- Ciclo de 14 días probado sin problemas
-- Relaciones progresan correctamente
-
-## Estados de relación
-
-Estados internos actuales:
+Estados de relación:
 
 none
 interest
@@ -158,672 +157,393 @@ dating
 lovers
 partner
 
-Interpretación oficial:
+La progresión depende de:
 
-none      → sin relación
-interest  → interés romántico claro
-dating    → están saliendo
-lovers    → relación íntima / traviesa / amantes no-final
-partner   → vínculo culminado personal con ese NPC
+afinidad total;
+amistad;
+tensión;
+lealtad;
+celos;
+información conocida del NPC;
+citas exitosas;
+condiciones narrativas.
 
-Importante:
-partner NO significa necesariamente matrimonio o pareja formal tradicional. Significa que el vínculo personal con ese NPC llegó a su forma máxima.
+Cada NPC tiene información organizada por categorías en npc_info_schema.json. La información se revela con lógica priorizada para que avanzar de relación no dependa de azar injusto.
 
-Según el NPC puede interpretarse como:
+Categorías trabajadas:
 
-pareja formal
-amante declarado
-pacto íntimo
-compañero de destino
-ancla existencial
-vínculo culminado no convencional
+básico;
+gustos;
+personalidad;
+contacto;
+perfil personal;
+íntimo;
+historia;
+romance;
+sombra emocional;
+deseo/química;
+costo/responsabilidad;
+final.
+Citas
 
-El juego debe permitir harem:
+Sistema:
 
-varios NPCs en interest
-varios en dating
-varios en lovers
-varios en partner
+systems/date/date_system.gd
+scenes/date/date_scene.gd
+data/date_locations.json
+data/date_moves.json
 
-Eso no debe bloquearse, pero debe tener consecuencias narrativas:
+Las citas tienen:
 
-celos
-rivalidades
-diálogos fríos
-presión romántica
-peticiones rechazadas
-eventos de drama
-cambios de disponibilidad
+localización;
+progreso;
+errores;
+movimientos desbloqueados;
+movimientos físicos/coquetos/íntimos;
+compatibilidad por NPC;
+compatibilidad por localización;
+compatibilidad por privacidad;
+éxito, excelente o perfecto.
 
-La futura elección final de historia debe ser separada:
+Las recompensas son dinámicas por rango.
 
-final_union_npc_id
+Ejemplo conceptual:
 
-o flag:
-
-final_union:<npc_id>
-
-Solo debe haber una unión final narrativa, aunque el jugador pueda tener varias relaciones culminadas.
-
-Sistema de relación multi-eje
-
-Cada NPC tiene varios valores:
-
-friendship
-tension
-loyalty
-jealousy
-relationship_state
-
-Total de vínculo:
-
-friendship * 0.4 + tension * 0.4 + loyalty * 0.2
-
-No debe volver a usarse una sola afinidad plana.
-
-Interpretación:
-
-friendship: confianza / cercanía emocional
-tension: química / coqueteo / deseo
-loyalty: disposición a arriesgarse o cruzar límites
-jealousy: celos / inseguridad / presión emocional
-Peticiones indebidas
-
-Existen como mecánica central.
-
-Una petición indebida es pedirle a un NPC que cruce una línea:
-
-ocultar información
-mentir
-retrasar un mensaje
-usar influencia
-romper un voto
-crear un objeto inestable
-intimidar a alguien
-abrir una posibilidad del Velo
-
-No son contenido sexual. Son límites narrativos.
-
-Archivos:
-
-res://data/petitions.json
-res://systems/petition/petition_system.gd
-
-Funcionalidad esperada:
-
-disponible solo con condiciones
-éxito o rechazo
-aplica efectos
-agrega world_flags
-afecta world_state
-puede disparar eventos / milestones
-consume acción
-se guarda
-DialogueSystem
-
-El sistema de diálogos ya existe y funciona.
-
-Archivos:
-
-res://data/dialogues.json
-res://systems/dialogue/dialogue_system.gd
-
-El diálogo es data-driven.
-
-Cada bloque usa:
-
-{
-  "npc_id": "aeris",
-  "category": "casual",
-  "priority": 100,
-  "conditions": {},
-  "lines": []
+"perfect_rewards": {
+  "friendship": { "min": 9, "max": 12 },
+  "tension": { "min": 10, "max": 14 },
+  "loyalty": { "min": 8, "max": 12 }
 }
 
-El sistema filtra por:
+DateSystem resuelve los rangos, aplica bonus por lugar adecuado y muestra valores reales en el resumen.
 
-NPC
-categoría
-condiciones
-relación
-estado de relación
-world_flags
-world_state
-contexto
+Las citas postgame también afectan la estabilidad de la unión final.
 
-Debe seguirse el principio:
+Final Union
 
-NPC = quién habla
-category = tono
-conditions = cuándo tiene sentido
-lines = qué puede decir
+Sistema:
 
-Los NPCs tienen centro temático, pero no cárcel temática. Pueden hablar de temas de otros si el contexto lo justifica.
+systems/final_union/final_union_system.gd
+data/final_union_requirements.json
 
-Ejemplos de centros temáticos:
+La unión final representa la elección definitiva de pareja del jugador.
 
-Aeris: Velo, verdad, profecía, observación
-Lyria: biblioteca, secretos, registros, prudencia
-Eryon: ironía, profecía manipulada, narrativas falsas
-Seraphine: fe, culpa, deseo, voto
-Nova: prototipos, caos, fallas de realidad
-Axiom: finitud, existencia, amor metafísico
-Elara: rumores, deseo social, taberna
-Rhea: protección directa, fuerza, lealtad
-Kael: protección, silencio, heridas
-Myr: cambio, identidad fluida, alquimia
-Taren: orden, control, Consejo/gremio
-Rhein: bosque, raíces, memoria natural
-Selene: mensajes, Consejo, neutralidad rota
-DateSystem — Citas normales 2.0
+Al completarla:
 
-Archivos:
+marca final_union_chosen;
+guarda final_union_npc_id;
+registra fecha emocional;
+otorga collectible/token;
+activa PostgameSystem.
+Calendario emocional
 
-res://data/date_locations.json
-res://data/date_moves.json
-res://systems/date/date_system.gd
-res://scenes/date/date_scene.gd
+El juego registra fechas importantes por NPC:
 
-Flujo:
+primera cita;
+primera cita exitosa;
+primera cita excelente;
+primera cita perfecta;
+avances de relación;
+unión final;
+regalos amados memorables;
+otras memorias emocionales.
 
-Invitar a cita
-→ elegir lugar
-→ inicia cita con progreso inicial
-→ hablar / regalo / movimiento
-→ terminar cita
-→ resumen con recompensa y coleccionable
+Se guarda en:
 
-Las citas normales:
+GameManager.player["emotional_calendar"]
 
-no suben relationship_state automáticamente
-sí registran una cita exitosa
-sí dan coleccionables por NPC + lugar
-sí descubren información
-sí descubren gustos de regalos
-sí preparan la cita especial
+Se muestra en la bitácora.
 
-Límites actuales:
+Postgame
 
-talks max 3
-questions max 2
-moves max 2
-gifts max 1
+Sistema:
 
-Los movimientos no se pueden repetir en la misma cita.
+systems/postgame/postgame_system.gd
+data/postgame_config.json
+data/postgame_storylets.json
 
-El jugador puede fallar movimientos románticos. No se deben mostrar solo opciones seguras. El diseño debe tentar al jugador a equivocarse.
+El postgame ya está completo a nivel sistémico.
 
-Tono de movimientos:
+Al iniciar postgame:
 
-coqueto
-picante
-adulto
-sugerente
-NO eroge
-NO hentai
-NO explícito
+marca postgame_started;
+marca postgame_partner:<npc_id>;
+crea postgame_state;
+establece:
+final_union_stability;
+postgame_pressure;
+outside_temptation;
+aplica cambios iniciales al mundo;
+dispara reacciones inmediatas de otros NPCs.
 
-Coleccionable de cita:
+Cada día:
 
-date_memory:<npc_id>:<date_location_id>
-RelationshipSystem — Citas especiales
+sube presión/tentación;
+revisa celos y rutas avanzadas con otros NPCs;
+afecta estabilidad de unión;
+dispara storylets postgame si se cumplen condiciones.
 
-Archivos:
+Citas/regalos después de final union:
 
-res://data/relationship_steps.json
-res://systems/relationship/relationship_system.gd
+con la pareja fortalecen unión;
+con otros NPCs generan tensión/tentación.
+UI Foundation
 
-Sirve para subir estados:
+Ya existen componentes UI iniciales:
 
-none → interest
-interest → dating
-dating → lovers
-lovers → partner
+ui/components/visual_asset.gd
+ui/components/location_map_button.gd
+ui/components/world_hud_bar.gd
+ui/components/world_action_panel.gd
+ui/components/location_hover_card.gd
+ui/components/world_status_panel.gd
 
-No basta con puntos. Requiere:
+world_status_panel.gd quedó de iteraciones anteriores y puede conservarse si es útil, pero el World Map actual ya no usa panel derecho grande.
 
-umbral de relación
-cita normal exitosa previa
-conocer información del tier requerido
-responder preguntas del NPC en una cita especial
-
-Esto funciona como mini-examen emocional:
-
-Tener una cita exitosa no significa conocer al NPC. Para avanzar de relación debes haber aprendido suficiente sobre esa persona.
-
-Cada subida da:
-
-portrait_piece:<npc_id>:1
-portrait_piece:<npc_id>:2
-portrait_piece:<npc_id>:3
-portrait_piece:<npc_id>:4
-
-Al llegar a partner:
-
-relationship_trophy:<npc_id>
-NPC info tiers
-
-GameManager.get_info_tier(info_key) define tiers:
-
-Tier 20:
-
-favorite_place
-hobby
-favorite_color
-favorite_food
-
-Tier 40:
-
-phone
-routine
-light_romantic_preference
-dislikes
-
-Tier 60:
-
-height
-favorite_style
-minor_insecurity
-accepted_affectionate_gesture
-
-Tier 80:
-
-measurements
-emotional_fear
-romantic_desire
-ideal_date
-
-Tier 100:
-
-intimate_secret
-partner_condition
-Coleccionables
-
-Coleccionables actuales:
-
-date_memory:<npc_id>:<date_location_id>
-portrait_piece:<npc_id>:<index>
-relationship_trophy:<npc_id>
-
-UI futura puede representar estos IDs con imágenes, cartas, CGs o piezas visuales sin cambiar lógica.
-
-Bitácora
+Estado actual de UI
+World Map
 
 Archivo:
 
-res://scenes/journal/journal_scene.gd
-
-Estado actual:
+scenes/map/world_map.gd
 
-funciona
-muestra NPCs conocidos
-muestra NPCs desconocidos como ???
-no revela información gratis
-muestra:
-estado de relación
-descripción del estado
-amistad/tensión/lealtad/celos
-total de vínculo
-próximo avance
-motivo si está bloqueado
-información descubierta con tier
-gustos de regalos descubiertos
-recuerdos de cita
-piezas de retrato
-trofeo de vínculo
-notas
-Milestones del Velo
-
-Archivos:
+Estado:
 
-res://data/milestones.json
-res://systems/milestone/milestone_system.gd
+HUD superior funcional.
+Mapa grande.
+Marcadores/edificios clicables.
+Botones globales compactos:
+Bitácora;
+Guardar;
+Menú.
+Tarjeta hover inferior izquierda.
+Click en ubicación entra directamente.
+NPCs presentes aparecen dinámicamente.
+Si el jugador no conoce al NPC, aparece ???.
+Al conocerlo, aparece su nombre.
+Las posiciones y tamaños se escalan según tamaño real de ventana.
+La ventana ya puede expandir correctamente al maximizar.
 
-Ya se creó MilestoneSystem y se agregó como Autoload.
+Configuración importante en project.godot:
 
-GameManager.sleep_until_next_day() dispara:
+display/window/size/viewport_width=1152
+display/window/size/viewport_height=648
+display/window/size/mode=2
+display/window/stretch/mode="canvas_items"
+display/window/stretch/aspect="expand"
+display/window/size/resizable=true
+display/window/stretch/scale=1.0
 
-MilestoneSystem.process_milestones({
-  "trigger": "day_started"
-})
+Si el juego no expande al maximizar, revisar estas líneas.
 
-Los resultados se guardan en:
+Diseño visual acordado para World Map
 
-pending_narrative_messages
+Regla final:
 
-Importante: add_pending_narrative_message acepta Variant, porque puede recibir strings de milestones.
+HUD arriba.
+Mapa grande.
+Botones globales arriba derecha.
+Tarjeta hover abajo izquierda.
+Edificios/ubicaciones independientes.
+Click directo para entrar.
+Sin lista duplicada.
+Sin panel derecho invasivo.
 
-Milestones narrativos de demo 14 días:
+Los edificios deben tratarse como assets separados del fondo.
 
-día 2: primera contradicción
-día 3: Aeris nota patrón
-día 4: Consejo empieza a mirar
-día 5: rumores
-día 6: recuerdo ajeno
-día 7: primera semana pesa
-día 9: mundo se repite mal
-día 10: advertencia del Consejo
-día 12: costo de coherencia
-día 14: cierre de arco demo
-ConditionSystem
+El fondo ideal:
 
-Debe soportar:
+world_map_luminaria.png
 
-"relationship": {
-  "state": "dating"
-}
+debe ser una planicie/mapa base con caminos, río, suelo, etc.
 
-y:
+Los edificios deben ser assets separados:
 
-"context": {
-  "to_state": "dating"
-}
+map_home_forastero.png
+map_library_alba.png
+map_tavern_puente_rojo.png
+...
 
-Se revisó que inicialmente no lo soportaba. Debe usarse una versión que soporte:
+Esto permite mover edificios desde ui_assets.json sin redibujar el fondo.
 
-relationship numérico
-relationship state
-context exacto
-context numérico
-world_flags
-world_state
-inventory
-time
-player_stats
-EventSystem
+Próximo paso
 
-Eventos reactivos por relación usan trigger:
+Siguiente pantalla:
 
-relationship_step_completed
-
-Contexto esperado:
-
-{
-  "trigger": "relationship_step_completed",
-  "npc_id": npc_id,
-  "step_id": step_id,
-  "to_state": to_state
-}
-
-Eventos de estado:
-
-interest
-dating
-lovers
-partner
-
-Estos deben afectar:
-
-romantic_pressure
-global_tension
-world_instability
-world_flags
-World State
-
-player["world_state"]:
-
-{
-  "global_tension": 0,
-  "world_instability": 0,
-  "romantic_pressure": 0
-}
-
-Usos:
-
-tensión social
-inestabilidad del Velo
-presión romántica / harem / celos
-Clases del jugador
-
-Archivo:
-
-res://data/player_classes.json
-
-Clases:
-
-Forastero Sensible
-Forastero Audaz
-Forastero Erudito
-Forastero Encantador
-Forastero Disciplinado
-Forastero Equilibrado
-
-El equilibrado usa modificadores en 1.0 para no romper nada y no aplicar ventajas reales.
-
-Clases afectan:
-
-stats iniciales
-crecimiento de stats
-dinero por trabajo
-relación
-Actividades y ubicaciones
-
-Archivos:
-
-res://data/activities.json
-res://data/locations.json
-
-Se decidió que NO todas las ubicaciones permitan todo.
-
-Regla:
-
-cada ubicación tiene identidad
-entrenar fuerte solo en lugares especializados
-trabajo completo solo donde tenga sentido económico
-medio tiempo puede ser más común
-las ganancias varían por ubicación
-
-Entrenamientos fuertes:
-
-strength    → Gremio
-intellect   → Ateneo Arcano
-charm       → Plaza
-discipline  → Santuario
-intuition   → Umbral
-UI actual
-
-Se hicieron varias correcciones de layout horizontal/PC.
-
-Pantallas con scroll ya corregidas:
-
-mundo/mapa
-tienda
-citas
-resumen de citas
-bitácora
-
-Falta seguir revisando scroll en pantallas largas futuras.
-
-Problemas ya resueltos
-Godot no reconocía DateSystem: se resolvió recreando el archivo y autoload.
-Resumen de cita desaparecía rápido: ahora requiere botón Continuar.
-Resumen de cita no scrolleaba: corregido.
-Movimientos de cita se podían spamear: corregido.
-Bitácora mostraba nombres de NPCs sin conocerlos: corregido con ???.
-Citas no desbloqueaban bien porque se exigía demasiada tensión: ajustado.
-Tienda no permitía volver por falta de scroll/layout: corregido.
-Mapa/lugares tenían problemas de layout vertical en pantalla horizontal: corregido.
-add_pending_narrative_message tenía tipo incorrecto para strings: debe quedar como Variant.
-Archivos clave a revisar al continuar
-
-Core:
-
-res://core/game_manager.gd
-res://core/data_manager.gd
-res://core/scene_router.gd
-
-Systems:
-
-res://systems/condition/condition_system.gd
-res://systems/event/event_system.gd
-res://systems/milestone/milestone_system.gd
-res://systems/rivalry/rivalry_system.gd
-res://systems/petition/petition_system.gd
-res://systems/dialogue/dialogue_system.gd
-res://systems/date/date_system.gd
-res://systems/relationship/relationship_system.gd
-
-Scenes:
-
-res://scenes/world_map/world_map.gd
-res://scenes/location/location_scene.gd
-res://scenes/date/date_scene.gd
-res://scenes/journal/journal_scene.gd
-res://scenes/shop/shop_scene.gd
-
-Data:
-
-res://data/npcs.json
-res://data/dialogues.json
-res://data/events.json
-res://data/milestones.json
-res://data/petitions.json
-res://data/relationship_steps.json
-res://data/date_locations.json
-res://data/date_moves.json
-res://data/activities.json
-res://data/locations.json
-res://data/items.json
-res://data/player_classes.json
-res://data/rivalries.json
-res://data/npc_info_schema.json
-Qué falta para primera entrega
-1. Confirmar milestones visibles
-
-Ya se disparan al dormir. Falta confirmar si los pending_narrative_messages se muestran de forma elegante al entrar al mapa.
-
-Si no se muestran bien, revisar world_map.gd.
-
-2. Estado del mundo en UI
-
-Agregar una pantalla o sección en bitácora para mostrar:
-
-global_tension
-world_instability
-romantic_pressure
-flags principales conocidos
-
-Puede llamarse:
-
-Estado del mundo
-3. Final Union básico
-
-Implementar sistema separado de relationship_state.
-
-No usar partner para la elección final única.
-
-Propuesta:
-
-final_union:<npc_id>
-
-o:
-
-player["final_union_npc_id"] = npc_id
-
-Requisitos:
-
-NPC en partner
-día mínimo o milestone demo_arc_completed
-world_state bajo cierto umbral o decisión narrativa
-una escena final de elección
-
-Solo debe haber uno.
-
-Debe afectar postgame:
-
-otros NPCs reaccionan
-celos o aceptación según personalidad
-epílogo principal
-posibilidad de continuar postgame
-4. Reacciones de harem más visibles
-
-Ahora el harem se permite. Falta hacerlo más reactivo:
-
-si tienes varios dating, subir romantic_pressure
-si tienes varios lovers, disparar eventos de celos
-si tienes varios partner, crear eventos de tensión fuerte
-no bloquear, solo consecuencias
-5. Balance
-
-Probar 14 días y ajustar:
-
-ganancias de hablar
-ganancias de regalos
-progreso de cita
-costos de stamina
-dinero de trabajos
-precios de regalos
-requisitos de relationship_steps
+LocationScene final funcional con personajes clicables
 
 Objetivo:
 
-en 14 días se debe poder llegar razonablemente a interest o dating con un NPC si el jugador se enfoca
-no debería poder maximizar a todos sin esfuerzo
-pero sí debe sentirse posible progresar con varios si el jugador entiende el sistema
-6. Más contenido narrativo
+click en edificio del mapa
+→ entrar a ubicación
+→ ver fondo de ubicación
+→ ver personajes presentes como sprites/placeholders clicables
+→ click en personaje
+→ acciones del personaje
 
-Prioridad:
+No debe ser una lista administrativa.
 
-Aeris
-Lyria
-Eryon
+Diseño esperado:
 
-Crear mini-ruta fuerte de demo:
+HUD superior compacto
+Fondo de ubicación
+Personajes presentes como placeholders/sprites
+Tarjeta de personaje seleccionable
+Acciones:
+- hablar
+- regalar
+- pedir favor
+- invitar a cita
+- volver
 
-Aeris introduce el Velo
-Lyria introduce registros/secretos
-Eryon introduce profecía manipulada
-Consejo presiona
-Día 14 deja gancho fuerte
-7. Revisión de textos
+Reglas:
 
-Hay que revisar:
+Si NPC no fue conocido, mostrar ???.
+Si fue conocido, mostrar nombre.
+Usar ui_assets.json para sprite/retrato/fondo.
+Si asset no existe, usar placeholder con nombre final.
+Mantener backend intacto.
+No tocar sistemas de relación/cita salvo helper visual si fuera inevitable.
 
-typos
-consistencia de nombres
-Lyria debe quedarse como Lyria
-no volver a usar Lyra si no corresponde
-tono adulto sugerente pero no explícito
-evitar que todos los NPCs suenen igual
-8. Coleccionables UI futura
+Archivos probables:
 
-Por ahora son IDs en bitácora. En UI final pueden ser:
+scenes/location/location_scene.gd
+ui/components/location_character_button.gd
+ui/components/location_character_card.gd
 
-cartas
-piezas de retrato
-CGs
-recuerdos
-trofeos
+Usar:
 
-No cambiar lógica.
+WorldHudBar
+VisualAsset
+DataManager.get_location_ui()
+DataManager.get_npc_ui()
+GameManager.mark_npc_seen()
+Forma de trabajo recomendada con ChatGPT
 
-Siguiente paso recomendado
+Al continuar:
 
-Al iniciar nuevo chat, lo más productivo sería pedir:
+Revisar archivos reales del repo antes de proponer cambios.
+No asumir funciones si no se revisaron.
+Entregar bloques grandes pero concretos.
+Indicar:
+archivo;
+bloque a reemplazar;
+código completo si conviene;
+qué probar.
+Evitar planes innecesarios cuando ya hay decisión.
+Pedir confirmación solo para decisiones creativas/narrativas o cambios estructurales.
+Si el usuario dice que hizo commit, revisar el repo actualizado.
+Recordar que GitHub no indexa bien por búsqueda; abrir archivos concretos por ruta.
+El usuario es novato en Godot, pero programador backend Java/Spring.
+Explicar lo necesario de Godot cuando haya errores de lógica o UI.
+Último estado validado
 
-Revisar directamente world_map.gd para confirmar cómo muestra pending_narrative_messages.
-Si no está bien, implementar una pantalla/modal simple de mensajes narrativos pendientes.
-Luego implementar FinalUnionSystem básico.
-Luego implementar WorldState en bitácora.
-Luego balancear 14 días.
+La última iteración corrigió el World Map responsive:
 
-Prompt sugerido:
+posiciones/tamaños escalan con ventana;
+botones dejan de salirse al reducir;
+HUD usa texto limpio;
+tarjeta hover queda abajo izquierda;
+ventana expande correctamente al maximizar;
+arquitectura está lista para pasar a LocationScene.
 
-Ya leíste README_CONTINUAR.md. Continuemos desde ahí. Primero abre directamente res://scenes/world_map/world_map.gd, res://core/game_manager.gd, res://systems/milestone/milestone_system.gd y dime si los mensajes narrativos pendientes de milestones se están mostrando bien. Si no, dame el reemplazo de archivos para corregirlo.
+Siguiente bloque recomendado:
 
-Estilo de trabajo preferido
+Implementar LocationScene final funcional con personajes clicables.
 
-El usuario prefiere:
+---
 
-trabajar por bloques completos
-recibir archivos completos cuando sea posible
-evitar rehacer arquitectura
-definir arquitectura antes de código si afecta futuro
-mantener todo modular
-usar JSON para contenido
-usar sistemas separados para lógica
-no quemar contenido narrativo en código
-avanzar rápido hacia primera entrega jugable
+# 2. Prompt para nuevo chat
 
-El usuario suele probar en Godot y reportar errores de línea.
-Responder con correcciones concretas y rutas exactas.
+Copia y pega esto al iniciar el nuevo chat:
+
+```text
+Hola, continuemos el desarrollo de mi juego Godot “Isekai Novel”.
+
+Contexto importante:
+- Estoy trabajando en un repositorio GitHub llamado `JoshSnowMex/isekai-novel`.
+- El repo está conectado por GitHub, pero por un error no indexa bien por búsqueda de palabras. No confíes en search para encontrar funciones; abre archivos concretos por ruta.
+- Antes de proponer cambios, revisa los archivos pertinentes del repo.
+- Soy programador backend Java/Spring, pero novato en Godot. Necesito instrucciones claras: archivo, qué reemplazar, dónde pegar código y qué probar.
+- No quiero soluciones temporales. Trabajamos siempre pensando en versión final, aunque usemos placeholders.
+- Los placeholders deben tener nombres finales de asset, por ejemplo `Lyria_talking.png`, no `npc1.png`.
+- Prefiero bloques grandes y concretos. No quiero conversaciones de “plan → confirmación → código” salvo que sea una decisión creativa, narrativa o estructural importante.
+- Si digo que hice commit/checkpoint, asume que el repo fue actualizado y revísalo antes de continuar.
+- El estilo de trabajo que veníamos teniendo era bueno: directo, con buen humor, pero preciso.
+
+Filosofía del juego:
+- No es un dating sim plano. Es un simulador de historias basado en citas.
+- La historia debe emerger de relaciones, conocimiento, decisiones, lealtad, celos, tensión, estado del mundo y consecuencias.
+- La main storyline no debe depender rígidamente del calendario.
+- El calendario sirve más para cumpleaños, aniversarios y memoria emocional.
+- Todos los sistemas principales del backend ya están cerrados para pasar a UI.
+
+Estado actual:
+- Backend completo:
+  - ciclo de día;
+  - acciones;
+  - casa;
+  - guardado/carga/autosave;
+  - ubicaciones;
+  - NPC schedules;
+  - diálogo;
+  - tienda/items/regalos;
+  - citas;
+  - movimientos de cita;
+  - revelación de información;
+  - bitácora;
+  - estado del mundo;
+  - storylets;
+  - milestones;
+  - rivalidades;
+  - final union;
+  - calendario emocional;
+  - postgame completo;
+  - recompensas dinámicas.
+- UI foundation iniciada.
+- World Map ya fue convertido a UI final funcional:
+  - HUD superior;
+  - mapa grande;
+  - botones globales arriba derecha;
+  - tarjeta hover abajo izquierda;
+  - ubicaciones clicables como placeholders cuadrados;
+  - click directo entra a ubicación;
+  - NPCs presentes se muestran en hover;
+  - NPC desconocido aparece como `???`;
+  - responsive al tamaño de ventana;
+  - configurado con `canvas_items` y `expand`.
+
+Archivos importantes:
+- `core/data_manager.gd`
+- `core/game_manager.gd`
+- `core/save_manager.gd`
+- `core/scene_router.gd`
+- `scenes/map/world_map.gd`
+- `scenes/location/location_scene.gd`
+- `data/ui_assets.json`
+- `ui/components/visual_asset.gd`
+- `ui/components/location_map_button.gd`
+- `ui/components/world_hud_bar.gd`
+- `ui/components/world_action_panel.gd`
+- `ui/components/location_hover_card.gd`
+
+Siguiente paso:
+Quiero continuar con `LocationScene final funcional con personajes clicables`.
+
+Objetivo:
+- Al entrar a una ubicación desde el mapa, debe mostrarse el fondo de la ubicación.
+- Los NPCs presentes deben aparecer como sprites/placeholders clicables.
+- Si el jugador no conoce al NPC, debe aparecer como `???`.
+- Si ya lo conoce, debe aparecer su nombre.
+- Al hacer click en un NPC, aparece una tarjeta/panel de acciones:
+  - hablar;
+  - regalar;
+  - pedir favor;
+  - invitar a cita;
+  - volver/cerrar selección.
+- No quiero lista administrativa de NPCs si podemos evitarla.
+- La escena debe quedar lista para reemplazar placeholders por assets reales usando `ui_assets.json`.
+- No tocar backend salvo helpers visuales necesarios.
+- Revisa primero el repo actualizado y luego dame el bloque grande de implementación.
+
+Por favor continúa desde ahí.
