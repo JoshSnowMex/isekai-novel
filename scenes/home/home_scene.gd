@@ -15,12 +15,6 @@ var main_description_scroll: ScrollContainer
 var main_description_label: Label
 var main_actions: HBoxContainer
 
-var side_panel: PanelContainer
-var side_title_label: Label
-var side_description_scroll: ScrollContainer
-var side_description_label: Label
-var side_actions: VBoxContainer
-
 var current_message: String = ""
 
 const BASE_HOME_SIZE := Vector2(1050.0, 540.0)
@@ -76,7 +70,6 @@ func build_ui() -> void:
 	build_background()
 	build_global_action_panel()
 	build_main_panel()
-	build_side_panel()
 
 	call_deferred("refresh_layout_after_frame")
 
@@ -133,7 +126,7 @@ func build_global_action_panel() -> void:
 
 func build_main_panel() -> void:
 	main_panel = PanelContainer.new()
-	main_panel.custom_minimum_size = Vector2(720, 196)
+	main_panel.custom_minimum_size = Vector2(820, 210)
 	home_layer.add_child(main_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -181,61 +174,12 @@ func build_main_panel() -> void:
 	box.add_child(main_actions)
 
 
-func build_side_panel() -> void:
-	side_panel = PanelContainer.new()
-	side_panel.custom_minimum_size = Vector2(330, 260)
-	home_layer.add_child(side_panel)
-
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 10)
-	side_panel.add_child(margin)
-
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 8)
-	margin.add_child(box)
-
-	side_title_label = Label.new()
-	side_title_label.custom_minimum_size = Vector2(1, 24)
-	side_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side_title_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	side_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	side_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	side_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(side_title_label)
-
-	side_description_scroll = ScrollContainer.new()
-	side_description_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side_description_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	side_description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	side_description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	box.add_child(side_description_scroll)
-
-	side_description_label = Label.new()
-	side_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side_description_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	side_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	side_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	side_description_scroll.add_child(side_description_label)
-
-	side_actions = VBoxContainer.new()
-	side_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	side_actions.size_flags_vertical = Control.SIZE_SHRINK_END
-	side_actions.add_theme_constant_override("separation", 6)
-	box.add_child(side_actions)
-
-
 func refresh_home(message: String = "") -> void:
 	current_message = message
 	GameManager.current_location_id = "home"
 	hud_bar.refresh()
 
 	refresh_main_panel()
-	refresh_side_panel()
 	call_deferred("refresh_layout_after_frame")
 
 
@@ -284,14 +228,55 @@ func refresh_main_panel() -> void:
 		))
 		map_button.mouse_exited.connect(func(): restore_main_text())
 
+	add_final_union_actions()
 
-func refresh_side_panel() -> void:
-	clear_children(side_actions)
 
-	side_title_label.text = "Vínculos y cierre"
-	side_description_label.text = build_home_state_summary()
+func add_final_union_actions() -> void:
+	if FinalUnionSystem.has_final_union():
+		if PostgameSystem.is_postgame_started():
+			var postgame_button: Button = add_main_action("Estado de la unión", func(): show_postgame_status())
+			postgame_button.mouse_entered.connect(func(): show_main_preview(
+				"Estado de la unión",
+				"Consulta el estado actual de la unión definitiva y sus tensiones posteriores."
+			))
+			postgame_button.focus_entered.connect(func(): show_main_preview(
+				"Estado de la unión",
+				"Consulta el estado actual de la unión definitiva y sus tensiones posteriores."
+			))
+			postgame_button.mouse_exited.connect(func(): restore_main_text())
+		return
 
-	build_final_union_options()
+	var candidates: Array = FinalUnionSystem.get_available_candidates()
+
+	for npc_id in candidates:
+		add_final_union_button(str(npc_id))
+
+
+func add_final_union_button(npc_id: String) -> void:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var requirement: Dictionary = DataManager.get_final_union_requirement(npc_id)
+	var label_text: String = str(requirement.get(
+		"proposal_label",
+		"Proponer unión a %s" % npc.get("name", npc_id)
+	))
+
+	var button: Button = add_main_action(label_text, func(): propose_final_union(npc_id))
+
+	button.mouse_entered.connect(func():
+		show_main_preview(
+			"Unión con %s" % npc.get("name", npc_id),
+			get_final_union_preview_text(npc_id)
+		)
+	)
+
+	button.focus_entered.connect(func():
+		show_main_preview(
+			"Unión con %s" % npc.get("name", npc_id),
+			get_final_union_preview_text(npc_id)
+		)
+	)
+
+	button.mouse_exited.connect(func(): restore_main_text())
 
 
 func get_home_description() -> String:
@@ -306,97 +291,17 @@ func get_home_description() -> String:
 	if pending_count > 0:
 		text += "\n\nAlgo espera ser procesado al descansar. El Velo tiene %s mensaje(s) pendiente(s)." % pending_count
 
-	return text
-
-
-func build_home_state_summary() -> String:
-	var text: String = ""
-
-	text += "Estado actual:\n"
-	text += "- Resistencia: %s/%s\n" % [
-		int(GameManager.player.get("stamina", 0)),
-		int(GameManager.player.get("max_stamina", 0))
-	]
-	text += "- Lúmenes: %s\n" % int(GameManager.player.get("money", 0))
-	text += "- Acciones restantes: %s\n" % GameManager.get_actions_remaining()
-	text += "- Momento: Mes %s · Día %s · %s · %s\n" % [
-		GameManager.current_month,
-		GameManager.current_day,
-		GameManager.get_weekday_name(),
-		GameManager.get_time_label()
-	]
-
-	if FinalUnionSystem.has_final_union():
-		var npc_id: String = FinalUnionSystem.get_final_union_npc_id()
-		var npc: Dictionary = DataManager.get_npc(npc_id)
-		text += "\nUnión definitiva:\n"
-		text += "- %s\n" % npc.get("name", npc_id)
-
-		if PostgameSystem.is_postgame_started():
-			text += "\nPostgame:\n"
-			text += PostgameSystem.get_postgame_status_text()
-	else:
-		var candidates: Array = FinalUnionSystem.get_available_candidates()
-
-		if candidates.is_empty():
-			text += "\nUnión definitiva:\n"
-			text += "- Aún no hay nadie listo para ese paso.\n"
-		else:
-			text += "\nUnión definitiva:\n"
-			text += "- Hay una decisión importante disponible.\n"
+	if has_final_union_context():
+		text += "\n\nHay una decisión emocional importante disponible."
 
 	return text
 
 
-func build_final_union_options() -> void:
+func has_final_union_context() -> bool:
 	if FinalUnionSystem.has_final_union():
-		return
+		return PostgameSystem.is_postgame_started()
 
-	var candidates: Array = FinalUnionSystem.get_available_candidates()
-
-	if candidates.is_empty():
-		return
-
-	var header: Label = Label.new()
-	header.text = "Unión definitiva disponible"
-	header.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	side_actions.add_child(header)
-
-	for npc_id in candidates:
-		add_final_union_button(str(npc_id))
-
-
-func add_final_union_button(npc_id: String) -> void:
-	var npc: Dictionary = DataManager.get_npc(npc_id)
-	var requirement: Dictionary = DataManager.get_final_union_requirement(npc_id)
-	var label_text: String = str(requirement.get(
-		"proposal_label",
-		"Proponer unión a %s" % npc.get("name", npc_id)
-	))
-
-	var button: Button = Button.new()
-	button.text = label_text
-	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(1, 36)
-
-	button.pressed.connect(func(): propose_final_union(npc_id))
-
-	button.mouse_entered.connect(func():
-		side_title_label.text = "Unión con %s" % npc.get("name", npc_id)
-		side_description_label.text = get_final_union_preview_text(npc_id)
-	)
-
-	button.focus_entered.connect(func():
-		side_title_label.text = "Unión con %s" % npc.get("name", npc_id)
-		side_description_label.text = get_final_union_preview_text(npc_id)
-	)
-
-	button.mouse_exited.connect(func():
-		refresh_side_panel()
-	)
-
-	side_actions.add_child(button)
+	return not FinalUnionSystem.get_available_candidates().is_empty()
 
 
 func get_final_union_preview_text(npc_id: String) -> String:
@@ -408,6 +313,18 @@ func get_final_union_preview_text(npc_id: String) -> String:
 	text += str(requirement.get("description", "Una unión definitiva cambia el estado de la historia y abre consecuencias de postgame."))
 
 	return text
+
+
+func show_postgame_status() -> void:
+	main_title_label.text = "Estado de la unión"
+	main_description_label.text = PostgameSystem.get_postgame_status_text()
+
+	clear_children(main_actions)
+
+	add_main_action("Volver", func():
+		current_message = ""
+		refresh_home()
+	)
 
 
 func show_main_preview(title: String, description: String) -> void:
@@ -589,38 +506,18 @@ func layout_overlay_controls() -> void:
 		margin
 	)
 
-	var main_width: float = min(820.0, max(420.0, home_layer.size.x - 24.0))
-	var main_height: float = 196.0
+	var main_width: float = min(860.0, max(420.0, home_layer.size.x - 24.0))
+	var main_height: float = 210.0
 
 	if home_layer.size.x < 760:
 		main_width = max(360.0, home_layer.size.x - 24.0)
-		main_height = 218.0
+		main_height = 230.0
 
 	main_panel.size = Vector2(main_width, main_height)
 	main_panel.position = Vector2(
 		12.0,
 		max(12.0, home_layer.size.y - main_height - 12.0)
 	)
-
-	var side_width: float = 340.0
-	var side_height: float = min(310.0, max(240.0, home_layer.size.y - 86.0))
-
-	if home_layer.size.x < 900:
-		side_width = min(320.0, max(280.0, home_layer.size.x - 24.0))
-		side_height = 210.0
-
-	side_panel.size = Vector2(side_width, side_height)
-
-	if home_layer.size.x < 900:
-		side_panel.position = Vector2(
-			12.0,
-			max(60.0, main_panel.position.y - side_height - 10.0)
-		)
-	else:
-		side_panel.position = Vector2(
-			max(12.0, home_layer.size.x - side_width - 12.0),
-			68.0
-		)
 
 
 func _notification(what: int) -> void:
