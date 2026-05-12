@@ -16,6 +16,7 @@ var global_action_buttons: HBoxContainer
 var current_location_id: String = ""
 var last_message: String = ""
 var selected_npc_id: String = ""
+var character_positions_by_location: Dictionary = {}
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
 const CHARACTER_BASE_SIZE := Vector2(132.0, 210.0)
@@ -229,7 +230,7 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	character_layer.add_child(button)
 
 	var button_size: Vector2 = get_scaled_character_size()
-	var button_position: Vector2 = get_character_position(index, total, button_size)
+	var button_position: Vector2 = get_stable_character_position(npc_id, index, total, button_size)
 
 	button.position = button_position
 	button.custom_minimum_size = button_size
@@ -304,11 +305,19 @@ func show_location_overview(location_data: Dictionary) -> void:
 	else:
 		bottom_description_label.text = str(location_data.get("description", ""))
 
-	add_bottom_action("Acciones del lugar", func(): show_location_actions(location_data))
+	var present_npcs: Array = get_present_npcs()
 
-	if get_present_npcs().is_empty():
+	for npc_id in present_npcs:
+		var id: String = str(npc_id)
+		add_bottom_action(
+			"Acercarse a %s" % get_npc_display_name(id),
+			func(): select_npc(id)
+		)
+
+	if present_npcs.is_empty():
 		add_bottom_action("No hay nadie", func(): pass, true)
 
+	add_bottom_action("Acciones del lugar", func(): show_location_actions(location_data))
 	add_bottom_action("Volver al mapa", func(): _on_back_pressed())
 
 
@@ -345,7 +354,7 @@ func show_location_actions(location_data: Dictionary) -> void:
 	if bottom_actions.get_child_count() == 0:
 		bottom_description_label.text = "No hay acciones disponibles aquí por ahora."
 
-	add_bottom_action("Volver", func(): load_location(current_location_id))
+	add_bottom_action("Volver", func(): show_location_overview(DataManager.get_location(current_location_id)))
 
 
 func show_character_preview(npc_id: String) -> void:
@@ -418,7 +427,10 @@ func interact_npc(npc_id: String) -> void:
 			if reason != "":
 				bottom_description_label.text += "\n\nAvance bloqueado:\n%s" % reason
 
-	add_bottom_action("Cerrar", func(): load_location(current_location_id))
+	add_bottom_action("Cerrar", func():
+		selected_npc_id = ""
+		show_location_overview(DataManager.get_location(current_location_id))
+	)
 
 
 func show_gift_selection(npc_id: String) -> void:
@@ -894,7 +906,31 @@ func get_scaled_character_size() -> Vector2:
 		max(size_value.y, min_height)
 	)
 
+func get_stable_character_position(npc_id: String, index: int, total: int, character_size: Vector2) -> Vector2:
+	if not character_positions_by_location.has(current_location_id):
+		character_positions_by_location[current_location_id] = {}
 
+	var location_positions: Dictionary = character_positions_by_location[current_location_id]
+
+	if location_positions.has(npc_id):
+		var stored_position: Vector2 = location_positions[npc_id]
+		return clamp_character_position(stored_position, character_size)
+
+	var position_value: Vector2 = get_character_position(index, total, character_size)
+	location_positions[npc_id] = position_value
+
+	return position_value
+
+func clamp_character_position(position_value: Vector2, character_size: Vector2) -> Vector2:
+	var margin: float = 8.0
+	var max_x: float = max(margin, location_layer.size.x - character_size.x - margin)
+	var max_y: float = max(margin, location_layer.size.y - character_size.y - margin)
+
+	return Vector2(
+		clamp(position_value.x, margin, max_x),
+		clamp(position_value.y, margin, max_y)
+	)
+	
 func get_character_position(index: int, total: int, character_size: Vector2) -> Vector2:
 	var safe_width: float = max(location_layer.size.x, 1.0)
 	var safe_height: float = max(location_layer.size.y, 1.0)
