@@ -6,6 +6,7 @@ var map_layer: Control
 var location_layer: Control
 var action_panel: WorldActionPanel
 var hover_card: LocationHoverCard
+var hovered_location_id: String = ""
 
 const BASE_MAP_SIZE := Vector2(1050.0, 540.0)
 
@@ -124,7 +125,10 @@ func layout_overlay_controls() -> void:
 	layout_action_panel()
 
 	if hover_card != null and hover_card.visible:
-		position_hover_card_bottom_left()
+		if hovered_location_id != "":
+			position_hover_card_for_location(hovered_location_id)
+		else:
+			position_hover_card_bottom_left()
 
 func refresh_overlay_layout_after_frame() -> void:
 	await get_tree().process_frame
@@ -264,9 +268,10 @@ func create_visual_location_button(location_id: String) -> void:
 	location_layer.add_child(button)
 	
 func show_location_hover(location_id: String) -> void:
+	hovered_location_id = location_id
 	hover_card.set_location(location_id)
 	hover_card.visible = true
-	position_hover_card_bottom_left()
+	position_hover_card_for_location(location_id)
 
 
 func show_system_hover_message(title: String, description: String, hint: String) -> void:
@@ -277,11 +282,10 @@ func show_system_hover_message(title: String, description: String, hint: String)
 	hover_card.visible = true
 	position_hover_card_bottom_left()
 
-
 func hide_hover_card() -> void:
+	hovered_location_id = ""
 	hover_card.visible = false
-
-
+	
 func position_hover_card_bottom_left() -> void:
 	var margin: float = 12.0
 	var bottom_safe_margin: float = 42.0
@@ -359,3 +363,87 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+	
+func position_hover_card_for_location(location_id: String) -> void:
+	var margin: float = 12.0
+	var bottom_safe_margin: float = 42.0
+	var card_size: Vector2 = hover_card.custom_minimum_size
+
+	if map_layer.size.x < 760:
+		card_size = Vector2(360, 104)
+
+	var location_rect: Rect2 = get_location_screen_rect(location_id)
+
+	var bottom_left_position: Vector2 = Vector2(
+		margin,
+		max(margin, map_layer.size.y - card_size.y - bottom_safe_margin)
+	)
+
+	var top_left_position: Vector2 = Vector2(
+		margin,
+		margin
+	)
+
+	var top_right_position: Vector2 = Vector2(
+		max(margin, map_layer.size.x - card_size.x - margin),
+		margin
+	)
+
+	var bottom_right_position: Vector2 = Vector2(
+		max(margin, map_layer.size.x - card_size.x - margin),
+		max(margin, map_layer.size.y - card_size.y - bottom_safe_margin)
+	)
+
+	var candidates: Array = [
+		bottom_left_position,
+		top_left_position,
+		top_right_position,
+		bottom_right_position
+	]
+
+	var chosen_position: Vector2 = bottom_left_position
+
+	for candidate in candidates:
+		var candidate_position: Vector2 = candidate
+		var candidate_rect: Rect2 = Rect2(candidate_position, card_size)
+
+		if not candidate_rect.intersects(location_rect):
+			chosen_position = candidate_position
+			break
+
+	hover_card.position = chosen_position
+	hover_card.size = card_size
+
+func get_location_screen_rect(location_id: String) -> Rect2:
+	var location_ui: Dictionary = DataManager.get_location_ui(location_id)
+
+	var position_data: Dictionary = location_ui.get("position", {})
+	var size_data: Dictionary = location_ui.get("size", {})
+
+	var base_position: Vector2 = Vector2(
+		float(position_data.get("x", 40)),
+		float(position_data.get("y", 40))
+	)
+
+	var base_size: Vector2 = Vector2(
+		float(size_data.get("x", 92)),
+		float(size_data.get("y", 92))
+	)
+
+	var content_offset: Vector2 = get_map_content_offset()
+	var scaled_position: Vector2 = content_offset + scale_map_vector(base_position)
+	var scaled_size: Vector2 = scale_map_vector(base_size)
+
+	var min_button_side: float = 38.0
+
+	if map_layer.size.x >= 900:
+		min_button_side = 52.0
+	elif map_layer.size.x >= 700:
+		min_button_side = 44.0
+
+	scaled_size.x = max(scaled_size.x, min_button_side)
+	scaled_size.y = max(scaled_size.y, min_button_side)
+
+	var final_position: Vector2 = clamp_location_position(scaled_position, scaled_size)
+
+	return Rect2(final_position, scaled_size)
