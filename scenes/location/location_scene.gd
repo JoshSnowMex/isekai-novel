@@ -225,6 +225,22 @@ func get_present_npcs() -> Array:
 
 	return result
 
+func is_npc_present_here(npc_id: String) -> bool:
+	return ScheduleSystem.get_npc_location(npc_id) == current_location_id
+
+
+func handle_npc_no_longer_available(npc_id: String) -> void:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var npc_name: String = str(npc.get("name", npc_id))
+
+	selected_npc_id = ""
+	rebuild_characters()
+	hud_bar.refresh()
+
+	show_location_message(
+		"%s ya no está aquí" % npc_name,
+		"%s se ha marchado según su rutina. Puedes seguir explorando la ubicación o buscarle más tarde." % npc_name
+	)
 
 func create_character_button(npc_id: String, index: int, total: int) -> void:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
@@ -348,23 +364,27 @@ func add_location_activity_actions(location_data: Dictionary) -> void:
 	for activity_id in activities:
 		var id: String = str(activity_id)
 		var activity: Dictionary = DataManager.get_activity(id)
-		add_bottom_action(get_activity_button_text(id), func(): do_activity(id))
+		var button: Button = add_bottom_action(activity.get("name", id), func(): do_activity(id))
+		button.tooltip_text = get_activity_tooltip(id)
 
 	if actions.get("train", false):
-		add_bottom_action("Entrenar", func(): do_train(location_data))
+		var train_button: Button = add_bottom_action("Entrenar", func(): do_train(location_data))
+		train_button.tooltip_text = "Mejora una estadística de entrenamiento y consume resistencia."
 
 	if actions.get("work_full", false):
-		add_bottom_action("Trabajar jornada completa · +20 Lúmenes · -25 Res.", func(): do_work_full())
+		var work_full_button: Button = add_bottom_action("Trabajar jornada completa", func(): do_work_full())
+		work_full_button.tooltip_text = "+20 Lúmenes · -25 Resistencia"
 
 	if actions.get("work_half", false):
-		add_bottom_action("Trabajar medio turno · +10 Lúmenes · -15 Res.", func(): do_work_half())
+		var work_half_button: Button = add_bottom_action("Trabajar medio turno", func(): do_work_half())
+		work_half_button.tooltip_text = "+10 Lúmenes · -15 Resistencia"
 
 	if actions.get("rest", false):
-		add_bottom_action("Descansar · +20 Res. · consume tiempo", func(): do_rest())
+		var rest_button: Button = add_bottom_action("Descansar", func(): do_rest())
+		rest_button.tooltip_text = "+20 Resistencia · consume tiempo"
 
 	if actions.get("shop", false):
 		add_bottom_action("Comprar", func(): SceneRouter.go_to_shop())
-
 
 func has_location_activity_actions(location_data: Dictionary) -> bool:
 	var actions: Dictionary = location_data.get("actions", {})
@@ -390,16 +410,18 @@ func has_location_activity_actions(location_data: Dictionary) -> bool:
 
 	return false
 
-
-func get_activity_button_text(activity_id: String) -> String:
+func get_activity_tooltip(activity_id: String) -> String:
 	var activity: Dictionary = DataManager.get_activity(activity_id)
-	var name: String = str(activity.get("name", activity_id))
-	var parts: Array = [name]
+	var parts: Array = []
 
+	var description: String = str(activity.get("description", ""))
 	var stat: String = str(activity.get("stat", ""))
 	var stat_gain: int = int(activity.get("base_stat_gain", activity.get("base_gain", 0)))
 	var money_gain: int = int(activity.get("base_money_gain", activity.get("money_gain", 0)))
 	var stamina_cost: int = int(activity.get("stamina_cost", 0))
+
+	if description != "":
+		parts.append(description)
 
 	if stat != "" and stat_gain > 0:
 		parts.append("+%s %s" % [
@@ -408,12 +430,12 @@ func get_activity_button_text(activity_id: String) -> String:
 		])
 
 	if money_gain > 0:
-		parts.append("+%s Lúmenes" % money_gain)
+		parts.append("+%s Lúmenes base" % money_gain)
 
 	if stamina_cost > 0:
-		parts.append("-%s Res." % stamina_cost)
+		parts.append("-%s Resistencia" % stamina_cost)
 
-	return " · ".join(parts)
+	return "\n".join(parts)
 	
 func show_location_actions(location_data: Dictionary) -> void:
 	selected_npc_id = ""
@@ -539,6 +561,13 @@ func interact_npc(npc_id: String) -> void:
 	)
 
 func show_npc_result(npc_id: String, message: String) -> void:
+	hud_bar.refresh()
+	rebuild_characters()
+
+	if not is_npc_present_here(npc_id):
+		handle_npc_no_longer_available(npc_id)
+		return
+
 	selected_npc_id = npc_id
 	clear_bottom_actions()
 
@@ -652,6 +681,10 @@ func show_date_location_selection(npc_id: String) -> void:
 
 
 func give_gift(npc_id: String, item_id: String) -> void:
+	if not is_npc_present_here(npc_id):
+		handle_npc_no_longer_available(npc_id)
+		return
+
 	if not GameManager.can_perform_action(5):
 		reload_scene(GameManager.get_action_blocked_message(5))
 		return
@@ -753,11 +786,16 @@ func give_gift(npc_id: String, item_id: String) -> void:
 		message += "\n\n" + postgame_gift_text
 
 	GameManager.consume_action(5)
+	hud_bar.refresh()
 	SaveManager.autosave_game()
 	show_npc_result(npc_id, message)
 
 
 func talk_to_npc(npc_id: String) -> void:
+	if not is_npc_present_here(npc_id):
+		handle_npc_no_longer_available(npc_id)
+		return
+
 	if not GameManager.can_perform_action(5):
 		reload_scene(GameManager.get_action_blocked_message(5))
 		return
@@ -811,6 +849,7 @@ func talk_to_npc(npc_id: String) -> void:
 	)
 
 	GameManager.consume_action(5)
+	hud_bar.refresh()
 	SaveManager.autosave_game()
 	show_npc_result(npc_id, message)
 
@@ -821,6 +860,8 @@ func do_activity(activity_id: String) -> void:
 		return
 
 	var result_message: String = GameManager.perform_activity(activity_id)
+	hud_bar.refresh()
+	rebuild_characters()
 	SaveManager.autosave_game()
 	reload_scene(result_message)
 
@@ -829,18 +870,24 @@ func do_train(location_data: Dictionary) -> void:
 	var stat: String = location_data.get("train_stat", "intellect")
 	GameManager.player["stats"][stat] += 1
 	GameManager.consume_action(10)
+	hud_bar.refresh()
+	rebuild_characters()
 	reload_scene("Entrenas y mejoras %s." % stat)
 
 
 func do_work_full() -> void:
 	GameManager.player["money"] += 20
 	GameManager.consume_action(25)
+	hud_bar.refresh()
+	rebuild_characters()
 	reload_scene("Trabajas una jornada completa.\nDinero +20")
 
 
 func do_work_half() -> void:
 	GameManager.player["money"] += 10
 	GameManager.consume_action(15)
+	hud_bar.refresh()
+	rebuild_characters()
 	reload_scene("Trabajas medio turno.\nDinero +10")
 
 
@@ -850,6 +897,8 @@ func do_rest() -> void:
 		int(GameManager.player.get("max_stamina", 100))
 	)
 	GameManager.consume_action(5)
+	hud_bar.refresh()
+	rebuild_characters()
 	reload_scene("Descansas un momento.\nResistencia +20")
 
 
@@ -985,7 +1034,7 @@ func add_global_action(text: String, callback: Callable) -> void:
 	global_action_buttons.add_child(button)
 
 
-func add_bottom_action(text: String, callback: Callable, disabled: bool = false) -> void:
+func add_bottom_action(text: String, callback: Callable, disabled: bool = false) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.disabled = disabled
@@ -997,7 +1046,7 @@ func add_bottom_action(text: String, callback: Callable, disabled: bool = false)
 		button.pressed.connect(callback)
 
 	bottom_actions.add_child(button)
-
+	return button
 
 func clear_bottom_actions() -> void:
 	clear_children(bottom_actions)
