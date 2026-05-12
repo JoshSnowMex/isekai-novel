@@ -165,12 +165,13 @@ func create_visual_location_button(location_id: String) -> void:
 		float(position_data.get("y", 40))
 	)
 
-	button.custom_minimum_size = Vector2(
-		float(size_data.get("x", 150)),
-		float(size_data.get("y", 72))
+	var button_size: Vector2 = Vector2(
+		float(size_data.get("x", 92)),
+		float(size_data.get("y", 92))
 	)
 
-	button.size = button.custom_minimum_size
+	button.custom_minimum_size = button_size
+	button.size = button_size
 
 	button.mouse_entered.connect(func():
 		show_location_hover(location_id)

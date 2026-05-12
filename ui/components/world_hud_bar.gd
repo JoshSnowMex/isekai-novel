@@ -8,15 +8,15 @@ var world_label: Label
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(1, 44)
+	custom_minimum_size = Vector2(1, 46)
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 
 func build() -> void:
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_left", 12)
 	margin.add_theme_constant_override("margin_top", 4)
-	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_right", 12)
 	margin.add_theme_constant_override("margin_bottom", 4)
 	add_child(margin)
 
@@ -24,16 +24,19 @@ func build() -> void:
 	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.alignment = BoxContainer.ALIGNMENT_CENTER
-	root.add_theme_constant_override("separation", 10)
+	root.add_theme_constant_override("separation", 12)
 	margin.add_child(root)
 
 	date_label = make_hud_label(HORIZONTAL_ALIGNMENT_LEFT)
+	date_label.size_flags_stretch_ratio = 0.90
 	root.add_child(date_label)
 
 	player_label = make_hud_label(HORIZONTAL_ALIGNMENT_CENTER)
+	player_label.size_flags_stretch_ratio = 1.35
 	root.add_child(player_label)
 
 	world_label = make_hud_label(HORIZONTAL_ALIGNMENT_RIGHT)
+	world_label.size_flags_stretch_ratio = 1.05
 	root.add_child(world_label)
 
 
@@ -55,7 +58,7 @@ func refresh() -> void:
 		GameManager.get_time_label()
 	]
 
-	player_label.text = "Res %s/%s · Oro %s · Acc %s" % [
+	player_label.text = "Resistencia %s/%s · Dinero %s · Acciones restantes %s" % [
 		GameManager.player.get("stamina", 0),
 		GameManager.player.get("max_stamina", 0),
 		GameManager.player.get("money", 0),

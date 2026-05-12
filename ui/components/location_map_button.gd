@@ -15,14 +15,14 @@ func setup(id: String, display_name: String, accent_text: String = "") -> void:
 	text = build_button_text()
 	tooltip_text = display_name
 	focus_mode = Control.FOCUS_ALL
-	clip_text = true
+	clip_text = false
+	text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 
 
 func build_button_text() -> String:
-	if accent == "":
-		return location_name
+	if accent != "":
+		return accent
 
-	return "%s\n%s" % [
-		location_name,
-		accent
-	]
+	return location_name
