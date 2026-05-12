@@ -199,7 +199,7 @@ func create_visual_location_button(location_id: String) -> void:
 func show_location_hover(location_id: String) -> void:
 	hover_card.set_location(location_id)
 	hover_card.visible = true
-	position_hover_card_near_mouse()
+	position_hover_card_bottom_left()
 
 
 func show_system_hover_message(title: String, description: String, hint: String) -> void:
@@ -213,26 +213,6 @@ func show_system_hover_message(title: String, description: String, hint: String)
 
 func hide_hover_card() -> void:
 	hover_card.visible = false
-
-
-func position_hover_card_near_mouse() -> void:
-	var margin: float = 12.0
-	var mouse_position: Vector2 = map_layer.get_local_mouse_position()
-	var card_size: Vector2 = hover_card.custom_minimum_size
-
-	var target_position: Vector2 = mouse_position + Vector2(18, 18)
-
-	if target_position.x + card_size.x > map_layer.size.x - margin:
-		target_position.x = mouse_position.x - card_size.x - 18
-
-	if target_position.y + card_size.y > map_layer.size.y - margin:
-		target_position.y = mouse_position.y - card_size.y - 18
-
-	target_position.x = clamp(target_position.x, margin, max(margin, map_layer.size.x - card_size.x - margin))
-	target_position.y = clamp(target_position.y, margin, max(margin, map_layer.size.y - card_size.y - margin))
-
-	hover_card.position = target_position
-	hover_card.size = card_size
 
 
 func position_hover_card_bottom_left() -> void:

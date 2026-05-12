@@ -24,19 +24,19 @@ func build() -> void:
 	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	root.alignment = BoxContainer.ALIGNMENT_CENTER
-	root.add_theme_constant_override("separation", 12)
+	root.add_theme_constant_override("separation", 10)
 	margin.add_child(root)
 
 	date_label = make_hud_label(HORIZONTAL_ALIGNMENT_LEFT)
-	date_label.size_flags_stretch_ratio = 0.90
+	date_label.size_flags_stretch_ratio = 0.95
 	root.add_child(date_label)
 
 	player_label = make_hud_label(HORIZONTAL_ALIGNMENT_CENTER)
-	player_label.size_flags_stretch_ratio = 1.35
+	player_label.size_flags_stretch_ratio = 1.65
 	root.add_child(player_label)
 
 	world_label = make_hud_label(HORIZONTAL_ALIGNMENT_RIGHT)
-	world_label.size_flags_stretch_ratio = 1.05
+	world_label.size_flags_stretch_ratio = 1.00
 	root.add_child(world_label)
 
 
@@ -58,10 +58,9 @@ func refresh() -> void:
 		GameManager.get_time_label()
 	]
 
-	player_label.text = "Resistencia %s/%s · Dinero %s · Acciones restantes %s" % [
-		GameManager.player.get("stamina", 0),
-		GameManager.player.get("max_stamina", 0),
-		GameManager.player.get("money", 0),
+	player_label.text = "Resistencia %s · %s Lúmenes · Acciones: %s" % [
+		format_number(GameManager.player.get("stamina", 0)),
+		format_number(GameManager.player.get("money", 0)),
 		GameManager.get_actions_remaining()
 	]
 
@@ -70,3 +69,12 @@ func refresh() -> void:
 		GameManager.get_world_state_value("world_instability"),
 		GameManager.get_world_state_value("romantic_pressure")
 	]
+
+
+func format_number(value: Variant) -> String:
+	var number: float = float(value)
+
+	if number == floor(number):
+		return str(int(number))
+
+	return "%.1f" % number

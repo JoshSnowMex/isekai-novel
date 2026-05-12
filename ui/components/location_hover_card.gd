@@ -9,7 +9,7 @@ var hint_label: Label
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(420, 132)
+	custom_minimum_size = Vector2(455, 126)
 	size = custom_minimum_size
 	visible = false
 
