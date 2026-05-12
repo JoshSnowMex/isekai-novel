@@ -209,7 +209,8 @@ func rebuild_background() -> void:
 
 func rebuild_characters() -> void:
 	clear_children(character_layer)
-
+	character_positions_by_location.clear()
+	
 	var present_npcs: Array = get_present_npcs()
 
 	for index in range(present_npcs.size()):
@@ -630,10 +631,6 @@ func show_character_preview(npc_id: String) -> void:
 		bottom_description_label.text = "Está aquí. Puedes acercarte y decidir cómo relacionarte con %s." % npc.get("name", npc_id)
 	else:
 		bottom_description_label.text = "Ves a alguien en esta zona, pero todavía no sabes quién es."
-
-	clear_bottom_actions()
-	add_bottom_action("Acercarse", func(): select_npc(npc_id))
-	add_bottom_action("Acciones del lugar", func(): show_location_actions(DataManager.get_location(current_location_id)))
 
 
 func select_npc(npc_id: String) -> void:
@@ -1239,20 +1236,13 @@ func get_scaled_character_size() -> Vector2:
 		max(size_value.y, min_height)
 	)
 
-func get_stable_character_position(npc_id: String, index: int, total: int, character_size: Vector2) -> Vector2:
-	if not character_positions_by_location.has(current_location_id):
-		character_positions_by_location[current_location_id] = {}
+func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
+	var key: String = "%s:%s" % [current_location_id, npc_id]
 
-	var location_positions: Dictionary = character_positions_by_location[current_location_id]
+	if not character_positions_by_location.has(key):
+		character_positions_by_location[key] = get_character_position(index, total, button_size)
 
-	if location_positions.has(npc_id):
-		var stored_position: Vector2 = location_positions[npc_id]
-		return clamp_character_position(stored_position, character_size)
-
-	var position_value: Vector2 = get_character_position(index, total, character_size)
-	location_positions[npc_id] = position_value
-
-	return position_value
+	return character_positions_by_location[key]
 
 func clamp_character_position(position_value: Vector2, character_size: Vector2) -> Vector2:
 	var margin: float = 8.0
@@ -1264,33 +1254,24 @@ func clamp_character_position(position_value: Vector2, character_size: Vector2) 
 		clamp(position_value.y, margin, max_y)
 	)
 	
-func get_character_position(index: int, total: int, character_size: Vector2) -> Vector2:
-	var safe_width: float = max(location_layer.size.x, 1.0)
-	var safe_height: float = max(location_layer.size.y, 1.0)
+func get_character_position(index: int, total: int, button_size: Vector2) -> Vector2:
+	var reserved_bottom: float = get_bottom_panel_reserved_height()
+	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
+	var base_x: float = 32.0
+	var gap_x: float = max(26.0, button_size.x * 0.28)
 
-	var usable_width: float = safe_width * 0.76
-	var start_x: float = (safe_width - usable_width) * 0.5
-
-	var gap: float = 18.0
-
-	if total > 1:
-		gap = min(34.0, usable_width / float(total) * 0.12)
-
-	var total_width: float = float(total) * character_size.x + float(max(total - 1, 0)) * gap
-	var x: float = start_x + ((usable_width - total_width) * 0.5) + float(index) * (character_size.x + gap)
-
-	var floor_y: float = safe_height - character_size.y - get_bottom_panel_reserved_height()
-
-	if safe_height < 520:
-		floor_y = safe_height - character_size.y - 118.0
-
-	var y: float = max(62.0, floor_y)
-
-	return Vector2(
-		clamp(x, 8.0, max(8.0, safe_width - character_size.x - 8.0)),
-		clamp(y, 54.0, max(54.0, safe_height - character_size.y - 8.0))
+	var x: float = base_x + (float(index) * (button_size.x + gap_x))
+	var y: float = max(
+		58.0,
+		available_height - button_size.y - 8.0
 	)
 
+	var max_x: float = max(32.0, location_layer.size.x - button_size.x - 32.0)
+
+	return Vector2(
+		clamp(x, 32.0, max_x),
+		y
+	)
 
 func get_bottom_panel_reserved_height() -> float:
 	if location_layer.size.x < 760:

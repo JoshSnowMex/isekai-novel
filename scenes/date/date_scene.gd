@@ -23,10 +23,12 @@ var npc_portrait_holder: Control
 var npc_status_label: Label
 
 var narrative_panel: PanelContainer
+var narrative_scroll: ScrollContainer
 var narrative_label: Label
 
 var action_panel: PanelContainer
-var action_buttons: HBoxContainer
+var action_scroll: ScrollContainer
+var action_buttons: GridContainer
 
 var current_date: Dictionary = {}
 var current_mode: String = "normal"
@@ -235,7 +237,7 @@ func build_npc_panel() -> void:
 
 func build_narrative_panel() -> void:
 	narrative_panel = PanelContainer.new()
-	narrative_panel.custom_minimum_size = Vector2(760, 128)
+	narrative_panel.custom_minimum_size = Vector2(760, 190)
 	date_layer.add_child(narrative_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -245,18 +247,24 @@ func build_narrative_panel() -> void:
 	margin.add_theme_constant_override("margin_bottom", 10)
 	narrative_panel.add_child(margin)
 
+	narrative_scroll = ScrollContainer.new()
+	narrative_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	narrative_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	narrative_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	narrative_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	margin.add_child(narrative_scroll)
+
 	narrative_label = Label.new()
 	narrative_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	narrative_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	narrative_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	narrative_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	narrative_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	narrative_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	margin.add_child(narrative_label)
-
+	narrative_scroll.add_child(narrative_label)
 
 func build_action_panel() -> void:
 	action_panel = PanelContainer.new()
-	action_panel.custom_minimum_size = Vector2(760, 62)
+	action_panel.custom_minimum_size = Vector2(760, 120)
 	date_layer.add_child(action_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -266,13 +274,19 @@ func build_action_panel() -> void:
 	margin.add_theme_constant_override("margin_bottom", 8)
 	action_panel.add_child(margin)
 
-	action_buttons = HBoxContainer.new()
-	action_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_buttons.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	action_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	action_buttons.add_theme_constant_override("separation", 8)
-	margin.add_child(action_buttons)
+	action_scroll = ScrollContainer.new()
+	action_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	margin.add_child(action_scroll)
 
+	action_buttons = GridContainer.new()
+	action_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	action_buttons.columns = 3
+	action_buttons.add_theme_constant_override("h_separation", 8)
+	action_buttons.add_theme_constant_override("v_separation", 8)
+	action_scroll.add_child(action_buttons)
 
 func start_date(npc_id: String, date_location_id: String = "") -> void:
 	current_mode = "normal"
@@ -342,7 +356,7 @@ func refresh_normal_header() -> void:
 	var progress: int = int(current_date.get("progress", 0))
 	var threshold: int = int(date_location.get("success_threshold", 70))
 
-	top_info_label.text = "Cita con %s · Progreso %s/%s" % [
+	top_info_label.text = "Cita con %s · Progreso %s%% · Éxito desde %s%%" % [
 		npc.get("name", npc_id),
 		progress,
 		threshold
@@ -487,7 +501,8 @@ func add_action_button(text: String, callback: Callable, disabled: bool = false,
 	button.disabled = disabled
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(120, 38)
+	button.custom_minimum_size = Vector2(180, 42)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 	if not disabled:
 		button.pressed.connect(callback)
@@ -573,8 +588,7 @@ func do_question() -> void:
 	refresh_date_view()
 
 	for option in q["options"]:
-		var value: String = str(option)
-		add_action_button(value, func(): answer_question(q, value), false, "Responder: %s" % value)
+		add_question_option_button(q, str(option))
 
 	add_action_button("No responder", func():
 		current_narrative = "Decides no responder todavía. Algunas preguntas pesan más cuando se entienden a medias."
@@ -627,14 +641,7 @@ func show_gift_selection() -> void:
 		var item_entry: Dictionary = entry
 		var item_id: String = item_entry.get("item_id", "")
 		var amount: int = int(item_entry.get("amount", 0))
-		var item_data: Dictionary = DataManager.get_item(item_id)
-
-		add_action_button(
-			"%s x%s" % [item_data.get("name", item_id), amount],
-			func(): give_date_gift(item_id),
-			false,
-			str(item_data.get("description", "Un regalo."))
-		)
+		add_gift_option_button(item_id, amount)
 
 	add_action_button("Volver", func():
 		current_narrative = "Guardas el regalo por ahora."
@@ -717,15 +724,7 @@ func show_move_selection() -> void:
 		refresh_date_view()
 	else:
 		for move_id in move_ids:
-			var id: String = str(move_id)
-			var move: Dictionary = DataManager.get_date_move(id)
-
-			add_action_button(
-				move.get("name", id),
-				func(): perform_move(id),
-				false,
-				build_move_hint(id)
-			)
+			add_move_option_button(str(move_id))
 
 	add_action_button("Volver", func():
 		current_narrative = "Dejas pasar el gesto por ahora."
@@ -786,8 +785,7 @@ func do_special_question() -> void:
 	refresh_date_view()
 
 	for option in q.get("options", []):
-		var value: String = str(option)
-		add_action_button(value, func(): answer_special_question(q, value))
+		add_special_question_option_button(q, str(option))
 
 	add_action_button("No responder", func():
 		current_narrative = "Decides no forzar la respuesta todavía."
@@ -902,8 +900,8 @@ func layout_overlay_controls() -> void:
 	top_info_panel.position = Vector2(margin, top_y)
 
 	var content_top: float = top_y + top_height + 12.0
-	var bottom_action_height: float = 66.0
-	var narrative_height: float = 132.0
+	var bottom_action_height: float = 132.0
+	var narrative_height: float = 190.0
 	var gap: float = 10.0
 
 	var available_width: float = date_layer.size.x - 24.0
@@ -916,8 +914,8 @@ func layout_overlay_controls() -> void:
 		npc_width = 240.0
 		scene_width = max(320.0, available_width - npc_width - 12.0)
 
-	scene_panel.size = Vector2(scene_width, max(210.0, available_height))
-	scene_panel.position = Vector2(12.0, content_top)
+	scene_panel.size = Vector2(scene_width, max(150.0, available_height))
+	npc_panel.size = Vector2(npc_width, max(150.0, available_height))
 
 	npc_panel.size = Vector2(npc_width, max(210.0, available_height))
 	npc_panel.position = Vector2(scene_panel.position.x + scene_width + 12.0, content_top)
@@ -925,7 +923,7 @@ func layout_overlay_controls() -> void:
 	narrative_panel.size = Vector2(available_width, narrative_height)
 	narrative_panel.position = Vector2(
 		12.0,
-		content_top + max(210.0, available_height) + gap
+		content_top + max(150.0, available_height) + gap
 	)
 
 	action_panel.size = Vector2(available_width, bottom_action_height)
@@ -934,6 +932,13 @@ func layout_overlay_controls() -> void:
 		narrative_panel.position.y + narrative_height + gap
 	)
 
+	if action_buttons != null:
+		if action_panel.size.x >= 900:
+			action_buttons.columns = 4
+		elif action_panel.size.x >= 660:
+			action_buttons.columns = 3
+		else:
+			action_buttons.columns = 2
 
 func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
@@ -961,3 +966,41 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func add_question_option_button(question: Dictionary, value: String) -> void:
+	var locked_value: String = value
+	add_action_button(
+		locked_value,
+		func(): answer_question(question, locked_value),
+		false,
+		"Responder: %s" % locked_value
+	)
+
+func add_special_question_option_button(question: Dictionary, value: String) -> void:
+	var locked_value: String = value
+	add_action_button(
+		locked_value,
+		func(): answer_special_question(question, locked_value)
+	)
+
+func add_gift_option_button(item_id: String, amount: int) -> void:
+	var locked_item_id: String = item_id
+	var item_data: Dictionary = DataManager.get_item(locked_item_id)
+
+	add_action_button(
+		"%s x%s" % [item_data.get("name", locked_item_id), amount],
+		func(): give_date_gift(locked_item_id),
+		false,
+		str(item_data.get("description", "Un regalo."))
+	)
+
+func add_move_option_button(move_id: String) -> void:
+	var locked_move_id: String = move_id
+	var move: Dictionary = DataManager.get_date_move(locked_move_id)
+
+	add_action_button(
+		move.get("name", locked_move_id),
+		func(): perform_move(locked_move_id),
+		false,
+		build_move_hint(locked_move_id)
+	)

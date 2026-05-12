@@ -86,12 +86,11 @@ func get_present_npcs_for_location(location_id: String) -> Array:
 	var result: Array = []
 
 	for npc_id in DataManager.npcs.keys():
-		var npc: Dictionary = DataManager.get_npc(str(npc_id))
-		var schedule: Dictionary = npc.get("schedule", {})
-		var current_location: String = str(schedule.get(GameManager.current_time_block, ""))
+		var id: String = str(npc_id)
+		var current_location: String = ScheduleSystem.get_npc_location(id)
 
 		if current_location == location_id:
-			result.append(str(npc_id))
+			result.append(id)
 
 	return result
 
