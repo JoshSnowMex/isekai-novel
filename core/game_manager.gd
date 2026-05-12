@@ -607,13 +607,18 @@ func perform_activity(activity_id: String) -> String:
 
 	var final_stat_gain: int = 0
 	var final_money_gain: int = 0
+	var stat_bonus_gained: bool = false
+	var money_variation: float = 1.0
 
 	if base_stat_gain > 0 and stat != "":
-		final_stat_gain = max(1, int(round(float(base_stat_gain) * stat_modifier)))
+		final_stat_gain = calculate_activity_stat_gain(base_stat_gain, stat_modifier)
+		stat_bonus_gained = final_stat_gain > max(1, int(round(float(base_stat_gain) * stat_modifier)))
 		player["stats"][stat] = int(player["stats"].get(stat, 0)) + final_stat_gain
 
 	if base_money_gain > 0:
-		final_money_gain = max(1, int(round(float(base_money_gain) * money_modifier)))
+		var modified_money_gain: int = max(1, int(round(float(base_money_gain) * money_modifier)))
+		money_variation = randf_range(0.85, 1.15)
+		final_money_gain = max(1, int(round(float(modified_money_gain) * money_variation)))
 		player["money"] = int(player.get("money", 0)) + final_money_gain
 
 	consume_action(stamina_cost)
@@ -624,10 +629,22 @@ func perform_activity(activity_id: String) -> String:
 	result += "\n\n"
 
 	if final_stat_gain > 0:
-		result += "%s +%s\n" % [stat_label, final_stat_gain]
+		result += "%s +%s" % [stat_label, final_stat_gain]
+
+		if stat_bonus_gained:
+			result += " · Buen desempeño"
+
+		result += "\n"
 
 	if final_money_gain > 0:
-		result += "Dinero +%s\n" % final_money_gain
+		result += "Dinero +%s" % final_money_gain
+
+		if money_variation >= 1.08:
+			result += " · Jornada favorable"
+		elif money_variation <= 0.92:
+			result += " · Jornada difícil"
+
+		result += "\n"
 
 	result += "Resistencia -%s" % stamina_cost
 
@@ -1232,3 +1249,47 @@ func get_current_calendar_stamp() -> String:
 		int(player.get("day", 1)),
 		get_time_block_label(current_time_block)
 	]
+
+func calculate_activity_stat_gain(base_stat_gain: int, stat_modifier: float) -> int:
+	var base_result: int = max(1, int(round(float(base_stat_gain) * stat_modifier)))
+	var bonus_chance: float = 0.20
+
+	if stat_modifier > 1.0:
+		bonus_chance = 0.30
+	elif stat_modifier < 1.0:
+		bonus_chance = 0.12
+
+	if randf() < bonus_chance:
+		return base_result + 1
+
+	return base_result
+
+func get_activity_money_estimate(activity_id: String) -> Dictionary:
+	var activity: Dictionary = DataManager.get_activity(activity_id)
+
+	if activity.is_empty():
+		return {
+			"min": 0,
+			"max": 0
+		}
+
+	var base_money_gain: int = int(activity.get("base_money_gain", activity.get("money_gain", 0)))
+
+	if base_money_gain <= 0:
+		return {
+			"min": 0,
+			"max": 0
+		}
+
+	var work_modifier_key: String = str(activity.get("work_modifier_key", "none"))
+	var class_id: String = str(player.get("class_id", ""))
+	var class_data: Dictionary = DataManager.get_player_class(class_id)
+	var work_modifiers: Dictionary = class_data.get("work_modifiers", {})
+	var money_modifier: float = float(work_modifiers.get(work_modifier_key, 1.0))
+
+	var modified_money_gain: int = max(1, int(round(float(base_money_gain) * money_modifier)))
+
+	return {
+		"min": max(1, int(floor(float(modified_money_gain) * 0.85))),
+		"max": max(1, int(ceil(float(modified_money_gain) * 1.15)))
+	}

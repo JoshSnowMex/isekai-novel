@@ -377,9 +377,7 @@ func add_location_activity_actions(location_data: Dictionary) -> void:
 		
 	for activity_id in activities:
 		var id: String = str(activity_id)
-		var activity: Dictionary = DataManager.get_activity(id)
-		var button: Button = add_bottom_action(activity.get("name", id), func(): do_activity(id))
-		button.tooltip_text = get_activity_tooltip(id)
+		add_activity_action_button(id)
 
 	if actions.get("train", false):
 		var train_button: Button = add_bottom_action("Entrenar", func(): do_train(location_data))
@@ -400,6 +398,35 @@ func add_location_activity_actions(location_data: Dictionary) -> void:
 	if actions.get("shop", false):
 		add_bottom_action("Comprar", func(): SceneRouter.go_to_shop())
 
+func add_activity_action_button(activity_id: String) -> void:
+	var locked_activity_id: String = activity_id
+	var activity: Dictionary = DataManager.get_activity(locked_activity_id)
+	var button: Button = add_bottom_action(
+		activity.get("name", locked_activity_id),
+		func(): do_activity(locked_activity_id)
+	)
+
+	var tooltip_text: String = get_activity_tooltip(locked_activity_id)
+	button.tooltip_text = tooltip_text
+
+	button.mouse_entered.connect(func():
+		show_activity_preview(locked_activity_id)
+	)
+
+	button.focus_entered.connect(func():
+		show_activity_preview(locked_activity_id)
+	)
+	
+
+func show_activity_preview(activity_id: String) -> void:
+	if selected_npc_id != "":
+		return
+
+	var activity: Dictionary = DataManager.get_activity(activity_id)
+
+	bottom_title_label.text = str(activity.get("name", activity_id))
+	bottom_description_label.text = get_activity_tooltip(activity_id)
+	
 func has_location_activity_actions(location_data: Dictionary) -> bool:
 	var actions: Dictionary = location_data.get("actions", {})
 	var activities: Array = location_data.get("activities", [])
@@ -430,24 +457,30 @@ func get_activity_tooltip(activity_id: String) -> String:
 
 	var description: String = str(activity.get("description", ""))
 	var stat: String = str(activity.get("stat", ""))
-	var stat_gain: int = int(activity.get("base_stat_gain", activity.get("base_gain", 0)))
-	var money_gain: int = int(activity.get("base_money_gain", activity.get("money_gain", 0)))
+	var base_stat_gain: int = int(activity.get("base_stat_gain", activity.get("base_gain", 0)))
+	var base_money_gain: int = int(activity.get("base_money_gain", activity.get("money_gain", 0)))
 	var stamina_cost: int = int(activity.get("stamina_cost", 0))
 
 	if description != "":
 		parts.append(description)
 
-	if stat != "" and stat_gain > 0:
-		parts.append("+%s %s" % [
-			stat_gain,
-			GameManager.get_stat_label(stat)
+	if stat != "" and base_stat_gain > 0:
+		parts.append("Mejora %s: +%s" % [
+			GameManager.get_stat_label(stat),
+			base_stat_gain
+		])
+		parts.append("Puede obtener +1 adicional por buen desempeño.")
+
+	if base_money_gain > 0:
+		var estimated_money: Dictionary = GameManager.get_activity_money_estimate(activity_id)
+
+		parts.append("Lúmenes estimados: %s-%s" % [
+			estimated_money.get("min", base_money_gain),
+			estimated_money.get("max", base_money_gain)
 		])
 
-	if money_gain > 0:
-		parts.append("+%s Lúmenes base" % money_gain)
-
 	if stamina_cost > 0:
-		parts.append("-%s Resistencia" % stamina_cost)
+		parts.append("Resistencia: -%s" % stamina_cost)
 
 	return "\n".join(parts)
 	
@@ -463,8 +496,7 @@ func show_location_actions(location_data: Dictionary) -> void:
 
 	for activity_id in activities:
 		var id: String = str(activity_id)
-		var activity: Dictionary = DataManager.get_activity(id)
-		add_bottom_action(activity.get("name", id), func(): do_activity(id))
+		add_activity_action_button(id)
 
 	if actions.get("train", false):
 		add_bottom_action("Entrenar", func(): do_train(location_data))
