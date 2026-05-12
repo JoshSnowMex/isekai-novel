@@ -6,25 +6,19 @@ var shop_frame: PanelContainer
 var shop_layer: Control
 var background_layer: Control
 
+var info_panel: PanelContainer
+var info_title_label: Label
+var info_description_label: Label
+
 var global_action_panel: PanelContainer
 var global_action_buttons: HBoxContainer
 
-var main_panel: PanelContainer
-var main_title_label: Label
-var main_description_scroll: ScrollContainer
-var main_description_label: Label
+var shop_panel: PanelContainer
+var item_scroll: ScrollContainer
 var item_grid: GridContainer
 
-var detail_panel: PanelContainer
-var detail_title_label: Label
-var detail_description_scroll: ScrollContainer
-var detail_description_label: Label
-var detail_actions: HBoxContainer
-
-var selected_item_id: String = ""
 var current_message: String = ""
-
-const BASE_SHOP_SIZE := Vector2(1050.0, 540.0)
+var preview_item_id: String = ""
 
 
 func _ready() -> void:
@@ -75,9 +69,9 @@ func build_ui() -> void:
 	shop_layer.add_child(background_layer)
 
 	build_background()
+	build_info_panel()
 	build_global_action_panel()
-	build_main_panel()
-	build_detail_panel()
+	build_shop_panel()
 
 	call_deferred("refresh_layout_after_frame")
 
@@ -109,6 +103,39 @@ func build_background() -> void:
 	background_layer.add_child(background)
 
 
+func build_info_panel() -> void:
+	info_panel = PanelContainer.new()
+	info_panel.custom_minimum_size = Vector2(540, 46)
+	shop_layer.add_child(info_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 4)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	info_panel.add_child(margin)
+
+	var box: VBoxContainer = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 0)
+	margin.add_child(box)
+
+	info_title_label = Label.new()
+	info_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	info_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	info_title_label.clip_text = true
+	box.add_child(info_title_label)
+
+	info_description_label = Label.new()
+	info_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_description_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	info_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	info_description_label.clip_text = true
+	box.add_child(info_description_label)
+
+
 func build_global_action_panel() -> void:
 	global_action_panel = PanelContainer.new()
 	global_action_panel.custom_minimum_size = Vector2(430, 46)
@@ -132,111 +159,31 @@ func build_global_action_panel() -> void:
 	add_global_action("Cargar", func(): SceneRouter.go_to_main_menu())
 
 
-func build_main_panel() -> void:
-	main_panel = PanelContainer.new()
-	main_panel.custom_minimum_size = Vector2(620, 360)
-	shop_layer.add_child(main_panel)
+func build_shop_panel() -> void:
+	shop_panel = PanelContainer.new()
+	shop_panel.custom_minimum_size = Vector2(980, 420)
+	shop_layer.add_child(shop_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
-	main_panel.add_child(margin)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	shop_panel.add_child(margin)
 
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 8)
-	margin.add_child(box)
-
-	main_title_label = Label.new()
-	main_title_label.custom_minimum_size = Vector2(1, 24)
-	main_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	main_title_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	main_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	main_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	main_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(main_title_label)
-
-	main_description_scroll = ScrollContainer.new()
-	main_description_scroll.custom_minimum_size = Vector2(1, 68)
-	main_description_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	main_description_scroll.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	main_description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	main_description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	box.add_child(main_description_scroll)
-
-	main_description_label = Label.new()
-	main_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	main_description_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	main_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	main_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	main_description_scroll.add_child(main_description_label)
-
-	var scroll: ScrollContainer = ScrollContainer.new()
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	box.add_child(scroll)
+	item_scroll = ScrollContainer.new()
+	item_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	item_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	margin.add_child(item_scroll)
 
 	item_grid = GridContainer.new()
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item_grid.columns = 2
+	item_grid.columns = 5
 	item_grid.add_theme_constant_override("h_separation", 8)
 	item_grid.add_theme_constant_override("v_separation", 8)
-	scroll.add_child(item_grid)
-
-
-func build_detail_panel() -> void:
-	detail_panel = PanelContainer.new()
-	detail_panel.custom_minimum_size = Vector2(430, 210)
-	shop_layer.add_child(detail_panel)
-
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
-	detail_panel.add_child(margin)
-
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 6)
-	margin.add_child(box)
-
-	detail_title_label = Label.new()
-	detail_title_label.custom_minimum_size = Vector2(1, 24)
-	detail_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail_title_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	detail_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	detail_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	detail_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(detail_title_label)
-
-	detail_description_scroll = ScrollContainer.new()
-	detail_description_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail_description_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	detail_description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	detail_description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	box.add_child(detail_description_scroll)
-
-	detail_description_label = Label.new()
-	detail_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail_description_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	detail_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	detail_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	detail_description_scroll.add_child(detail_description_label)
-
-	detail_actions = HBoxContainer.new()
-	detail_actions.custom_minimum_size = Vector2(1, 40)
-	detail_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail_actions.size_flags_vertical = Control.SIZE_SHRINK_END
-	detail_actions.alignment = BoxContainer.ALIGNMENT_CENTER
-	detail_actions.add_theme_constant_override("separation", 8)
-	box.add_child(detail_actions)
+	item_scroll.add_child(item_grid)
 
 
 func refresh_shop(message: String = "") -> void:
@@ -244,82 +191,39 @@ func refresh_shop(message: String = "") -> void:
 	GameManager.current_location_id = "shop"
 	hud_bar.refresh()
 
-	refresh_main_panel()
-	refresh_detail_panel()
+	refresh_info_panel()
+	refresh_items()
 
 	call_deferred("refresh_layout_after_frame")
 
 
-func refresh_main_panel() -> void:
-	clear_children(item_grid)
-
-	main_title_label.text = "Tienda del Umbral"
+func refresh_info_panel() -> void:
+	if preview_item_id != "":
+		show_item_preview(preview_item_id)
+		return
 
 	if current_message != "":
-		main_description_label.text = current_message
-	else:
-		main_description_label.text = get_shop_description()
+		info_title_label.text = "Tienda del Umbral"
+		info_description_label.text = current_message
+		return
+
+	info_title_label.text = "Tienda del Umbral"
+	info_description_label.text = "Click en un regalo para comprarlo. Pasa el cursor para ver detalles."
+
+
+func refresh_items() -> void:
+	clear_children(item_grid)
 
 	var item_ids: Array = get_shop_item_ids()
 
 	for item_id in item_ids:
-		add_item_button(str(item_id))
+		add_item_card(str(item_id))
 
 	if item_ids.is_empty():
 		var empty_label: Label = Label.new()
 		empty_label.text = "No hay objetos disponibles por ahora."
 		empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		item_grid.add_child(empty_label)
-
-
-func refresh_detail_panel() -> void:
-	clear_children(detail_actions)
-
-	if selected_item_id == "":
-		detail_title_label.text = "Elige un objeto"
-		detail_description_label.text = "Pasa el cursor o selecciona un regalo para ver detalles. Comprar regalos amplía tus opciones con los personajes."
-		add_detail_action("Volver al mapa", func(): _on_map_pressed())
-		return
-
-	var item: Dictionary = DataManager.get_item(selected_item_id)
-	var item_name: String = str(item.get("name", selected_item_id))
-	var price: int = int(item.get("price", 0))
-	var owned: int = get_inventory_amount(selected_item_id)
-
-	detail_title_label.text = item_name
-	detail_description_label.text = build_item_detail_text(selected_item_id)
-
-	var can_buy: bool = int(GameManager.player.get("money", 0)) >= price
-
-	add_detail_action("Comprar", func(): buy_item(selected_item_id), not can_buy)
-	add_detail_action("Comprar x3", func(): buy_item_amount(selected_item_id, 3), not can_buy_amount(selected_item_id, 3))
-	add_detail_action("Cerrar", func():
-		selected_item_id = ""
-		current_message = ""
-		refresh_shop()
-	)
-
-	if owned > 0:
-		var owned_label: Label = Label.new()
-		owned_label.text = "En inventario: %s" % owned
-		owned_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		detail_actions.add_child(owned_label)
-
-
-func get_shop_description() -> String:
-	var money: int = int(GameManager.player.get("money", 0))
-	var gift_count: int = get_total_gift_inventory_count()
-
-	var text: String = ""
-	text += "La Tienda del Umbral reúne regalos útiles, extraños y peligrosamente personales."
-	text += "\n\nLúmenes disponibles: %s" % money
-
-	if gift_count > 0:
-		text += "\nRegalos en inventario: %s" % gift_count
-	else:
-		text += "\nNo llevas regalos adicionales en la mochila."
-
-	return text
 
 
 func get_shop_item_ids() -> Array:
@@ -349,76 +253,62 @@ func get_shop_item_ids() -> Array:
 	return result
 
 
-func add_item_button(item_id: String) -> void:
+func add_item_card(item_id: String) -> void:
 	var locked_item_id: String = item_id
 	var item: Dictionary = DataManager.get_item(locked_item_id)
 	var item_name: String = str(item.get("name", locked_item_id))
 	var price: int = int(item.get("price", 0))
 	var owned: int = get_inventory_amount(locked_item_id)
-
-	var button_text: String = "%s\n%s Lúmenes" % [
-		item_name,
-		price
-	]
-
-	if owned > 0:
-		button_text += " · Tienes %s" % owned
+	var player_money: int = int(GameManager.player.get("money", 0))
+	var can_buy: bool = player_money >= price
 
 	var button: Button = Button.new()
-	button.text = button_text
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(220, 58)
-	button.disabled = price > int(GameManager.player.get("money", 0))
+	button.custom_minimum_size = Vector2(118, 118)
+	button.disabled = not can_buy
+	button.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
 
-	button.pressed.connect(func():
-		selected_item_id = locked_item_id
-		current_message = ""
-		refresh_shop()
-	)
+	if can_buy:
+		button.pressed.connect(func():
+			buy_item(locked_item_id)
+		)
 
 	button.mouse_entered.connect(func():
+		preview_item_id = locked_item_id
 		show_item_preview(locked_item_id)
 	)
 
 	button.focus_entered.connect(func():
+		preview_item_id = locked_item_id
 		show_item_preview(locked_item_id)
 	)
 
 	button.mouse_exited.connect(func():
-		restore_shop_text()
+		preview_item_id = ""
+		refresh_info_panel()
 	)
 
 	item_grid.add_child(button)
 
 
+func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
+	var text: String = ""
+
+	text += "[Icono]\n"
+	text += "%s\n" % item_name
+	text += "%s L" % price
+
+	if owned > 0:
+		text += "\n×%s" % owned
+
+	if not can_buy:
+		text += "\nFaltan %s" % max(price - player_money, 0)
+
+	return text
+
+
 func show_item_preview(item_id: String) -> void:
-	var item: Dictionary = DataManager.get_item(item_id)
-	var item_name: String = str(item.get("name", item_id))
-
-	main_title_label.text = item_name
-	main_description_label.text = build_item_detail_text(item_id)
-
-	detail_title_label.text = item_name
-	detail_description_label.text = build_item_detail_text(item_id)
-
-
-func restore_shop_text() -> void:
-	if selected_item_id != "":
-		return
-
-	main_title_label.text = "Tienda del Umbral"
-
-	if current_message != "":
-		main_description_label.text = current_message
-	else:
-		main_description_label.text = get_shop_description()
-
-	detail_title_label.text = "Elige un objeto"
-	detail_description_label.text = "Pasa el cursor o selecciona un regalo para ver detalles. Comprar regalos amplía tus opciones con los personajes."
-
-
-func build_item_detail_text(item_id: String) -> String:
 	var item: Dictionary = DataManager.get_item(item_id)
 	var item_name: String = str(item.get("name", item_id))
 	var description: String = str(item.get("description", ""))
@@ -426,68 +316,55 @@ func build_item_detail_text(item_id: String) -> String:
 	var owned: int = get_inventory_amount(item_id)
 	var money: int = int(GameManager.player.get("money", 0))
 
-	var text: String = ""
-	text += description
+	info_title_label.text = "%s · %s Lúmenes" % [
+		item_name,
+		price
+	]
+
+	var text: String = description
 
 	if text == "":
 		text = "Un objeto de la tienda."
 
-	text += "\n\nPrecio: %s Lúmenes" % price
-	text += "\nEn inventario: %s" % owned
+	if owned > 0:
+		text += " Tienes %s." % owned
 
-	if money >= price:
-		text += "\nPuedes comprarlo ahora."
-	else:
-		text += "\nTe faltan %s Lúmenes." % max(price - money, 0)
+	if money < price:
+		text += " Faltan %s Lúmenes." % max(price - money, 0)
 
-	text += "\n\nTipo: Regalo"
-	text += "\nUso: entrégalo a un personaje desde una ubicación cuando esté presente."
-
-	return text
+	info_description_label.text = text
 
 
 func buy_item(item_id: String) -> void:
-	buy_item_amount(item_id, 1)
-
-
-func buy_item_amount(item_id: String, amount: int) -> void:
 	var item: Dictionary = DataManager.get_item(item_id)
 	var item_name: String = str(item.get("name", item_id))
 	var price: int = int(item.get("price", 0))
-	var total_cost: int = price * amount
 
-	if amount <= 0:
-		return
-
-	if int(GameManager.player.get("money", 0)) < total_cost:
-		current_message = "No tienes suficientes Lúmenes para comprar %s x%s." % [
-			item_name,
-			amount
-		]
+	if int(GameManager.player.get("money", 0)) < price:
+		current_message = "No tienes suficientes Lúmenes para comprar %s." % item_name
+		preview_item_id = ""
 		refresh_shop(current_message)
 		return
 
-	for index in range(amount):
-		GameManager.buy_item(item_id, 1)
+	var success: bool = GameManager.buy_item(item_id, 1)
+
+	if not success:
+		current_message = "No fue posible comprar %s." % item_name
+		preview_item_id = ""
+		refresh_shop(current_message)
+		return
 
 	SaveManager.autosave_game()
+	hud_bar.refresh()
 
-	selected_item_id = item_id
-	current_message = "Compraste %s x%s.\nLúmenes gastados: %s" % [
+	current_message = "Compraste %s por %s Lúmenes." % [
 		item_name,
-		amount,
-		total_cost
+		price
 	]
 
+	preview_item_id = item_id
 	refresh_shop(current_message)
-
-
-func can_buy_amount(item_id: String, amount: int) -> bool:
-	var item: Dictionary = DataManager.get_item(item_id)
-	var price: int = int(item.get("price", 0))
-	var total_cost: int = price * amount
-
-	return int(GameManager.player.get("money", 0)) >= total_cost
+	show_item_preview(item_id)
 
 
 func get_inventory_amount(item_id: String) -> int:
@@ -505,37 +382,12 @@ func get_inventory_amount(item_id: String) -> int:
 	return total
 
 
-func get_total_gift_inventory_count() -> int:
-	if not GameManager.player.has("inventory"):
-		return 0
-
-	var total: int = 0
-
-	for entry in GameManager.player.get("inventory", []):
-		var item_entry: Dictionary = entry
-		var item_id: String = str(item_entry.get("item_id", ""))
-		var item: Dictionary = DataManager.get_item(item_id)
-
-		if item.get("type", "") == "gift":
-			total += int(item_entry.get("amount", 0))
-
-	return total
-
-
 func show_shop_message(title: String, message: String) -> void:
 	current_message = message
+	preview_item_id = ""
 
-	main_title_label.text = title
-	main_description_label.text = message
-
-	clear_children(detail_actions)
-	detail_title_label.text = title
-	detail_description_label.text = message
-
-	add_detail_action("Continuar", func():
-		current_message = ""
-		refresh_shop()
-	)
+	info_title_label.text = title
+	info_description_label.text = message
 
 
 func show_pending_narrative_messages() -> void:
@@ -594,21 +446,6 @@ func add_global_action(text: String, callback: Callable) -> Button:
 	return button
 
 
-func add_detail_action(text: String, callback: Callable, disabled: bool = false) -> Button:
-	var button: Button = Button.new()
-	button.text = text
-	button.disabled = disabled
-	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(110, 36)
-
-	if not disabled:
-		button.pressed.connect(callback)
-
-	detail_actions.add_child(button)
-	return button
-
-
 func clear_children(node: Node) -> void:
 	for child in node.get_children():
 		child.queue_free()
@@ -624,57 +461,45 @@ func layout_overlay_controls() -> void:
 		return
 
 	var margin: float = 10.0
+	var top_y: float = 10.0
+	var top_height: float = 46.0
 
 	var global_width: float = 430.0
-
 	if shop_layer.size.x < 760:
 		global_width = 330.0
 
-	global_action_panel.size = Vector2(global_width, 46)
+	global_action_panel.size = Vector2(global_width, top_height)
 	global_action_panel.position = Vector2(
 		max(margin, shop_layer.size.x - global_width - margin),
-		margin
+		top_y
 	)
 
-	var detail_width: float = 430.0
-	var detail_height: float = 218.0
+	var info_width: float = max(
+		260.0,
+		shop_layer.size.x - global_width - (margin * 3.0)
+	)
 
-	var main_width: float = min(650.0, max(420.0, shop_layer.size.x - detail_width - 42.0))
-	var main_height: float = min(390.0, max(300.0, shop_layer.size.y - 92.0))
+	info_panel.size = Vector2(info_width, top_height)
+	info_panel.position = Vector2(
+		margin,
+		top_y
+	)
 
-	if shop_layer.size.x < 940:
-		main_width = max(360.0, shop_layer.size.x - 24.0)
-		main_height = min(330.0, max(260.0, shop_layer.size.y - 300.0))
+	var panel_width: float = max(360.0, shop_layer.size.x - 24.0)
+	var panel_height: float = max(300.0, shop_layer.size.y - top_height - 34.0)
 
-		detail_width = max(360.0, shop_layer.size.x - 24.0)
-		detail_height = 210.0
+	shop_panel.size = Vector2(panel_width, panel_height)
+	shop_panel.position = Vector2(
+		12.0,
+		top_y + top_height + 12.0
+	)
 
-		main_panel.size = Vector2(main_width, main_height)
-		main_panel.position = Vector2(
-			12.0,
-			68.0
-		)
-
-		detail_panel.size = Vector2(detail_width, detail_height)
-		detail_panel.position = Vector2(
-			12.0,
-			max(12.0, shop_layer.size.y - detail_height - 12.0)
-		)
-	else:
-		main_panel.size = Vector2(main_width, main_height)
-		main_panel.position = Vector2(
-			12.0,
-			68.0
-		)
-
-		detail_panel.size = Vector2(detail_width, detail_height)
-		detail_panel.position = Vector2(
-			max(12.0, shop_layer.size.x - detail_width - 12.0),
-			max(68.0, shop_layer.size.y - detail_height - 12.0)
-		)
-
-	if main_width < 560:
-		item_grid.columns = 1
+	if panel_width >= 980:
+		item_grid.columns = 5
+	elif panel_width >= 780:
+		item_grid.columns = 4
+	elif panel_width >= 600:
+		item_grid.columns = 3
 	else:
 		item_grid.columns = 2
 
