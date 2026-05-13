@@ -22,9 +22,6 @@ var content_subtitle_label: Label
 var content_scroll: ScrollContainer
 var content_container: VBoxContainer
 
-var context_panel: PanelContainer
-var context_label: Label
-
 var selected_section: String = "people"
 var selected_npc_id: String = ""
 
@@ -86,7 +83,6 @@ func build_ui() -> void:
 	build_global_action_panel()
 	build_nav_panel()
 	build_content_panel()
-	build_context_panel()
 
 	call_deferred("refresh_layout_after_frame")
 
@@ -218,29 +214,6 @@ func build_content_panel() -> void:
 	content_container.add_theme_constant_override("separation", 10)
 	content_scroll.add_child(content_container)
 
-
-func build_context_panel() -> void:
-	context_panel = PanelContainer.new()
-	context_panel.custom_minimum_size = Vector2(920, 54)
-	journal_layer.add_child(context_panel)
-
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 8)
-	context_panel.add_child(margin)
-
-	context_label = Label.new()
-	context_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	context_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	context_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	context_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	context_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	context_label.clip_text = true
-	margin.add_child(context_label)
-
-
 func show_section(section_id: String) -> void:
 	selected_section = section_id
 	selected_npc_id = ""
@@ -272,7 +245,7 @@ func build_nav_buttons() -> void:
 	add_nav_button("Mundo", SECTION_WORLD, "Estado de Luminaria, presión del Velo y consecuencias globales.")
 	add_nav_button("Calendario", SECTION_CALENDAR, "Fechas emocionales, aniversarios y momentos que la historia recuerda.")
 	add_nav_button("Recuerdos", SECTION_MEMORIES, "Memorias, trofeos y fragmentos conseguidos durante la partida.")
-	add_nav_button("Unión", SECTION_UNION, "Progreso hacia la unión definitiva y estado del postgame.")
+	add_nav_button("Unión", SECTION_UNION, "Progreso hacia la unión definitiva y consecuencias posteriores.")
 
 
 func add_nav_button(text: String, section_id: String, hint: String) -> void:
@@ -424,7 +397,7 @@ func show_npc_detail_view(npc_id: String) -> void:
 
 	var postgame_text: String = build_npc_postgame_text(npc_id)
 	if postgame_text != "":
-		add_text_card("Postgame personal", postgame_text)
+		add_text_card("Vida compartida", postgame_text)
 
 	add_text_card("Fechas importantes", build_emotional_calendar_text(npc_id))
 	add_text_card("Información descubierta", build_known_info_text(npc_id))
@@ -481,7 +454,6 @@ func build_npc_collectibles_text(npc_id: String) -> String:
 
 	return text
 
-
 func build_collectible_list(values: Array, empty_text: String) -> String:
 	if values.is_empty():
 		return "- %s" % empty_text
@@ -489,11 +461,53 @@ func build_collectible_list(values: Array, empty_text: String) -> String:
 	var text: String = ""
 
 	for collectible_id in values:
-		text += "- %s\n" % GameManager.get_collectible_label(str(collectible_id))
+		var label: String = get_safe_collectible_label(str(collectible_id))
+
+		if label == "":
+			continue
+
+		text += "- %s\n" % label
+
+	if text.strip_edges() == "":
+		return "- %s" % empty_text
 
 	return text.strip_edges()
 
+func get_safe_collectible_label(collectible_id: String) -> String:
+	var clean_id: String = collectible_id.strip_edges()
 
+	if clean_id == "":
+		return ""
+
+	if clean_id.to_lower() == "page that should not exist":
+		return "Memoria emocional registrada"
+
+	var label: String = GameManager.get_collectible_label(clean_id).strip_edges()
+
+	if label == "":
+		return prettify_collectible_id(clean_id)
+
+	if label.to_lower() == "page that should not exist":
+		return "Memoria emocional registrada"
+
+	return label
+
+
+func prettify_collectible_id(collectible_id: String) -> String:
+	var text: String = collectible_id.replace("_", " ").replace(":", " · ")
+	var parts: PackedStringArray = text.split(" ", false)
+	var pretty_parts: Array = []
+
+	for part in parts:
+		var p: String = str(part)
+
+		if p.length() <= 1:
+			pretty_parts.append(p.to_upper())
+		else:
+			pretty_parts.append(p.substr(0, 1).to_upper() + p.substr(1))
+
+	return " ".join(pretty_parts)
+	
 func build_npc_notes_text(npc_id: String) -> String:
 	GameManager.ensure_npc_knowledge(npc_id)
 
@@ -510,7 +524,38 @@ func build_npc_notes_text(npc_id: String) -> String:
 
 	return text.strip_edges()
 
+func add_calendar_npc_card(parent: Node, npc_id: String) -> void:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var name: String = str(npc.get("name", npc_id))
+	var calendar_text: String = build_emotional_calendar_text(npc_id)
+	var summary: String = summarize_block_text(calendar_text, 2)
 
+	var button: Button = Button.new()
+	button.text = "%s\n%s" % [name, summary]
+	button.focus_mode = Control.FOCUS_ALL
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.custom_minimum_size = Vector2(260, 86)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	button.pressed.connect(func(): show_calendar_npc_detail(npc_id))
+	button.mouse_entered.connect(func(): set_context("Ver calendario emocional de %s." % name))
+	button.focus_entered.connect(func(): set_context("Ver calendario emocional de %s." % name))
+	parent.add_child(button)
+
+
+func show_calendar_npc_detail(npc_id: String) -> void:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var name: String = str(npc.get("name", npc_id))
+
+	top_info_label.text = "Bitácora · Calendario · %s" % name
+	content_title_label.text = name
+	content_subtitle_label.text = "Fechas, promesas y heridas asociadas a este vínculo."
+	set_context("Detalle del calendario emocional.")
+
+	clear_children(content_container)
+
+	add_action_card("← Volver al calendario", "Regresa al resumen del calendario emocional.", func(): show_calendar_section())
+	add_text_card("Fechas importantes", build_emotional_calendar_text(npc_id))
+	
 func show_world_section() -> void:
 	GameManager.ensure_world_state()
 
@@ -520,12 +565,12 @@ func show_world_section() -> void:
 
 	top_info_label.text = "Bitácora · Mundo"
 	content_title_label.text = "Estado de Luminaria"
-	content_subtitle_label.text = "El mundo no solo avanza por calendario. También responde a tensión, deseo, memoria y consecuencias."
-	set_context("Esta sección resume cómo tus decisiones están deformando o estabilizando Luminaria.")
+	content_subtitle_label.text = "El mundo responde a tensión, memoria, deseo y consecuencias."
+	set_context("Elige un bloque para leer detalle sin perderte en una lista larga.")
 
 	clear_children(content_container)
 
-	add_text_card("Lectura general", "- Tensión global: %s · %s\n- Inestabilidad del Velo: %s · %s\n- Presión romántica: %s · %s" % [
+	add_text_card("Lectura general", "Tensión global: %s · %s\nVelo: %s · %s\nPresión romántica: %s · %s" % [
 		global_tension,
 		get_world_state_level_label(global_tension),
 		world_instability,
@@ -534,71 +579,262 @@ func show_world_section() -> void:
 		get_world_state_level_label(romantic_pressure)
 	])
 
-	add_text_card("Interpretación", build_world_state_interpretation(global_tension, world_instability, romantic_pressure))
-	add_text_card("Eje dominante del Velo", build_veil_axis_text())
-	add_text_card("Consecuencias activas", build_active_world_consequences_text())
-	add_text_card("Memorias del mundo", build_world_memories_text())
-	add_text_card("Postgame", build_postgame_status_text())
-	add_text_card("Unión definitiva", build_final_union_text())
+	add_action_card(
+		"Interpretación",
+		summarize_block_text(build_world_state_interpretation(global_tension, world_instability, romantic_pressure), 2),
+		func(): show_world_detail("Interpretación", build_world_state_interpretation(global_tension, world_instability, romantic_pressure))
+	)
 
+	add_action_card(
+		"Eje dominante del Velo",
+		summarize_block_text(build_veil_axis_text(), 2),
+		func(): show_world_detail("Eje dominante del Velo", build_veil_axis_text())
+	)
 
+	add_action_card(
+		"Consecuencias activas",
+		summarize_block_text(build_active_world_consequences_text(), 2),
+		func(): show_world_detail("Consecuencias activas", build_active_world_consequences_text())
+	)
+
+	add_action_card(
+		"Memorias del mundo",
+		summarize_block_text(build_world_memories_text(), 2),
+		func(): show_world_detail("Memorias del mundo", build_world_memories_text())
+	)
+
+	add_action_card(
+		"Después de la unión",
+		summarize_block_text(build_postgame_status_text(), 2),
+		func(): show_world_detail("Después de la unión", build_postgame_status_text())
+	)
+
+	add_action_card(
+		"Unión definitiva",
+		summarize_block_text(build_final_union_text(), 2),
+		func(): show_world_detail("Unión definitiva", build_final_union_text())
+	)
+
+func show_world_detail(title: String, body: String) -> void:
+	top_info_label.text = "Bitácora · Mundo · %s" % title
+	content_title_label.text = title
+	content_subtitle_label.text = "Detalle del estado del mundo."
+	set_context("Detalle de mundo.")
+
+	clear_children(content_container)
+
+	add_action_card("← Volver a mundo", "Regresa al resumen del mundo.", func(): show_world_section())
+	add_text_card(title, body)
+	
 func show_calendar_section() -> void:
 	top_info_label.text = "Bitácora · Calendario"
 	content_title_label.text = "Calendario emocional"
-	content_subtitle_label.text = "El calendario no dicta la historia, pero sí recuerda cuándo algo importó."
-	set_context("Cumpleaños, primeras citas, promesas y heridas quedan registrados aquí.")
+	content_subtitle_label.text = "Los momentos importantes quedan agrupados por persona para evitar perderse en una lista interminable."
+	set_context("Elige una tarjeta para ver fechas concretas.")
 
 	clear_children(content_container)
 
 	add_text_card("Resumen global", build_global_emotional_calendar_summary())
 
+	var grid: GridContainer = GridContainer.new()
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 10)
+	content_container.add_child(grid)
+
+	var any_known: bool = false
+
 	for npc_id in DataManager.npcs.keys():
 		if is_npc_known(str(npc_id)):
-			var npc: Dictionary = DataManager.get_npc(str(npc_id))
-			add_text_card(str(npc.get("name", npc_id)), build_emotional_calendar_text(str(npc_id)))
+			any_known = true
+			add_calendar_npc_card(grid, str(npc_id))
 
+	if not any_known:
+		add_text_card("Sin registros personales", "Aún no hay fechas emocionales asociadas a personajes conocidos.")
 
 func show_memories_section() -> void:
 	top_info_label.text = "Bitácora · Recuerdos"
 	content_title_label.text = "Memorias y fragmentos"
-	content_subtitle_label.text = "No todo progreso es estadística. Algunas cosas quedan como prueba de que algo ocurrió."
-	set_context("Aquí se agrupan recuerdos del mundo y coleccionables personales.")
+	content_subtitle_label.text = "Los recuerdos se agrupan por origen para que puedas revisarlos sin una lista interminable."
+	set_context("Elige un bloque para ver sus recuerdos.")
 
 	clear_children(content_container)
 
-	add_text_card("Memorias del mundo", build_world_memories_text())
+	add_action_card(
+		"Memorias del mundo",
+		summarize_block_text(build_world_memories_text(), 2),
+		func(): show_world_memories_detail()
+	)
+
+	var grid: GridContainer = GridContainer.new()
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 10)
+	content_container.add_child(grid)
+
+	var any_known: bool = false
 
 	for npc_id in DataManager.npcs.keys():
 		if is_npc_known(str(npc_id)):
-			var npc: Dictionary = DataManager.get_npc(str(npc_id))
-			add_text_card(str(npc.get("name", npc_id)), build_npc_collectibles_text(str(npc_id)))
+			any_known = true
+			add_memory_npc_card(grid, str(npc_id))
+
+	if not any_known:
+		add_text_card("Sin memorias personales", "Aún no hay recuerdos asociados a personajes conocidos.")
+		
+func add_memory_npc_card(parent: Node, npc_id: String) -> void:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var name: String = str(npc.get("name", npc_id))
+	var collectibles: Dictionary = GameManager.get_npc_collectibles(npc_id)
+
+	var total: int = 0
+	total += int(collectibles.get("date_memories", []).size())
+	total += int(collectibles.get("emotional_memories", []).size())
+	total += int(collectibles.get("portrait_pieces", []).size())
+	total += int(collectibles.get("trophies", []).size())
+	total += int(collectibles.get("union_tokens", []).size())
+
+	var button: Button = Button.new()
+	button.text = "%s\n%s recuerdo(s) registrado(s)" % [name, total]
+	button.focus_mode = Control.FOCUS_ALL
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.custom_minimum_size = Vector2(260, 82)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	button.pressed.connect(func(): show_memory_npc_detail(npc_id))
+	button.mouse_entered.connect(func(): set_context("Ver recuerdos asociados a %s." % name))
+	button.focus_entered.connect(func(): set_context("Ver recuerdos asociados a %s." % name))
+	parent.add_child(button)
 
 
-func show_union_section() -> void:
-	top_info_label.text = "Bitácora · Unión"
-	content_title_label.text = "Unión definitiva"
-	content_subtitle_label.text = "Algunas decisiones no cierran una ruta: cambian el tipo de historia que estás contando."
-	set_context("Consulta candidatos, bloqueos, unión elegida y tensión del postgame.")
+func show_world_memories_detail() -> void:
+	top_info_label.text = "Bitácora · Recuerdos · Mundo"
+	content_title_label.text = "Memorias del mundo"
+	content_subtitle_label.text = "Eventos y consecuencias que Luminaria conserva."
+	set_context("Detalle de memorias del mundo.")
 
 	clear_children(content_container)
 
-	add_text_card("Estado actual", build_final_union_text())
-	add_text_card("Postgame", build_postgame_status_text())
+	add_action_card("← Volver a recuerdos", "Regresa al resumen de recuerdos.", func(): show_memories_section())
+	add_text_card("Memorias del mundo", build_world_memories_text())
+
+
+func show_memory_npc_detail(npc_id: String) -> void:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var name: String = str(npc.get("name", npc_id))
+
+	top_info_label.text = "Bitácora · Recuerdos · %s" % name
+	content_title_label.text = name
+	content_subtitle_label.text = "Recuerdos, piezas y pruebas asociadas a este vínculo."
+	set_context("Detalle de recuerdos personales.")
+
+	clear_children(content_container)
+
+	add_action_card("← Volver a recuerdos", "Regresa al resumen de recuerdos.", func(): show_memories_section())
+	add_text_card("Coleccionables", build_npc_collectibles_text(npc_id))
+	
+func show_union_section() -> void:
+	top_info_label.text = "Bitácora · Unión"
+	content_title_label.text = "Unión definitiva"
+	content_subtitle_label.text = "Una ruta final no es solo un cierre: cambia qué tipo de historia continúa después."
+	set_context("Revisa estado actual, candidatos y consecuencias posteriores.")
+
+	clear_children(content_container)
+
+	add_action_card(
+		"Estado actual",
+		summarize_block_text(build_final_union_text(), 2),
+		func(): show_union_state_detail()
+	)
+
+	add_action_card(
+		"Después de la unión",
+		summarize_block_text(build_postgame_status_text(), 2),
+		func(): show_union_after_detail()
+	)
 
 	if FinalUnionSystem.has_final_union():
-		var npc_id: String = FinalUnionSystem.get_final_union_npc_id()
-		var npc: Dictionary = DataManager.get_npc(npc_id)
-		add_text_card("Vínculo elegido", "%s\n\n%s" % [
-			npc.get("name", npc_id),
-			build_final_union_progress_text(npc_id)
-		])
+		var chosen_npc_id: String = FinalUnionSystem.get_final_union_npc_id()
+		var chosen_npc: Dictionary = DataManager.get_npc(chosen_npc_id)
+		add_action_card(
+			"Vínculo elegido: %s" % chosen_npc.get("name", chosen_npc_id),
+			summarize_block_text(build_final_union_progress_text(chosen_npc_id), 2),
+			func(): show_union_npc_detail(chosen_npc_id)
+		)
 	else:
+		var grid: GridContainer = GridContainer.new()
+		grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		grid.columns = 2
+		grid.add_theme_constant_override("h_separation", 10)
+		grid.add_theme_constant_override("v_separation", 10)
+		content_container.add_child(grid)
+
+		var any_known: bool = false
+
 		for npc_id in DataManager.npcs.keys():
 			if is_npc_known(str(npc_id)):
-				var npc: Dictionary = DataManager.get_npc(str(npc_id))
-				add_text_card(str(npc.get("name", npc_id)), build_final_union_progress_text(str(npc_id)))
+				any_known = true
+				add_union_npc_card(grid, str(npc_id))
+
+		if not any_known:
+			add_text_card("Sin candidatos conocidos", "Aún no hay vínculos suficientes para mostrar candidatos de unión.")
+
+func add_union_npc_card(parent: Node, npc_id: String) -> void:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var name: String = str(npc.get("name", npc_id))
+	var progress_text: String = build_final_union_progress_text(npc_id)
+
+	var button: Button = Button.new()
+	button.text = "%s\n%s" % [name, summarize_block_text(progress_text, 2)]
+	button.focus_mode = Control.FOCUS_ALL
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.custom_minimum_size = Vector2(260, 88)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	button.pressed.connect(func(): show_union_npc_detail(npc_id))
+	button.mouse_entered.connect(func(): set_context("Ver progreso de unión con %s." % name))
+	button.focus_entered.connect(func(): set_context("Ver progreso de unión con %s." % name))
+	parent.add_child(button)
 
 
+func show_union_state_detail() -> void:
+	top_info_label.text = "Bitácora · Unión · Estado"
+	content_title_label.text = "Estado actual"
+	content_subtitle_label.text = "Resumen de la ruta final y sus bloqueos."
+	set_context("Detalle del estado de unión.")
+
+	clear_children(content_container)
+
+	add_action_card("← Volver a unión", "Regresa al resumen de unión.", func(): show_union_section())
+	add_text_card("Estado actual", build_final_union_text())
+
+
+func show_union_after_detail() -> void:
+	top_info_label.text = "Bitácora · Unión · Después"
+	content_title_label.text = "Después de la unión"
+	content_subtitle_label.text = "Consecuencias posteriores a la elección definitiva."
+	set_context("Detalle de consecuencias posteriores.")
+
+	clear_children(content_container)
+
+	add_action_card("← Volver a unión", "Regresa al resumen de unión.", func(): show_union_section())
+	add_text_card("Después de la unión", build_postgame_status_text())
+
+
+func show_union_npc_detail(npc_id: String) -> void:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var name: String = str(npc.get("name", npc_id))
+
+	top_info_label.text = "Bitácora · Unión · %s" % name
+	content_title_label.text = name
+	content_subtitle_label.text = "Progreso y requisitos hacia la unión definitiva."
+	set_context("Detalle de candidato de unión.")
+
+	clear_children(content_container)
+
+	add_action_card("← Volver a unión", "Regresa al resumen de unión.", func(): show_union_section())
+	add_text_card("Progreso de unión", build_final_union_progress_text(npc_id))
+	
 func add_text_card(title: String, body: String) -> PanelContainer:
 	var card: PanelContainer = PanelContainer.new()
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -630,21 +866,66 @@ func add_text_card(title: String, body: String) -> PanelContainer:
 
 	return card
 
+func summarize_block_text(text: String, max_lines: int = 2) -> String:
+	var clean_text: String = text.strip_edges()
 
+	if clean_text == "":
+		return "Sin información registrada."
+
+	var raw_lines: PackedStringArray = clean_text.split("\n", false)
+	var lines: Array = []
+
+	for raw_line in raw_lines:
+		var line: String = str(raw_line).strip_edges()
+
+		if line == "":
+			continue
+
+		if line.begins_with("- "):
+			line = line.substr(2).strip_edges()
+
+		lines.append(line)
+
+		if lines.size() >= max_lines:
+			break
+
+	var summary: String = " · ".join(lines)
+
+	if summary.length() > 150:
+		summary = summary.substr(0, 147).strip_edges() + "..."
+
+	return summary
+	
 func add_action_card(title: String, hint: String, callback: Callable) -> void:
 	var button: Button = Button.new()
-	button.text = title
+	button.text = "%s\n%s" % [title, hint]
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(1, 40)
+	button.custom_minimum_size = Vector2(1, 64)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	button.pressed.connect(callback)
 	button.mouse_entered.connect(func(): set_context(hint))
 	button.focus_entered.connect(func(): set_context(hint))
 	content_container.add_child(button)
 
-
 func set_context(text: String) -> void:
-	context_label.text = text
+	var clean_text: String = text.strip_edges()
+
+	if clean_text.length() > 72:
+		clean_text = clean_text.substr(0, 69).strip_edges() + "..."
+
+	if selected_section == SECTION_PEOPLE:
+		top_info_label.text = "Bitácora · Personas · %s" % clean_text
+	elif selected_section == SECTION_WORLD:
+		top_info_label.text = "Bitácora · Mundo · %s" % clean_text
+	elif selected_section == SECTION_CALENDAR:
+		top_info_label.text = "Bitácora · Calendario · %s" % clean_text
+	elif selected_section == SECTION_MEMORIES:
+		top_info_label.text = "Bitácora · Recuerdos · %s" % clean_text
+	elif selected_section == SECTION_UNION:
+		top_info_label.text = "Bitácora · Unión · %s" % clean_text
+	else:
+		top_info_label.text = "Bitácora · %s" % clean_text
 
 
 func add_global_action(text: String, callback: Callable) -> Button:
@@ -1141,69 +1422,43 @@ func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
 	layout_overlay_controls()
 
-
 func layout_overlay_controls() -> void:
 	if journal_layer == null:
 		return
 
 	var margin: float = 10.0
-	var top_y: float = 10.0
 	var top_height: float = 46.0
+	var gap: float = 10.0
 
 	var global_width: float = 250.0
-	if journal_layer.size.x < 760:
-		global_width = 210.0
+	var nav_width: float = 190.0
+
+	if journal_layer.size.x < 900:
+		global_width = 230.0
+		nav_width = 170.0
 
 	global_action_panel.size = Vector2(global_width, top_height)
 	global_action_panel.position = Vector2(
 		max(margin, journal_layer.size.x - global_width - margin),
-		top_y
+		margin
 	)
 
-	var info_width: float = max(
-		260.0,
-		journal_layer.size.x - global_width - (margin * 3.0)
-	)
+	var top_width: float = max(320.0, journal_layer.size.x - global_width - (margin * 3.0))
+	top_info_panel.size = Vector2(top_width, top_height)
+	top_info_panel.position = Vector2(margin, margin)
 
-	top_info_panel.size = Vector2(info_width, top_height)
-	top_info_panel.position = Vector2(
-		margin,
-		top_y
-	)
+	var content_top: float = margin + top_height + gap
+	var content_height: float = max(280.0, journal_layer.size.y - content_top - margin)
 
-	var context_height: float = 58.0
-	var content_top: float = top_y + top_height + 12.0
-	var available_height: float = journal_layer.size.y - content_top - context_height - 24.0
+	nav_panel.size = Vector2(nav_width, content_height)
+	nav_panel.position = Vector2(margin, content_top)
 
-	var nav_width: float = 190.0
-	if journal_layer.size.x < 760:
-		nav_width = 150.0
-
-	nav_panel.size = Vector2(nav_width, max(260.0, available_height))
-	nav_panel.position = Vector2(
-		margin,
-		content_top
-	)
-
-	var content_x: float = nav_panel.position.x + nav_width + 12.0
+	var content_x: float = margin + nav_width + gap
 	var content_width: float = max(360.0, journal_layer.size.x - content_x - margin)
 
-	content_panel.size = Vector2(content_width, max(260.0, available_height))
-	content_panel.position = Vector2(
-		content_x,
-		content_top
-	)
-
-	context_panel.size = Vector2(
-		max(360.0, journal_layer.size.x - 20.0),
-		context_height
-	)
-	context_panel.position = Vector2(
-		margin,
-		max(content_top + available_height + 10.0, journal_layer.size.y - context_height - margin)
-	)
-
-
+	content_panel.size = Vector2(content_width, content_height)
+	content_panel.position = Vector2(content_x, content_top)
+	
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		if journal_layer != null:
