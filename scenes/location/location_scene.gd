@@ -877,25 +877,57 @@ func confirm_petition(petition_id: String) -> void:
 
 
 func show_date_location_selection(npc_id: String) -> void:
-	clear_bottom_actions()
-
 	var npc: Dictionary = DataManager.get_npc(npc_id)
-	var available_locations: Array = DateSystem.get_available_date_locations(npc_id)
+	var npc_name: String = str(npc.get("name", npc_id))
+	var locations: Array = DateSystem.get_available_date_locations(npc_id)
 
-	bottom_title_label.text = "Invitar a cita a %s" % npc.get("name", npc_id)
+	bottom_title_label.text = "Invitar a cita"
+	bottom_description_label.text = "Elige dónde pasar tiempo con %s." % npc_name
 
-	if available_locations.is_empty():
-		bottom_description_label.text = "Hay intención de invitarle, pero todavía no tienes un lugar adecuado para esta cita. Mejora el vínculo, descubre más información o prueba en otro momento."
-	else:
-		bottom_description_label.text = "Elige un lugar. El ambiente puede cambiarlo todo."
+	if locations.is_empty():
+		bottom_description_label.text = "No hay lugares de cita disponibles por ahora."
+		return
 
-		for date_location_id in available_locations:
-			var id: String = str(date_location_id)
-			var date_location: Dictionary = DataManager.get_date_location(id)
-			add_bottom_action(date_location.get("name", id), func(): SceneRouter.go_to_date(npc_id, id))
+	open_choice_modal(
+		"Cita con %s" % npc_name,
+		"Selecciona un lugar. Cada ubicación tiene ambiente, dificultad y consecuencias distintas."
+	)
 
-	add_bottom_action("Volver", func(): interact_npc(npc_id))
+	for date_location_id in locations:
+		var locked_location_id: String = str(date_location_id)
+		var date_location: Dictionary = DataManager.get_date_location(locked_location_id)
 
+		add_modal_choice_button(
+			build_date_location_button_text(locked_location_id),
+			func(): start_date_from_modal(npc_id, locked_location_id)
+		)
+
+	add_modal_footer_button("Volver", func():
+		close_choice_modal()
+		interact_npc(npc_id)
+	)
+
+func build_date_location_button_text(date_location_id: String) -> String:
+	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
+
+	var name: String = str(date_location.get("name", date_location_id))
+	var threshold: int = int(date_location.get("success_threshold", 70))
+	var mood_tags: Array = date_location.get("mood_tags", [])
+
+	var mood_text: String = ""
+	if not mood_tags.is_empty():
+		mood_text = "\nAmbiente: %s" % ", ".join(mood_tags)
+
+	return "%s\nÉxito desde %s%%%s" % [
+		name,
+		threshold,
+		mood_text
+	]
+
+
+func start_date_from_modal(npc_id: String, date_location_id: String) -> void:
+	close_choice_modal()
+	SceneRouter.go_to_date(npc_id, date_location_id)
 
 func give_gift(npc_id: String, item_id: String) -> void:
 	close_choice_modal()
