@@ -28,11 +28,11 @@ func build() -> void:
 	margin.add_child(root)
 
 	date_label = make_hud_label(HORIZONTAL_ALIGNMENT_LEFT)
-	date_label.size_flags_stretch_ratio = 0.95
+	date_label.size_flags_stretch_ratio = 1.35
 	root.add_child(date_label)
 
 	player_label = make_hud_label(HORIZONTAL_ALIGNMENT_CENTER)
-	player_label.size_flags_stretch_ratio = 1.65
+	player_label.size_flags_stretch_ratio = 1.35
 	root.add_child(player_label)
 
 	world_label = make_hud_label(HORIZONTAL_ALIGNMENT_RIGHT)

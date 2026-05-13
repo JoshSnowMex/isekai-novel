@@ -296,7 +296,7 @@ func position_hover_card_bottom_left() -> void:
 	var card_size: Vector2 = hover_card.custom_minimum_size
 
 	if map_layer.size.x < 760:
-		card_size = Vector2(360, 104)
+		card_size = Vector2(380, 118)
 
 	var y_position: float = map_layer.size.y - card_size.y - bottom_safe_margin
 
@@ -378,7 +378,7 @@ func position_hover_card_for_location(location_id: String) -> void:
 	var card_size: Vector2 = hover_card.custom_minimum_size
 
 	if map_layer.size.x < 760:
-		card_size = Vector2(360, 104)
+		card_size = Vector2(380, 118)
 
 	var location_rect: Rect2 = get_location_screen_rect(location_id)
 
