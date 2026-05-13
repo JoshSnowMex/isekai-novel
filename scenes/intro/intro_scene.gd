@@ -357,19 +357,18 @@ func show_confirm_selection() -> void:
 
 	var class_data: Dictionary = DataManager.get_player_class(selected_class_id)
 	var appearance_label: String = get_appearance_label(selected_appearance_id)
+	var confirm_background_path: String = get_confirm_background_path(selected_class_id)
 
 	build_background(
-		"res://assets/backgrounds/intro_confirm_outsider.png",
+		confirm_background_path,
 		"Confirmar Forastero",
-		"Fondo final: intro_confirm_outsider.png"
+		"Fondo final: %s" % get_confirm_background_name(selected_class_id)
 	)
 
 	top_label.text = "Nuevo juego · Confirmar Forastero"
-	bottom_text_label.text = "Apariencia: %s · Camino: %s · Elemento: %s\nArte final: %s" % [
-		appearance_label,
-		class_data.get("name", selected_class_id),
-		class_data.get("element", ""),
-		get_class_asset_name(selected_class_id)
+	bottom_text_label.text = "%s\n%s" % [
+		build_confirm_title(class_data, appearance_label),
+		str(class_data.get("narrative_style", ""))
 	]
 
 	clear_card_area()
@@ -563,3 +562,38 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func build_confirm_title(class_data: Dictionary, appearance_label: String) -> String:
+	var class_name: String = str(class_data.get("name", selected_class_id))
+	var clean_class_name: String = class_name
+
+	clean_class_name = clean_class_name.replace("Forastero ", "")
+	clean_class_name = clean_class_name.replace("Forastera ", "")
+	clean_class_name = clean_class_name.replace("Forma velada ", "")
+
+	return "Camino elegido: %s %s" % [
+		appearance_label,
+		clean_class_name
+	]
+
+
+func get_confirm_background_name(class_id: String) -> String:
+	var appearance_asset_id: String = selected_appearance_id
+
+	if appearance_asset_id == "woman":
+		appearance_asset_id = "female"
+	elif appearance_asset_id == "veiled":
+		appearance_asset_id = "veiled"
+	else:
+		appearance_asset_id = "male"
+
+	var normalized_class_id: String = class_id.replace("_outsider", "")
+
+	return "intro_confirm_outsider_%s_%s.png" % [
+		appearance_asset_id,
+		normalized_class_id
+	]
+
+
+func get_confirm_background_path(class_id: String) -> String:
+	return "res://assets/backgrounds/%s" % get_confirm_background_name(class_id)
