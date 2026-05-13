@@ -110,10 +110,10 @@ func build_bottom_panel() -> void:
 	add_child(bottom_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_theme_constant_override("margin_left", 14)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 14)
+	margin.add_theme_constant_override("margin_bottom", 10)
 	bottom_panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
@@ -123,16 +123,23 @@ func build_bottom_panel() -> void:
 	margin.add_child(box)
 
 	bottom_text_label = Label.new()
-	bottom_text_label.custom_minimum_size = Vector2(1, 54)
+	bottom_text_label.custom_minimum_size = Vector2(1, 74)
 	bottom_text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_text_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	bottom_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	bottom_text_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	bottom_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bottom_text_label.clip_text = true
 	box.add_child(bottom_text_label)
+
+	var spacer: Control = Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_child(spacer)
 
 	bottom_buttons = HBoxContainer.new()
 	bottom_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
 	bottom_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_buttons.size_flags_vertical = Control.SIZE_SHRINK_END
 	bottom_buttons.custom_minimum_size = Vector2(1, 42)
 	bottom_buttons.add_theme_constant_override("separation", 10)
 	box.add_child(bottom_buttons)
@@ -307,7 +314,7 @@ func add_class_card(parent: Node, class_id: String) -> void:
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(150, 280)
+	card.custom_minimum_size = Vector2(160, 300)
 	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	card.text = build_class_card_text(class_id, class_data)
 
@@ -498,10 +505,10 @@ func refresh_layout_after_frame() -> void:
 
 
 func layout_overlay_controls() -> void:
-	var margin: float = 10.0
+	var margin: float = 6.0
 	var top_height: float = 46.0
-	var panel_width: float = min(1040.0, max(640.0, size.x - (margin * 2.0)))
-	var bottom_height: float = 176.0
+	var panel_width: float = min(1120.0, max(720.0, size.x - (margin * 2.0)))
+	var bottom_height: float = 184.0
 
 	top_panel.size = Vector2(panel_width, top_height)
 	top_panel.position = Vector2(
@@ -535,8 +542,8 @@ func layout_overlay_controls() -> void:
 			grid_width = min(panel_width, 760.0)
 			grid_height = min(card_area.size.y, 340.0)
 		elif current_step == IntroStep.CLASS:
-			grid_width = min(panel_width, 1040.0)
-			grid_height = min(card_area.size.y, 320.0)
+			grid_width = min(panel_width, 1120.0)
+			grid_height = min(card_area.size.y, 330.0)
 
 		card_grid.size = Vector2(grid_width, grid_height)
 		card_grid.position = Vector2(
