@@ -107,7 +107,7 @@ func build_background() -> void:
 
 func build_info_panel() -> void:
 	info_panel = PanelContainer.new()
-	info_panel.custom_minimum_size = Vector2(540, 58)
+	info_panel.custom_minimum_size = Vector2(540, 72)
 	shop_layer.add_child(info_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -129,7 +129,7 @@ func build_info_panel() -> void:
 
 func build_global_action_panel() -> void:
 	global_action_panel = PanelContainer.new()
-	global_action_panel.custom_minimum_size = Vector2(430, 46)
+	global_action_panel.custom_minimum_size = Vector2(430, 72)
 	shop_layer.add_child(global_action_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -197,7 +197,7 @@ func refresh_info_panel() -> void:
 		info_label.text = current_message
 		return
 
-	info_label.text = "Tienda del Umbral\nElige un regalo. El detalle correcto puede abrir una ruta."
+	info_label.text = "Tienda del Umbral\nRegalos pequeños, consecuencias grandes."
 
 
 func refresh_items() -> void:
@@ -313,62 +313,23 @@ func get_item_card_size() -> Vector2:
 func show_item_preview(item_id: String) -> void:
 	var item: Dictionary = DataManager.get_item(item_id)
 	var item_name: String = str(item.get("name", item_id))
-	var description: String = str(item.get("description", ""))
+	var description: String = str(item.get("shop_preview", item.get("description", "")))
 	var price: int = int(item.get("price", 0))
 	var owned: int = get_inventory_amount(item_id)
 	var money: int = int(GameManager.player.get("money", 0))
 
-	var status_parts: Array = []
-
-	status_parts.append("%s L" % price)
+	var first_line: String = "%s  ·  %s L" % [item_name, price]
 
 	if owned > 0:
-		status_parts.append("Tienes %s" % owned)
+		first_line += "  ·  En bolsa: %s" % owned
 
 	if money < price:
-		status_parts.append("Faltan %s L" % max(price - money, 0))
+		first_line += "  ·  Lúmenes insuficientes"
 
-	var short_description: String = get_shop_preview_text(item_id, description)
-
-	info_label.text = "%s · %s\n%s" % [
-		item_name,
-		" · ".join(status_parts),
-		short_description
+	info_label.text = "%s\n%s" % [
+		first_line,
+		description
 	]
-	
-func get_shop_preview_text(item_id: String, fallback_description: String) -> String:
-	var previews := {
-		"ancient_books": "Notas viejas, secretos nuevos.",
-		"symbolic_art": "Una pieza que mira de vuelta.",
-		"weapons": "Poder envuelto como regalo.",
-		"flowers": "Sencillo, directo, difícil de odiar.",
-		"wine": "Honestidad líquida. Riesgosa.",
-		"special_tea": "Calidez para bajar defensas.",
-		"sweets": "Dulzura fácil de aceptar.",
-		"simple_jewels": "Discreto, íntimo, intencional.",
-		"clothes": "Elegir ropa también confiesa.",
-		"music_box": "Una melodía contra el silencio.",
-		"maps": "Rutas para quien sueña lejos.",
-		"mana_gems": "Energía arcana en bruto.",
-		"tech_prototypes": "Brillante, útil, probablemente peligroso.",
-		"trophies": "Orgullo convertido en objeto.",
-		"coins": "Práctico. Frío. Muy claro.",
-		"blank_diaries": "Páginas para lo que no se dice.",
-		"sacred_objects": "Fe, culpa o esperanza.",
-		"gadgets": "Pequeña rareza con propósito.",
-		"desserts": "Dulce evidente, intención segura.",
-		"narrative_secrets": "Información que puede cambiarlo todo."
-	}
-
-	if previews.has(item_id):
-		return str(previews[item_id])
-
-	var clean_text: String = fallback_description.strip_edges()
-
-	if clean_text.length() > 58:
-		return clean_text.substr(0, 55).strip_edges() + "..."
-
-	return clean_text
 	
 func buy_item(item_id: String) -> void:
 	var item: Dictionary = DataManager.get_item(item_id)
@@ -495,7 +456,7 @@ func layout_overlay_controls() -> void:
 
 	var margin: float = 10.0
 	var top_y: float = 10.0
-	var top_height: float = 58.0
+	var top_height: float = 72.0
 
 	var global_width: float = 430.0
 	if shop_layer.size.x < 760:

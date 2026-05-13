@@ -2,120 +2,140 @@
 	"ancient_books": {
 		"name": "Libros antiguos",
 		"description": "Volúmenes viejos con márgenes llenos de notas y secretos.",
+		"shop_preview": "Notas viejas, secretos nuevos.",
 		"type": "gift",
 		"price": 60
 	},
 	"symbolic_art": {
 		"name": "Arte simbólico",
 		"description": "Una pieza extraña que parece decir algo distinto según quién la mire.",
+		"shop_preview": "Una pieza que mira de vuelta.",
 		"type": "gift",
 		"price": 45
 	},
 	"weapons": {
 		"name": "Armas",
 		"description": "Herramientas de supervivencia, poder y promesas difíciles.",
+		"shop_preview": "Poder envuelto como regalo.",
 		"type": "gift",
 		"price": 55
 	},
 	"flowers": {
 		"name": "Flores",
 		"description": "Un gesto sencillo que puede ser inocente... o no tanto.",
+		"shop_preview": "Sencillo, directo, difícil de odiar.",
 		"type": "gift",
 		"price": 12
 	},
 	"wine": {
 		"name": "Vino",
 		"description": "Una botella intensa, perfecta para conversaciones peligrosamente honestas.",
+		"shop_preview": "Honestidad líquida. Riesgosa.",
 		"type": "gift",
 		"price": 30
 	},
 	"special_tea": {
 		"name": "Té especial",
 		"description": "Una infusión cálida, aromática y cuidadosamente preparada.",
+		"shop_preview": "Calidez para bajar defensas.",
 		"type": "gift",
 		"price": 25
 	},
 	"sweets": {
 		"name": "Dulces",
 		"description": "Pequeños placeres para suavizar días ásperos.",
+		"shop_preview": "Dulzura fácil de aceptar.",
 		"type": "gift",
 		"price": 15
 	},
 	"simple_jewels": {
 		"name": "Joyas simples",
 		"description": "Adornos discretos, más cercanos al detalle que al lujo.",
+		"shop_preview": "Discreto, íntimo, intencional.",
 		"type": "gift",
 		"price": 40
 	},
 	"clothes": {
 		"name": "Ropa",
 		"description": "Prendas elegidas con intención. A veces eso dice demasiado.",
+		"shop_preview": "Elegir ropa también confiesa.",
 		"type": "gift",
 		"price": 35
 	},
 	"music_box": {
 		"name": "Caja de música",
 		"description": "Una melodía pequeña capaz de llenar un silencio incómodo.",
+		"shop_preview": "Una melodía contra el silencio.",
 		"type": "gift",
 		"price": 42
 	},
 	"maps": {
 		"name": "Mapas",
 		"description": "Trazos de lugares conocidos, olvidados o imposibles.",
+		"shop_preview": "Rutas para quien sueña lejos.",
 		"type": "gift",
 		"price": 38
 	},
 	"mana_gems": {
 		"name": "Gemas de maná",
 		"description": "Cristales vibrantes que guardan energía arcana.",
+		"shop_preview": "Energía arcana en bruto.",
 		"type": "gift",
 		"price": 50
 	},
 	"tech_prototypes": {
 		"name": "Prototipos tecnológicos",
 		"description": "Artefactos inestables, brillantes y probablemente peligrosos.",
+		"shop_preview": "Brillante, útil, probablemente peligroso.",
 		"type": "gift",
 		"price": 58
 	},
 	"trophies": {
 		"name": "Trofeos",
 		"description": "Recuerdos de victorias, heridas y orgullo.",
+		"shop_preview": "Orgullo convertido en objeto.",
 		"type": "gift",
 		"price": 32
 	},
 	"coins": {
 		"name": "Dinero",
 		"description": "Práctico, frío y a veces ofensivamente honesto.",
+		"shop_preview": "Práctico. Frío. Muy claro.",
 		"type": "gift",
 		"price": 20
 	},
 	"blank_diaries": {
 		"name": "Diarios en blanco",
 		"description": "Páginas vacías para confesiones que aún no se atreven a existir.",
+		"shop_preview": "Páginas para lo que no se dice.",
 		"type": "gift",
 		"price": 28
 	},
 	"sacred_objects": {
 		"name": "Objetos sagrados",
 		"description": "Reliquias pequeñas cargadas de fe, culpa o esperanza.",
+		"shop_preview": "Fe, culpa o esperanza.",
 		"type": "gift",
 		"price": 48
 	},
 	"gadgets": {
 		"name": "Gadgets",
 		"description": "Pequeños mecanismos útiles, absurdos o brillantes.",
+		"shop_preview": "Pequeña rareza con propósito.",
 		"type": "gift",
 		"price": 36
 	},
 	"desserts": {
 		"name": "Postres",
 		"description": "Dulzura evidente, fácil de aceptar y difícil de malinterpretar.",
+		"shop_preview": "Dulce evidente, intención segura.",
 		"type": "gift",
 		"price": 18
 	},
 	"narrative_secrets": {
 		"name": "Secretos narrativos",
 		"description": "Información delicada. No debería regalarse... pero puede cambiarlo todo.",
+		"shop_preview": "Información que puede cambiarlo todo.",
 		"type": "gift",
 		"price": 75
 	}
