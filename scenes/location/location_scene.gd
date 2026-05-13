@@ -329,6 +329,48 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 
 	button.set_meta("name_label", name_label)
 
+func get_scaled_character_size() -> Vector2:
+	var scale_factor: float = min(
+		location_layer.size.x / BASE_LOCATION_SIZE.x,
+		location_layer.size.y / BASE_LOCATION_SIZE.y
+	)
+
+	scale_factor = clamp(scale_factor, 0.72, 1.0)
+
+	return CHARACTER_BASE_SIZE * scale_factor
+
+
+func get_bottom_panel_reserved_height() -> float:
+	if bottom_panel == null:
+		return 210.0
+
+	return max(bottom_panel.size.y + 28.0, 210.0)
+
+
+func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
+	return get_character_position(index, total, button_size)
+
+
+func get_character_position(index: int, total: int, button_size: Vector2) -> Vector2:
+	var reserved_bottom: float = get_bottom_panel_reserved_height()
+	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
+
+	var base_x: float = 32.0
+	var gap_x: float = 28.0
+
+	var x: float = base_x + (float(index) * (button_size.x + gap_x))
+	var y: float = max(
+		58.0,
+		available_height - button_size.y - 8.0
+	)
+
+	var max_x: float = max(32.0, location_layer.size.x - button_size.x - 32.0)
+
+	return Vector2(
+		clamp(x, 32.0, max_x),
+		y
+	)
+	
 func show_location_overview(location_data: Dictionary, clear_message: bool = false) -> void:
 	selected_npc_id = ""
 	clear_bottom_actions()
