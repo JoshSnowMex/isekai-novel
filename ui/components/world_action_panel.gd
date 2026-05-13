@@ -2,7 +2,7 @@ extends PanelContainer
 class_name WorldActionPanel
 
 
-var action_container: VBoxContainer
+var action_container: HBoxContainer
 
 
 func _init() -> void:
@@ -18,10 +18,11 @@ func build() -> void:
 	margin.add_theme_constant_override("margin_bottom", 8)
 	add_child(margin)
 
-	action_container = VBoxContainer.new()
+	action_container = HBoxContainer.new()
+	action_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	action_container.add_theme_constant_override("separation", 8)
 	action_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	action_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	action_container.add_theme_constant_override("separation", 6)
 	margin.add_child(action_container)
 
 

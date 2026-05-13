@@ -94,6 +94,10 @@ func build_action_panel() -> void:
 
 	action_panel.clear_actions()
 
+	action_panel.add_action("Mapa", func():
+		refresh_screen()
+	)
+	
 	action_panel.add_action("Bitácora", func():
 		SceneRouter.go_to_journal(SceneRouter.WORLD_MAP)
 	)
@@ -107,7 +111,7 @@ func build_action_panel() -> void:
 		)
 	)
 
-	action_panel.add_action("Menú", func():
+	action_panel.add_action("Cargar", func():
 		SceneRouter.go_to_main_menu()
 	)
 
@@ -137,18 +141,18 @@ func refresh_overlay_layout_after_frame() -> void:
 
 func layout_action_panel() -> void:
 	var margin: float = 10.0
-	var panel_size: Vector2 = action_panel.custom_minimum_size
+	var panel_size: Vector2 = Vector2(420.0, 46.0)
 
 	if map_layer.size.x < 900:
-		panel_size = Vector2(132, 108)
+		panel_size = Vector2(360.0, 46.0)
 
 	var x: float = max(margin, map_layer.size.x - panel_size.x - margin)
 	var y: float = margin
 
 	action_panel.position = Vector2(x, y)
 	action_panel.size = panel_size
-
-
+	action_panel.custom_minimum_size = panel_size
+	
 func refresh_screen() -> void:
 	hud_bar.refresh()
 	rebuild_locations()

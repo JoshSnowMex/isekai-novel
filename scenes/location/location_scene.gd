@@ -13,7 +13,13 @@ var bottom_description_label: Label
 var bottom_actions: HBoxContainer
 var global_action_panel: PanelContainer
 var global_action_buttons: HBoxContainer
-
+var modal_layer: ColorRect
+var modal_panel: PanelContainer
+var modal_title_label: Label
+var modal_description_label: Label
+var modal_scroll: ScrollContainer
+var modal_buttons: VBoxContainer
+var modal_footer: HBoxContainer
 var current_location_id: String = ""
 var last_message: String = ""
 var selected_npc_id: String = ""
@@ -80,7 +86,8 @@ func build_ui() -> void:
 
 	build_global_action_panel()
 	build_bottom_panel()
-
+	build_modal()
+	
 	call_deferred("refresh_layout_after_frame")
 
 
@@ -117,7 +124,7 @@ func build_global_action_panel() -> void:
 
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(760, 190)
+	bottom_panel.custom_minimum_size = Vector2(760, 230)
 	location_layer.add_child(bottom_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -344,7 +351,7 @@ func get_bottom_panel_reserved_height() -> float:
 	if bottom_panel == null:
 		return 210.0
 
-	return max(bottom_panel.size.y + 28.0, 210.0)
+	return max(bottom_panel.size.y + 34.0, 250.0)
 
 
 func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
@@ -779,34 +786,56 @@ func show_gift_selection(npc_id: String) -> void:
 
 	var relation: Dictionary = GameManager.player["relationships"][npc_id]
 	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var npc_name: String = str(npc.get("name", npc_id))
 
-	clear_bottom_actions()
-	bottom_title_label.text = "Regalo para %s" % npc.get("name", npc_id)
+	bottom_title_label.text = "Regalo para %s" % npc_name
 
 	if relation.get("gift_given_today", false):
 		bottom_description_label.text = "Ya le diste un regalo hoy."
-	else:
-		var gifts: Array = GameManager.get_gift_items_in_inventory()
+		return
 
-		if gifts.is_empty():
-			bottom_description_label.text = "No tienes regalos disponibles."
-		else:
-			bottom_description_label.text = "Elige con cuidado. Un regalo puede acercar... o alejar."
+	var gifts: Array = GameManager.get_gift_items_in_inventory()
 
-			for entry in gifts:
-				var item_entry: Dictionary = entry
-				var item_id: String = item_entry.get("item_id", "")
-				var amount: int = int(item_entry.get("amount", 0))
-				var item_data: Dictionary = DataManager.get_item(item_id)
+	if gifts.is_empty():
+		bottom_description_label.text = "No tienes regalos disponibles."
+		return
 
-				add_bottom_action("%s x%s" % [
-					item_data.get("name", item_id),
-					amount
-				], func(): give_gift(npc_id, item_id))
+	gifts.sort_custom(func(a, b):
+		var item_a: Dictionary = DataManager.get_item(str(a.get("item_id", "")))
+		var item_b: Dictionary = DataManager.get_item(str(b.get("item_id", "")))
 
-	add_bottom_action("Volver", func(): interact_npc(npc_id))
+		var price_a: int = int(item_a.get("price", item_a.get("cost", 0)))
+		var price_b: int = int(item_b.get("price", item_b.get("cost", 0)))
 
+		if price_a == price_b:
+			return str(item_a.get("name", a.get("item_id", ""))) < str(item_b.get("name", b.get("item_id", "")))
 
+		return price_a < price_b
+	)
+
+	bottom_description_label.text = "Elige con cuidado. Un regalo puede acercar... o alejar."
+
+	open_choice_modal(
+		"Regalo para %s" % npc_name,
+		"Selecciona un regalo de tu inventario. Los objetos están ordenados por precio para que coincidan mejor con la tienda."
+	)
+
+	for entry in gifts:
+		var item_entry: Dictionary = entry
+		var item_id: String = str(item_entry.get("item_id", ""))
+		var amount: int = int(item_entry.get("amount", 0))
+		var item_data: Dictionary = DataManager.get_item(item_id)
+
+		add_modal_choice_button(
+			"%s x%s" % [item_data.get("name", item_id), amount],
+			func(): give_gift(npc_id, item_id)
+		)
+
+	add_modal_footer_button("Volver", func():
+		close_choice_modal()
+		interact_npc(npc_id)
+	)
+	
 func show_petitions(npc_id: String) -> void:
 	clear_bottom_actions()
 
@@ -864,6 +893,7 @@ func show_date_location_selection(npc_id: String) -> void:
 
 
 func give_gift(npc_id: String, item_id: String) -> void:
+	close_choice_modal()
 	if not is_npc_present_here(npc_id):
 		handle_npc_no_longer_available(npc_id)
 		return
@@ -1281,8 +1311,31 @@ func get_location_scale() -> float:
 func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
 	layout_overlay_controls()
+	reposition_character_buttons()
 
+func reposition_character_buttons() -> void:
+	var character_buttons: Array = []
 
+	for child in character_layer.get_children():
+		if child.has_meta("npc_id"):
+			character_buttons.append(child)
+
+	var total: int = character_buttons.size()
+
+	for index in range(total):
+		var button: Button = character_buttons[index] as Button
+
+		if button == null:
+			continue
+
+		var npc_id: String = str(button.get_meta("npc_id"))
+		var button_size: Vector2 = get_scaled_character_size()
+		var button_position: Vector2 = get_stable_character_position(npc_id, index, total, button_size)
+
+		button.position = button_position
+		button.custom_minimum_size = button_size
+		button.size = button_size
+		
 func layout_overlay_controls() -> void:
 	if global_action_panel == null or bottom_panel == null or location_layer == null:
 		return
@@ -1311,7 +1364,18 @@ func layout_overlay_controls() -> void:
 		12.0,
 		max(12.0, location_layer.size.y - panel_height - 12.0)
 	)
+	
+	if modal_layer != null:
+		modal_layer.size = location_layer.size
 
+		var modal_width: float = clamp(location_layer.size.x * 0.72, 520.0, 860.0)
+		var modal_height: float = clamp(location_layer.size.y * 0.72, 360.0, 640.0)
+
+		modal_panel.size = Vector2(modal_width, modal_height)
+		modal_panel.position = Vector2(
+			(location_layer.size.x - modal_width) / 2.0,
+			(location_layer.size.y - modal_height) / 2.0
+		)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
@@ -1330,3 +1394,102 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func build_modal() -> void:
+	modal_layer = ColorRect.new()
+	modal_layer.color = Color(0, 0, 0, 0.55)
+	modal_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	modal_layer.visible = false
+	modal_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+	location_layer.add_child(modal_layer)
+
+	modal_panel = PanelContainer.new()
+	modal_panel.custom_minimum_size = Vector2(520, 360)
+	modal_layer.add_child(modal_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	modal_panel.add_child(margin)
+
+	var box: VBoxContainer = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 10)
+	margin.add_child(box)
+
+	modal_title_label = Label.new()
+	modal_title_label.custom_minimum_size = Vector2(1, 28)
+	modal_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	modal_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	modal_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	modal_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(modal_title_label)
+
+	modal_description_label = Label.new()
+	modal_description_label.custom_minimum_size = Vector2(1, 52)
+	modal_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	modal_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	modal_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	modal_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(modal_description_label)
+
+	modal_scroll = ScrollContainer.new()
+	modal_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	modal_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	modal_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	modal_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	box.add_child(modal_scroll)
+
+	modal_buttons = VBoxContainer.new()
+	modal_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	modal_buttons.add_theme_constant_override("separation", 8)
+	modal_scroll.add_child(modal_buttons)
+
+	modal_footer = HBoxContainer.new()
+	modal_footer.alignment = BoxContainer.ALIGNMENT_CENTER
+	modal_footer.add_theme_constant_override("separation", 10)
+	box.add_child(modal_footer)
+
+
+func open_choice_modal(title: String, description: String) -> void:
+	clear_children(modal_buttons)
+	clear_children(modal_footer)
+
+	modal_title_label.text = title
+	modal_description_label.text = description
+
+	modal_layer.visible = true
+	modal_layer.move_to_front()
+	call_deferred("refresh_layout_after_frame")
+
+
+func close_choice_modal() -> void:
+	if modal_layer != null:
+		modal_layer.visible = false
+
+
+func add_modal_choice_button(text: String, callback: Callable) -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_ALL
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.custom_minimum_size = Vector2(1, 48)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	button.pressed.connect(callback)
+
+	modal_buttons.add_child(button)
+	return button
+
+
+func add_modal_footer_button(text: String, callback: Callable) -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(180, 42)
+	button.pressed.connect(callback)
+
+	modal_footer.add_child(button)
+	return button
