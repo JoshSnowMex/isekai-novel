@@ -1258,29 +1258,6 @@ func get_npc_display_name(npc_id: String) -> String:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	return str(npc.get("name", npc_id))
 
-
-func get_scaled_character_size() -> Vector2:
-	var scale_value: float = get_location_scale()
-	var size_value: Vector2 = CHARACTER_BASE_SIZE * scale_value
-
-	var min_width: float = 82.0
-	var min_height: float = 132.0
-
-	if location_layer.size.x >= 900:
-		min_width = 116.0
-		min_height = 184.0
-	elif location_layer.size.x >= 700:
-		min_width = 98.0
-		min_height = 158.0
-
-	return Vector2(
-		max(size_value.x, min_width),
-		max(size_value.y, min_height)
-	)
-
-func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
-	return get_character_position(index, total, button_size)
-
 func clamp_character_position(position_value: Vector2, character_size: Vector2) -> Vector2:
 	var margin: float = 8.0
 	var max_x: float = max(margin, location_layer.size.x - character_size.x - margin)
@@ -1290,33 +1267,6 @@ func clamp_character_position(position_value: Vector2, character_size: Vector2) 
 		clamp(position_value.x, margin, max_x),
 		clamp(position_value.y, margin, max_y)
 	)
-	
-func get_character_position(index: int, total: int, button_size: Vector2) -> Vector2:
-	var reserved_bottom: float = get_bottom_panel_reserved_height()
-	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
-
-	var base_x: float = 32.0
-	var gap_x: float = 28.0
-
-	var x: float = base_x + (float(index) * (button_size.x + gap_x))
-	var y: float = max(
-		58.0,
-		available_height - button_size.y - 8.0
-	)
-
-	var max_x: float = max(32.0, location_layer.size.x - button_size.x - 32.0)
-
-	return Vector2(
-		clamp(x, 32.0, max_x),
-		y
-	)
-
-func get_bottom_panel_reserved_height() -> float:
-	if location_layer.size.x < 760:
-		return 220.0
-
-	return 204.0
-
 
 func get_location_scale() -> float:
 	var safe_width: float = max(location_layer.size.x, 1.0)
