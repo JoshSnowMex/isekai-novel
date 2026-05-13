@@ -229,7 +229,7 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(260, 260)
+	card.custom_minimum_size = Vector2(220, 300)
 	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	card.text = build_appearance_card_text(title, locked_appearance_id, description)
 
@@ -275,7 +275,7 @@ func show_class_selection() -> void:
 	bottom_text_label.text = "Selecciona un camino. Cada uno favorece ciertos vínculos y complica otros."
 
 	clear_card_area()
-	card_grid = create_grid(3)
+	card_grid = create_grid(6)
 	card_area.add_child(card_grid)
 
 	for class_id in DataManager.player_classes.keys():
@@ -307,7 +307,7 @@ func add_class_card(parent: Node, class_id: String) -> void:
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(260, 170)
+	card.custom_minimum_size = Vector2(150, 300)
 	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	card.text = build_class_card_text(class_id, class_data)
 
@@ -325,35 +325,19 @@ func add_class_card(parent: Node, class_id: String) -> void:
 
 	parent.add_child(card)
 
-
 func build_class_card_text(class_id: String, class_data: Dictionary) -> String:
 	var marker: String = ""
 
 	if selected_class_id == class_id:
 		marker = "✓ "
 
-	var strengths: Array = class_data.get("strengths", [])
-	var weaknesses: Array = class_data.get("weaknesses", [])
-
-	var strength_text: String = "Ventaja: flexible"
-	var weakness_text: String = "Riesgo: sin extremos"
-
-	if not strengths.is_empty():
-		strength_text = "Ventaja: %s" % str(strengths[0])
-
-	if not weaknesses.is_empty():
-		weakness_text = "Riesgo: %s" % str(weaknesses[0])
-
-	return "%s%s\n%s\n\n%s\n%s\n\n%s" % [
+	return "%s%s\n\n%s\n\n%s" % [
 		marker,
 		class_data.get("name", class_id),
 		get_class_asset_name(class_id),
-		strength_text,
-		weakness_text,
 		class_data.get("element", "")
 	]
-
-
+	
 func build_class_hover_summary(class_data: Dictionary) -> String:
 	return "%s\n%s" % [
 		class_data.get("description", ""),
@@ -517,16 +501,7 @@ func layout_overlay_controls() -> void:
 	var margin: float = 10.0
 	var top_height: float = 46.0
 	var panel_width: float = min(1040.0, max(640.0, size.x - (margin * 2.0)))
-	var bottom_height: float = 138.0
-
-	if current_step == IntroStep.PROLOGUE:
-		bottom_height = 148.0
-	elif current_step == IntroStep.APPEARANCE:
-		bottom_height = 128.0
-	elif current_step == IntroStep.CLASS:
-		bottom_height = 148.0
-	elif current_step == IntroStep.CONFIRM:
-		bottom_height = 128.0
+	var bottom_height: float = 148.0
 
 	top_panel.size = Vector2(panel_width, top_height)
 	top_panel.position = Vector2(
@@ -557,11 +532,11 @@ func layout_overlay_controls() -> void:
 		var grid_height: float = card_area.size.y
 
 		if current_step == IntroStep.APPEARANCE:
-			grid_width = min(panel_width, 900.0)
-			grid_height = min(card_area.size.y, 300.0)
+			grid_width = min(panel_width, 760.0)
+			grid_height = min(card_area.size.y, 340.0)
 		elif current_step == IntroStep.CLASS:
-			grid_width = min(panel_width, 960.0)
-			grid_height = min(card_area.size.y, 380.0)
+			grid_width = min(panel_width, 1040.0)
+			grid_height = min(card_area.size.y, 340.0)
 
 		card_grid.size = Vector2(grid_width, grid_height)
 		card_grid.position = Vector2(
