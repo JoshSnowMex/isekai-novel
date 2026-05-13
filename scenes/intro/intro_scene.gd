@@ -14,16 +14,15 @@ var background_layer: Control
 var top_panel: PanelContainer
 var top_label: Label
 
-var narrative_panel: PanelContainer
-var narrative_label: Label
+var hero_panel: PanelContainer
+var hero_holder: Control
+var hero_caption_label: Label
 
-var content_panel: PanelContainer
-var content_title_label: Label
-var content_subtitle_label: Label
-var content_container: VBoxContainer
-
-var footer_panel: PanelContainer
-var footer_buttons: HBoxContainer
+var bottom_panel: PanelContainer
+var bottom_title_label: Label
+var bottom_text_label: Label
+var bottom_content: VBoxContainer
+var bottom_buttons: HBoxContainer
 
 var selected_class_id: String = ""
 var selected_appearance_id: String = "man"
@@ -56,9 +55,8 @@ func build_ui() -> void:
 
 	build_background()
 	build_top_panel()
-	build_narrative_panel()
-	build_content_panel()
-	build_footer_panel()
+	build_hero_panel()
+	build_bottom_panel()
 
 
 func build_background() -> void:
@@ -99,38 +97,17 @@ func build_top_panel() -> void:
 	margin.add_child(top_label)
 
 
-func build_narrative_panel() -> void:
-	narrative_panel = PanelContainer.new()
-	narrative_panel.custom_minimum_size = Vector2(760, 160)
-	add_child(narrative_panel)
+func build_hero_panel() -> void:
+	hero_panel = PanelContainer.new()
+	hero_panel.custom_minimum_size = Vector2(520, 280)
+	add_child(hero_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 20)
-	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_right", 20)
-	margin.add_theme_constant_override("margin_bottom", 16)
-	narrative_panel.add_child(margin)
-
-	narrative_label = Label.new()
-	narrative_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	narrative_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	narrative_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	narrative_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	narrative_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	margin.add_child(narrative_label)
-
-
-func build_content_panel() -> void:
-	content_panel = PanelContainer.new()
-	content_panel.custom_minimum_size = Vector2(900, 360)
-	add_child(content_panel)
-
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_bottom", 14)
-	content_panel.add_child(margin)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	hero_panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -138,57 +115,83 @@ func build_content_panel() -> void:
 	box.add_theme_constant_override("separation", 8)
 	margin.add_child(box)
 
-	content_title_label = Label.new()
-	content_title_label.custom_minimum_size = Vector2(1, 30)
-	content_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	content_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	content_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(content_title_label)
+	hero_holder = Control.new()
+	hero_holder.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hero_holder.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_child(hero_holder)
 
-	content_subtitle_label = Label.new()
-	content_subtitle_label.custom_minimum_size = Vector2(1, 42)
-	content_subtitle_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content_subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	content_subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	content_subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(content_subtitle_label)
-
-	content_container = VBoxContainer.new()
-	content_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content_container.add_theme_constant_override("separation", 10)
-	box.add_child(content_container)
+	hero_caption_label = Label.new()
+	hero_caption_label.custom_minimum_size = Vector2(1, 42)
+	hero_caption_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hero_caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hero_caption_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hero_caption_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(hero_caption_label)
 
 
-func build_footer_panel() -> void:
-	footer_panel = PanelContainer.new()
-	footer_panel.custom_minimum_size = Vector2(520, 58)
-	add_child(footer_panel)
+func build_bottom_panel() -> void:
+	bottom_panel = PanelContainer.new()
+	bottom_panel.custom_minimum_size = Vector2(920, 250)
+	add_child(bottom_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_bottom", 8)
-	footer_panel.add_child(margin)
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	bottom_panel.add_child(margin)
 
-	footer_buttons = HBoxContainer.new()
-	footer_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	footer_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	footer_buttons.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	footer_buttons.add_theme_constant_override("separation", 10)
-	margin.add_child(footer_buttons)
+	var box: VBoxContainer = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 8)
+	margin.add_child(box)
+
+	bottom_title_label = Label.new()
+	bottom_title_label.custom_minimum_size = Vector2(1, 28)
+	bottom_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	bottom_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	bottom_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(bottom_title_label)
+
+	bottom_text_label = Label.new()
+	bottom_text_label.custom_minimum_size = Vector2(1, 54)
+	bottom_text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	bottom_text_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	bottom_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(bottom_text_label)
+
+	bottom_content = VBoxContainer.new()
+	bottom_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	bottom_content.add_theme_constant_override("separation", 8)
+	box.add_child(bottom_content)
+
+	bottom_buttons = HBoxContainer.new()
+	bottom_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	bottom_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bottom_buttons.custom_minimum_size = Vector2(1, 44)
+	bottom_buttons.add_theme_constant_override("separation", 10)
+	box.add_child(bottom_buttons)
 
 
 func show_prologue() -> void:
 	current_step = IntroStep.PROLOGUE
-	content_panel.visible = false
 
 	top_label.text = "Nuevo juego · Prólogo"
-	narrative_label.text = str(prologue_pages[prologue_index])
+	bottom_title_label.text = "El umbral"
+	bottom_text_label.text = str(prologue_pages[prologue_index])
 
-	clear_children(footer_buttons)
+	clear_children(bottom_content)
+	clear_children(bottom_buttons)
+
+	set_hero_placeholder(
+		"res://assets/backgrounds/intro_veil_crossing.png",
+		"El umbral",
+		"Arte de prólogo: intro_veil_crossing.png"
+	)
 
 	if prologue_index > 0:
 		add_footer_button("Anterior", func():
@@ -215,25 +218,28 @@ func show_prologue() -> void:
 
 func show_appearance_selection() -> void:
 	current_step = IntroStep.APPEARANCE
-	content_panel.visible = true
 
 	top_label.text = "Nuevo juego · Apariencia"
-	narrative_label.text = "El Velo no solo arrastra almas: también les da forma.\n\nElige cómo aparece el Forastero al cruzar hacia Luminaria."
+	bottom_title_label.text = "Elige tu forma"
+	bottom_text_label.text = "El Velo te da una presencia. Luminaria reaccionará a ella antes de conocerte de verdad."
 
-	content_title_label.text = "Apariencia del Forastero"
-	content_subtitle_label.text = "Esta elección prepara retratos y presencia visual. La historia seguirá dependiendo de tus decisiones."
+	clear_children(bottom_content)
+	clear_children(bottom_buttons)
 
-	clear_children(content_container)
-	clear_children(footer_buttons)
+	set_hero_placeholder(
+		get_appearance_asset_path(selected_appearance_id),
+		get_appearance_label(selected_appearance_id),
+		"Arte de apariencia: %s" % get_appearance_asset_name(selected_appearance_id)
+	)
 
 	var grid: GridContainer = create_grid(3)
-	content_container.add_child(grid)
+	bottom_content.add_child(grid)
 
-	add_appearance_card(grid, "Forastero", "man", "Rostro masculino", "outsider_man.png")
-	add_appearance_card(grid, "Forastera", "woman", "Rostro femenino", "outsider_woman.png")
-	add_appearance_card(grid, "Forma velada", "veiled", "Presencia ambigua del Velo", "outsider_veiled.png")
+	add_appearance_card(grid, "Forastero", "man", "Rostro masculino")
+	add_appearance_card(grid, "Forastera", "woman", "Rostro femenino")
+	add_appearance_card(grid, "Forma velada", "veiled", "Presencia tocada por el Velo")
 
-	add_footer_button("Volver al prólogo", func():
+	add_footer_button("Volver", func():
 		prologue_index = prologue_pages.size() - 1
 		show_prologue()
 	)
@@ -241,28 +247,36 @@ func show_appearance_selection() -> void:
 	call_deferred("refresh_layout_after_frame")
 
 
-func add_appearance_card(parent: Node, title: String, appearance_id: String, description: String, asset_name: String) -> void:
+func add_appearance_card(parent: Node, title: String, appearance_id: String, description: String) -> void:
 	var locked_appearance_id: String = appearance_id
 
 	var button: Button = Button.new()
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(240, 150)
+	button.custom_minimum_size = Vector2(220, 82)
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	button.text = "%s\n\n%s\n\nArte final: %s" % [
-		title,
-		description,
-		asset_name
-	]
+	button.text = "%s\n%s" % [title, description]
+
+	button.mouse_entered.connect(func():
+		selected_appearance_id = locked_appearance_id
+		set_hero_placeholder(
+			get_appearance_asset_path(locked_appearance_id),
+			get_appearance_label(locked_appearance_id),
+			"Arte de apariencia: %s" % get_appearance_asset_name(locked_appearance_id)
+		)
+	)
+	button.focus_entered.connect(func():
+		selected_appearance_id = locked_appearance_id
+		set_hero_placeholder(
+			get_appearance_asset_path(locked_appearance_id),
+			get_appearance_label(locked_appearance_id),
+			"Arte de apariencia: %s" % get_appearance_asset_name(locked_appearance_id)
+		)
+	)
+
 	button.pressed.connect(func():
 		selected_appearance_id = locked_appearance_id
 		show_class_selection()
-	)
-	button.mouse_entered.connect(func():
-		narrative_label.text = "El Velo adopta esta presencia para que Luminaria pueda mirarte… aunque todavía no sepa entenderte."
-	)
-	button.focus_entered.connect(func():
-		narrative_label.text = "El Velo adopta esta presencia para que Luminaria pueda mirarte… aunque todavía no sepa entenderte."
 	)
 
 	parent.add_child(button)
@@ -270,19 +284,25 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 
 func show_class_selection() -> void:
 	current_step = IntroStep.CLASS
-	content_panel.visible = true
 
 	top_label.text = "Nuevo juego · Camino del Forastero"
-	narrative_label.text = "La apariencia abre la puerta.\n\nEl camino decide qué tipo de presión llevarás dentro cuando el mundo empiece a pedirte respuestas."
+	bottom_title_label.text = "Elige tu camino"
+	bottom_text_label.text = "Cada camino favorece ciertos vínculos y complica otros. Elige una tendencia, no una hoja de números."
 
-	content_title_label.text = "Elige tu camino"
-	content_subtitle_label.text = "Cada camino favorece ciertas rutas y complica otras. No son números: son tendencias narrativas."
+	clear_children(bottom_content)
+	clear_children(bottom_buttons)
 
-	clear_children(content_container)
-	clear_children(footer_buttons)
+	if selected_class_id == "":
+		selected_class_id = "balanced_outsider"
+
+	set_hero_placeholder(
+		get_class_asset_path(selected_class_id),
+		DataManager.get_player_class(selected_class_id).get("name", selected_class_id),
+		get_class_asset_caption(selected_class_id)
+	)
 
 	var grid: GridContainer = create_grid(3)
-	content_container.add_child(grid)
+	bottom_content.add_child(grid)
 
 	for class_id in DataManager.player_classes.keys():
 		add_class_card(grid, str(class_id))
@@ -301,20 +321,27 @@ func add_class_card(parent: Node, class_id: String) -> void:
 	var button: Button = Button.new()
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(250, 150)
+	button.custom_minimum_size = Vector2(230, 92)
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	button.text = build_class_front_text(class_id, class_data)
+	button.text = build_class_card_text(class_id, class_data)
 
 	button.mouse_entered.connect(func():
-		button.text = build_class_back_text(class_data)
-		show_class_hover_text(class_id)
+		selected_class_id = locked_class_id
+		set_hero_placeholder(
+			get_class_asset_path(locked_class_id),
+			class_data.get("name", locked_class_id),
+			get_class_asset_caption(locked_class_id)
+		)
+		bottom_text_label.text = build_class_hover_summary(class_data)
 	)
 	button.focus_entered.connect(func():
-		button.text = build_class_back_text(class_data)
-		show_class_hover_text(class_id)
-	)
-	button.mouse_exited.connect(func():
-		button.text = build_class_front_text(class_id, class_data)
+		selected_class_id = locked_class_id
+		set_hero_placeholder(
+			get_class_asset_path(locked_class_id),
+			class_data.get("name", locked_class_id),
+			get_class_asset_caption(locked_class_id)
+		)
+		bottom_text_label.text = build_class_hover_summary(class_data)
 	)
 
 	button.pressed.connect(func():
@@ -325,20 +352,12 @@ func add_class_card(parent: Node, class_id: String) -> void:
 	parent.add_child(button)
 
 
-func build_class_front_text(class_id: String, class_data: Dictionary) -> String:
-	return "%s\n%s\n\n%s" % [
-		class_data.get("name", class_id),
-		class_data.get("element", ""),
-		get_class_asset_hint(class_id)
-	]
-
-
-func build_class_back_text(class_data: Dictionary) -> String:
+func build_class_card_text(class_id: String, class_data: Dictionary) -> String:
 	var strengths: Array = class_data.get("strengths", [])
 	var weaknesses: Array = class_data.get("weaknesses", [])
 
-	var strength_text: String = "Ventaja: define mejor sus vínculos."
-	var weakness_text: String = "Riesgo: carga una tensión propia."
+	var strength_text: String = "Ventaja: flexible"
+	var weakness_text: String = "Riesgo: sin extremos"
 
 	if not strengths.is_empty():
 		strength_text = "Ventaja: %s" % str(strengths[0])
@@ -346,89 +365,43 @@ func build_class_back_text(class_data: Dictionary) -> String:
 	if not weaknesses.is_empty():
 		weakness_text = "Riesgo: %s" % str(weaknesses[0])
 
-	return "%s\n\n%s\n\n%s" % [
-		class_data.get("name", ""),
+	return "%s\n%s\n%s" % [
+		class_data.get("name", class_id),
 		strength_text,
 		weakness_text
 	]
 
 
-func show_class_hover_text(class_id: String) -> void:
-	var class_data: Dictionary = DataManager.get_player_class(class_id)
-
-	narrative_label.text = "%s\n\n%s" % [
+func build_class_hover_summary(class_data: Dictionary) -> String:
+	return "%s\n%s" % [
 		class_data.get("description", ""),
 		class_data.get("narrative_style", "")
-	]
-
-
-func get_class_asset_hint(class_id: String) -> String:
-	var appearance_asset_id: String = selected_appearance_id
-
-	if appearance_asset_id == "veiled":
-		appearance_asset_id = "veiled"
-	elif appearance_asset_id == "woman":
-		appearance_asset_id = "female"
-	else:
-		appearance_asset_id = "male"
-
-	var normalized_class_id: String = class_id
-	normalized_class_id = normalized_class_id.replace("_outsider", "")
-	normalized_class_id = normalized_class_id.replace("sensitive", "sensitive")
-	normalized_class_id = normalized_class_id.replace("bold", "bold")
-	normalized_class_id = normalized_class_id.replace("scholar", "scholar")
-	normalized_class_id = normalized_class_id.replace("charming", "charming")
-	normalized_class_id = normalized_class_id.replace("steadfast", "steadfast")
-	normalized_class_id = normalized_class_id.replace("balanced", "balanced")
-
-	return "Arte final:\noutsider_%s_%s.png" % [
-		appearance_asset_id,
-		normalized_class_id
 	]
 
 
 func show_confirm_selection() -> void:
 	current_step = IntroStep.CONFIRM
-	content_panel.visible = true
 
 	var class_data: Dictionary = DataManager.get_player_class(selected_class_id)
 	var appearance_label: String = get_appearance_label(selected_appearance_id)
 
 	top_label.text = "Nuevo juego · Confirmar Forastero"
-	narrative_label.text = "El Velo se aquieta.\n\nEsta será la forma que Luminaria verá al abrir los ojos."
-
-	content_title_label.text = "Confirmar inicio"
-	content_subtitle_label.text = "Revisa tu elección antes de comenzar la partida."
-
-	clear_children(content_container)
-	clear_children(footer_buttons)
-
-	var summary_panel: PanelContainer = PanelContainer.new()
-	summary_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	summary_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content_container.add_child(summary_panel)
-
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 18)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_right", 18)
-	margin.add_theme_constant_override("margin_bottom", 14)
-	summary_panel.add_child(margin)
-
-	var label: Label = Label.new()
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	label.text = "%s\n\nApariencia: %s\nCamino: %s\nElemento: %s\n\n%s\n\n%s" % [
-		get_class_asset_hint(selected_class_id),
+	bottom_title_label.text = "Confirmar inicio"
+	bottom_text_label.text = "Apariencia: %s · Camino: %s · Elemento: %s\n%s" % [
 		appearance_label,
 		class_data.get("name", selected_class_id),
 		class_data.get("element", ""),
-		class_data.get("description", ""),
 		class_data.get("narrative_style", "")
 	]
-	margin.add_child(label)
+
+	clear_children(bottom_content)
+	clear_children(bottom_buttons)
+
+	set_hero_placeholder(
+		get_class_asset_path(selected_class_id),
+		class_data.get("name", selected_class_id),
+		get_class_asset_caption(selected_class_id)
+	)
 
 	add_footer_button("Comenzar historia", func():
 		start_game()
@@ -445,6 +418,25 @@ func show_confirm_selection() -> void:
 	call_deferred("refresh_layout_after_frame")
 
 
+func set_hero_placeholder(path: String, title: String, caption: String) -> void:
+	clear_children(hero_holder)
+
+	var visual: Control = VisualAsset.make_texture_or_placeholder(
+		path,
+		title,
+		caption
+	)
+
+	visual.set_anchors_preset(Control.PRESET_FULL_RECT)
+	visual.offset_left = 0
+	visual.offset_top = 0
+	visual.offset_right = 0
+	visual.offset_bottom = 0
+	hero_holder.add_child(visual)
+
+	hero_caption_label.text = caption
+
+
 func get_appearance_label(appearance_id: String) -> String:
 	match appearance_id:
 		"man":
@@ -455,6 +447,48 @@ func get_appearance_label(appearance_id: String) -> String:
 			return "Forma velada"
 		_:
 			return "Forastero"
+
+
+func get_appearance_asset_name(appearance_id: String) -> String:
+	match appearance_id:
+		"man":
+			return "outsider_male_base.png"
+		"woman":
+			return "outsider_female_base.png"
+		"veiled":
+			return "outsider_veiled_base.png"
+		_:
+			return "outsider_male_base.png"
+
+
+func get_appearance_asset_path(appearance_id: String) -> String:
+	return "res://assets/player/%s" % get_appearance_asset_name(appearance_id)
+
+
+func get_class_asset_path(class_id: String) -> String:
+	return "res://assets/player/%s" % get_class_asset_name(class_id)
+
+
+func get_class_asset_name(class_id: String) -> String:
+	var appearance_asset_id: String = selected_appearance_id
+
+	if appearance_asset_id == "woman":
+		appearance_asset_id = "female"
+	elif appearance_asset_id == "veiled":
+		appearance_asset_id = "veiled"
+	else:
+		appearance_asset_id = "male"
+
+	var normalized_class_id: String = class_id.replace("_outsider", "")
+
+	return "outsider_%s_%s.png" % [
+		appearance_asset_id,
+		normalized_class_id
+	]
+
+
+func get_class_asset_caption(class_id: String) -> String:
+	return "Arte final: %s" % get_class_asset_name(class_id)
 
 
 func start_game() -> void:
@@ -482,9 +516,9 @@ func add_footer_button(text: String, callback: Callable) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(180, 42)
+	button.custom_minimum_size = Vector2(180, 40)
 	button.pressed.connect(callback)
-	footer_buttons.add_child(button)
+	bottom_buttons.add_child(button)
 	return button
 
 
@@ -501,8 +535,14 @@ func refresh_layout_after_frame() -> void:
 func layout_overlay_controls() -> void:
 	var margin: float = 10.0
 	var top_height: float = 46.0
-	var footer_height: float = 58.0
-	var gap: float = 10.0
+	var bottom_height: float = 286.0
+
+	if current_step == IntroStep.PROLOGUE:
+		bottom_height = 240.0
+	elif current_step == IntroStep.CLASS:
+		bottom_height = 318.0
+	elif current_step == IntroStep.CONFIRM:
+		bottom_height = 220.0
 
 	top_panel.size = Vector2(
 		min(920.0, max(520.0, size.x - (margin * 2.0))),
@@ -513,42 +553,27 @@ func layout_overlay_controls() -> void:
 		margin
 	)
 
-	footer_panel.size = Vector2(
-		min(820.0, max(520.0, size.x * 0.72)),
-		footer_height
+	bottom_panel.size = Vector2(
+		min(1040.0, max(640.0, size.x - (margin * 2.0))),
+		bottom_height
 	)
-	footer_panel.position = Vector2(
-		(size.x - footer_panel.size.x) / 2.0,
-		max(margin, size.y - footer_height - margin)
-	)
-
-	var narrative_height: float = 170.0
-
-	if current_step == IntroStep.PROLOGUE:
-		narrative_height = min(320.0, max(220.0, size.y * 0.38))
-
-	narrative_panel.size = Vector2(
-		min(920.0, max(520.0, size.x - (margin * 2.0))),
-		narrative_height
-	)
-	narrative_panel.position = Vector2(
-		(size.x - narrative_panel.size.x) / 2.0,
-		top_panel.position.y + top_height + gap
+	bottom_panel.position = Vector2(
+		(size.x - bottom_panel.size.x) / 2.0,
+		max(margin, size.y - bottom_height - margin)
 	)
 
-	if content_panel.visible:
-		var content_top: float = narrative_panel.position.y + narrative_panel.size.y + gap
-		var content_bottom: float = footer_panel.position.y - gap
-		var content_height: float = max(260.0, content_bottom - content_top)
+	var hero_top: float = top_panel.position.y + top_height + margin
+	var hero_bottom: float = bottom_panel.position.y - margin
+	var hero_height: float = max(180.0, hero_bottom - hero_top)
 
-		content_panel.size = Vector2(
-			min(980.0, max(620.0, size.x - (margin * 2.0))),
-			content_height
-		)
-		content_panel.position = Vector2(
-			(size.x - content_panel.size.x) / 2.0,
-			content_top
-		)
+	hero_panel.size = Vector2(
+		min(620.0, max(420.0, size.x * 0.48)),
+		hero_height
+	)
+	hero_panel.position = Vector2(
+		(size.x - hero_panel.size.x) / 2.0,
+		hero_top
+	)
 
 
 func _notification(what: int) -> void:
