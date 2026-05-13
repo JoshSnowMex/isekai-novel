@@ -13,10 +13,6 @@ var top_info_label: Label
 var global_action_panel: PanelContainer
 var global_action_buttons: HBoxContainer
 
-var context_panel: PanelContainer
-var context_title_label: Label
-var context_description_label: Label
-
 var npc_panel: PanelContainer
 var npc_name_label: Label
 var npc_portrait_holder: Control
@@ -96,7 +92,6 @@ func build_ui() -> void:
 	build_background()
 	build_top_info_panel()
 	build_global_action_panel()
-	build_context_panel()
 	build_npc_panel()
 	build_narrative_panel()
 	build_action_panel()
@@ -166,42 +161,6 @@ func build_global_action_panel() -> void:
 	)
 
 	add_global_action("Cargar", func(): SceneRouter.go_to_main_menu())
-
-
-func build_context_panel() -> void:
-	context_panel = PanelContainer.new()
-	context_panel.custom_minimum_size = Vector2(360, 72)
-	date_layer.add_child(context_panel)
-
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 8)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 8)
-	context_panel.add_child(margin)
-
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 4)
-	margin.add_child(box)
-
-	context_title_label = Label.new()
-	context_title_label.custom_minimum_size = Vector2(1, 24)
-	context_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	context_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	context_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	context_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(context_title_label)
-
-	context_description_label = Label.new()
-	context_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	context_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	context_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	context_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	context_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(context_description_label)
-
 
 func build_npc_panel() -> void:
 	npc_panel = PanelContainer.new()
@@ -425,9 +384,6 @@ func refresh_normal_header() -> void:
 		threshold
 	]
 
-	context_title_label.text = str(date_location.get("name", date_location_id))
-	context_description_label.text = build_date_scene_summary(date_location)
-
 	npc_status_label.text = build_npc_status_text(npc_id)
 
 
@@ -438,8 +394,6 @@ func refresh_special_header() -> void:
 	var step: Dictionary = DataManager.get_relationship_step(step_id)
 
 	top_info_label.text = "Cita especial con %s" % npc.get("name", npc_id)
-	context_title_label.text = str(step.get("name", "Avance de relación"))
-	context_description_label.text = str(step.get("description", "Una conversación importante."))
 	npc_status_label.text = "Progreso especial: %s/%s\nErrores: %s" % [
 		current_date.get("progress", 0),
 		current_date.get("questions_required", 0),
@@ -519,10 +473,10 @@ func build_actions() -> void:
 	)
 
 	add_action_button(
-		"Gesto",
+		"Movimiento",
 		func(): show_move_selection(),
 		not DateSystem.can_move(current_date),
-		"Elige un movimiento más intencional. Algunos gestos dependen del ambiente y del vínculo."
+		"Es tu momento de coqueteo físico. Algunos movimientos dependen del ambiente y del vínculo."
 	)
 
 	add_action_button(
@@ -581,13 +535,9 @@ func add_action_button(text: String, callback: Callable, disabled: bool = false,
 
 
 func show_hint(text: String) -> void:
-	if current_mode == "special":
-		context_description_label.text = text
-		return
-
-	var date_location_id: String = current_date.get("date_location_id", "")
-	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
-	context_description_label.text = text + "\n\n" + build_date_scene_summary(date_location)
+	# No cambiamos narrativa, pregunta ni modal al pasar el mouse.
+	# La UI de cita debe proteger el texto importante del jugador.
+	pass
 
 
 func clear_children(node: Node) -> void:
@@ -784,7 +734,7 @@ func give_date_gift(item_id: String) -> void:
 func show_move_selection() -> void:
 	var move_ids: Array = DateSystem.get_available_moves(current_date)
 
-	current_narrative = "Elige un gesto. No todos los movimientos son buena idea solo porque puedas intentarlos."
+	current_narrative = "Ésta frente a ti... ¿Qué harás?"
 	refresh_date_view()
 
 	if move_ids.is_empty():
@@ -792,14 +742,14 @@ func show_move_selection() -> void:
 		refresh_date_view()
 		return
 
-	open_choice_modal("Elegir gesto", current_narrative)
+	open_choice_modal("Elegir movimiento", current_narrative)
 
 	for move_id in move_ids:
 		add_move_option_button(str(move_id))
 
 	add_modal_footer_button("Volver", func():
 		close_choice_modal()
-		current_narrative = "Dejas pasar el gesto por ahora."
+		current_narrative = "Dejas pasar la oportunidad"
 		refresh_date_view()
 		build_actions()
 	)
@@ -903,19 +853,6 @@ func show_date_message(title: String, message: String) -> void:
 	current_narrative = "%s\n\n%s" % [title, message]
 	refresh_date_view()
 
-
-func show_final_summary(summary_text: String) -> void:
-	current_narrative = summary_text
-	refresh_date_view()
-	clear_children(action_buttons)
-
-	open_choice_modal("Resumen de la cita", summary_text)
-	add_modal_footer_button("Continuar", func():
-		close_choice_modal()
-		SceneRouter.go_to_current_location_scene()
-	)
-
-
 func build_question(npc_id: String) -> Dictionary:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	var info_data: Dictionary = npc.get("info", {})
@@ -959,21 +896,20 @@ func build_question(npc_id: String) -> Dictionary:
 		"options": options
 	}
 
-
 func open_choice_modal(title: String, description: String) -> void:
 	clear_children(modal_buttons)
 	clear_children(modal_footer)
+
 	modal_title_label.text = title
 	modal_description_label.text = description
+
 	modal_layer.visible = true
 	modal_layer.move_to_front()
 	call_deferred("refresh_layout_after_frame")
 
-
 func close_choice_modal() -> void:
 	if modal_layer != null:
 		modal_layer.visible = false
-
 
 func add_modal_choice_button(text: String, callback: Callable, hint: String = "") -> Button:
 	var button: Button = Button.new()
@@ -984,13 +920,13 @@ func add_modal_choice_button(text: String, callback: Callable, hint: String = ""
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	button.pressed.connect(callback)
 
-	if hint != "":
-		button.mouse_entered.connect(func(): modal_description_label.text = hint)
-		button.focus_entered.connect(func(): modal_description_label.text = hint)
+	# Importante:
+	# No cambiar modal_description_label en hover.
+	# Ese texto puede contener la pregunta completa o el resumen final.
+	# Robarlo deja al jugador sin contexto.
 
 	modal_buttons.add_child(button)
 	return button
-
 
 func add_modal_footer_button(text: String, callback: Callable) -> Button:
 	var button: Button = Button.new()
@@ -1001,7 +937,6 @@ func add_modal_footer_button(text: String, callback: Callable) -> Button:
 	modal_footer.add_child(button)
 	return button
 
-
 func layout_overlay_controls() -> void:
 	if date_layer == null:
 		return
@@ -1010,7 +945,6 @@ func layout_overlay_controls() -> void:
 	var top_y: float = 10.0
 	var top_height: float = 46.0
 	var action_height: float = 78.0
-	var context_height: float = 86.0
 	var gap: float = 10.0
 
 	var global_width: float = 330.0
@@ -1030,24 +964,21 @@ func layout_overlay_controls() -> void:
 
 	var available_width: float = max(320.0, date_layer.size.x - (margin * 2.0))
 	var bottom_y: float = max(
-		top_y + top_height + context_height + 220.0,
+		top_y + top_height + 260.0,
 		date_layer.size.y - action_height - margin
 	)
 
 	action_panel.size = Vector2(available_width, action_height)
 	action_panel.position = Vector2(margin, bottom_y)
 
-	var content_top: float = top_y + top_height + gap
-	context_panel.size = Vector2(available_width, context_height)
-	context_panel.position = Vector2(margin, content_top)
+	var center_top: float = top_y + top_height + gap
+	var center_height: float = max(300.0, action_panel.position.y - center_top - gap)
 
-	var center_top: float = content_top + context_height + gap
-	var center_height: float = max(260.0, action_panel.position.y - center_top - gap)
-	var npc_width: float = clamp(date_layer.size.x * 0.28, 240.0, 340.0)
+	var npc_width: float = clamp(date_layer.size.x * 0.28, 260.0, 360.0)
 	var narrative_width: float = available_width - npc_width - gap
 
 	if date_layer.size.x < 760:
-		npc_width = max(200.0, available_width * 0.32)
+		npc_width = max(220.0, available_width * 0.34)
 		narrative_width = available_width - npc_width - gap
 
 	narrative_panel.size = Vector2(max(320.0, narrative_width), center_height)
@@ -1062,16 +993,15 @@ func layout_overlay_controls() -> void:
 	if modal_layer != null:
 		modal_layer.size = date_layer.size
 
-		var modal_width: float = clamp(date_layer.size.x * 0.72, 520.0, 860.0)
-		var modal_height: float = clamp(date_layer.size.y * 0.72, 360.0, 640.0)
+		var modal_width: float = clamp(date_layer.size.x * 0.76, 560.0, 920.0)
+		var modal_height: float = clamp(date_layer.size.y * 0.78, 420.0, 700.0)
 
 		modal_panel.size = Vector2(modal_width, modal_height)
 		modal_panel.position = Vector2(
 			(date_layer.size.x - modal_width) / 2.0,
 			(date_layer.size.y - modal_height) / 2.0
 		)
-
-
+		
 func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
 	layout_overlay_controls()
@@ -1099,16 +1029,13 @@ func setup_fullscreen_root() -> void:
 	offset_right = 0
 	offset_bottom = 0
 
-
 func add_question_option_button(question: Dictionary, value: String) -> void:
 	var locked_value: String = value
 
 	add_modal_choice_button(
 		locked_value,
-		func(): answer_question(question, locked_value),
-		"Responder: %s" % locked_value
+		func(): answer_question(question, locked_value)
 	)
-
 
 func add_special_question_option_button(question: Dictionary, value: String) -> void:
 	var locked_value: String = value
@@ -1138,4 +1065,26 @@ func add_move_option_button(move_id: String) -> void:
 		move.get("name", locked_move_id),
 		func(): perform_move(locked_move_id),
 		build_move_hint(locked_move_id)
+	)
+
+func show_final_summary(summary_text: String) -> void:
+	current_narrative = summary_text
+	refresh_date_view()
+	clear_children(action_buttons)
+
+	open_choice_modal("Resumen de la cita", "")
+
+	clear_children(modal_buttons)
+
+	var summary_label: Label = Label.new()
+	summary_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	summary_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	summary_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	summary_label.text = summary_text
+	modal_buttons.add_child(summary_label)
+
+	add_modal_footer_button("Continuar", func():
+		close_choice_modal()
+		SceneRouter.go_to_current_location_scene()
 	)
