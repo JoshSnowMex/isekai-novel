@@ -14,10 +14,6 @@ var background_layer: Control
 var top_panel: PanelContainer
 var top_label: Label
 
-var hero_panel: PanelContainer
-var hero_holder: Control
-var hero_caption_label: Label
-
 var bottom_panel: PanelContainer
 var bottom_title_label: Label
 var bottom_text_label: Label
@@ -53,19 +49,17 @@ func build_ui() -> void:
 	background_layer.offset_bottom = 0
 	add_child(background_layer)
 
-	build_background()
 	build_top_panel()
-	build_hero_panel()
 	build_bottom_panel()
 
 
-func build_background() -> void:
+func build_background(path: String, title: String, caption: String) -> void:
 	clear_children(background_layer)
 
 	var background: Control = VisualAsset.make_texture_or_placeholder(
-		"res://assets/backgrounds/intro_veil_crossing.png",
-		"El umbral",
-		"Fondo final: intro_veil_crossing.png"
+		path,
+		title,
+		caption
 	)
 
 	background.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -78,7 +72,7 @@ func build_background() -> void:
 
 func build_top_panel() -> void:
 	top_panel = PanelContainer.new()
-	top_panel.custom_minimum_size = Vector2(720, 46)
+	top_panel.custom_minimum_size = Vector2(1040, 46)
 	add_child(top_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -97,41 +91,9 @@ func build_top_panel() -> void:
 	margin.add_child(top_label)
 
 
-func build_hero_panel() -> void:
-	hero_panel = PanelContainer.new()
-	hero_panel.custom_minimum_size = Vector2(520, 280)
-	add_child(hero_panel)
-
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
-	hero_panel.add_child(margin)
-
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 8)
-	margin.add_child(box)
-
-	hero_holder = Control.new()
-	hero_holder.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hero_holder.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_child(hero_holder)
-
-	hero_caption_label = Label.new()
-	hero_caption_label.custom_minimum_size = Vector2(1, 42)
-	hero_caption_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hero_caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hero_caption_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hero_caption_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(hero_caption_label)
-
-
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(920, 250)
+	bottom_panel.custom_minimum_size = Vector2(1040, 270)
 	add_child(bottom_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -180,6 +142,12 @@ func build_bottom_panel() -> void:
 func show_prologue() -> void:
 	current_step = IntroStep.PROLOGUE
 
+	build_background(
+		"res://assets/backgrounds/intro_veil_crossing.png",
+		"El umbral",
+		"Fondo final: intro_veil_crossing.png"
+	)
+
 	top_label.text = "Nuevo juego · Prólogo"
 	bottom_title_label.text = "El umbral"
 	bottom_text_label.text = str(prologue_pages[prologue_index])
@@ -187,17 +155,10 @@ func show_prologue() -> void:
 	clear_children(bottom_content)
 	clear_children(bottom_buttons)
 
-	set_hero_placeholder(
-		"res://assets/backgrounds/intro_veil_crossing.png",
-		"El umbral",
-		"Arte de prólogo: intro_veil_crossing.png"
-	)
-
-	if prologue_index > 0:
-		add_footer_button("Anterior", func():
-			prologue_index = max(0, prologue_index - 1)
-			show_prologue()
-		)
+	add_footer_button("Anterior", func():
+		prologue_index = max(0, prologue_index - 1)
+		show_prologue()
+	).disabled = prologue_index <= 0
 
 	if prologue_index < prologue_pages.size() - 1:
 		add_footer_button("Continuar", func():
@@ -219,18 +180,18 @@ func show_prologue() -> void:
 func show_appearance_selection() -> void:
 	current_step = IntroStep.APPEARANCE
 
+	build_background(
+		"res://assets/backgrounds/intro_appearance_selection.png",
+		"Elige tu forma",
+		"Fondo final: intro_appearance_selection.png"
+	)
+
 	top_label.text = "Nuevo juego · Apariencia"
 	bottom_title_label.text = "Elige tu forma"
 	bottom_text_label.text = "El Velo te da una presencia. Luminaria reaccionará a ella antes de conocerte de verdad."
 
 	clear_children(bottom_content)
 	clear_children(bottom_buttons)
-
-	set_hero_placeholder(
-		get_appearance_asset_path(selected_appearance_id),
-		get_appearance_label(selected_appearance_id),
-		"Arte de apariencia: %s" % get_appearance_asset_name(selected_appearance_id)
-	)
 
 	var grid: GridContainer = create_grid(3)
 	bottom_content.add_child(grid)
@@ -239,51 +200,61 @@ func show_appearance_selection() -> void:
 	add_appearance_card(grid, "Forastera", "woman", "Rostro femenino")
 	add_appearance_card(grid, "Forma velada", "veiled", "Presencia tocada por el Velo")
 
-	add_footer_button("Volver", func():
+	add_footer_button("Anterior", func():
 		prologue_index = prologue_pages.size() - 1
 		show_prologue()
 	)
+
+	add_footer_button("Continuar", func():
+		show_class_selection()
+	)
+
+	add_footer_button("Saltar prólogo", func():
+		show_class_selection()
+	).disabled = true
 
 	call_deferred("refresh_layout_after_frame")
 
 
 func add_appearance_card(parent: Node, title: String, appearance_id: String, description: String) -> void:
 	var locked_appearance_id: String = appearance_id
+	var asset_path: String = get_appearance_asset_path(locked_appearance_id)
 
-	var button: Button = Button.new()
-	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(220, 82)
-	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	button.text = "%s\n%s" % [title, description]
+	var card: Button = Button.new()
+	card.focus_mode = Control.FOCUS_ALL
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.custom_minimum_size = Vector2(260, 132)
+	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card.text = "%s\n%s\n\n%s" % [
+		title,
+		description,
+		get_appearance_asset_name(locked_appearance_id)
+	]
 
-	button.mouse_entered.connect(func():
+	card.mouse_entered.connect(func():
 		selected_appearance_id = locked_appearance_id
-		set_hero_placeholder(
-			get_appearance_asset_path(locked_appearance_id),
-			get_appearance_label(locked_appearance_id),
-			"Arte de apariencia: %s" % get_appearance_asset_name(locked_appearance_id)
-		)
+		bottom_text_label.text = "%s · %s" % [title, description]
 	)
-	button.focus_entered.connect(func():
+	card.focus_entered.connect(func():
 		selected_appearance_id = locked_appearance_id
-		set_hero_placeholder(
-			get_appearance_asset_path(locked_appearance_id),
-			get_appearance_label(locked_appearance_id),
-			"Arte de apariencia: %s" % get_appearance_asset_name(locked_appearance_id)
-		)
+		bottom_text_label.text = "%s · %s" % [title, description]
 	)
-
-	button.pressed.connect(func():
+	card.pressed.connect(func():
 		selected_appearance_id = locked_appearance_id
 		show_class_selection()
 	)
 
-	parent.add_child(button)
+	parent.add_child(card)
 
 
 func show_class_selection() -> void:
 	current_step = IntroStep.CLASS
+
+	build_background(
+		"res://assets/backgrounds/intro_class_selection.png",
+		"Elige tu camino",
+		"Fondo final: intro_class_selection.png"
+	)
 
 	top_label.text = "Nuevo juego · Camino del Forastero"
 	bottom_title_label.text = "Elige tu camino"
@@ -295,21 +266,25 @@ func show_class_selection() -> void:
 	if selected_class_id == "":
 		selected_class_id = "balanced_outsider"
 
-	set_hero_placeholder(
-		get_class_asset_path(selected_class_id),
-		DataManager.get_player_class(selected_class_id).get("name", selected_class_id),
-		get_class_asset_caption(selected_class_id)
-	)
-
 	var grid: GridContainer = create_grid(3)
 	bottom_content.add_child(grid)
 
 	for class_id in DataManager.player_classes.keys():
 		add_class_card(grid, str(class_id))
 
-	add_footer_button("Volver a apariencia", func():
+	add_footer_button("Anterior", func():
 		show_appearance_selection()
 	)
+
+	add_footer_button("Continuar", func():
+		if selected_class_id == "":
+			selected_class_id = "balanced_outsider"
+		show_confirm_selection()
+	)
+
+	add_footer_button("Saltar prólogo", func():
+		show_confirm_selection()
+	).disabled = true
 
 	call_deferred("refresh_layout_after_frame")
 
@@ -318,41 +293,30 @@ func add_class_card(parent: Node, class_id: String) -> void:
 	var locked_class_id: String = class_id
 	var class_data: Dictionary = DataManager.get_player_class(class_id)
 
-	var button: Button = Button.new()
-	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(230, 92)
-	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	button.text = build_class_card_text(class_id, class_data)
+	var card: Button = Button.new()
+	card.focus_mode = Control.FOCUS_ALL
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.custom_minimum_size = Vector2(260, 132)
+	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	card.text = build_class_visual_card_text(class_id, class_data)
 
-	button.mouse_entered.connect(func():
+	card.mouse_entered.connect(func():
 		selected_class_id = locked_class_id
-		set_hero_placeholder(
-			get_class_asset_path(locked_class_id),
-			class_data.get("name", locked_class_id),
-			get_class_asset_caption(locked_class_id)
-		)
 		bottom_text_label.text = build_class_hover_summary(class_data)
 	)
-	button.focus_entered.connect(func():
+	card.focus_entered.connect(func():
 		selected_class_id = locked_class_id
-		set_hero_placeholder(
-			get_class_asset_path(locked_class_id),
-			class_data.get("name", locked_class_id),
-			get_class_asset_caption(locked_class_id)
-		)
 		bottom_text_label.text = build_class_hover_summary(class_data)
 	)
-
-	button.pressed.connect(func():
+	card.pressed.connect(func():
 		selected_class_id = locked_class_id
 		show_confirm_selection()
 	)
 
-	parent.add_child(button)
+	parent.add_child(card)
 
 
-func build_class_card_text(class_id: String, class_data: Dictionary) -> String:
+func build_class_visual_card_text(class_id: String, class_data: Dictionary) -> String:
 	var strengths: Array = class_data.get("strengths", [])
 	var weaknesses: Array = class_data.get("weaknesses", [])
 
@@ -365,10 +329,12 @@ func build_class_card_text(class_id: String, class_data: Dictionary) -> String:
 	if not weaknesses.is_empty():
 		weakness_text = "Riesgo: %s" % str(weaknesses[0])
 
-	return "%s\n%s\n%s" % [
+	return "%s\n%s\n\n%s\n%s\n\n%s" % [
 		class_data.get("name", class_id),
+		get_class_asset_name(class_id),
 		strength_text,
-		weakness_text
+		weakness_text,
+		class_data.get("element", "")
 	]
 
 
@@ -385,6 +351,12 @@ func show_confirm_selection() -> void:
 	var class_data: Dictionary = DataManager.get_player_class(selected_class_id)
 	var appearance_label: String = get_appearance_label(selected_appearance_id)
 
+	build_background(
+		"res://assets/backgrounds/intro_confirm_outsider.png",
+		"Confirmar Forastero",
+		"Fondo final: intro_confirm_outsider.png"
+	)
+
 	top_label.text = "Nuevo juego · Confirmar Forastero"
 	bottom_title_label.text = "Confirmar inicio"
 	bottom_text_label.text = "Apariencia: %s · Camino: %s · Elemento: %s\n%s" % [
@@ -397,18 +369,18 @@ func show_confirm_selection() -> void:
 	clear_children(bottom_content)
 	clear_children(bottom_buttons)
 
-	set_hero_placeholder(
-		get_class_asset_path(selected_class_id),
-		class_data.get("name", selected_class_id),
-		get_class_asset_caption(selected_class_id)
+	var summary_label: Label = Label.new()
+	summary_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	summary_label.text = "Arte final de personaje: %s" % get_class_asset_name(selected_class_id)
+	bottom_content.add_child(summary_label)
+
+	add_footer_button("Anterior", func():
+		show_class_selection()
 	)
 
 	add_footer_button("Comenzar historia", func():
 		start_game()
-	)
-
-	add_footer_button("Cambiar camino", func():
-		show_class_selection()
 	)
 
 	add_footer_button("Cambiar apariencia", func():
@@ -416,25 +388,6 @@ func show_confirm_selection() -> void:
 	)
 
 	call_deferred("refresh_layout_after_frame")
-
-
-func set_hero_placeholder(path: String, title: String, caption: String) -> void:
-	clear_children(hero_holder)
-
-	var visual: Control = VisualAsset.make_texture_or_placeholder(
-		path,
-		title,
-		caption
-	)
-
-	visual.set_anchors_preset(Control.PRESET_FULL_RECT)
-	visual.offset_left = 0
-	visual.offset_top = 0
-	visual.offset_right = 0
-	visual.offset_bottom = 0
-	hero_holder.add_child(visual)
-
-	hero_caption_label.text = caption
 
 
 func get_appearance_label(appearance_id: String) -> String:
@@ -465,10 +418,6 @@ func get_appearance_asset_path(appearance_id: String) -> String:
 	return "res://assets/player/%s" % get_appearance_asset_name(appearance_id)
 
 
-func get_class_asset_path(class_id: String) -> String:
-	return "res://assets/player/%s" % get_class_asset_name(class_id)
-
-
 func get_class_asset_name(class_id: String) -> String:
 	var appearance_asset_id: String = selected_appearance_id
 
@@ -485,10 +434,6 @@ func get_class_asset_name(class_id: String) -> String:
 		appearance_asset_id,
 		normalized_class_id
 	]
-
-
-func get_class_asset_caption(class_id: String) -> String:
-	return "Arte final: %s" % get_class_asset_name(class_id)
 
 
 func start_game() -> void:
@@ -535,44 +480,28 @@ func refresh_layout_after_frame() -> void:
 func layout_overlay_controls() -> void:
 	var margin: float = 10.0
 	var top_height: float = 46.0
-	var bottom_height: float = 286.0
+	var panel_width: float = min(1040.0, max(640.0, size.x - (margin * 2.0)))
+	var bottom_height: float = 270.0
 
 	if current_step == IntroStep.PROLOGUE:
 		bottom_height = 240.0
+	elif current_step == IntroStep.APPEARANCE:
+		bottom_height = 282.0
 	elif current_step == IntroStep.CLASS:
-		bottom_height = 318.0
+		bottom_height = 372.0
 	elif current_step == IntroStep.CONFIRM:
-		bottom_height = 220.0
+		bottom_height = 236.0
 
-	top_panel.size = Vector2(
-		min(920.0, max(520.0, size.x - (margin * 2.0))),
-		top_height
-	)
+	top_panel.size = Vector2(panel_width, top_height)
 	top_panel.position = Vector2(
-		(size.x - top_panel.size.x) / 2.0,
+		(size.x - panel_width) / 2.0,
 		margin
 	)
 
-	bottom_panel.size = Vector2(
-		min(1040.0, max(640.0, size.x - (margin * 2.0))),
-		bottom_height
-	)
+	bottom_panel.size = Vector2(panel_width, bottom_height)
 	bottom_panel.position = Vector2(
-		(size.x - bottom_panel.size.x) / 2.0,
+		(size.x - panel_width) / 2.0,
 		max(margin, size.y - bottom_height - margin)
-	)
-
-	var hero_top: float = top_panel.position.y + top_height + margin
-	var hero_bottom: float = bottom_panel.position.y - margin
-	var hero_height: float = max(180.0, hero_bottom - hero_top)
-
-	hero_panel.size = Vector2(
-		min(620.0, max(420.0, size.x * 0.48)),
-		hero_height
-	)
-	hero_panel.position = Vector2(
-		(size.x - hero_panel.size.x) / 2.0,
-		hero_top
 	)
 
 
