@@ -601,7 +601,6 @@ func has_location_activity_actions(location_data: Dictionary) -> bool:
 
 func get_activity_tooltip(activity_id: String) -> String:
 	var activity: Dictionary = DataManager.get_activity(activity_id)
-	var parts: Array = []
 
 	var description: String = str(activity.get("description", ""))
 	var stat: String = str(activity.get("stat", ""))
@@ -609,28 +608,34 @@ func get_activity_tooltip(activity_id: String) -> String:
 	var base_money_gain: int = int(activity.get("base_money_gain", activity.get("money_gain", 0)))
 	var stamina_cost: int = int(activity.get("stamina_cost", 0))
 
-	if description != "":
-		parts.append(description)
+	var effects: Array = []
 
 	if stat != "" and base_stat_gain > 0:
-		parts.append("Mejora %s: +%s" % [
+		effects.append("Mejora %s: +%s" % [
 			GameManager.get_stat_label(stat),
 			base_stat_gain
 		])
-		parts.append("Puede obtener +1 adicional por buen desempeño.")
 
 	if base_money_gain > 0:
 		var estimated_money: Dictionary = GameManager.get_activity_money_estimate(activity_id)
-
-		parts.append("Lúmenes estimados: %s-%s" % [
+		effects.append("Lúmenes: %s-%s" % [
 			estimated_money.get("min", base_money_gain),
 			estimated_money.get("max", base_money_gain)
 		])
 
 	if stamina_cost > 0:
-		parts.append("Resistencia: -%s" % stamina_cost)
+		effects.append("Resistencia: -%s" % stamina_cost)
 
-	return "\n".join(parts)
+	if effects.is_empty():
+		return description
+
+	if description == "":
+		return " | ".join(effects)
+
+	return "%s\n%s" % [
+		description,
+		" | ".join(effects)
+	]
 	
 func show_location_actions(location_data: Dictionary) -> void:
 	selected_npc_id = ""

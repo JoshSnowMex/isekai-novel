@@ -27,7 +27,7 @@
 		"base_money_gain": 12,
 		"stamina_cost": 14,
 		"work_modifier_key": "academic",
-		"description": "Ordenas manuscritos, etiquetas registros y ganas unas monedas sin alejarte demasiado del conocimiento."
+		"description": "Ordenas documentos antiguos buscando patrones útiles."
 	},
 	"train_market_strength_minor": {
 		"name": "Ayudar con carga ligera",
