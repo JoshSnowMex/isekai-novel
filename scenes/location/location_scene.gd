@@ -210,7 +210,7 @@ func rebuild_background() -> void:
 func rebuild_characters() -> void:
 	clear_children(character_layer)
 	character_positions_by_location.clear()
-	
+
 	var present_npcs: Array = get_present_npcs()
 
 	for index in range(present_npcs.size()):
@@ -1237,12 +1237,7 @@ func get_scaled_character_size() -> Vector2:
 	)
 
 func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
-	var key: String = "%s:%s" % [current_location_id, npc_id]
-
-	if not character_positions_by_location.has(key):
-		character_positions_by_location[key] = get_character_position(index, total, button_size)
-
-	return character_positions_by_location[key]
+	return get_character_position(index, total, button_size)
 
 func clamp_character_position(position_value: Vector2, character_size: Vector2) -> Vector2:
 	var margin: float = 8.0
@@ -1257,8 +1252,9 @@ func clamp_character_position(position_value: Vector2, character_size: Vector2) 
 func get_character_position(index: int, total: int, button_size: Vector2) -> Vector2:
 	var reserved_bottom: float = get_bottom_panel_reserved_height()
 	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
+
 	var base_x: float = 32.0
-	var gap_x: float = max(26.0, button_size.x * 0.28)
+	var gap_x: float = 28.0
 
 	var x: float = base_x + (float(index) * (button_size.x + gap_x))
 	var y: float = max(

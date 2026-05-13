@@ -57,6 +57,22 @@ func return_from_journal() -> void:
 func go_to_shop() -> void:
 	get_tree().change_scene_to_file(SHOP_SCENE)
 
+func go_to_current_location_scene() -> void:
+	var location_id: String = str(GameManager.current_location_id)
+
+	if location_id == "":
+		go_to_world_map()
+		return
+
+	if location_id == "home":
+		go_to_home()
+		return
+
+	if location_id == "shop":
+		go_to_shop()
+		return
+
+	go_to_location()
 
 func quit_game() -> void:
 	get_tree().quit()

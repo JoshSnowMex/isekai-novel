@@ -56,11 +56,11 @@ func _on_new_game_pressed() -> void:
 
 func _on_continue_pressed() -> void:
 	if SaveManager.load_continue_game():
-		SceneRouter.go_to_world_map()
+		SceneRouter.go_to_current_location_scene()
 
 func _on_load_manual_pressed() -> void:
 	if SaveManager.load_manual_game():
-		SceneRouter.go_to_world_map()
+		SceneRouter.go_to_current_location_scene()
 
 func _on_quit_pressed() -> void:
 	SceneRouter.quit_game()
