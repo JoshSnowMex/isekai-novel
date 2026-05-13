@@ -433,8 +433,8 @@ func get_class_asset_name(class_id: String) -> String:
 	]
 
 func build_confirm_title(class_data: Dictionary, appearance_label: String) -> String:
-	var class_name: String = str(class_data.get("name", selected_class_id))
-	var clean_class_name: String = class_name
+	var player_class_name: String = str(class_data.get("name", selected_class_id))
+	var clean_class_name: String = player_class_name
 
 	clean_class_name = clean_class_name.replace("Forastero ", "")
 	clean_class_name = clean_class_name.replace("Forastera ", "")
