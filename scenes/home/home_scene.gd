@@ -513,10 +513,12 @@ func layout_overlay_controls() -> void:
 		main_width = max(360.0, home_layer.size.x - 24.0)
 		main_height = 230.0
 
+	var bottom_margin: float = 18.0
+
 	main_panel.size = Vector2(main_width, main_height)
 	main_panel.position = Vector2(
-		12.0,
-		max(12.0, home_layer.size.y - main_height - 12.0)
+		(home_layer.size.x - main_width) / 2.0,
+		max(12.0, home_layer.size.y - main_height - bottom_margin)
 	)
 
 
