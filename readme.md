@@ -1,549 +1,520 @@
-# Isekai Novel — Estado del Proyecto
+# Isekai Novel — Estado de desarrollo y guía de continuidad
 
-## Resumen
+## Propósito de este README
 
-Isekai Novel es un simulador de historias basado en citas, inspirado en juegos tipo Sim Girls, pero diseñado para que las relaciones generen consecuencias narrativas reales en el mundo.
+Este README existe para que cualquier nueva conversación de ChatGPT pueda continuar el desarrollo del juego sin perder contexto ni repetir decisiones ya tomadas.
 
-El objetivo no es crear un dating sim plano donde subir afinidad desbloquea escenas fijas por calendario. El objetivo es crear un sistema donde la historia emerge de:
+El proyecto es una Visual Novel / simulador de historias inspirado en SimGirls de Newgrounds, pero con una filosofía más narrativa y sistémica:
 
-- vínculos con NPCs;
-- afinidad, tensión, lealtad y celos;
-- conocimiento real del personaje;
-- decisiones del jugador;
-- consecuencias sobre el mundo;
-- elección de unión final;
-- tensión postgame.
+- No es un dating sim plano.
+- La historia debe emerger de relaciones, conocimiento, decisiones, lealtad, celos, tensión, estado del mundo y consecuencias.
+- La main storyline no debe depender rígidamente del calendario.
+- El calendario sirve más para cumpleaños, aniversarios y memoria emocional.
+- Se trabaja siempre pensando en versión final productiva, aunque usemos placeholders.
+- No se quieren soluciones temporales ni “luego lo cambiamos”.
+- Si se detecta que algo debe cambiarse para ser finalista, se cambia.
+- Los placeholders deben usar nombres finales de asset, por ejemplo `Lyria_talking.png`, no `npc1.png`.
 
-La UI actual está entrando en fase final funcional. Todavía usamos placeholders, pero deben nombrarse y organizarse como assets finales para que luego solo se reemplacen imágenes, fondos y sprites sin reescribir gameplay.
+## Perfil del capitán / dueño del proyecto
 
----
+El dueño del proyecto es backend Java/Spring y novato en Godot.
 
-## Filosofía de desarrollo
+Necesita instrucciones claras y concretas:
 
-Este proyecto se trabaja con filosofía de versión final desde el inicio.
+- Archivo exacto.
+- Qué reemplazar.
+- Dónde pegar.
+- Qué probar.
+- Si el cambio es grande, preferir reemplazo completo de archivo.
+- No dar instrucciones basadas en “probablemente” o “si existe”.
+- Antes de proponer cambios, revisar archivos reales del repositorio.
+- El repo GitHub está conectado, pero la búsqueda indexada de GitHub puede fallar o no encontrar funciones existentes. No confiar en search para encontrar funciones. Abrir archivos concretos por ruta.
 
-Reglas importantes:
+Importante: si se usa ChatGPT con GitHub connector, abrir archivos con `fetch_file` o raw, no inferir.
 
-1. No hacer soluciones temporales si ya sabemos que después deberán reemplazarse.
-2. No crear sistemas “por ahora” si el sistema final debe estar separado.
-3. Preferir arquitectura clara y modular desde el inicio.
-4. Evitar repetir ciclos de “primero lo hacemos simple, luego lo expandimos, luego lo separamos”.
-5. Si algo va a ser un sistema propio, se crea como sistema propio desde el principio.
-6. La UI puede usar placeholders, pero la estructura visual debe ser la final.
-7. Los placeholders deben tener nombres finales:
-   - `Lyria_talking.png`
-   - `map_library_alba.png`
-   - `world_map_luminaria.png`
-   - no `npc1.png`, `test.jpg`, `placeholder2.png`.
-8. El usuario prefiere instrucciones directas:
-   - qué archivo tocar;
-   - qué bloque reemplazar;
-   - dónde poner código nuevo;
-   - sin pedir confirmación innecesaria.
-9. Solo detenerse para decisiones creativas, narrativas o estructurales importantes.
-10. Si el usuario dice que hizo commit/checkpoint, asumir que el repo fue actualizado y revisar archivos reales antes de proponer cambios.
+## Repositorio
 
----
+Repositorio:
 
-## Estado general
+JoshSnowMex/isekai-novel
+Branch principal actual:
 
-Backend/sistemas principales: cerrado para pasar a UI.
+main
+Filosofía de trabajo acordada
+Evitar UI tipo ERP/dashboard.
+Priorizar experiencia de jugador.
+Menos paneles redundantes.
+El HUD debe ser la fuente principal para dinero, resistencia, acciones y fecha.
+Las escenas deben sentirse como juego/visual novel, no como app administrativa.
+No pedir al usuario que revise archivos si el asistente tiene acceso al repo.
+No basarse en búsqueda indexada para confirmar si una función existe.
+Abrir el archivo real antes de dar instrucciones.
+Si una iteración sale mal, estabilizar antes de seguir metiendo features.
+Si una escena requiere muchas opciones, usar popup/modal/scroll, no llenar el panel inferior hasta romper la pantalla.
+Estado general del backend
 
-Ya están implementados:
+El backend se considera completo/cerrado para pasar a UI.
 
-- ciclo de día;
-- bloques horarios;
-- acciones por bloque;
-- casa del Forastero;
-- descanso/dormir;
-- guardado manual;
-- autosave;
-- carga;
-- mapa;
-- ubicaciones;
-- NPC schedules;
-- diálogo;
-- regalos;
-- tienda;
-- citas;
-- movimientos de cita;
-- compatibilidad de movimientos por personalidad/lugar/intimidad;
-- revelación inteligente de información;
-- bitácora;
-- estado del mundo;
-- storylets dinámicos;
-- milestones;
-- rivalidades/celos;
-- progresión de relación;
-- final union;
-- calendario emocional;
-- postgame completo;
-- recompensas dinámicas de citas;
-- UI foundation inicial;
-- World Map visual funcional.
+Sistemas implementados:
 
----
+Ciclo de día.
+Acciones.
+Casa.
+Guardado/carga/autosave.
+Ubicaciones.
+NPC schedules.
+Diálogo.
+Tienda/items/regalos.
+Citas.
+Movimientos de cita.
+Revelación de información.
+Bitácora.
+Estado del mundo.
+Storylets.
+Milestones.
+Rivalidades.
+Final union.
+Calendario emocional.
+Postgame completo.
+Recompensas dinámicas.
 
-## Sistemas principales
+No tocar backend salvo helpers visuales necesarios o bugs claros.
 
-### Core
+Escenas UI trabajadas
+1. WorldMap
 
-Ubicación:
+Estado: funcional, pero necesita pase visual/consistencia.
 
-```text
-/core
-Archivos principales:
+Ya tiene:
 
+HUD superior.
+Mapa grande.
+Botones globales arriba derecha.
+Tarjeta hover.
+Ubicaciones clicables.
+Click directo entra a ubicación.
+NPCs presentes deberían aparecer en hover.
+NPC desconocido aparece como ???.
+Responsive.
+Configurado con canvas_items y expand.
+
+Problemas/pendientes conocidos:
+
+El hover de ubicaciones se ajustó para moverse y no bloquear clicks.
+El hover debe mostrar NPCs presentes usando ScheduleSystem.get_npc_location(id), no schedule directo viejo.
+El panel del mapa a veces se ve raro con textos largos. Ajustar textos, no necesariamente el panel.
+Los botones globales del WorldMap no son consistentes visualmente con escenas nuevas. En WorldMap están en tonos morados y estilo diferente; se quiere estandarizar con las escenas actuales.
+El HUD trunca Mañana/fecha en algunas resoluciones. Revisar ui/components/world_hud_bar.gd y compactar o redistribuir texto.
+
+Archivo importante:
+
+scenes/map/world_map.gd
+ui/components/location_hover_card.gd
+ui/components/world_hud_bar.gd
+ui/components/world_action_panel.gd
+
+Nota crítica:
+visit_location(location_id) debe mandar shop directo a SceneRouter.go_to_shop() y home directo a SceneRouter.go_to_home().
+
+2. LocationScene
+
+Estado: funcional, pero con bug intermitente de sprites NPC encimados.
+
+Ya tiene:
+
+Fondo por ubicación desde ui_assets.json.
+HUD superior.
+Botones globales:
+Mapa
+Bitácora
+Guardar
+Cargar
+NPCs presentes como sprites/placeholders clicables.
+Desconocidos como ???.
+Acciones directas en panel inferior:
+Acercarse a NPC.
+Actividades de ubicación.
+Las acciones del lugar ya no deberían estar escondidas detrás de “Acciones del lugar”.
+Si no hay acciones disponibles, aparece Ir a casa.
+Al hablar/regalar con NPC, se mantiene en interacción con NPC.
+Si NPC ya no está disponible por schedule, debe salir de interacción.
+Hover de acciones muestra información inmediata en panel inferior.
+Tooltips nativos se evitaron por delay/ruido.
+
+Problemas/pendientes conocidos:
+
+En biblioteca de noche, cuando hay Selene y Seraphina, sus sprites a veces aparecen encimados o centrados.
+El problema parece intermitente después de guardar/cargar o reentrar.
+location_scene.gd ya tiene:
+get_scaled_character_size()
+get_bottom_panel_reserved_height()
+get_stable_character_position()
+get_character_position()
+No duplicar esas funciones.
+Si vuelve el error de duplicado, revisar que solo exista una copia.
+Actualmente rebuild_characters() limpia character_positions_by_location.clear().
+show_character_preview() ya no debería reconstruir botones ni meter Acciones del lugar.
+
+Archivo importante:
+
+scenes/location/location_scene.gd
+
+Nota crítica:
+No dar instrucciones sobre funciones de LocationScene sin abrir el archivo completo o raw. Ya hubo problemas por confiar en búsqueda indexada.
+
+3. HomeScene
+
+Estado: correcto / funcional.
+
+Decisiones tomadas:
+
+Se eliminó panel lateral Vínculos y cierre porque repetía HUD y se encimaba.
+Casa queda limpia:
+HUD.
+Botones globales arriba derecha.
+Fondo de casa.
+Panel inferior.
+Dormir mantiene al jugador en casa al despertar.
+Dormir procesa mensajes narrativos.
+Guardar/cargar funcionan desde casa.
+Bitácora desde casa debe volver a casa.
+
+Archivo:
+
+scenes/home/home_scene.gd
+
+Pendiente menor:
+Ninguno urgente.
+
+4. ShopScene
+
+Estado: correcto / funcional tras varias iteraciones.
+
+Decisiones tomadas:
+
+Entrar a tienda desde mapa debe abrir ShopScene directo, no LocationScene.
+La tienda es escaparate directo:
+No botón intermedio Comprar.
+No panel lateral.
+No panel inferior innecesario.
+Click en tarjeta compra directamente.
+Hover muestra info compacta arriba.
+Tarjetas cuadradas compactas.
+Máximo 6 columnas para reservar espacio derecho.
+Espacio derecho reservado para arte/tendero futuro.
+Scroll existe, pero debe ocultarse si todo cabe.
+Panel informativo arriba izquierda debe ser coherente con botones globales.
+
+Archivo:
+
+scenes/shop/shop_scene.gd
+
+Pendiente menor:
+Agregar assets reales de objetos/tendero en el futuro.
+
+5. JournalScene / Bitácora
+
+Estado: excelente / aprobado.
+
+Diseño actual aprobado:
+
+Navegación por capítulos.
+Personas como tarjetas.
+Detalle narrativo por personaje.
+Mundo, calendario, recuerdos y unión separados.
+Panel contextual.
+Retorno correcto según escena de origen.
+Placeholder de fondo final.
+
+Archivo:
+
+scenes/journal/journal_scene.gd
+
+No tocar salvo bugs reales.
+
+6. DateScene
+
+Estado: NO aprobado / necesita rediseño.
+
+La primera propuesta se sintió bien al inicio, pero después de pruebas largas se confirmó que la UI actual no sirve.
+
+Problemas reportados:
+
+Panel de localización ocupa espacio y aporta poco.
+Panel narrativo es demasiado pequeño.
+Resumen final se sale de pantalla.
+Acciones/respuestas/gestos se desbordan.
+Acciones en HBox abajo no escalan para:
+muchas respuestas;
+muchos gestos;
+regalos;
+textos largos.
+Agrandar panel inferior empeoró la UI.
+Progreso corregido de 100/73 a “Progreso 100% · Éxito desde 73%”, pero quedó oculto por encimamiento.
+Para respuestas y gestos se necesita estrategia diferente.
+Se confirmó que preguntas sí aparecen; inicialmente parecía que no por azar.
+Respuestas incorrectas en cita especial ya se pudieron seleccionar, pero la navegación sigue siendo mala.
+
+Conclusión de diseño:
+
+La DateScene debe rehacerse con estructura:
+
+Top:
+- Header compacto:
+  Cita con Lyria · Biblioteca/Jardines · Progreso 80% · Éxito desde 73%
+
+Centro:
+- NPC / sprite a la derecha o integrado visualmente.
+- Panel narrativo grande con scroll.
+
+Abajo:
+- Solo acciones base compactas:
+  Hablar
+  Regalar
+  Gesto
+  Terminar cita
+
+Opciones largas:
+- Popup/modal centrado con scroll para:
+  respuestas de preguntas;
+  selección de regalos;
+  selección de gestos;
+  confirmaciones importantes.
+
+Importante:
+No intentar resolver listas largas agrandando el panel inferior. Eso rompe la escena.
+
+Archivo:
+
+scenes/date/date_scene.gd
+
+Siguiente tarea real:
+Reemplazo completo de date_scene.gd con popup/modal y narrativa grande.
+
+Guardado / carga
+
+Estado: parcialmente corregido.
+
+SaveManager guarda:
+
+player
+current_day
+current_month
+current_weekday_index
+current_time_block
+current_action_index
+current_location_id
+final_union_npc_id
+
+Archivo:
+
+core/save_manager.gd
+
+SceneRouter ya tiene:
+
+func go_to_current_location_scene() -> void:
+	var location_id: String = str(GameManager.current_location_id)
+
+	if location_id == "":
+		go_to_world_map()
+		return
+
+	if location_id == "home":
+		go_to_home()
+		return
+
+	if location_id == "shop":
+		go_to_shop()
+		return
+
+	go_to_location()
+
+Archivo:
+
+core/scene_router.gd
+
+main_menu.gd ya llama:
+
+SceneRouter.go_to_current_location_scene()
+
+en continuar y cargar guardado manual.
+
+Archivo:
+
+scenes/menu/main_menu.gd
+
+Pendientes:
+
+Confirmar en juego que cargar desde guardado manual vuelve a:
+Casa si guardaste en casa.
+LocationScene si guardaste en biblioteca.
+ShopScene si guardaste en tienda.
+No guardar/restaurar DateScene todavía salvo decisión explícita. Puede ser complejo y no se necesita de inmediato.
+HUD / tiempo
+
+Se propuso y aplicó concepto de horas para hacer el avance del día más perceptible.
+
+Idea:
+
+08:00 · Mañana
+10:00 · Mañana
+12:00 · Tarde
+15:00 · Tarde
+18:00 · Tarde
+20:00 · Noche
+22:00 · Noche
+Medianoche
+
+Problema actual:
+En WorldMap puede truncarse texto como Mañana.
+
+Archivo:
+
+ui/components/world_hud_bar.gd
+
+Pendiente:
+Compactar layout del HUD para evitar truncamiento.
+
+Assets / placeholders
+
+Regla:
+
+Usar nombres finales de asset.
+No usar nombres genéricos tipo npc1.png.
+
+Ejemplos:
+
+Lyria_talking.png
+location_home_forastero.png
+location_shop_umbral.png
+journal_forastero.png
+date_scene_default.png
+
+Archivo central:
+
+data/ui_assets.json
+Archivos clave del proyecto
 core/data_manager.gd
 core/game_manager.gd
 core/save_manager.gd
 core/scene_router.gd
 
-Responsabilidades:
+systems/date_system.gd o core/date_system.gd
+systems/relationship_system.gd o core/relationship_system.gd
+systems/schedule_system.gd o core/schedule_system.gd
 
-DataManager: carga JSONs y expone getters.
-GameManager: estado global, día/hora, jugador, relaciones, mundo, inventario, conocimiento NPC, narrativa pendiente.
-SaveManager: guardado/carga/autosave.
-SceneRouter: navegación entre escenas.
-Data
-
-Ubicación:
-
-/data
-
-Archivos actuales importantes:
-
-activities.json
-date_locations.json
-date_moves.json
-dialogues.json
-events.json
-game_config.json
-items.json
-locations.json
-milestones.json
-npcs.json
-npc_info_schema.json
-petitions.json
-player_classes.json
-relationship_steps.json
-rivalries.json
-final_union_requirements.json
-postgame_config.json
-postgame_storylets.json
-ui_assets.json
-
-Notas:
-
-ui_assets.json contiene rutas finales previstas para fondos, edificios, retratos y sprites.
-Los assets no tienen que existir todavía; si no existen, la UI usa placeholders.
-Las rutas deben conservar nombres finales.
-Relación y NPCs
-
-La relación no es solo afinidad.
-
-Valores:
-
-friendship
-tension
-loyalty
-jealousy
-
-Estados de relación:
-
-none
-interest
-dating
-lovers
-partner
-
-La progresión depende de:
-
-afinidad total;
-amistad;
-tensión;
-lealtad;
-celos;
-información conocida del NPC;
-citas exitosas;
-condiciones narrativas.
-
-Cada NPC tiene información organizada por categorías en npc_info_schema.json. La información se revela con lógica priorizada para que avanzar de relación no dependa de azar injusto.
-
-Categorías trabajadas:
-
-básico;
-gustos;
-personalidad;
-contacto;
-perfil personal;
-íntimo;
-historia;
-romance;
-sombra emocional;
-deseo/química;
-costo/responsabilidad;
-final.
-Citas
-
-Sistema:
-
-systems/date/date_system.gd
+scenes/map/world_map.gd
+scenes/location/location_scene.gd
+scenes/home/home_scene.gd
+scenes/shop/shop_scene.gd
+scenes/journal/journal_scene.gd
 scenes/date/date_scene.gd
-data/date_locations.json
-data/date_moves.json
-
-Las citas tienen:
-
-localización;
-progreso;
-errores;
-movimientos desbloqueados;
-movimientos físicos/coquetos/íntimos;
-compatibilidad por NPC;
-compatibilidad por localización;
-compatibilidad por privacidad;
-éxito, excelente o perfecto.
-
-Las recompensas son dinámicas por rango.
-
-Ejemplo conceptual:
-
-"perfect_rewards": {
-  "friendship": { "min": 9, "max": 12 },
-  "tension": { "min": 10, "max": 14 },
-  "loyalty": { "min": 8, "max": 12 }
-}
-
-DateSystem resuelve los rangos, aplica bonus por lugar adecuado y muestra valores reales en el resumen.
-
-Las citas postgame también afectan la estabilidad de la unión final.
-
-Final Union
-
-Sistema:
-
-systems/final_union/final_union_system.gd
-data/final_union_requirements.json
-
-La unión final representa la elección definitiva de pareja del jugador.
-
-Al completarla:
-
-marca final_union_chosen;
-guarda final_union_npc_id;
-registra fecha emocional;
-otorga collectible/token;
-activa PostgameSystem.
-Calendario emocional
-
-El juego registra fechas importantes por NPC:
-
-primera cita;
-primera cita exitosa;
-primera cita excelente;
-primera cita perfecta;
-avances de relación;
-unión final;
-regalos amados memorables;
-otras memorias emocionales.
-
-Se guarda en:
-
-GameManager.player["emotional_calendar"]
-
-Se muestra en la bitácora.
-
-Postgame
-
-Sistema:
-
-systems/postgame/postgame_system.gd
-data/postgame_config.json
-data/postgame_storylets.json
-
-El postgame ya está completo a nivel sistémico.
-
-Al iniciar postgame:
-
-marca postgame_started;
-marca postgame_partner:<npc_id>;
-crea postgame_state;
-establece:
-final_union_stability;
-postgame_pressure;
-outside_temptation;
-aplica cambios iniciales al mundo;
-dispara reacciones inmediatas de otros NPCs.
-
-Cada día:
-
-sube presión/tentación;
-revisa celos y rutas avanzadas con otros NPCs;
-afecta estabilidad de unión;
-dispara storylets postgame si se cumplen condiciones.
-
-Citas/regalos después de final union:
-
-con la pareja fortalecen unión;
-con otros NPCs generan tensión/tentación.
-UI Foundation
-
-Ya existen componentes UI iniciales:
+scenes/menu/main_menu.gd
 
 ui/components/visual_asset.gd
 ui/components/location_map_button.gd
 ui/components/world_hud_bar.gd
 ui/components/world_action_panel.gd
 ui/components/location_hover_card.gd
-ui/components/world_status_panel.gd
 
-world_status_panel.gd quedó de iteraciones anteriores y puede conservarse si es útil, pero el World Map actual ya no usa panel derecho grande.
+data/ui_assets.json
+data/locations.json
+data/items.json
+data/date_locations.json
+data/date_moves.json
+Capturas usadas para diagnóstico
 
-Estado actual de UI
-World Map
+El capitán suele subir capturas al root del repo, por ejemplo:
 
-Archivo:
+ejemplo.png
+tienda1.png
+tienda2.png
 
-scenes/map/world_map.gd
+Antes de opinar sobre UI, revisar esas capturas si existen.
 
-Estado:
+Estado emocional / nota de continuidad
 
-HUD superior funcional.
-Mapa grande.
-Marcadores/edificios clicables.
-Botones globales compactos:
-Bitácora;
-Guardar;
-Menú.
-Tarjeta hover inferior izquierda.
-Click en ubicación entra directamente.
-NPCs presentes aparecen dinámicamente.
-Si el jugador no conoce al NPC, aparece ???.
-Al conocerlo, aparece su nombre.
-Las posiciones y tamaños se escalan según tamaño real de ventana.
-La ventana ya puede expandir correctamente al maximizar.
+La sesión más reciente fue frustrante porque se dieron instrucciones basadas en suposiciones y búsqueda indexada fallida. Evitar repetir eso.
 
-Configuración importante en project.godot:
+Regla para el siguiente chat:
 
-display/window/size/viewport_width=1152
-display/window/size/viewport_height=648
-display/window/size/mode=2
-display/window/stretch/mode="canvas_items"
-display/window/stretch/aspect="expand"
-display/window/size/resizable=true
-display/window/stretch/scale=1.0
+Abrir archivo real.
+Leerlo.
+Si el fetch se trunca, usar raw/fetch o pedir rangos si la herramienta lo permite.
+No decir “si existe tal función”.
+No pedir al capitán que revise algo que el asistente puede revisar.
+No proponer cambios sin ubicar el estado actual del archivo.
+No tocar varias escenas al mismo tiempo si hay inestabilidad.
+Priorizar estabilizar antes de avanzar.
+Próximo paso recomendado
 
-Si el juego no expande al maximizar, revisar estas líneas.
+No avanzar a nuevas features.
 
-Diseño visual acordado para World Map
+Primero hacer estabilización:
 
-Regla final:
+Confirmar que LocationScene compila tras eliminar duplicados.
+Probar biblioteca de noche con Selene y Seraphina:
+no deben encimarse;
+deben aparecer alineadas desde izquierda.
+Confirmar guardado/carga:
+guardar en casa y cargar vuelve a casa;
+guardar en biblioteca y cargar vuelve a biblioteca;
+guardar en tienda y cargar vuelve a tienda.
+Confirmar WorldMap hover:
+muestra NPCs presentes;
+no trunca mal textos importantes.
+Luego rehacer DateScene completa con popup/modal.
 
-HUD arriba.
-Mapa grande.
-Botones globales arriba derecha.
-Tarjeta hover abajo izquierda.
-Edificios/ubicaciones independientes.
-Click directo para entrar.
-Sin lista duplicada.
-Sin panel derecho invasivo.
+Última advertencia importante
 
-Los edificios deben tratarse como assets separados del fondo.
+No repetir el error de modificar DateScene por pedazos. La escena debe reemplazarse completa cuando se retome, porque la estructura actual es la causa de la mala experiencia.
 
-El fondo ideal:
 
-world_map_luminaria.png
+Lamento de verdad la vuelta absurda de hoy, capitán. Este README deja candados explícitos para que al retomar no se vuelva a trabajar contra archivos imaginarios ni contra estados viejos.
 
-debe ser una planicie/mapa base con caminos, río, suelo, etc.
+Prompt sugerido para continuar en otro chat
 
-Los edificios deben ser assets separados:
+Usa este prompt exacto:
 
-map_home_forastero.png
-map_library_alba.png
-map_tavern_puente_rojo.png
-...
-
-Esto permite mover edificios desde ui_assets.json sin redibujar el fondo.
-
-Próximo paso
-
-Siguiente pantalla:
-
-LocationScene final funcional con personajes clicables
-
-Objetivo:
-
-click en edificio del mapa
-→ entrar a ubicación
-→ ver fondo de ubicación
-→ ver personajes presentes como sprites/placeholders clicables
-→ click en personaje
-→ acciones del personaje
-
-No debe ser una lista administrativa.
-
-Diseño esperado:
-
-HUD superior compacto
-Fondo de ubicación
-Personajes presentes como placeholders/sprites
-Tarjeta de personaje seleccionable
-Acciones:
-- hablar
-- regalar
-- pedir favor
-- invitar a cita
-- volver
-
-Reglas:
-
-Si NPC no fue conocido, mostrar ???.
-Si fue conocido, mostrar nombre.
-Usar ui_assets.json para sprite/retrato/fondo.
-Si asset no existe, usar placeholder con nombre final.
-Mantener backend intacto.
-No tocar sistemas de relación/cita salvo helper visual si fuera inevitable.
-
-Archivos probables:
-
-scenes/location/location_scene.gd
-ui/components/location_character_button.gd
-ui/components/location_character_card.gd
-
-Usar:
-
-WorldHudBar
-VisualAsset
-DataManager.get_location_ui()
-DataManager.get_npc_ui()
-GameManager.mark_npc_seen()
-Forma de trabajo recomendada con ChatGPT
-
-Al continuar:
-
-Revisar archivos reales del repo antes de proponer cambios.
-No asumir funciones si no se revisaron.
-Entregar bloques grandes pero concretos.
-Indicar:
-archivo;
-bloque a reemplazar;
-código completo si conviene;
-qué probar.
-Evitar planes innecesarios cuando ya hay decisión.
-Pedir confirmación solo para decisiones creativas/narrativas o cambios estructurales.
-Si el usuario dice que hizo commit, revisar el repo actualizado.
-Recordar que GitHub no indexa bien por búsqueda; abrir archivos concretos por ruta.
-El usuario es novato en Godot, pero programador backend Java/Spring.
-Explicar lo necesario de Godot cuando haya errores de lógica o UI.
-Último estado validado
-
-La última iteración corrigió el World Map responsive:
-
-posiciones/tamaños escalan con ventana;
-botones dejan de salirse al reducir;
-HUD usa texto limpio;
-tarjeta hover queda abajo izquierda;
-ventana expande correctamente al maximizar;
-arquitectura está lista para pasar a LocationScene.
-
-Siguiente bloque recomendado:
-
-Implementar LocationScene final funcional con personajes clicables.
-
----
-
-# 2. Prompt para nuevo chat
-
-Copia y pega esto al iniciar el nuevo chat:
-
-```text
 Hola, continuemos el desarrollo de mi juego Godot “Isekai Novel”.
 
-Contexto importante:
-- Estoy trabajando en un repositorio GitHub llamado `JoshSnowMex/isekai-novel`.
-- El repo está conectado por GitHub, pero por un error no indexa bien por búsqueda de palabras. No confíes en search para encontrar funciones; abre archivos concretos por ruta.
-- Antes de proponer cambios, revisa los archivos pertinentes del repo.
-- Soy programador backend Java/Spring, pero novato en Godot. Necesito instrucciones claras: archivo, qué reemplazar, dónde pegar código y qué probar.
-- No quiero soluciones temporales. Trabajamos siempre pensando en versión final, aunque usemos placeholders.
-- Los placeholders deben tener nombres finales de asset, por ejemplo `Lyria_talking.png`, no `npc1.png`.
-- Prefiero bloques grandes y concretos. No quiero conversaciones de “plan → confirmación → código” salvo que sea una decisión creativa, narrativa o estructural importante.
-- Si digo que hice commit/checkpoint, asume que el repo fue actualizado y revísalo antes de continuar.
-- El estilo de trabajo que veníamos teniendo era bueno: directo, con buen humor, pero preciso.
-
-Filosofía del juego:
-- No es un dating sim plano. Es un simulador de historias basado en citas.
-- La historia debe emerger de relaciones, conocimiento, decisiones, lealtad, celos, tensión, estado del mundo y consecuencias.
-- La main storyline no debe depender rígidamente del calendario.
-- El calendario sirve más para cumpleaños, aniversarios y memoria emocional.
-- Todos los sistemas principales del backend ya están cerrados para pasar a UI.
+Contexto obligatorio:
+- Revisa primero el README.md actualizado del repositorio.
+- El repo es `JoshSnowMex/isekai-novel`.
+- No confíes en la búsqueda indexada de GitHub para encontrar funciones; puede fallar.
+- Antes de proponer cambios, abre los archivos concretos por ruta y lee el estado real.
+- No me digas “si existe tal función”; verifica tú el archivo.
+- No me pidas que te pase archivos si tienes acceso al repo.
+- Soy backend Java/Spring y novato en Godot, necesito instrucciones exactas: archivo, qué reemplazar, dónde pegar y qué probar.
+- Si el cambio es grande, dame reemplazo completo de archivo.
+- No quiero soluciones temporales ni UI tipo ERP/dashboard.
+- Trabajamos como versión final productiva, aunque usemos placeholders.
+- Los placeholders deben tener nombres finales de asset.
 
 Estado actual:
-- Backend completo:
-  - ciclo de día;
-  - acciones;
-  - casa;
-  - guardado/carga/autosave;
-  - ubicaciones;
-  - NPC schedules;
-  - diálogo;
-  - tienda/items/regalos;
-  - citas;
-  - movimientos de cita;
-  - revelación de información;
-  - bitácora;
-  - estado del mundo;
-  - storylets;
-  - milestones;
-  - rivalidades;
-  - final union;
-  - calendario emocional;
-  - postgame completo;
-  - recompensas dinámicas.
-- UI foundation iniciada.
-- World Map ya fue convertido a UI final funcional:
-  - HUD superior;
-  - mapa grande;
-  - botones globales arriba derecha;
-  - tarjeta hover abajo izquierda;
-  - ubicaciones clicables como placeholders cuadrados;
-  - click directo entra a ubicación;
-  - NPCs presentes se muestran en hover;
-  - NPC desconocido aparece como `???`;
-  - responsive al tamaño de ventana;
-  - configurado con `canvas_items` y `expand`.
+- Backend completo/cerrado.
+- UI aprobada:
+  - WorldMap funcional pero necesita ajuste visual/consistencia.
+  - HomeScene aprobada.
+  - ShopScene aprobada.
+  - JournalScene aprobada.
+  - LocationScene funcional pero hay que confirmar bug de sprites encimados.
+- DateScene NO aprobada. Debe rehacerse con:
+  - narrativa grande con scroll;
+  - header compacto;
+  - acciones base abajo;
+  - popup/modal con scroll para respuestas, regalos y gestos;
+  - sin panel grande inútil de localización;
+  - sin opciones desbordadas.
 
-Archivos importantes:
-- `core/data_manager.gd`
-- `core/game_manager.gd`
-- `core/save_manager.gd`
-- `core/scene_router.gd`
-- `scenes/map/world_map.gd`
-- `scenes/location/location_scene.gd`
-- `data/ui_assets.json`
-- `ui/components/visual_asset.gd`
-- `ui/components/location_map_button.gd`
-- `ui/components/world_hud_bar.gd`
-- `ui/components/world_action_panel.gd`
-- `ui/components/location_hover_card.gd`
+Antes de tocar DateScene:
+1. Revisa `scenes/location/location_scene.gd`.
+2. Confirma que no haya funciones duplicadas.
+3. Confirma que los NPCs se posicionan desde izquierda.
+4. Revisa `core/save_manager.gd`, `core/scene_router.gd`, `scenes/menu/main_menu.gd`.
+5. Confirma que cargar partida vuelve a la escena correspondiente usando `SceneRouter.go_to_current_location_scene()`.
 
-Siguiente paso:
-Quiero continuar con `LocationScene final funcional con personajes clicables`.
-
-Objetivo:
-- Al entrar a una ubicación desde el mapa, debe mostrarse el fondo de la ubicación.
-- Los NPCs presentes deben aparecer como sprites/placeholders clicables.
-- Si el jugador no conoce al NPC, debe aparecer como `???`.
-- Si ya lo conoce, debe aparecer su nombre.
-- Al hacer click en un NPC, aparece una tarjeta/panel de acciones:
-  - hablar;
-  - regalar;
-  - pedir favor;
-  - invitar a cita;
-  - volver/cerrar selección.
-- No quiero lista administrativa de NPCs si podemos evitarla.
-- La escena debe quedar lista para reemplazar placeholders por assets reales usando `ui_assets.json`.
-- No tocar backend salvo helpers visuales necesarios.
-- Revisa primero el repo actualizado y luego dame el bloque grande de implementación.
-
-Por favor continúa desde ahí.
+Después de esa revisión, dame:
+- diagnóstico breve basado en archivos reales;
+- correcciones puntuales si hay bug;
+- y luego el reemplazo completo de `scenes/date/date_scene.gd` con popup/modal.
