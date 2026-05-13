@@ -307,7 +307,7 @@ func add_class_card(parent: Node, class_id: String) -> void:
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(150, 300)
+	card.custom_minimum_size = Vector2(150, 280)
 	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	card.text = build_class_card_text(class_id, class_data)
 
@@ -501,7 +501,7 @@ func layout_overlay_controls() -> void:
 	var margin: float = 10.0
 	var top_height: float = 46.0
 	var panel_width: float = min(1040.0, max(640.0, size.x - (margin * 2.0)))
-	var bottom_height: float = 148.0
+	var bottom_height: float = 176.0
 
 	top_panel.size = Vector2(panel_width, top_height)
 	top_panel.position = Vector2(
@@ -536,7 +536,7 @@ func layout_overlay_controls() -> void:
 			grid_height = min(card_area.size.y, 340.0)
 		elif current_step == IntroStep.CLASS:
 			grid_width = min(panel_width, 1040.0)
-			grid_height = min(card_area.size.y, 340.0)
+			grid_height = min(card_area.size.y, 320.0)
 
 		card_grid.size = Vector2(grid_width, grid_height)
 		card_grid.position = Vector2(
