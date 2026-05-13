@@ -13,9 +13,9 @@ var top_info_label: Label
 var global_action_panel: PanelContainer
 var global_action_buttons: HBoxContainer
 
-var scene_panel: PanelContainer
-var scene_title_label: Label
-var scene_description_label: Label
+var context_panel: PanelContainer
+var context_title_label: Label
+var context_description_label: Label
 
 var npc_panel: PanelContainer
 var npc_name_label: Label
@@ -27,8 +27,15 @@ var narrative_scroll: ScrollContainer
 var narrative_label: Label
 
 var action_panel: PanelContainer
-var action_scroll: ScrollContainer
-var action_buttons: GridContainer
+var action_buttons: HBoxContainer
+
+var modal_layer: ColorRect
+var modal_panel: PanelContainer
+var modal_title_label: Label
+var modal_description_label: Label
+var modal_scroll: ScrollContainer
+var modal_buttons: VBoxContainer
+var modal_footer: HBoxContainer
 
 var current_date: Dictionary = {}
 var current_mode: String = "normal"
@@ -89,10 +96,11 @@ func build_ui() -> void:
 	build_background()
 	build_top_info_panel()
 	build_global_action_panel()
-	build_scene_panel()
+	build_context_panel()
 	build_npc_panel()
 	build_narrative_panel()
 	build_action_panel()
+	build_modal()
 
 	call_deferred("refresh_layout_after_frame")
 
@@ -160,39 +168,39 @@ func build_global_action_panel() -> void:
 	add_global_action("Cargar", func(): SceneRouter.go_to_main_menu())
 
 
-func build_scene_panel() -> void:
-	scene_panel = PanelContainer.new()
-	scene_panel.custom_minimum_size = Vector2(520, 210)
-	date_layer.add_child(scene_panel)
+func build_context_panel() -> void:
+	context_panel = PanelContainer.new()
+	context_panel.custom_minimum_size = Vector2(360, 72)
+	date_layer.add_child(context_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_top", 8)
 	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 10)
-	scene_panel.add_child(margin)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	context_panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 8)
+	box.add_theme_constant_override("separation", 4)
 	margin.add_child(box)
 
-	scene_title_label = Label.new()
-	scene_title_label.custom_minimum_size = Vector2(1, 26)
-	scene_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scene_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	scene_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	scene_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(scene_title_label)
+	context_title_label = Label.new()
+	context_title_label.custom_minimum_size = Vector2(1, 24)
+	context_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	context_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	context_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	context_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(context_title_label)
 
-	scene_description_label = Label.new()
-	scene_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scene_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scene_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	scene_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	scene_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(scene_description_label)
+	context_description_label = Label.new()
+	context_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	context_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	context_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	context_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	context_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(context_description_label)
 
 
 func build_npc_panel() -> void:
@@ -237,14 +245,14 @@ func build_npc_panel() -> void:
 
 func build_narrative_panel() -> void:
 	narrative_panel = PanelContainer.new()
-	narrative_panel.custom_minimum_size = Vector2(760, 190)
+	narrative_panel.custom_minimum_size = Vector2(760, 260)
 	date_layer.add_child(narrative_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 14)
 	narrative_panel.add_child(margin)
 
 	narrative_scroll = ScrollContainer.new()
@@ -262,9 +270,10 @@ func build_narrative_panel() -> void:
 	narrative_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	narrative_scroll.add_child(narrative_label)
 
+
 func build_action_panel() -> void:
 	action_panel = PanelContainer.new()
-	action_panel.custom_minimum_size = Vector2(760, 120)
+	action_panel.custom_minimum_size = Vector2(760, 72)
 	date_layer.add_child(action_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -274,19 +283,72 @@ func build_action_panel() -> void:
 	margin.add_theme_constant_override("margin_bottom", 8)
 	action_panel.add_child(margin)
 
-	action_scroll = ScrollContainer.new()
-	action_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	action_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	margin.add_child(action_scroll)
-
-	action_buttons = GridContainer.new()
+	action_buttons = HBoxContainer.new()
 	action_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	action_buttons.columns = 3
-	action_buttons.add_theme_constant_override("h_separation", 8)
-	action_buttons.add_theme_constant_override("v_separation", 8)
-	action_scroll.add_child(action_buttons)
+	action_buttons.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	action_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	action_buttons.add_theme_constant_override("separation", 10)
+	margin.add_child(action_buttons)
+
+
+func build_modal() -> void:
+	modal_layer = ColorRect.new()
+	modal_layer.color = Color(0, 0, 0, 0.55)
+	modal_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	modal_layer.visible = false
+	modal_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+	date_layer.add_child(modal_layer)
+
+	modal_panel = PanelContainer.new()
+	modal_panel.custom_minimum_size = Vector2(520, 360)
+	modal_layer.add_child(modal_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 14)
+	modal_panel.add_child(margin)
+
+	var box: VBoxContainer = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 10)
+	margin.add_child(box)
+
+	modal_title_label = Label.new()
+	modal_title_label.custom_minimum_size = Vector2(1, 28)
+	modal_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	modal_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	modal_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	modal_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(modal_title_label)
+
+	modal_description_label = Label.new()
+	modal_description_label.custom_minimum_size = Vector2(1, 48)
+	modal_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	modal_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	modal_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	modal_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(modal_description_label)
+
+	modal_scroll = ScrollContainer.new()
+	modal_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	modal_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	modal_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	modal_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	box.add_child(modal_scroll)
+
+	modal_buttons = VBoxContainer.new()
+	modal_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	modal_buttons.add_theme_constant_override("separation", 8)
+	modal_scroll.add_child(modal_buttons)
+
+	modal_footer = HBoxContainer.new()
+	modal_footer.alignment = BoxContainer.ALIGNMENT_CENTER
+	modal_footer.add_theme_constant_override("separation", 10)
+	box.add_child(modal_footer)
+
 
 func start_date(npc_id: String, date_location_id: String = "") -> void:
 	current_mode = "normal"
@@ -356,14 +418,15 @@ func refresh_normal_header() -> void:
 	var progress: int = int(current_date.get("progress", 0))
 	var threshold: int = int(date_location.get("success_threshold", 70))
 
-	top_info_label.text = "Cita con %s · Progreso %s%% · Éxito desde %s%%" % [
+	top_info_label.text = "Cita con %s · %s · Progreso %s%% · Éxito desde %s%%" % [
 		npc.get("name", npc_id),
+		date_location.get("name", date_location_id),
 		progress,
 		threshold
 	]
 
-	scene_title_label.text = str(date_location.get("name", date_location_id))
-	scene_description_label.text = build_date_scene_summary(date_location)
+	context_title_label.text = str(date_location.get("name", date_location_id))
+	context_description_label.text = build_date_scene_summary(date_location)
 
 	npc_status_label.text = build_npc_status_text(npc_id)
 
@@ -375,8 +438,8 @@ func refresh_special_header() -> void:
 	var step: Dictionary = DataManager.get_relationship_step(step_id)
 
 	top_info_label.text = "Cita especial con %s" % npc.get("name", npc_id)
-	scene_title_label.text = str(step.get("name", "Avance de relación"))
-	scene_description_label.text = str(step.get("description", "Una conversación importante."))
+	context_title_label.text = str(step.get("name", "Avance de relación"))
+	context_description_label.text = str(step.get("description", "Una conversación importante."))
 	npc_status_label.text = "Progreso especial: %s/%s\nErrores: %s" % [
 		current_date.get("progress", 0),
 		current_date.get("questions_required", 0),
@@ -438,6 +501,7 @@ func build_npc_portrait() -> void:
 
 
 func build_actions() -> void:
+	close_choice_modal()
 	clear_children(action_buttons)
 
 	add_action_button(
@@ -470,6 +534,7 @@ func build_actions() -> void:
 
 
 func build_special_actions() -> void:
+	close_choice_modal()
 	clear_children(action_buttons)
 
 	if RelationshipSystem.is_special_date_complete(current_date):
@@ -517,12 +582,12 @@ func add_action_button(text: String, callback: Callable, disabled: bool = false,
 
 func show_hint(text: String) -> void:
 	if current_mode == "special":
-		scene_description_label.text = text
+		context_description_label.text = text
 		return
 
 	var date_location_id: String = current_date.get("date_location_id", "")
 	var date_location: Dictionary = DataManager.get_date_location(date_location_id)
-	scene_description_label.text = text + "\n\n" + build_date_scene_summary(date_location)
+	context_description_label.text = text + "\n\n" + build_date_scene_summary(date_location)
 
 
 func clear_children(node: Node) -> void:
@@ -582,15 +647,16 @@ func do_question() -> void:
 		return
 
 	DateSystem.register_question(current_date)
-	clear_children(action_buttons)
-
 	current_narrative = q["question"]
 	refresh_date_view()
+
+	open_choice_modal("Responder", q["question"])
 
 	for option in q["options"]:
 		add_question_option_button(q, str(option))
 
-	add_action_button("No responder", func():
+	add_modal_footer_button("No responder", func():
+		close_choice_modal()
 		current_narrative = "Decides no responder todavía. Algunas preguntas pesan más cuando se entienden a medias."
 		refresh_date_view()
 		build_actions()
@@ -598,6 +664,8 @@ func do_question() -> void:
 
 
 func answer_question(question: Dictionary, selected: String) -> void:
+	close_choice_modal()
+
 	var correct: String = question["correct"]
 	var npc_id: String = current_date["npc_id"]
 
@@ -626,16 +694,15 @@ func show_gift_selection() -> void:
 
 	var gifts: Array = GameManager.get_gift_items_in_inventory()
 
-	clear_children(action_buttons)
-
 	if gifts.is_empty():
 		current_narrative = "No tienes regalos disponibles.\n\nLa intención existe, pero la mochila no ayuda."
 		refresh_date_view()
-		add_action_button("Volver", func(): build_actions())
 		return
 
 	current_narrative = "Elige un regalo para esta cita. No todos los regalos dicen lo mismo."
 	refresh_date_view()
+
+	open_choice_modal("Elegir regalo", current_narrative)
 
 	for entry in gifts:
 		var item_entry: Dictionary = entry
@@ -643,7 +710,8 @@ func show_gift_selection() -> void:
 		var amount: int = int(item_entry.get("amount", 0))
 		add_gift_option_button(item_id, amount)
 
-	add_action_button("Volver", func():
+	add_modal_footer_button("Volver", func():
+		close_choice_modal()
 		current_narrative = "Guardas el regalo por ahora."
 		refresh_date_view()
 		build_actions()
@@ -651,6 +719,8 @@ func show_gift_selection() -> void:
 
 
 func give_date_gift(item_id: String) -> void:
+	close_choice_modal()
+
 	if not DateSystem.can_gift(current_date):
 		show_date_message("Regalo agotado", "Ya diste un regalo durante esta cita.")
 		build_actions()
@@ -712,8 +782,6 @@ func give_date_gift(item_id: String) -> void:
 
 
 func show_move_selection() -> void:
-	clear_children(action_buttons)
-
 	var move_ids: Array = DateSystem.get_available_moves(current_date)
 
 	current_narrative = "Elige un gesto. No todos los movimientos son buena idea solo porque puedas intentarlos."
@@ -722,11 +790,15 @@ func show_move_selection() -> void:
 	if move_ids.is_empty():
 		current_narrative = "Ya no conviene intentar más movimientos en esta cita."
 		refresh_date_view()
-	else:
-		for move_id in move_ids:
-			add_move_option_button(str(move_id))
+		return
 
-	add_action_button("Volver", func():
+	open_choice_modal("Elegir gesto", current_narrative)
+
+	for move_id in move_ids:
+		add_move_option_button(str(move_id))
+
+	add_modal_footer_button("Volver", func():
+		close_choice_modal()
 		current_narrative = "Dejas pasar el gesto por ahora."
 		refresh_date_view()
 		build_actions()
@@ -741,6 +813,7 @@ func build_move_hint(move_id: String) -> String:
 	text += " · Tensión mínima %s" % int(move.get("min_tension", 0))
 
 	var preferred: Array = move.get("preferred_moods", [])
+
 	if not preferred.is_empty():
 		text += "\nEncaja con: %s" % ", ".join(preferred)
 
@@ -748,6 +821,8 @@ func build_move_hint(move_id: String) -> String:
 
 
 func perform_move(move_id: String) -> void:
+	close_choice_modal()
+
 	var result: Dictionary = DateSystem.perform_move(current_date, move_id)
 
 	GameManager.consume_action(4)
@@ -779,15 +854,16 @@ func do_special_question() -> void:
 		build_special_actions()
 		return
 
-	clear_children(action_buttons)
-
 	current_narrative = q.get("question", "")
 	refresh_date_view()
+
+	open_choice_modal("Responder", current_narrative)
 
 	for option in q.get("options", []):
 		add_special_question_option_button(q, str(option))
 
-	add_action_button("No responder", func():
+	add_modal_footer_button("No responder", func():
+		close_choice_modal()
 		current_narrative = "Decides no forzar la respuesta todavía."
 		refresh_date_view()
 		build_special_actions()
@@ -795,6 +871,8 @@ func do_special_question() -> void:
 
 
 func answer_special_question(question: Dictionary, selected: String) -> void:
+	close_choice_modal()
+
 	var result: Dictionary = RelationshipSystem.answer_special_question(current_date, question, selected)
 
 	current_narrative = "%s\n\nProgreso especial: %s/%s\nErrores: %s" % [
@@ -831,7 +909,11 @@ func show_final_summary(summary_text: String) -> void:
 	refresh_date_view()
 	clear_children(action_buttons)
 
-	add_action_button("Continuar", func(): SceneRouter.go_to_world_map())
+	open_choice_modal("Resumen de la cita", summary_text)
+	add_modal_footer_button("Continuar", func():
+		close_choice_modal()
+		SceneRouter.go_to_current_location_scene()
+	)
 
 
 func build_question(npc_id: String) -> Dictionary:
@@ -854,6 +936,7 @@ func build_question(npc_id: String) -> Dictionary:
 
 		if other_info.has(info_key):
 			var value: String = str(other_info[info_key])
+
 			if value != correct_value:
 				options.append(value)
 
@@ -877,6 +960,48 @@ func build_question(npc_id: String) -> Dictionary:
 	}
 
 
+func open_choice_modal(title: String, description: String) -> void:
+	clear_children(modal_buttons)
+	clear_children(modal_footer)
+	modal_title_label.text = title
+	modal_description_label.text = description
+	modal_layer.visible = true
+	modal_layer.move_to_front()
+	call_deferred("refresh_layout_after_frame")
+
+
+func close_choice_modal() -> void:
+	if modal_layer != null:
+		modal_layer.visible = false
+
+
+func add_modal_choice_button(text: String, callback: Callable, hint: String = "") -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_ALL
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.custom_minimum_size = Vector2(1, 48)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	button.pressed.connect(callback)
+
+	if hint != "":
+		button.mouse_entered.connect(func(): modal_description_label.text = hint)
+		button.focus_entered.connect(func(): modal_description_label.text = hint)
+
+	modal_buttons.add_child(button)
+	return button
+
+
+func add_modal_footer_button(text: String, callback: Callable) -> Button:
+	var button: Button = Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(180, 42)
+	button.pressed.connect(callback)
+	modal_footer.add_child(button)
+	return button
+
+
 func layout_overlay_controls() -> void:
 	if date_layer == null:
 		return
@@ -884,8 +1009,12 @@ func layout_overlay_controls() -> void:
 	var margin: float = 10.0
 	var top_y: float = 10.0
 	var top_height: float = 46.0
+	var action_height: float = 78.0
+	var context_height: float = 86.0
+	var gap: float = 10.0
 
 	var global_width: float = 330.0
+
 	if date_layer.size.x < 760:
 		global_width = 260.0
 
@@ -899,46 +1028,49 @@ func layout_overlay_controls() -> void:
 	top_info_panel.size = Vector2(info_width, top_height)
 	top_info_panel.position = Vector2(margin, top_y)
 
-	var content_top: float = top_y + top_height + 12.0
-	var bottom_action_height: float = 132.0
-	var narrative_height: float = 190.0
-	var gap: float = 10.0
-
-	var available_width: float = date_layer.size.x - 24.0
-	var available_height: float = date_layer.size.y - content_top - bottom_action_height - narrative_height - (gap * 3.0) - 12.0
-
-	var npc_width: float = 300.0
-	var scene_width: float = max(360.0, available_width - npc_width - 12.0)
-
-	if date_layer.size.x < 880:
-		npc_width = 240.0
-		scene_width = max(320.0, available_width - npc_width - 12.0)
-
-	scene_panel.size = Vector2(scene_width, max(150.0, available_height))
-	npc_panel.size = Vector2(npc_width, max(150.0, available_height))
-
-	npc_panel.size = Vector2(npc_width, max(210.0, available_height))
-	npc_panel.position = Vector2(scene_panel.position.x + scene_width + 12.0, content_top)
-
-	narrative_panel.size = Vector2(available_width, narrative_height)
-	narrative_panel.position = Vector2(
-		12.0,
-		content_top + max(150.0, available_height) + gap
+	var available_width: float = max(320.0, date_layer.size.x - (margin * 2.0))
+	var bottom_y: float = max(
+		top_y + top_height + context_height + 220.0,
+		date_layer.size.y - action_height - margin
 	)
 
-	action_panel.size = Vector2(available_width, bottom_action_height)
-	action_panel.position = Vector2(
-		12.0,
-		narrative_panel.position.y + narrative_height + gap
+	action_panel.size = Vector2(available_width, action_height)
+	action_panel.position = Vector2(margin, bottom_y)
+
+	var content_top: float = top_y + top_height + gap
+	context_panel.size = Vector2(available_width, context_height)
+	context_panel.position = Vector2(margin, content_top)
+
+	var center_top: float = content_top + context_height + gap
+	var center_height: float = max(260.0, action_panel.position.y - center_top - gap)
+	var npc_width: float = clamp(date_layer.size.x * 0.28, 240.0, 340.0)
+	var narrative_width: float = available_width - npc_width - gap
+
+	if date_layer.size.x < 760:
+		npc_width = max(200.0, available_width * 0.32)
+		narrative_width = available_width - npc_width - gap
+
+	narrative_panel.size = Vector2(max(320.0, narrative_width), center_height)
+	narrative_panel.position = Vector2(margin, center_top)
+
+	npc_panel.size = Vector2(npc_width, center_height)
+	npc_panel.position = Vector2(
+		narrative_panel.position.x + narrative_panel.size.x + gap,
+		center_top
 	)
 
-	if action_buttons != null:
-		if action_panel.size.x >= 900:
-			action_buttons.columns = 4
-		elif action_panel.size.x >= 660:
-			action_buttons.columns = 3
-		else:
-			action_buttons.columns = 2
+	if modal_layer != null:
+		modal_layer.size = date_layer.size
+
+		var modal_width: float = clamp(date_layer.size.x * 0.72, 520.0, 860.0)
+		var modal_height: float = clamp(date_layer.size.y * 0.72, 360.0, 640.0)
+
+		modal_panel.size = Vector2(modal_width, modal_height)
+		modal_panel.position = Vector2(
+			(date_layer.size.x - modal_width) / 2.0,
+			(date_layer.size.y - modal_height) / 2.0
+		)
+
 
 func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
@@ -967,40 +1099,43 @@ func setup_fullscreen_root() -> void:
 	offset_right = 0
 	offset_bottom = 0
 
+
 func add_question_option_button(question: Dictionary, value: String) -> void:
 	var locked_value: String = value
-	add_action_button(
+
+	add_modal_choice_button(
 		locked_value,
 		func(): answer_question(question, locked_value),
-		false,
 		"Responder: %s" % locked_value
 	)
 
+
 func add_special_question_option_button(question: Dictionary, value: String) -> void:
 	var locked_value: String = value
-	add_action_button(
+
+	add_modal_choice_button(
 		locked_value,
 		func(): answer_special_question(question, locked_value)
 	)
+
 
 func add_gift_option_button(item_id: String, amount: int) -> void:
 	var locked_item_id: String = item_id
 	var item_data: Dictionary = DataManager.get_item(locked_item_id)
 
-	add_action_button(
+	add_modal_choice_button(
 		"%s x%s" % [item_data.get("name", locked_item_id), amount],
 		func(): give_date_gift(locked_item_id),
-		false,
 		str(item_data.get("description", "Un regalo."))
 	)
+
 
 func add_move_option_button(move_id: String) -> void:
 	var locked_move_id: String = move_id
 	var move: Dictionary = DataManager.get_date_move(locked_move_id)
 
-	add_action_button(
+	add_modal_choice_button(
 		move.get("name", locked_move_id),
 		func(): perform_move(locked_move_id),
-		false,
 		build_move_hint(locked_move_id)
 	)
