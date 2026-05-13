@@ -124,7 +124,7 @@ func build_global_action_panel() -> void:
 
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(760, 230)
+	bottom_panel.custom_minimum_size = Vector2(760, 210)
 	location_layer.add_child(bottom_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
@@ -351,7 +351,7 @@ func get_bottom_panel_reserved_height() -> float:
 	if bottom_panel == null:
 		return 210.0
 
-	return max(bottom_panel.size.y + 34.0, 250.0)
+	return max(bottom_panel.size.y + 24.0, 230.0)
 
 
 func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
@@ -1359,10 +1359,14 @@ func layout_overlay_controls() -> void:
 		panel_width = max(360.0, location_layer.size.x - 24.0)
 		panel_height = 206.0
 
-	bottom_panel.size = Vector2(panel_width, panel_height)
+	var bottom_margin: float = 18.0
+	var bottom_height: float = min(210.0, max(176.0, location_layer.size.y * 0.34))
+	var bottom_width: float = min(900.0, max(620.0, location_layer.size.x - 24.0))
+
+	bottom_panel.size = Vector2(bottom_width, bottom_height)
 	bottom_panel.position = Vector2(
-		12.0,
-		max(12.0, location_layer.size.y - panel_height - 12.0)
+		(location_layer.size.x - bottom_width) / 2.0,
+		max(8.0, location_layer.size.y - bottom_height - bottom_margin)
 	)
 	
 	if modal_layer != null:
