@@ -364,7 +364,6 @@ func show_unknown_npc_detail_view() -> void:
 
 	add_action_card("Volver a personas", "Regresa al listado de personajes.", func(): show_people_section())
 
-
 func show_npc_detail_view(npc_id: String) -> void:
 	selected_npc_id = npc_id
 	GameManager.ensure_relationship(npc_id)
@@ -373,39 +372,173 @@ func show_npc_detail_view(npc_id: String) -> void:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	var relation: Dictionary = GameManager.player["relationships"][npc_id]
 	var state: String = str(relation.get("relationship_state", "none"))
+	var name: String = str(npc.get("name", npc_id))
 
-	top_info_label.text = "Bitácora · Personas"
-	content_title_label.text = str(npc.get("name", npc_id))
+	top_info_label.text = "Bitácora · Personas · %s" % name
+	content_title_label.text = name
 	content_subtitle_label.text = "%s · Vínculo total %s" % [
 		GameManager.get_relationship_state_label(state),
 		GameManager.get_total_affinity(npc_id)
 	]
-	set_context("Este registro mezcla datos descubiertos y memoria emocional. Lo que falta también importa.")
+	set_context("Elige un bloque para revisar este vínculo sin perderte en una lista larga.")
 
 	clear_children(content_container)
 
-	add_action_card("← Volver a personas", "Regresa al listado de personajes conocidos.", func(): show_people_section())
+	add_action_card(
+		"← Volver a personas",
+		"Regresa al listado de personajes conocidos.",
+		func(): show_people_section()
+	)
 
-	add_text_card("Estado de relación", "%s\n\n%s" % [
-		GameManager.get_relationship_state_label(state),
-		GameManager.get_relationship_state_description(state)
-	])
+	var grid: GridContainer = create_card_grid()
 
-	add_text_card("Vínculo", build_npc_affinity_summary(npc_id))
-	add_text_card("Próximo avance", build_progression_text(npc_id))
-	add_text_card("Unión definitiva", build_final_union_progress_text(npc_id))
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Estado de relación",
+		"%s · %s" % [
+			GameManager.get_relationship_state_label(state),
+			summarize_block_text(GameManager.get_relationship_state_description(state), 1)
+		],
+		"Estado de relación",
+		"%s\n\n%s" % [
+			GameManager.get_relationship_state_label(state),
+			GameManager.get_relationship_state_description(state)
+		]
+	)
 
-	var postgame_text: String = build_npc_postgame_text(npc_id)
-	if postgame_text != "":
-		add_text_card("Vida compartida", postgame_text)
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Vínculo",
+		summarize_block_text(build_npc_affinity_summary(npc_id), 2),
+		"Vínculo",
+		build_npc_affinity_summary(npc_id)
+	)
 
-	add_text_card("Fechas importantes", build_emotional_calendar_text(npc_id))
-	add_text_card("Información descubierta", build_known_info_text(npc_id))
-	add_text_card("Regalos conocidos", build_known_gifts_text(npc_id))
-	add_text_card("Horarios conocidos", build_known_schedule_text(npc_id))
-	add_text_card("Coleccionables", build_npc_collectibles_text(npc_id))
-	add_text_card("Notas", build_npc_notes_text(npc_id))
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Próximo avance",
+		summarize_block_text(build_progression_text(npc_id), 2),
+		"Próximo avance",
+		build_progression_text(npc_id)
+	)
 
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Unión definitiva",
+		summarize_block_text(build_final_union_progress_text(npc_id), 2),
+		"Unión definitiva",
+		build_final_union_progress_text(npc_id)
+	)
+
+	var shared_life_text: String = build_npc_postgame_text(npc_id)
+	if shared_life_text != "":
+		add_npc_detail_block(
+			grid,
+			npc_id,
+			"Vida compartida",
+			summarize_block_text(shared_life_text, 2),
+			"Vida compartida",
+			shared_life_text
+		)
+
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Fechas importantes",
+		summarize_block_text(build_emotional_calendar_text(npc_id), 2),
+		"Fechas importantes",
+		build_emotional_calendar_text(npc_id)
+	)
+
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Información descubierta",
+		summarize_block_text(build_known_info_text(npc_id), 2),
+		"Información descubierta",
+		build_known_info_text(npc_id)
+	)
+
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Regalos conocidos",
+		summarize_block_text(build_known_gifts_text(npc_id), 2),
+		"Regalos conocidos",
+		build_known_gifts_text(npc_id)
+	)
+
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Horarios conocidos",
+		summarize_block_text(build_known_schedule_text(npc_id), 2),
+		"Horarios conocidos",
+		build_known_schedule_text(npc_id)
+	)
+
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Coleccionables",
+		summarize_block_text(build_npc_collectibles_text(npc_id), 2),
+		"Coleccionables",
+		build_npc_collectibles_text(npc_id)
+	)
+
+	add_npc_detail_block(
+		grid,
+		npc_id,
+		"Notas",
+		summarize_block_text(build_npc_notes_text(npc_id), 2),
+		"Notas",
+		build_npc_notes_text(npc_id)
+	)
+		
+func add_npc_detail_block(
+	parent: Node,
+	npc_id: String,
+	title: String,
+	summary: String,
+	detail_title: String,
+	detail_body: String
+) -> void:
+	var clean_summary: String = summary.strip_edges()
+
+	if clean_summary == "":
+		clean_summary = "Sin información registrada."
+
+	add_grid_action_card(
+		parent,
+		title,
+		clean_summary,
+		func(): show_npc_detail_block(npc_id, detail_title, detail_body)
+	)
+
+func show_npc_detail_block(npc_id: String, title: String, body: String) -> void:
+	selected_npc_id = npc_id
+
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var name: String = str(npc.get("name", npc_id))
+
+	top_info_label.text = "Bitácora · Personas · %s · %s" % [name, title]
+	content_title_label.text = title
+	content_subtitle_label.text = "Detalle de %s." % name
+	set_context("Detalle de %s." % title)
+
+	clear_children(content_container)
+
+	add_action_card(
+		"← Volver a %s" % name,
+		"Regresa al resumen de esta persona.",
+		func(): show_npc_detail_view(npc_id)
+	)
+
+	add_text_card(title, body)
 
 func build_npc_affinity_summary(npc_id: String) -> String:
 	var relation: Dictionary = GameManager.player["relationships"][npc_id]
@@ -578,38 +711,46 @@ func show_world_section() -> void:
 		romantic_pressure,
 		get_world_state_level_label(romantic_pressure)
 	])
-
-	add_action_card(
+	
+	var grid: GridContainer = create_card_grid()
+	
+	add_grid_action_card(
+		grid,
 		"Interpretación",
 		summarize_block_text(build_world_state_interpretation(global_tension, world_instability, romantic_pressure), 2),
 		func(): show_world_detail("Interpretación", build_world_state_interpretation(global_tension, world_instability, romantic_pressure))
 	)
 
-	add_action_card(
+	add_grid_action_card(
+		grid,
 		"Eje dominante del Velo",
 		summarize_block_text(build_veil_axis_text(), 2),
 		func(): show_world_detail("Eje dominante del Velo", build_veil_axis_text())
 	)
 
-	add_action_card(
+	add_grid_action_card(
+		grid,
 		"Consecuencias activas",
 		summarize_block_text(build_active_world_consequences_text(), 2),
 		func(): show_world_detail("Consecuencias activas", build_active_world_consequences_text())
 	)
 
-	add_action_card(
+	add_grid_action_card(
+		grid,
 		"Memorias del mundo",
 		summarize_block_text(build_world_memories_text(), 2),
 		func(): show_world_detail("Memorias del mundo", build_world_memories_text())
 	)
 
-	add_action_card(
+	add_grid_action_card(
+		grid,
 		"Después de la unión",
 		summarize_block_text(build_postgame_status_text(), 2),
 		func(): show_world_detail("Después de la unión", build_postgame_status_text())
 	)
 
-	add_action_card(
+	add_grid_action_card(
+		grid,
 		"Unión definitiva",
 		summarize_block_text(build_final_union_text(), 2),
 		func(): show_world_detail("Unión definitiva", build_final_union_text())
@@ -636,12 +777,7 @@ func show_calendar_section() -> void:
 
 	add_text_card("Resumen global", build_global_emotional_calendar_summary())
 
-	var grid: GridContainer = GridContainer.new()
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 10)
-	grid.add_theme_constant_override("v_separation", 10)
-	content_container.add_child(grid)
+	var grid: GridContainer = create_card_grid()
 
 	var any_known: bool = false
 
@@ -661,18 +797,14 @@ func show_memories_section() -> void:
 
 	clear_children(content_container)
 
-	add_action_card(
+	var grid: GridContainer = create_card_grid()
+
+	add_grid_action_card(
+		grid,
 		"Memorias del mundo",
 		summarize_block_text(build_world_memories_text(), 2),
 		func(): show_world_memories_detail()
 	)
-
-	var grid: GridContainer = GridContainer.new()
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 10)
-	grid.add_theme_constant_override("v_separation", 10)
-	content_container.add_child(grid)
 
 	var any_known: bool = false
 
@@ -741,14 +873,18 @@ func show_union_section() -> void:
 	set_context("Revisa estado actual, candidatos y consecuencias posteriores.")
 
 	clear_children(content_container)
-
-	add_action_card(
+	
+	var grid: GridContainer = create_card_grid()
+	
+	add_grid_action_card(
+		grid,
 		"Estado actual",
 		summarize_block_text(build_final_union_text(), 2),
 		func(): show_union_state_detail()
 	)
 
-	add_action_card(
+	add_grid_action_card(
+		grid,
 		"Después de la unión",
 		summarize_block_text(build_postgame_status_text(), 2),
 		func(): show_union_after_detail()
@@ -757,21 +893,15 @@ func show_union_section() -> void:
 	if FinalUnionSystem.has_final_union():
 		var chosen_npc_id: String = FinalUnionSystem.get_final_union_npc_id()
 		var chosen_npc: Dictionary = DataManager.get_npc(chosen_npc_id)
-		add_action_card(
+		add_grid_action_card(
+			grid,
 			"Vínculo elegido: %s" % chosen_npc.get("name", chosen_npc_id),
 			summarize_block_text(build_final_union_progress_text(chosen_npc_id), 2),
 			func(): show_union_npc_detail(chosen_npc_id)
-		)
+)
 	else:
-		var grid: GridContainer = GridContainer.new()
-		grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		grid.columns = 2
-		grid.add_theme_constant_override("h_separation", 10)
-		grid.add_theme_constant_override("v_separation", 10)
-		content_container.add_child(grid)
-
 		var any_known: bool = false
-
+		
 		for npc_id in DataManager.npcs.keys():
 			if is_npc_known(str(npc_id)):
 				any_known = true
@@ -898,16 +1028,39 @@ func summarize_block_text(text: String, max_lines: int = 2) -> String:
 	
 func add_action_card(title: String, hint: String, callback: Callable) -> void:
 	var button: Button = Button.new()
-	button.text = "%s\n%s" % [title, hint]
+	button.text = title
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(1, 64)
+	button.custom_minimum_size = Vector2(1, 42)
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	button.pressed.connect(callback)
 	button.mouse_entered.connect(func(): set_context(hint))
 	button.focus_entered.connect(func(): set_context(hint))
 	content_container.add_child(button)
 
+func create_card_grid() -> GridContainer:
+	var grid: GridContainer = GridContainer.new()
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 10)
+	grid.add_theme_constant_override("v_separation", 10)
+	content_container.add_child(grid)
+	return grid
+
+
+func add_grid_action_card(parent: Node, title: String, hint: String, callback: Callable) -> Button:
+	var button: Button = Button.new()
+	button.text = "%s\n%s" % [title, hint]
+	button.focus_mode = Control.FOCUS_ALL
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.custom_minimum_size = Vector2(260, 96)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	button.pressed.connect(callback)
+	button.mouse_entered.connect(func(): set_context(hint))
+	button.focus_entered.connect(func(): set_context(hint))
+	parent.add_child(button)
+	return button
+	
 func set_context(text: String) -> void:
 	var clean_text: String = text.strip_edges()
 
