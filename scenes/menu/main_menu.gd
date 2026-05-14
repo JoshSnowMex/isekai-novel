@@ -94,10 +94,10 @@ func build_menu_panel() -> void:
 	menu_panel.add_theme_stylebox_override("panel", panel_style)
 
 	var margin_container: MarginContainer = MarginContainer.new()
-	margin_container.add_theme_constant_override("margin_left", 18)
-	margin_container.add_theme_constant_override("margin_top", 18)
-	margin_container.add_theme_constant_override("margin_right", 18)
-	margin_container.add_theme_constant_override("margin_bottom", 18)
+	margin_container.add_theme_constant_override("margin_left", 10)
+	margin_container.add_theme_constant_override("margin_top", 10)
+	margin_container.add_theme_constant_override("margin_right", 10)
+	margin_container.add_theme_constant_override("margin_bottom", 10)
 	menu_panel.add_child(margin_container)
 
 	var menu_container: VBoxContainer = VBoxContainer.new()
@@ -173,10 +173,10 @@ func layout_overlay_controls() -> void:
 		size.y * -0.02
 	)
 
-	var menu_size: Vector2 = Vector2(390.0, 304.0)
+	var menu_size: Vector2 = Vector2(430.0, 376.0)
 
 	if size.x < 800:
-		menu_size = Vector2(350.0, 304.0)
+		menu_size = Vector2(390.0, 376.0)
 
 	menu_panel.size = menu_size
 	menu_panel.position = Vector2(

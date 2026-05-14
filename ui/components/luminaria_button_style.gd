@@ -5,7 +5,7 @@ class_name LuminariaButtonStyle
 static func apply_menu_plate(button: Button) -> void:
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(1, 54)
+	button.custom_minimum_size = Vector2(1, 72)
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 
@@ -39,15 +39,15 @@ static func make_texture_style(path: String, fallback_style: StyleBox) -> StyleB
 	var style: StyleBoxTexture = StyleBoxTexture.new()
 	style.texture = texture
 
-	style.texture_margin_left = 48
-	style.texture_margin_top = 24
-	style.texture_margin_right = 48
-	style.texture_margin_bottom = 24
+	style.texture_margin_left = 64
+	style.texture_margin_top = 16
+	style.texture_margin_right = 64
+	style.texture_margin_bottom = 164
 
-	style.content_margin_left = 28
-	style.content_margin_right = 28
-	style.content_margin_top = 8
-	style.content_margin_bottom = 8
+	style.content_margin_left = 42
+	style.content_margin_right = 42
+	style.content_margin_top = 12
+	style.content_margin_bottom = 12
 
 	return style
 
