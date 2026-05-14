@@ -85,19 +85,12 @@ func build_menu_panel() -> void:
 	add_child(menu_panel)
 
 	var panel_style: StyleBoxFlat = StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.03, 0.025, 0.04, 0.58)
-	panel_style.border_color = Color(0.85, 0.72, 0.46, 0.28)
-	panel_style.border_width_left = 1
-	panel_style.border_width_top = 1
-	panel_style.border_width_right = 1
-	panel_style.border_width_bottom = 1
-	panel_style.corner_radius_top_left = 18
-	panel_style.corner_radius_top_right = 18
-	panel_style.corner_radius_bottom_left = 18
-	panel_style.corner_radius_bottom_right = 18
-	panel_style.shadow_color = Color(0, 0, 0, 0.45)
-	panel_style.shadow_size = 18
-	panel_style.shadow_offset = Vector2(0, 8)
+	panel_style.bg_color = Color(0, 0, 0, 0)
+	panel_style.border_width_left = 0
+	panel_style.border_width_top = 0
+	panel_style.border_width_right = 0
+	panel_style.border_width_bottom = 0
+	panel_style.shadow_size = 0
 	menu_panel.add_theme_stylebox_override("panel", panel_style)
 
 	var margin_container: MarginContainer = MarginContainer.new()
@@ -135,32 +128,38 @@ func make_menu_button(text: String) -> Button:
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(1, 42)
+	button.custom_minimum_size = Vector2(1, 46)
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 	var normal_style: StyleBoxFlat = StyleBoxFlat.new()
-	normal_style.bg_color = Color(0.10, 0.075, 0.13, 0.62)
-	normal_style.border_color = Color(0.95, 0.80, 0.48, 0.30)
-	normal_style.border_width_left = 1
+	normal_style.bg_color = Color(0.055, 0.045, 0.075, 0.72)
+	normal_style.border_color = Color(0.78, 0.62, 0.36, 0.42)
+	normal_style.border_width_left = 2
 	normal_style.border_width_top = 1
 	normal_style.border_width_right = 1
 	normal_style.border_width_bottom = 1
-	normal_style.corner_radius_top_left = 12
-	normal_style.corner_radius_top_right = 12
-	normal_style.corner_radius_bottom_left = 12
-	normal_style.corner_radius_bottom_right = 12
+	normal_style.corner_radius_top_left = 6
+	normal_style.corner_radius_top_right = 6
+	normal_style.corner_radius_bottom_left = 6
+	normal_style.corner_radius_bottom_right = 6
+	normal_style.shadow_color = Color(0, 0, 0, 0.35)
+	normal_style.shadow_size = 10
+	normal_style.shadow_offset = Vector2(0, 4)
 
 	var hover_style: StyleBoxFlat = normal_style.duplicate()
-	hover_style.bg_color = Color(0.18, 0.12, 0.22, 0.76)
-	hover_style.border_color = Color(1.0, 0.86, 0.52, 0.68)
+	hover_style.bg_color = Color(0.12, 0.085, 0.15, 0.86)
+	hover_style.border_color = Color(1.0, 0.78, 0.42, 0.78)
+	hover_style.border_width_left = 4
 
 	var pressed_style: StyleBoxFlat = normal_style.duplicate()
-	pressed_style.bg_color = Color(0.07, 0.045, 0.09, 0.82)
-	pressed_style.border_color = Color(1.0, 0.82, 0.46, 0.75)
+	pressed_style.bg_color = Color(0.035, 0.025, 0.05, 0.92)
+	pressed_style.border_color = Color(0.95, 0.68, 0.34, 0.85)
+	pressed_style.border_width_left = 4
 
 	var disabled_style: StyleBoxFlat = normal_style.duplicate()
-	disabled_style.bg_color = Color(0.05, 0.05, 0.06, 0.38)
-	disabled_style.border_color = Color(0.6, 0.6, 0.65, 0.18)
+	disabled_style.bg_color = Color(0.035, 0.035, 0.045, 0.42)
+	disabled_style.border_color = Color(0.45, 0.43, 0.48, 0.22)
+	disabled_style.shadow_size = 0
 
 	button.add_theme_stylebox_override("normal", normal_style)
 	button.add_theme_stylebox_override("hover", hover_style)
@@ -169,9 +168,11 @@ func make_menu_button(text: String) -> Button:
 	button.add_theme_stylebox_override("disabled", disabled_style)
 
 	button.add_theme_color_override("font_color", Color(0.96, 0.90, 0.78, 1.0))
-	button.add_theme_color_override("font_hover_color", Color(1.0, 0.95, 0.82, 1.0))
-	button.add_theme_color_override("font_pressed_color", Color(0.90, 0.78, 0.56, 1.0))
-	button.add_theme_color_override("font_disabled_color", Color(0.62, 0.60, 0.65, 0.72))
+	button.add_theme_color_override("font_hover_color", Color(1.0, 0.94, 0.72, 1.0))
+	button.add_theme_color_override("font_pressed_color", Color(0.90, 0.76, 0.52, 1.0))
+	button.add_theme_color_override("font_disabled_color", Color(0.58, 0.56, 0.62, 0.72))
+
+	button.add_theme_font_size_override("font_size", 18)
 
 	return button
 
@@ -206,8 +207,8 @@ func refresh_layout_after_frame() -> void:
 func layout_overlay_controls() -> void:
 	var margin: float = 28.0
 
-	var logo_width: float = min(1180.0, max(760.0, size.x * 0.78))
-	var logo_height: float = min(430.0, max(280.0, size.y * 0.42))
+	var logo_width: float = min(1500.0, max(980.0, size.x * 0.96))
+	var logo_height: float = min(620.0, max(420.0, size.y * 0.62))
 
 	if size.x < 800:
 		logo_width = min(size.x - (margin * 2.0), 620.0)
@@ -215,14 +216,14 @@ func layout_overlay_controls() -> void:
 
 	logo_layer.size = Vector2(logo_width, logo_height)
 	logo_layer.position = Vector2(
-		max(4.0, size.x * 0.025),
-		max(margin, size.y * 0.045)
+		size.x * -0.08,
+		size.y * -0.02
 	)
 
-	var menu_size: Vector2 = Vector2(340.0, 236.0)
+	var menu_size: Vector2 = Vector2(340.0, 252.0)
 
 	if size.x < 800:
-		menu_size = Vector2(320.0, 236.0)
+		menu_size = Vector2(320.0, 252.0)
 
 	menu_panel.size = menu_size
 	menu_panel.position = Vector2(
