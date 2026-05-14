@@ -24,6 +24,7 @@ var current_location_id: String = ""
 var last_message: String = ""
 var selected_npc_id: String = ""
 var character_positions_by_location: Dictionary = {}
+var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
 const CHARACTER_BASE_SIZE := Vector2(132.0, 210.0)
@@ -87,6 +88,7 @@ func build_ui() -> void:
 	build_global_action_panel()
 	build_bottom_panel()
 	build_modal()
+	build_load_game_modal()
 	
 	call_deferred("refresh_layout_after_frame")
 
@@ -118,7 +120,7 @@ func build_global_action_panel() -> void:
 		)
 	)
 	add_global_action("Cargar", func():
-		SceneRouter.go_to_main_menu()
+		load_game_modal.open()
 	)
 
 
@@ -1534,3 +1536,18 @@ func add_modal_footer_button(text: String, callback: Callable) -> Button:
 
 	modal_footer.add_child(button)
 	return button
+
+func load_continue_from_location() -> void:
+	if SaveManager.load_continue_game():
+		SceneRouter.go_to_current_location_scene()
+		return
+
+	show_location_message(
+		"No hay partida guardada",
+		"No se encontró autosave ni guardado manual."
+	)
+
+func build_load_game_modal() -> void:
+	load_game_modal = LoadGameModal.new()
+	location_layer.add_child(load_game_modal)
+	load_game_modal.hide_modal()

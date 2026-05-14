@@ -74,6 +74,21 @@ func go_to_current_location_scene() -> void:
 
 	go_to_location()
 
+func load_autosave_and_route() -> bool:
+	if SaveManager.load_autosave_game():
+		go_to_current_location_scene()
+		return true
+
+	return false
+
+
+func load_manual_and_route() -> bool:
+	if SaveManager.load_manual_game():
+		go_to_current_location_scene()
+		return true
+
+	return false
+	
 func quit_game() -> void:
 	get_tree().quit()
 
@@ -84,3 +99,4 @@ func go_to_date(npc_id: String, date_location_id: String = "", date_type: String
 	temp_date_type = date_type
 	temp_relationship_step_id = relationship_step_id
 	get_tree().change_scene_to_file(DATE_SCENE)
+	

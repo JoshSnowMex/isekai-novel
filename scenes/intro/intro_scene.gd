@@ -368,7 +368,7 @@ func show_confirm_selection() -> void:
 	top_label.text = "Nuevo juego · Confirmar Forastero"
 	bottom_text_label.text = "%s\n%s" % [
 		build_confirm_title(class_data, appearance_label),
-		str(class_data.get("narrative_style", ""))
+		build_confirm_description(class_data)
 	]
 
 	clear_card_area()
@@ -432,19 +432,16 @@ func get_class_asset_name(class_id: String) -> String:
 		normalized_class_id
 	]
 
-func build_confirm_title(class_data: Dictionary, appearance_label: String) -> String:
-	var player_class_name: String = str(class_data.get("name", selected_class_id))
-	var clean_class_name: String = player_class_name
+func build_confirm_description(class_data: Dictionary) -> String:
+	var style_text: String = str(class_data.get("narrative_style", "")).strip_edges()
 
-	clean_class_name = clean_class_name.replace("Forastero ", "")
-	clean_class_name = clean_class_name.replace("Forastera ", "")
-	clean_class_name = clean_class_name.replace("Forma velada ", "")
+	if style_text == "":
+		return "El Velo acepta esta forma. Luminaria responderá a tus decisiones."
 
-	return "Camino elegido: %s %s" % [
-		appearance_label,
-		clean_class_name
-	]
+	if style_text.length() > 150:
+		style_text = style_text.substr(0, 147).strip_edges() + "..."
 
+	return style_text
 
 func get_confirm_background_name(class_id: String) -> String:
 	var appearance_asset_id: String = selected_appearance_id
@@ -596,3 +593,24 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func build_confirm_title(class_data: Dictionary, appearance_label: String) -> String:
+	var player_class_name: String = str(class_data.get("name", selected_class_id))
+	var clean_class_name: String = player_class_name
+	var element_name: String = str(class_data.get("element", "")).to_lower()
+
+	clean_class_name = clean_class_name.replace("Forastero ", "")
+	clean_class_name = clean_class_name.replace("Forastera ", "")
+	clean_class_name = clean_class_name.replace("Forma velada ", "")
+
+	if element_name != "":
+		return "Camino elegido: %s %s, bajo el signo de %s." % [
+			appearance_label,
+			clean_class_name,
+			element_name
+		]
+
+	return "Camino elegido: %s %s." % [
+		appearance_label,
+		clean_class_name
+	]

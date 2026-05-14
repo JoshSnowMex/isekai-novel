@@ -42,6 +42,9 @@ func load_continue_game() -> bool:
 
 	return false
 
+func load_autosave_game() -> bool:
+	return load_from_path(AUTOSAVE_PATH)
+
 
 func load_manual_game() -> bool:
 	return load_from_path(MANUAL_SAVE_PATH)
@@ -91,7 +94,9 @@ func load_from_path(path: String) -> bool:
 func has_continue_file() -> bool:
 	return FileAccess.file_exists(AUTOSAVE_PATH) or FileAccess.file_exists(MANUAL_SAVE_PATH)
 
-
+func has_autosave_file() -> bool:
+	return FileAccess.file_exists(AUTOSAVE_PATH)
+	
 func has_manual_save_file() -> bool:
 	return FileAccess.file_exists(MANUAL_SAVE_PATH)
 

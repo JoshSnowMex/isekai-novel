@@ -1,12 +1,12 @@
 extends Control
 
-
 var hud_bar: WorldHudBar
 var map_layer: Control
 var location_layer: Control
 var action_panel: WorldActionPanel
 var hover_card: LocationHoverCard
 var hovered_location_id: String = ""
+var load_game_modal: LoadGameModal
 
 const BASE_MAP_SIZE := Vector2(1050.0, 540.0)
 
@@ -53,6 +53,7 @@ func build_ui() -> void:
 	build_location_layer()
 	build_action_panel()
 	build_hover_card()
+	build_load_game_modal()
 
 	call_deferred("layout_overlay_controls")
 	call_deferred("refresh_overlay_layout_after_frame")
@@ -112,7 +113,7 @@ func build_action_panel() -> void:
 	)
 
 	action_panel.add_action("Cargar", func():
-		SceneRouter.go_to_main_menu()
+		load_game_modal.open()
 	)
 
 
@@ -124,6 +125,10 @@ func build_hover_card() -> void:
 	hover_card.set_intro()
 	hover_card.visible = false
 
+func build_load_game_modal() -> void:
+	load_game_modal = LoadGameModal.new()
+	map_layer.add_child(load_game_modal)
+	load_game_modal.hide_modal()
 
 func layout_overlay_controls() -> void:
 	layout_action_panel()
@@ -455,3 +460,14 @@ func get_location_screen_rect(location_id: String) -> Rect2:
 	var final_position: Vector2 = clamp_location_position(scaled_position, scaled_size)
 
 	return Rect2(final_position, scaled_size)
+
+func load_continue_from_world_map() -> void:
+	if SaveManager.load_continue_game():
+		SceneRouter.go_to_current_location_scene()
+		return
+
+	show_system_hover_message(
+		"No hay partida guardada",
+		"No se encontró autosave ni guardado manual.",
+		"Guarda una partida antes de intentar cargar."
+	)

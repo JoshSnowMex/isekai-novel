@@ -5,22 +5,18 @@ var hud_bar: WorldHudBar
 var shop_frame: PanelContainer
 var shop_layer: Control
 var background_layer: Control
-
 var info_panel: PanelContainer
 var info_label: Label
-
 var global_action_panel: PanelContainer
 var global_action_buttons: HBoxContainer
-
 var shop_panel: PanelContainer
 var item_scroll: ScrollContainer
 var item_grid: GridContainer
-
 var current_message: String = ""
 var preview_item_id: String = ""
-
 var vendor_placeholder: PanelContainer
 var vendor_label: Label
+var load_game_modal: LoadGameModal
 
 func _ready() -> void:
 	setup_fullscreen_root()
@@ -74,7 +70,8 @@ func build_ui() -> void:
 	build_global_action_panel()
 	build_shop_panel()
 	build_vendor_placeholder()
-
+	build_load_game_modal()
+	
 	call_deferred("refresh_layout_after_frame")
 
 
@@ -147,7 +144,9 @@ func build_global_action_panel() -> void:
 	add_global_action("Mapa", func(): _on_map_pressed())
 	add_global_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.SHOP_SCENE))
 	add_global_action("Guardar", func(): _on_save_pressed())
-	add_global_action("Cargar", func(): SceneRouter.go_to_main_menu())
+	add_global_action("Cargar", func():
+		load_game_modal.open()
+	)
 
 
 func build_shop_panel() -> void:
@@ -565,3 +564,18 @@ func build_vendor_placeholder() -> void:
 	vendor_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	vendor_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	margin.add_child(vendor_label)
+
+func load_continue_from_shop() -> void:
+	if SaveManager.load_continue_game():
+		SceneRouter.go_to_current_location_scene()
+		return
+
+	show_shop_message(
+		"No hay partida guardada",
+		"No se encontró autosave ni guardado manual."
+	)
+
+func build_load_game_modal() -> void:
+	load_game_modal = LoadGameModal.new()
+	shop_layer.add_child(load_game_modal)
+	load_game_modal.hide_modal()

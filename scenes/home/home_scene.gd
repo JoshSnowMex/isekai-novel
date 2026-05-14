@@ -5,17 +5,15 @@ var hud_bar: WorldHudBar
 var home_frame: PanelContainer
 var home_layer: Control
 var background_layer: Control
-
 var global_action_panel: PanelContainer
 var global_action_buttons: HBoxContainer
-
 var main_panel: PanelContainer
 var main_title_label: Label
 var main_description_scroll: ScrollContainer
 var main_description_label: Label
 var main_actions: HBoxContainer
-
 var current_message: String = ""
+var load_game_modal: LoadGameModal
 
 const BASE_HOME_SIZE := Vector2(1050.0, 540.0)
 
@@ -70,7 +68,8 @@ func build_ui() -> void:
 	build_background()
 	build_global_action_panel()
 	build_main_panel()
-
+	build_load_game_modal()
+	
 	call_deferred("refresh_layout_after_frame")
 
 
@@ -121,9 +120,15 @@ func build_global_action_panel() -> void:
 	add_global_action("Mapa", func(): _on_map_pressed())
 	add_global_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.HOME_SCENE))
 	add_global_action("Guardar", func(): _on_save_pressed())
-	add_global_action("Cargar", func(): SceneRouter.go_to_main_menu())
+	add_global_action("Cargar", func():
+		load_game_modal.open()
+	)
 
-
+func build_load_game_modal() -> void:
+	load_game_modal = LoadGameModal.new()
+	home_layer.add_child(load_game_modal)
+	load_game_modal.hide_modal()
+	
 func build_main_panel() -> void:
 	main_panel = PanelContainer.new()
 	main_panel.custom_minimum_size = Vector2(820, 210)
@@ -534,3 +539,13 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func load_continue_from_home() -> void:
+	if SaveManager.load_continue_game():
+		SceneRouter.go_to_current_location_scene()
+		return
+
+	show_home_message(
+		"No hay partida guardada",
+		"No se encontró autosave ni guardado manual."
+	)
