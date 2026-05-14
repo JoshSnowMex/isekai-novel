@@ -104,7 +104,7 @@ func build_menu_panel() -> void:
 	menu_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	menu_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	menu_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	menu_container.add_theme_constant_override("separation", 12)
+	menu_container.add_theme_constant_override("separation", 4)
 	margin_container.add_child(menu_container)
 
 	var new_game_button: Button = make_menu_button("Nuevo juego")
@@ -173,10 +173,10 @@ func layout_overlay_controls() -> void:
 		size.y * -0.02
 	)
 
-	var menu_size: Vector2 = Vector2(430.0, 376.0)
+	var menu_size: Vector2 = Vector2(430.0, 336.0)
 
 	if size.x < 800:
-		menu_size = Vector2(390.0, 376.0)
+		menu_size = Vector2(390.0, 336.0)
 
 	menu_panel.size = menu_size
 	menu_panel.position = Vector2(
