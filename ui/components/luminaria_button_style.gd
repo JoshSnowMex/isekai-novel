@@ -39,10 +39,10 @@ static func make_texture_style(path: String, fallback_style: StyleBox) -> StyleB
 	var style: StyleBoxTexture = StyleBoxTexture.new()
 	style.texture = texture
 
-	style.texture_margin_left = 64
-	style.texture_margin_top = 16
-	style.texture_margin_right = 64
-	style.texture_margin_bottom = 164
+	style.texture_margin_left = 48
+	style.texture_margin_top = 12
+	style.texture_margin_right = 48
+	style.texture_margin_bottom = 12
 
 	style.content_margin_left = 42
 	style.content_margin_right = 42
