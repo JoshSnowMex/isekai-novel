@@ -201,9 +201,15 @@
 	  "map_sprite": "res://assets/portraits/Elara_location_sprite.png"
 	}
   },
-  "ui": {
+	"ui": {
 	"panel_texture": "res://assets/backgrounds/ui_panel_velo.png",
 	"button_texture": "res://assets/backgrounds/ui_button_default.png",
 	"button_hover_texture": "res://assets/backgrounds/ui_button_hover.png"
+  },
+  "buttons": {
+	"menu_normal": "res://assets/ui/button_velo_normal.png",
+	"menu_hover": "res://assets/ui/button_velo_normal.png",
+	"menu_pressed": "res://assets/ui/button_velo_normal.png",
+	"menu_disabled": "res://assets/ui/button_velo_normal.png"
   }
 }

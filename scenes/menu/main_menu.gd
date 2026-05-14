@@ -104,7 +104,7 @@ func build_menu_panel() -> void:
 	menu_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	menu_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	menu_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	menu_container.add_theme_constant_override("separation", 9)
+	menu_container.add_theme_constant_override("separation", 12)
 	margin_container.add_child(menu_container)
 
 	var new_game_button: Button = make_menu_button("Nuevo juego")
@@ -126,56 +126,9 @@ func build_menu_panel() -> void:
 func make_menu_button(text: String) -> Button:
 	var button: Button = Button.new()
 	button.text = text
-	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(1, 46)
-	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-
-	var normal_style: StyleBoxFlat = StyleBoxFlat.new()
-	normal_style.bg_color = Color(0.055, 0.045, 0.075, 0.72)
-	normal_style.border_color = Color(0.78, 0.62, 0.36, 0.42)
-	normal_style.border_width_left = 2
-	normal_style.border_width_top = 1
-	normal_style.border_width_right = 1
-	normal_style.border_width_bottom = 1
-	normal_style.corner_radius_top_left = 6
-	normal_style.corner_radius_top_right = 6
-	normal_style.corner_radius_bottom_left = 6
-	normal_style.corner_radius_bottom_right = 6
-	normal_style.shadow_color = Color(0, 0, 0, 0.35)
-	normal_style.shadow_size = 10
-	normal_style.shadow_offset = Vector2(0, 4)
-
-	var hover_style: StyleBoxFlat = normal_style.duplicate()
-	hover_style.bg_color = Color(0.12, 0.085, 0.15, 0.86)
-	hover_style.border_color = Color(1.0, 0.78, 0.42, 0.78)
-	hover_style.border_width_left = 4
-
-	var pressed_style: StyleBoxFlat = normal_style.duplicate()
-	pressed_style.bg_color = Color(0.035, 0.025, 0.05, 0.92)
-	pressed_style.border_color = Color(0.95, 0.68, 0.34, 0.85)
-	pressed_style.border_width_left = 4
-
-	var disabled_style: StyleBoxFlat = normal_style.duplicate()
-	disabled_style.bg_color = Color(0.035, 0.035, 0.045, 0.42)
-	disabled_style.border_color = Color(0.45, 0.43, 0.48, 0.22)
-	disabled_style.shadow_size = 0
-
-	button.add_theme_stylebox_override("normal", normal_style)
-	button.add_theme_stylebox_override("hover", hover_style)
-	button.add_theme_stylebox_override("pressed", pressed_style)
-	button.add_theme_stylebox_override("focus", hover_style)
-	button.add_theme_stylebox_override("disabled", disabled_style)
-
-	button.add_theme_color_override("font_color", Color(0.96, 0.90, 0.78, 1.0))
-	button.add_theme_color_override("font_hover_color", Color(1.0, 0.94, 0.72, 1.0))
-	button.add_theme_color_override("font_pressed_color", Color(0.90, 0.76, 0.52, 1.0))
-	button.add_theme_color_override("font_disabled_color", Color(0.58, 0.56, 0.62, 0.72))
-
-	button.add_theme_font_size_override("font_size", 18)
-
+	LuminariaButtonStyle.apply_menu_plate(button)
 	return button
-
+	
 func update_buttons() -> void:
 	continue_button.disabled = not SaveManager.has_continue_file()
 	load_manual_button.disabled = not SaveManager.has_manual_save_file()
@@ -216,14 +169,14 @@ func layout_overlay_controls() -> void:
 
 	logo_layer.size = Vector2(logo_width, logo_height)
 	logo_layer.position = Vector2(
-		size.x * -0.25,
+		size.x * -0.17,
 		size.y * -0.02
 	)
 
-	var menu_size: Vector2 = Vector2(340.0, 252.0)
+	var menu_size: Vector2 = Vector2(390.0, 304.0)
 
 	if size.x < 800:
-		menu_size = Vector2(320.0, 252.0)
+		menu_size = Vector2(350.0, 304.0)
 
 	menu_panel.size = menu_size
 	menu_panel.position = Vector2(

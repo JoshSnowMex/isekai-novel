@@ -161,3 +161,6 @@ func get_world_map_ui() -> Dictionary:
 
 func get_ui_theme_assets() -> Dictionary:
 	return ui_assets.get("ui", {})
+
+func get_button_theme_assets() -> Dictionary:
+	return ui_assets.get("buttons", {})
