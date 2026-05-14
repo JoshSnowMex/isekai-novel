@@ -148,10 +148,14 @@ func build_bottom_panel() -> void:
 func show_prologue() -> void:
 	current_step = IntroStep.PROLOGUE
 
+	var intro_ui: Dictionary = DataManager.get_intro_ui()
+	var background_path: String = str(intro_ui.get("prologue_background", "res://assets/backgrounds/intro_veil_crossing.png"))
+	var fallback_title: String = str(intro_ui.get("fallback_prologue_title", "El umbral"))
+
 	build_background(
-		"res://assets/backgrounds/intro_veil_crossing.png",
-		"El umbral",
-		"Fondo final: intro_veil_crossing.png"
+		background_path,
+		fallback_title,
+		"Fondo final: %s" % background_path.get_file()
 	)
 
 	clear_card_area()
@@ -192,10 +196,14 @@ func get_prologue_primary_label() -> String:
 func show_appearance_selection() -> void:
 	current_step = IntroStep.APPEARANCE
 
+	var intro_ui: Dictionary = DataManager.get_intro_ui()
+	var background_path: String = str(intro_ui.get("appearance_background", "res://assets/backgrounds/intro_appearance_selection.png"))
+	var fallback_title: String = str(intro_ui.get("fallback_appearance_title", "Elige tu forma"))
+
 	build_background(
-		"res://assets/backgrounds/intro_appearance_selection.png",
-		"Elige tu forma",
-		"Fondo final: intro_appearance_selection.png"
+		background_path,
+		fallback_title,
+		"Fondo final: %s" % background_path.get_file()
 	)
 
 	top_label.text = "Nuevo juego · Apariencia · Elige tu forma"
@@ -272,10 +280,14 @@ func build_appearance_card_text(title: String, appearance_id: String, descriptio
 func show_class_selection() -> void:
 	current_step = IntroStep.CLASS
 
+	var intro_ui: Dictionary = DataManager.get_intro_ui()
+	var background_path: String = str(intro_ui.get("class_background", "res://assets/backgrounds/intro_class_selection.png"))
+	var fallback_title: String = str(intro_ui.get("fallback_class_title", "Elige tu camino"))
+
 	build_background(
-		"res://assets/backgrounds/intro_class_selection.png",
-		"Elige tu camino",
-		"Fondo final: intro_class_selection.png"
+		background_path,
+		fallback_title,
+		"Fondo final: %s" % background_path.get_file()
 	)
 
 	top_label.text = "Nuevo juego · Camino del Forastero · Elige tu camino"
@@ -460,9 +472,25 @@ func get_confirm_background_name(class_id: String) -> String:
 		normalized_class_id
 	]
 
-
 func get_confirm_background_path(class_id: String) -> String:
-	return "res://assets/backgrounds/%s" % get_confirm_background_name(class_id)
+	var intro_ui: Dictionary = DataManager.get_intro_ui()
+	var pattern: String = str(intro_ui.get(
+		"confirm_background_pattern",
+		"res://assets/backgrounds/intro_confirm_outsider_{appearance}_{class}.png"
+	))
+
+	var appearance_asset_id: String = selected_appearance_id
+
+	if appearance_asset_id == "woman":
+		appearance_asset_id = "female"
+	elif appearance_asset_id == "veiled":
+		appearance_asset_id = "veiled"
+	else:
+		appearance_asset_id = "male"
+
+	var normalized_class_id: String = class_id.replace("_outsider", "")
+
+	return pattern.replace("{appearance}", appearance_asset_id).replace("{class}", normalized_class_id)
 
 func start_game() -> void:
 	var gender_identity: String = selected_appearance_id

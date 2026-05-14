@@ -1,4 +1,21 @@
 {
+  "title_screen": {
+	"background": "res://assets/backgrounds/title_luminaria_threshold.png",
+	"logo": "res://assets/ui/title_logo_isekai_novel.png",
+	"fallback_title": "Isekai Novel",
+	"fallback_subtitle": "Fondo final: title_luminaria_threshold.png"
+  },
+  "intro": {
+	"prologue_background": "res://assets/backgrounds/intro_veil_crossing.png",
+	"appearance_background": "res://assets/backgrounds/intro_appearance_selection.png",
+	"class_background": "res://assets/backgrounds/intro_class_selection.png",
+	"confirm_background_pattern": "res://assets/backgrounds/intro_confirm_outsider_{appearance}_{class}.png",
+	"player_asset_folder": "res://assets/player/",
+	"fallback_prologue_title": "El umbral",
+	"fallback_appearance_title": "Elige tu forma",
+	"fallback_class_title": "Elige tu camino",
+	"fallback_confirm_title": "Confirmar Forastero"
+  },
   "world_map": {
 	"background": "res://assets/backgrounds/world_map_luminaria.png",
 	"fallback_title": "Mapa de Luminaria"

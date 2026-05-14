@@ -30,23 +30,21 @@ func build_ui() -> void:
 	build_title_panel()
 	build_menu_panel()
 
-
 func build_background() -> void:
 	clear_children(background_layer)
 
+	var title_ui: Dictionary = DataManager.get_title_screen_ui()
+	var background_path: String = str(title_ui.get("background", "res://assets/backgrounds/title_luminaria_threshold.png"))
+	var fallback_title: String = str(title_ui.get("fallback_title", "Isekai Novel"))
+	var fallback_subtitle: String = str(title_ui.get("fallback_subtitle", "Fondo final: title_luminaria_threshold.png"))
+
 	var background: Control = VisualAsset.make_texture_or_placeholder(
-		"res://assets/backgrounds/title_luminaria_threshold.png",
-		"Isekai Novel",
-		"Fondo final: title_luminaria_threshold.png"
+		background_path,
+		fallback_title,
+		fallback_subtitle
 	)
 
 	background.set_anchors_preset(Control.PRESET_FULL_RECT)
-	background.offset_left = 0
-	background.offset_top = 0
-	background.offset_right = 0
-	background.offset_bottom = 0
-	background_layer.add_child(background)
-
 
 func build_title_panel() -> void:
 	title_panel = PanelContainer.new()

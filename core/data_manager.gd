@@ -149,6 +149,11 @@ func get_npc_ui(npc_id: String) -> Dictionary:
 	var npcs_ui: Dictionary = ui_assets.get("npcs", {})
 	return npcs_ui.get(npc_id, {})
 
+func get_title_screen_ui() -> Dictionary:
+	return ui_assets.get("title_screen", {})
+
+func get_intro_ui() -> Dictionary:
+	return ui_assets.get("intro", {})
 
 func get_world_map_ui() -> Dictionary:
 	return ui_assets.get("world_map", {})
