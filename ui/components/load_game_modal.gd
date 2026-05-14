@@ -8,6 +8,7 @@ var description_label: Label
 var autosave_button: Button
 var manual_button: Button
 var cancel_button: Button
+var title_screen_button: Button
 
 
 func _ready() -> void:
@@ -78,6 +79,14 @@ func build() -> void:
 	)
 	manual_button.pressed.connect(load_manual)
 	buttons_box.add_child(manual_button)
+
+	title_screen_button = Button.new()
+	title_screen_button.text = "Volver al título"
+	title_screen_button.focus_mode = Control.FOCUS_ALL
+	title_screen_button.custom_minimum_size = Vector2(1, 38)
+	title_screen_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_screen_button.pressed.connect(SceneRouter.go_to_main_menu)
+	box.add_child(title_screen_button)
 
 	cancel_button = Button.new()
 	cancel_button.text = "Cancelar"
