@@ -28,7 +28,7 @@ func build_ui() -> void:
 	build_background()
 	build_logo_layer()
 	build_menu_panel()
-
+	build_debug_viewport_label()
 
 func build_background() -> void:
 	clear_children(background_layer)
@@ -156,35 +156,34 @@ func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
 	layout_overlay_controls()
 
-
 func layout_overlay_controls() -> void:
+	var viewport_size: Vector2 = get_viewport_rect().size
 	var margin: float = 28.0
 
-	var logo_width: float = min(1500.0, max(980.0, size.x * 0.96))
-	var logo_height: float = min(620.0, max(420.0, size.y * 0.62))
+	var logo_width: float = min(1500.0, max(980.0, viewport_size.x * 0.96))
+	var logo_height: float = min(620.0, max(420.0, viewport_size.y * 0.62))
 
-	if size.x < 800:
-		logo_width = min(size.x - (margin * 2.0), 620.0)
+	if viewport_size.x < 800:
+		logo_width = min(viewport_size.x - (margin * 2.0), 620.0)
 		logo_height = 210.0
 
 	logo_layer.size = Vector2(logo_width, logo_height)
 	logo_layer.position = Vector2(
-		size.x * -0.17,
-		size.y * -0.02
+		viewport_size.x * -0.17,
+		viewport_size.y * -0.02
 	)
 
 	var menu_size: Vector2 = Vector2(430.0, 304.0)
 
-	if size.x < 800:
+	if viewport_size.x < 800:
 		menu_size = Vector2(390.0, 304.0)
 
 	menu_panel.size = menu_size
 	menu_panel.position = Vector2(
-		max(margin, size.x - menu_size.x - 42.0),
-		max(margin, size.y - menu_size.y - 46.0)
+		max(margin, viewport_size.x - menu_size.x - 42.0),
+		max(margin, viewport_size.y - menu_size.y - 46.0)
 	)
-
-
+	
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		call_deferred("refresh_layout_after_frame")
@@ -201,3 +200,24 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
+
+func build_debug_viewport_label() -> void:
+	var label: Label = Label.new()
+	label.name = "DebugViewportLabel"
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", Color(1, 0.85, 0.35, 1))
+	label.position = Vector2(12, 12)
+	add_child(label)
+
+	var update_label := func():
+		var window: Window = get_window()
+		label.text = "root size=%s | viewport=%s | window=%s | control=%s" % [
+			get_tree().root.size,
+			get_viewport_rect().size,
+			window.size,
+			size
+		]
+
+	update_label.call()
+	get_tree().root.size_changed.connect(update_label)
