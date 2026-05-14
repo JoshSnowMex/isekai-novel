@@ -95,7 +95,7 @@ func build_menu_panel() -> void:
 	menu_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	menu_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	menu_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	menu_container.add_theme_constant_override("separation", 10)
+	menu_container.add_theme_constant_override("separation", 8)
 	margin.add_child(menu_container)
 
 	var new_game_button: Button = make_menu_button("Nuevo juego")
@@ -120,7 +120,7 @@ func make_menu_button(text: String) -> Button:
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(1, 44)
+	button.custom_minimum_size = Vector2(1, 40)
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	return button
 
@@ -156,8 +156,8 @@ func refresh_layout_after_frame() -> void:
 func layout_overlay_controls() -> void:
 	var margin: float = 28.0
 
-	var logo_width: float = min(780.0, max(420.0, size.x * 0.52))
-	var logo_height: float = min(260.0, max(150.0, size.y * 0.24))
+	var logo_width: float = min(1040.0, max(620.0, size.x * 0.68))
+	var logo_height: float = min(360.0, max(220.0, size.y * 0.34))
 
 	if size.x < 800:
 		logo_width = min(size.x - (margin * 2.0), 520.0)
@@ -166,13 +166,13 @@ func layout_overlay_controls() -> void:
 	logo_layer.size = Vector2(logo_width, logo_height)
 	logo_layer.position = Vector2(
 		margin,
-		max(margin, size.y * 0.12)
+		max(margin, size.y * 0.08)
 	)
 
-	var menu_size: Vector2 = Vector2(380.0, 270.0)
+	var menu_size: Vector2 = Vector2(340.0, 236.0)
 
 	if size.x < 800:
-		menu_size = Vector2(340.0, 270.0)
+		menu_size = Vector2(320.0, 236.0)
 
 	menu_panel.size = menu_size
 	menu_panel.position = Vector2(
