@@ -216,7 +216,7 @@ func layout_overlay_controls() -> void:
 
 	logo_layer.size = Vector2(logo_width, logo_height)
 	logo_layer.position = Vector2(
-		size.x * -0.08,
+		size.x * -0.25,
 		size.y * -0.02
 	)
 
