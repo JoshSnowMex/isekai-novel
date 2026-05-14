@@ -2,12 +2,11 @@ extends Control
 
 
 var background_layer: Control
-var title_panel: PanelContainer
+var logo_layer: Control
 var menu_panel: PanelContainer
 
 var continue_button: Button
 var load_manual_button: Button
-var subtitle_label: Label
 
 
 func _ready() -> void:
@@ -27,15 +26,16 @@ func build_ui() -> void:
 	add_child(background_layer)
 
 	build_background()
-	build_title_panel()
+	build_logo_layer()
 	build_menu_panel()
+
 
 func build_background() -> void:
 	clear_children(background_layer)
 
 	var title_ui: Dictionary = DataManager.get_title_screen_ui()
 	var background_path: String = str(title_ui.get("background", "res://assets/backgrounds/title_luminaria_threshold.png"))
-	var fallback_title: String = str(title_ui.get("fallback_title", "Isekai Novel"))
+	var fallback_title: String = str(title_ui.get("fallback_title", "Luminaria: Crónicas del Velo"))
 	var fallback_subtitle: String = str(title_ui.get("fallback_subtitle", "Fondo final: title_luminaria_threshold.png"))
 
 	var background: Control = VisualAsset.make_texture_or_placeholder(
@@ -45,62 +45,38 @@ func build_background() -> void:
 	)
 
 	background.set_anchors_preset(Control.PRESET_FULL_RECT)
+	background.offset_left = 0
+	background.offset_top = 0
+	background.offset_right = 0
+	background.offset_bottom = 0
+	background_layer.add_child(background)
 
-func build_title_panel() -> void:
-	title_panel = PanelContainer.new()
-	title_panel.custom_minimum_size = Vector2(620, 150)
-	add_child(title_panel)
 
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 22)
-	margin.add_theme_constant_override("margin_top", 18)
-	margin.add_theme_constant_override("margin_right", 22)
-	margin.add_theme_constant_override("margin_bottom", 18)
-	title_panel.add_child(margin)
-
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 8)
-	margin.add_child(box)
+func build_logo_layer() -> void:
+	logo_layer = Control.new()
+	logo_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(logo_layer)
 
 	var title_ui: Dictionary = DataManager.get_title_screen_ui()
-	var logo_path: String = str(title_ui.get("logo", ""))
-	var logo_texture: Texture2D = VisualAsset.load_texture(logo_path)
+	var logo_path: String = str(title_ui.get("logo", "res://assets/ui/title_logo_luminaria_cronicas_del_velo.png"))
 
-	if logo_texture != null:
-		var logo_rect: TextureRect = TextureRect.new()
-		logo_rect.texture = logo_texture
-		logo_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
-		logo_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		logo_rect.custom_minimum_size = Vector2(1, 82)
-		logo_rect.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		logo_rect.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		box.add_child(logo_rect)
-	else:
-		var title_label: Label = Label.new()
-		title_label.text = DataManager.game_config.get("game_title", "Luminaria: Crónicas del Velo")
-		title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		box.add_child(title_label)
+	var logo: Control = VisualAsset.make_texture_or_placeholder(
+		logo_path,
+		"Luminaria: Crónicas del Velo",
+		"Logo final: %s" % logo_path.get_file()
+	)
 
-	subtitle_label = Label.new()
-	subtitle_label.text = "El Velo recuerda lo que deseas olvidar."
-	subtitle_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(subtitle_label)
+	logo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	logo.offset_left = 0
+	logo.offset_top = 0
+	logo.offset_right = 0
+	logo.offset_bottom = 0
+	logo_layer.add_child(logo)
 
-	var tone_label: Label = Label.new()
-	tone_label.text = "Drama romántico · Fantasía isekai · Decisiones íntimas"
-	tone_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	tone_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	tone_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	tone_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(tone_label)
+	if logo is TextureRect:
+		var logo_texture_rect: TextureRect = logo as TextureRect
+		logo_texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		logo_texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
 
 func build_menu_panel() -> void:
@@ -180,15 +156,17 @@ func refresh_layout_after_frame() -> void:
 func layout_overlay_controls() -> void:
 	var margin: float = 28.0
 
-	var title_size: Vector2 = Vector2(
-		min(700.0, max(520.0, size.x * 0.58)),
-		150.0
-	)
+	var logo_width: float = min(780.0, max(420.0, size.x * 0.52))
+	var logo_height: float = min(260.0, max(150.0, size.y * 0.24))
 
-	title_panel.size = title_size
-	title_panel.position = Vector2(
+	if size.x < 800:
+		logo_width = min(size.x - (margin * 2.0), 520.0)
+		logo_height = 160.0
+
+	logo_layer.size = Vector2(logo_width, logo_height)
+	logo_layer.position = Vector2(
 		margin,
-		max(margin, size.y * 0.16)
+		max(margin, size.y * 0.12)
 	)
 
 	var menu_size: Vector2 = Vector2(380.0, 270.0)
