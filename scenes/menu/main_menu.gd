@@ -64,13 +64,27 @@ func build_title_panel() -> void:
 	box.add_theme_constant_override("separation", 8)
 	margin.add_child(box)
 
-	var title_label: Label = Label.new()
-	title_label.text = DataManager.game_config.get("game_title", "Isekai Novel")
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(title_label)
+	var title_ui: Dictionary = DataManager.get_title_screen_ui()
+	var logo_path: String = str(title_ui.get("logo", ""))
+	var logo_texture: Texture2D = VisualAsset.load_texture(logo_path)
+
+	if logo_texture != null:
+		var logo_rect: TextureRect = TextureRect.new()
+		logo_rect.texture = logo_texture
+		logo_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+		logo_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		logo_rect.custom_minimum_size = Vector2(1, 82)
+		logo_rect.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		logo_rect.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		box.add_child(logo_rect)
+	else:
+		var title_label: Label = Label.new()
+		title_label.text = DataManager.game_config.get("game_title", "Luminaria: Crónicas del Velo")
+		title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		box.add_child(title_label)
 
 	subtitle_label = Label.new()
 	subtitle_label.text = "El Velo recuerda lo que deseas olvidar."

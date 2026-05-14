@@ -1,7 +1,7 @@
 {
   "title_screen": {
 	"background": "res://assets/backgrounds/title_luminaria_threshold.png",
-	"logo": "res://assets/ui/title_logo_isekai_novel.png",
+	"logo": "res://assets/ui/title_logo_luminaria_cronicas_del_velo.png",
 	"fallback_title": "Isekai Novel",
 	"fallback_subtitle": "Fondo final: title_luminaria_threshold.png"
   },
