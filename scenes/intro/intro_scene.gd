@@ -213,8 +213,8 @@ func show_appearance_selection() -> void:
 	card_grid = create_grid(3)
 	card_area.add_child(card_grid)
 
-	add_appearance_card(card_grid, "Forastero", "man", "Rostro masculino")
-	add_appearance_card(card_grid, "Forastera", "woman", "Rostro femenino")
+	add_appearance_card(card_grid, "Forastero", "man", "Forma masculina")
+	add_appearance_card(card_grid, "Forastera", "woman", "Forma femenina")
 	add_appearance_card(card_grid, "Forma velada", "veiled", "Presencia tocada por el Velo")
 
 	build_three_buttons(
