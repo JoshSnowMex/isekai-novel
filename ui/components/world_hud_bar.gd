@@ -8,7 +8,7 @@ var world_label: Label
 
 
 func _init() -> void:
-	custom_minimum_size = Vector2(1, 46)
+	custom_minimum_size = Vector2(1, 52)
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 
@@ -41,12 +41,10 @@ func build() -> void:
 	world_label.size_flags_stretch_ratio = 1.00
 	root.add_child(world_label)
 
-
 func make_hud_label(alignment: HorizontalAlignment) -> Label:
 	var label: Label = Label.new()
 	LuminariaTheme.apply_hud_label(label, alignment)
 	return label
-
 
 func refresh() -> void:
 	date_label.text = "Mes %s · Día %s · %s · %s" % [

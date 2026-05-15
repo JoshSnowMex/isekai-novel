@@ -84,9 +84,9 @@ static func make_hud_panel_style() -> StyleBoxFlat:
 	style.border_width_right = 0
 	style.border_width_bottom = 1
 	style.content_margin_left = 8
-	style.content_margin_top = 4
+	style.content_margin_top = 6
 	style.content_margin_right = 8
-	style.content_margin_bottom = 4
+	style.content_margin_bottom = 6
 	style.shadow_color = Color(0, 0, 0, 0.34)
 	style.shadow_size = 8
 	style.shadow_offset = Vector2(0, 2)
@@ -182,4 +182,4 @@ static func apply_hud_label(label: Label, alignment: HorizontalAlignment) -> voi
 	label.horizontal_alignment = alignment
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.clip_text = true
-	apply_label(label, 17, Color(0.96, 0.91, 0.82, 1.0), 2)
+	apply_label(label, 20, Color(0.98, 0.93, 0.82, 1.0), 2)
