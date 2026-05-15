@@ -212,10 +212,11 @@ func build_debug_viewport_label() -> void:
 
 	var update_label := func():
 		var window: Window = get_window()
-		label.text = "root size=%s | viewport=%s | window=%s | control=%s" % [
+		label.text = "root=%s | viewport=%s | window=%s | display=%s | control=%s" % [
 			get_tree().root.size,
 			get_viewport_rect().size,
-			window.size,
+			get_window().size,
+			DisplayServer.window_get_size(),
 			size
 		]
 
