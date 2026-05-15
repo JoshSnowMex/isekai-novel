@@ -95,6 +95,7 @@ func build_top_panel() -> void:
 	top_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	top_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	top_label.clip_text = true
+	LuminariaTheme.apply_label(top_label, 18, Color(0.96, 0.91, 0.82, 1.0), 2)
 	margin.add_child(top_label)
 
 
@@ -130,6 +131,7 @@ func build_bottom_panel() -> void:
 	bottom_text_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	bottom_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bottom_text_label.clip_text = true
+	LuminariaTheme.apply_label(bottom_text_label, 17, Color(0.94, 0.91, 0.86, 1.0), 2)
 	box.add_child(bottom_text_label)
 
 	var spacer: Control = Control.new()
@@ -238,28 +240,72 @@ func show_appearance_selection() -> void:
 func add_appearance_card(parent: Node, title: String, appearance_id: String, description: String) -> void:
 	var locked_appearance_id: String = appearance_id
 	var asset_path: String = get_player_asset_path(get_appearance_asset_name(locked_appearance_id))
+	var is_selected: bool = selected_appearance_id == locked_appearance_id
 
 	var card: Button = Button.new()
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(220, 300)
+	card.custom_minimum_size = Vector2(220, 330)
 	card.text = ""
-	card.clip_contents = true
+	card.clip_contents = false
+	LuminariaTheme.apply_transparent_button(card)
 
-	var margin: MarginContainer = MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	margin.offset_left = 10
-	margin.offset_top = 10
-	margin.offset_right = -10
-	margin.offset_bottom = -10
-	card.add_child(margin)
+	var stage: Control = Control.new()
+	stage.set_anchors_preset(Control.PRESET_FULL_RECT)
+	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card.add_child(stage)
 
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_theme_constant_override("separation", 8)
-	margin.add_child(box)
+	var frame: TextureRect = TextureRect.new()
+	frame.texture = VisualAsset.load_texture(LuminariaTheme.SELECTION_FRAME_PATH)
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame.offset_left = -8
+	frame.offset_top = -8
+	frame.offset_right = 8
+	frame.offset_bottom = 8
+	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame.stretch_mode = TextureRect.STRETCH_SCALE
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.modulate = get_selection_frame_color(is_selected)
+	stage.add_child(frame)
+
+	var portrait: TextureRect = TextureRect.new()
+	portrait.texture = load_player_texture(asset_path)
+	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
+	portrait.offset_left = 12
+	portrait.offset_top = 20
+	portrait.offset_right = -12
+	portrait.offset_bottom = -58
+	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	portrait.modulate = get_selection_portrait_color(is_selected)
+	stage.add_child(portrait)
+
+	var label_panel: PanelContainer = PanelContainer.new()
+	label_panel.anchor_left = 0.07
+	label_panel.anchor_top = 0.78
+	label_panel.anchor_right = 0.93
+	label_panel.anchor_bottom = 0.96
+	label_panel.offset_left = 0
+	label_panel.offset_top = 0
+	label_panel.offset_right = 0
+	label_panel.offset_bottom = 0
+	label_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label_panel.add_theme_stylebox_override("panel", make_selection_label_style(is_selected))
+	stage.add_child(label_panel)
+
+	var label_margin: MarginContainer = MarginContainer.new()
+	label_margin.add_theme_constant_override("margin_left", 8)
+	label_margin.add_theme_constant_override("margin_top", 4)
+	label_margin.add_theme_constant_override("margin_right", 8)
+	label_margin.add_theme_constant_override("margin_bottom", 4)
+	label_panel.add_child(label_margin)
+
+	var label_box: VBoxContainer = VBoxContainer.new()
+	label_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	label_box.add_theme_constant_override("separation", 1)
+	label_margin.add_child(label_box)
 
 	var title_label: Label = Label.new()
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -268,25 +314,18 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_label.clip_text = true
 	title_label.text = build_appearance_title_text(title, locked_appearance_id)
-	box.add_child(title_label)
-
-	var portrait: TextureRect = TextureRect.new()
-	portrait.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	portrait.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
-	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	portrait.texture = load_player_texture(asset_path)
-	box.add_child(portrait)
+	LuminariaTheme.apply_label(title_label, 18, Color(1.0, 0.92, 0.72, 1.0), 2)
+	label_box.add_child(title_label)
 
 	var description_label: Label = Label.new()
-	description_label.custom_minimum_size = Vector2(1, 42)
 	description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	description_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.clip_text = true
 	description_label.text = description
-	box.add_child(description_label)
+	LuminariaTheme.apply_label(description_label, 14, Color(0.88, 0.86, 0.92, 1.0), 2)
+	label_box.add_child(description_label)
 
 	card.mouse_entered.connect(func():
 		bottom_text_label.text = "%s · %s" % [title, description]
@@ -301,7 +340,7 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	)
 
 	parent.add_child(card)
-	
+		
 func build_appearance_title_text(title: String, appearance_id: String) -> String:
 	if selected_appearance_id == appearance_id:
 		return "✓ %s" % title
@@ -590,6 +629,7 @@ func add_footer_button(text: String, callback: Callable) -> Button:
 	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size = Vector2(190, 40)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	LuminariaTheme.apply_button_text(button, 17)
 	button.pressed.connect(callback)
 	bottom_buttons.add_child(button)
 	return button
@@ -690,3 +730,45 @@ func build_confirm_title(class_data: Dictionary, appearance_label: String) -> St
 		appearance_label,
 		clean_class_name
 	]
+
+func get_selection_frame_color(is_selected: bool) -> Color:
+	if is_selected:
+		return Color(1.0, 0.90, 0.55, 1.0)
+
+	return Color(0.78, 0.82, 0.96, 0.92)
+
+
+func get_selection_portrait_color(is_selected: bool) -> Color:
+	if is_selected:
+		return Color(1.0, 1.0, 1.0, 1.0)
+
+	return Color(0.86, 0.90, 1.0, 0.92)
+
+
+func make_selection_label_style(is_selected: bool) -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+
+	if is_selected:
+		style.bg_color = Color(0.12, 0.07, 0.12, 0.74)
+		style.border_color = Color(1.0, 0.78, 0.36, 0.90)
+	else:
+		style.bg_color = Color(0.04, 0.04, 0.08, 0.58)
+		style.border_color = Color(0.68, 0.62, 0.82, 0.38)
+
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_left = 8
+	style.corner_radius_bottom_right = 8
+	style.content_margin_left = 6
+	style.content_margin_top = 4
+	style.content_margin_right = 6
+	style.content_margin_bottom = 4
+	style.shadow_color = Color(0, 0, 0, 0.38)
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 3)
+
+	return style

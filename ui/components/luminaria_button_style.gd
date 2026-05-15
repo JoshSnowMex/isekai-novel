@@ -9,7 +9,7 @@ static func apply_menu_plate(button: Button) -> void:
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 
-	button.add_theme_font_size_override("font_size", 19)
+	LuminariaTheme.apply_button_text(button, 20)
 
 	var button_assets: Dictionary = DataManager.get_button_theme_assets()
 
