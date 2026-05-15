@@ -273,9 +273,9 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	portrait.texture = load_player_texture(asset_path)
 	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
 	portrait.offset_left = 18
-	portrait.offset_top = 38
+	portrait.offset_top = 78
 	portrait.offset_right = -18
-	portrait.offset_bottom = -78
+	portrait.offset_bottom = -56
 	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -283,10 +283,10 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	stage.add_child(portrait)
 
 	var label_panel: PanelContainer = PanelContainer.new()
-	label_panel.anchor_left = 0.09
-	label_panel.anchor_top = 0.72
-	label_panel.anchor_right = 0.91
-	label_panel.anchor_bottom = 0.94
+	label_panel.anchor_left = 0.20
+	label_panel.anchor_top = 0.85
+	label_panel.anchor_right = 0.80
+	label_panel.anchor_bottom = 0.96
 	label_panel.offset_left = 0
 	label_panel.offset_top = 0
 	label_panel.offset_right = 0
@@ -296,10 +296,10 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	stage.add_child(label_panel)
 
 	var label_margin: MarginContainer = MarginContainer.new()
-	label_margin.add_theme_constant_override("margin_left", 8)
-	label_margin.add_theme_constant_override("margin_top", 4)
-	label_margin.add_theme_constant_override("margin_right", 8)
-	label_margin.add_theme_constant_override("margin_bottom", 4)
+	label_margin.add_theme_constant_override("margin_left", 6)
+	label_margin.add_theme_constant_override("margin_top", 2)
+	label_margin.add_theme_constant_override("margin_right", 6)
+	label_margin.add_theme_constant_override("margin_bottom", 2)
 	label_panel.add_child(label_margin)
 
 	var label_box: VBoxContainer = VBoxContainer.new()
