@@ -5,8 +5,7 @@ var hud_bar: WorldHudBar
 var home_frame: PanelContainer
 var home_layer: Control
 var background_layer: Control
-var global_action_panel: PanelContainer
-var global_action_buttons: HBoxContainer
+var global_action_panel: WorldActionPanel
 var main_panel: PanelContainer
 var main_title_label: Label
 var main_description_scroll: ScrollContainer
@@ -99,31 +98,20 @@ func build_background() -> void:
 	background.offset_bottom = 0
 	background_layer.add_child(background)
 
-
 func build_global_action_panel() -> void:
-	global_action_panel = PanelContainer.new()
-	global_action_panel.custom_minimum_size = Vector2(430, 46)
+	global_action_panel = WorldActionPanel.new()
+	global_action_panel.build()
 	home_layer.add_child(global_action_panel)
 
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_top", 6)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 6)
-	global_action_panel.add_child(margin)
+	global_action_panel.clear_actions()
 
-	global_action_buttons = HBoxContainer.new()
-	global_action_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	global_action_buttons.add_theme_constant_override("separation", 8)
-	margin.add_child(global_action_buttons)
-
-	add_global_action("Mapa", func(): _on_map_pressed())
-	add_global_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.HOME_SCENE))
-	add_global_action("Guardar", func(): _on_save_pressed())
-	add_global_action("Cargar", func():
+	global_action_panel.add_action("Mapa", func(): _on_map_pressed())
+	global_action_panel.add_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.HOME_SCENE))
+	global_action_panel.add_action("Guardar", func(): _on_save_pressed())
+	global_action_panel.add_action("Cargar", func():
 		load_game_modal.open()
 	)
-
+	
 func build_load_game_modal() -> void:
 	load_game_modal = LoadGameModal.new()
 	home_layer.add_child(load_game_modal)
@@ -131,14 +119,23 @@ func build_load_game_modal() -> void:
 	
 func build_main_panel() -> void:
 	main_panel = PanelContainer.new()
-	main_panel.custom_minimum_size = Vector2(820, 210)
+	main_panel.custom_minimum_size = Vector2(860, 230)
+	main_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	home_layer.add_child(main_panel)
 
+	var panel_texture: TextureRect = TextureRect.new()
+	panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel_texture.texture = LuminariaTheme.get_world_info_panel_texture()
+	panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	main_panel.add_child(panel_texture)
+
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_left", 30)
+	margin.add_theme_constant_override("margin_top", 22)
+	margin.add_theme_constant_override("margin_right", 30)
+	margin.add_theme_constant_override("margin_bottom", 22)
 	main_panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
@@ -154,6 +151,7 @@ func build_main_panel() -> void:
 	main_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	main_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	main_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_title(main_title_label)
 	box.add_child(main_title_label)
 
 	main_description_scroll = ScrollContainer.new()
@@ -168,6 +166,7 @@ func build_main_panel() -> void:
 	main_description_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	main_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	main_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_body(main_description_label)
 	main_description_scroll.add_child(main_description_label)
 
 	main_actions = HBoxContainer.new()
@@ -176,6 +175,7 @@ func build_main_panel() -> void:
 	main_actions.size_flags_vertical = Control.SIZE_SHRINK_END
 	main_actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	main_actions.add_theme_constant_override("separation", 8)
+	LuminariaTheme.apply_content_action_button(main_actions)
 	box.add_child(main_actions)
 
 

@@ -11,8 +11,7 @@ var bottom_title_label: Label
 var bottom_description_scroll: ScrollContainer
 var bottom_description_label: Label
 var bottom_actions: HBoxContainer
-var global_action_panel: PanelContainer
-var global_action_buttons: HBoxContainer
+var global_action_panel: WorldActionPanel
 var modal_layer: ColorRect
 var modal_panel: PanelContainer
 var modal_title_label: Label
@@ -92,48 +91,45 @@ func build_ui() -> void:
 	
 	call_deferred("refresh_layout_after_frame")
 
-
 func build_global_action_panel() -> void:
-	global_action_panel = PanelContainer.new()
-	global_action_panel.custom_minimum_size = Vector2(360, 46)
+	global_action_panel = WorldActionPanel.new()
+	global_action_panel.build()
 	location_layer.add_child(global_action_panel)
 
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_top", 6)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 6)
-	global_action_panel.add_child(margin)
+	global_action_panel.clear_actions()
 
-	global_action_buttons = HBoxContainer.new()
-	global_action_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	global_action_buttons.add_theme_constant_override("separation", 8)
-	margin.add_child(global_action_buttons)
-
-	add_global_action("Mapa", func(): _on_back_pressed())
-	add_global_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.LOCATION_SCENE))
-	add_global_action("Guardar", func():
+	global_action_panel.add_action("Mapa", func(): _on_back_pressed())
+	global_action_panel.add_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.LOCATION_SCENE))
+	global_action_panel.add_action("Guardar", func():
 		SaveManager.save_game()
 		show_location_message(
 			"Partida guardada",
 			"El progreso fue guardado manualmente.\nPuedes continuar explorando esta zona."
 		)
 	)
-	add_global_action("Cargar", func():
+	global_action_panel.add_action("Cargar", func():
 		load_game_modal.open()
 	)
 
-
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(760, 210)
+	bottom_panel.custom_minimum_size = Vector2(820, 230)
+	bottom_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	location_layer.add_child(bottom_panel)
 
+	var panel_texture: TextureRect = TextureRect.new()
+	panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel_texture.texture = LuminariaTheme.get_world_info_panel_texture()
+	panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bottom_panel.add_child(panel_texture)
+
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_left", 30)
+	margin.add_theme_constant_override("margin_top", 22)
+	margin.add_theme_constant_override("margin_right", 30)
+	margin.add_theme_constant_override("margin_bottom", 22)
 	bottom_panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
@@ -149,6 +145,7 @@ func build_bottom_panel() -> void:
 	bottom_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	bottom_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	bottom_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_title(bottom_title_label)
 	box.add_child(bottom_title_label)
 
 	bottom_description_scroll = ScrollContainer.new()
@@ -156,6 +153,7 @@ func build_bottom_panel() -> void:
 	bottom_description_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bottom_description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	bottom_description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	LuminariaTheme.apply_content_body(bottom_description_label)
 	box.add_child(bottom_description_scroll)
 
 	bottom_description_label = Label.new()
@@ -1278,14 +1276,6 @@ func format_narrative_message(message: Variant) -> String:
 	return str(message)
 
 
-func add_global_action(text: String, callback: Callable) -> void:
-	var button: Button = Button.new()
-	button.text = text
-	button.focus_mode = Control.FOCUS_ALL
-	button.pressed.connect(callback)
-	global_action_buttons.add_child(button)
-
-
 func add_bottom_action(text: String, callback: Callable, disabled: bool = false) -> Button:
 	var button: Button = Button.new()
 	button.text = text
@@ -1297,6 +1287,7 @@ func add_bottom_action(text: String, callback: Callable, disabled: bool = false)
 	if not disabled:
 		button.pressed.connect(callback)
 
+	LuminariaTheme.apply_content_action_button(button)
 	bottom_actions.add_child(button)
 	return button
 

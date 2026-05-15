@@ -200,3 +200,86 @@ static func apply_flat_nav_text_button(button: Button) -> void:
 	button.add_theme_color_override("font_pressed_color", Color(0.72, 0.58, 0.92, 1.0))
 	button.add_theme_color_override("font_disabled_color", Color(0.52, 0.50, 0.62, 0.70))
 	button.add_theme_constant_override("outline_size", 2)
+
+static func get_world_info_panel_texture() -> Texture2D:
+	var world_map_ui: Dictionary = DataManager.get_world_map_ui()
+	var path: String = str(world_map_ui.get("hover_info_panel", "res://assets/ui/world_hover_info_panel.png"))
+
+	if ResourceLoader.exists(path):
+		return load(path)
+
+	return null
+
+
+static func apply_content_title(label: Label) -> void:
+	apply_label(label, 20, Color(0.95, 0.88, 1.0, 1.0), 2)
+
+
+static func apply_content_body(label: Label) -> void:
+	apply_label(label, 17, Color(0.92, 0.90, 0.96, 1.0), 2)
+
+
+static func apply_content_action_button(button: Button) -> void:
+	var normal: StyleBoxFlat = make_content_action_button_style("normal")
+	var hover: StyleBoxFlat = make_content_action_button_style("hover")
+	var pressed: StyleBoxFlat = make_content_action_button_style("pressed")
+	var disabled: StyleBoxFlat = make_content_action_button_style("disabled")
+
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", hover)
+	button.add_theme_stylebox_override("pressed", pressed)
+	button.add_theme_stylebox_override("focus", hover)
+	button.add_theme_stylebox_override("disabled", disabled)
+
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.custom_minimum_size = Vector2(180, 38)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	apply_button_text(button, 17, Color(0.94, 0.88, 1.0, 1.0))
+	button.add_theme_color_override("font_hover_color", Color(1.0, 0.96, 1.0, 1.0))
+	button.add_theme_color_override("font_pressed_color", Color(0.78, 0.66, 1.0, 1.0))
+
+
+static func make_content_action_button_style(state: String) -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+
+	match state:
+		"hover":
+			style.bg_color = Color(0.16, 0.07, 0.26, 0.68)
+			style.border_color = Color(0.78, 0.58, 1.0, 0.72)
+			style.shadow_color = Color(0.48, 0.22, 0.90, 0.26)
+			style.shadow_size = 8
+		"pressed":
+			style.bg_color = Color(0.08, 0.035, 0.14, 0.84)
+			style.border_color = Color(0.62, 0.42, 0.90, 0.80)
+			style.shadow_color = Color(0, 0, 0, 0.46)
+			style.shadow_size = 3
+		"disabled":
+			style.bg_color = Color(0.02, 0.018, 0.028, 0.30)
+			style.border_color = Color(0.30, 0.26, 0.38, 0.22)
+			style.shadow_color = Color(0, 0, 0, 0.10)
+			style.shadow_size = 1
+		_:
+			style.bg_color = Color(0.05, 0.035, 0.08, 0.48)
+			style.border_color = Color(0.46, 0.34, 0.72, 0.38)
+			style.shadow_color = Color(0, 0, 0, 0.20)
+			style.shadow_size = 4
+
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_left = 8
+	style.corner_radius_bottom_right = 8
+
+	style.content_margin_left = 10
+	style.content_margin_top = 5
+	style.content_margin_right = 10
+	style.content_margin_bottom = 6
+	style.shadow_offset = Vector2(0, 2)
+
+	return style
