@@ -259,11 +259,11 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	card.add_child(root_box)
 
 	var portal_stage: Control = Control.new()
-	portal_stage.custom_minimum_size = Vector2(1, 334)
+	portal_stage.custom_minimum_size = Vector2(1, 330)
 	portal_stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	portal_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	portal_stage.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	portal_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root_box.add_child(portal_stage)
+	root_box.add_child(portal_stage)	
 
 	var frame: TextureRect = TextureRect.new()
 	frame.texture = VisualAsset.load_texture(LuminariaTheme.SELECTION_FRAME_PATH)
@@ -281,10 +281,10 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	var portrait: TextureRect = TextureRect.new()
 	portrait.texture = load_player_texture(asset_path)
 	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
-	portrait.offset_left = 20
-	portrait.offset_top = 58
-	portrait.offset_right = -20
-	portrait.offset_bottom = -24
+	portrait.offset_left = 34
+	portrait.offset_top = 68
+	portrait.offset_right = -34
+	portrait.offset_bottom = -34
 	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -292,9 +292,9 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	portal_stage.add_child(portrait)
 
 	var text_box: VBoxContainer = VBoxContainer.new()
-	text_box.custom_minimum_size = Vector2(1, 48)
+	text_box.custom_minimum_size = Vector2(1, 58)
 	text_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	text_box.size_flags_vertical = Control.SIZE_SHRINK_END
+	text_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	text_box.alignment = BoxContainer.ALIGNMENT_CENTER
 	text_box.add_theme_constant_override("separation", 0)
 	text_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -307,7 +307,7 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_label.clip_text = true
 	title_label.text = build_appearance_title_text(title, locked_appearance_id)
-	LuminariaTheme.apply_label(title_label, 19, Color(1.0, 0.92, 0.72, 1.0), 2)
+	LuminariaTheme.apply_label(title_label, 17, Color(1.0, 0.92, 0.72, 1.0), 2)
 	text_box.add_child(title_label)
 
 	var description_label: Label = Label.new()
@@ -317,7 +317,7 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.clip_text = true
 	description_label.text = description
-	LuminariaTheme.apply_label(description_label, 14, Color(0.88, 0.86, 0.92, 1.0), 2)
+	LuminariaTheme.apply_label(description_label, 13, Color(0.88, 0.86, 0.92, 1.0), 2)
 	text_box.add_child(description_label)
 
 	card.mouse_entered.connect(func():
@@ -644,7 +644,7 @@ func refresh_layout_after_frame() -> void:
 
 
 func layout_overlay_controls() -> void:
-	var margin: float = 6.0
+	var margin: float = 18.0
 	var top_height: float = 46.0
 	var panel_width: float = min(1120.0, max(720.0, size.x - (margin * 2.0)))
 	var bottom_height: float = 184.0
@@ -661,8 +661,8 @@ func layout_overlay_controls() -> void:
 		max(margin, size.y - bottom_height - margin)
 	)
 
-	var card_top: float = top_panel.position.y + top_height + margin
-	var card_bottom: float = bottom_panel.position.y - margin
+	var card_top: float = top_panel.position.y + top_height + 10.0
+	var card_bottom: float = bottom_panel.position.y - 10.0
 
 	card_area.position = Vector2(
 		(size.x - panel_width) / 2.0,
