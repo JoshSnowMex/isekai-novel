@@ -246,7 +246,7 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(220, 330)
+	card.custom_minimum_size = Vector2(220, 350)
 	card.text = ""
 	card.clip_contents = false
 	LuminariaTheme.apply_transparent_button(card)
@@ -272,10 +272,10 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	var portrait: TextureRect = TextureRect.new()
 	portrait.texture = load_player_texture(asset_path)
 	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
-	portrait.offset_left = 12
-	portrait.offset_top = 20
-	portrait.offset_right = -12
-	portrait.offset_bottom = -58
+	portrait.offset_left = 18
+	portrait.offset_top = 38
+	portrait.offset_right = -18
+	portrait.offset_bottom = -78
 	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -283,10 +283,10 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	stage.add_child(portrait)
 
 	var label_panel: PanelContainer = PanelContainer.new()
-	label_panel.anchor_left = 0.07
-	label_panel.anchor_top = 0.78
-	label_panel.anchor_right = 0.93
-	label_panel.anchor_bottom = 0.96
+	label_panel.anchor_left = 0.09
+	label_panel.anchor_top = 0.72
+	label_panel.anchor_right = 0.91
+	label_panel.anchor_bottom = 0.94
 	label_panel.offset_left = 0
 	label_panel.offset_top = 0
 	label_panel.offset_right = 0
@@ -314,7 +314,7 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_label.clip_text = true
 	title_label.text = build_appearance_title_text(title, locked_appearance_id)
-	LuminariaTheme.apply_label(title_label, 18, Color(1.0, 0.92, 0.72, 1.0), 2)
+	LuminariaTheme.apply_label(title_label, 16, Color(1.0, 0.92, 0.72, 1.0), 2)
 	label_box.add_child(title_label)
 
 	var description_label: Label = Label.new()
@@ -324,7 +324,7 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.clip_text = true
 	description_label.text = description
-	LuminariaTheme.apply_label(description_label, 14, Color(0.88, 0.86, 0.92, 1.0), 2)
+	LuminariaTheme.apply_label(description_label, 13, Color(0.88, 0.86, 0.92, 1.0), 2)
 	label_box.add_child(description_label)
 
 	card.mouse_entered.connect(func():
@@ -595,7 +595,7 @@ func create_grid(columns: int) -> GridContainer:
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	grid.columns = columns
-	grid.add_theme_constant_override("h_separation", 14)
+	grid.add_theme_constant_override("h_separation", 24)
 	grid.add_theme_constant_override("v_separation", 14)
 	return grid
 
@@ -685,8 +685,8 @@ func layout_overlay_controls() -> void:
 		var grid_height: float = card_area.size.y
 
 		if current_step == IntroStep.APPEARANCE:
-			grid_width = min(panel_width, 760.0)
-			grid_height = min(card_area.size.y, 340.0)
+			grid_width = min(panel_width, 800.0)
+			grid_height = min(card_area.size.y, 360.0)
 		elif current_step == IntroStep.CLASS:
 			grid_width = min(panel_width, 1120.0)
 			grid_height = min(card_area.size.y, 330.0)
