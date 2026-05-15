@@ -144,15 +144,13 @@ func build_main_panel() -> void:
 	box.add_theme_constant_override("separation", 6)
 	margin.add_child(box)
 
-	main_title_label = Label.new()
-	main_title_label.custom_minimum_size = Vector2(1, 24)
-	main_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	main_title_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	main_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	main_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	main_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	LuminariaTheme.apply_content_title(main_title_label)
-	box.add_child(main_title_label)
+	main_actions = HBoxContainer.new()
+	main_actions.custom_minimum_size = Vector2(1, 40)
+	main_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	main_actions.size_flags_vertical = Control.SIZE_SHRINK_END
+	main_actions.alignment = BoxContainer.ALIGNMENT_CENTER
+	main_actions.add_theme_constant_override("separation", 8)
+	box.add_child(main_actions)
 
 	main_description_scroll = ScrollContainer.new()
 	main_description_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -175,7 +173,6 @@ func build_main_panel() -> void:
 	main_actions.size_flags_vertical = Control.SIZE_SHRINK_END
 	main_actions.alignment = BoxContainer.ALIGNMENT_CENTER
 	main_actions.add_theme_constant_override("separation", 8)
-	LuminariaTheme.apply_content_action_button(main_actions)
 	box.add_child(main_actions)
 
 
@@ -465,7 +462,7 @@ func add_global_action(text: String, callback: Callable) -> Button:
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
 	button.pressed.connect(callback)
-	global_action_buttons.add_child(button)
+	button.add_child(button)
 	return button
 
 
@@ -480,6 +477,7 @@ func add_main_action(text: String, callback: Callable, disabled: bool = false) -
 	if not disabled:
 		button.pressed.connect(callback)
 
+	LuminariaTheme.apply_content_action_button(button)
 	main_actions.add_child(button)
 	return button
 
