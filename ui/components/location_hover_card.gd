@@ -1,4 +1,4 @@
-extends PanelContainer
+extends Control
 class_name LocationHoverCard
 
 
@@ -7,37 +7,50 @@ var description_label: Label
 var npc_label: Label
 var hint_label: Label
 
+var panel_texture: TextureRect
+
 
 func _init() -> void:
-	custom_minimum_size = Vector2(500, 128)
+	custom_minimum_size = Vector2(500, 320)
 	size = custom_minimum_size
 	visible = false
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func build() -> void:
-	add_theme_stylebox_override("panel", make_hover_card_style())
+	panel_texture = TextureRect.new()
+	panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel_texture.offset_left = 0
+	panel_texture.offset_top = 0
+	panel_texture.offset_right = 0
+	panel_texture.offset_bottom = 0
+	panel_texture.texture = get_hover_panel_texture()
+	panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(panel_texture)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.add_theme_constant_override("margin_left", 28)
+	margin.add_theme_constant_override("margin_top", 24)
+	margin.add_theme_constant_override("margin_right", 28)
+	margin.add_theme_constant_override("margin_bottom", 24)
 	add_child(margin)
 
 	var root: VBoxContainer = VBoxContainer.new()
 	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	root.add_theme_constant_override("separation", 4)
+	root.add_theme_constant_override("separation", 8)
 	margin.add_child(root)
 
 	title_label = Label.new()
-	title_label.custom_minimum_size = Vector2(1, 26)
+	title_label.custom_minimum_size = Vector2(1, 30)
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	LuminariaTheme.apply_label(title_label, 16, Color(0.92, 0.90, 0.96, 1.0), 2)
+	LuminariaTheme.apply_label(title_label, 20, Color(0.95, 0.88, 1.0, 1.0), 2)
 	root.add_child(title_label)
 
 	description_label = Label.new()
@@ -46,7 +59,7 @@ func build() -> void:
 	description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	LuminariaTheme.apply_label(description_label, 16, Color(0.92, 0.90, 0.96, 1.0), 2)
+	LuminariaTheme.apply_label(description_label, 17, Color(0.92, 0.90, 0.96, 1.0), 2)
 	root.add_child(description_label)
 
 	npc_label = Label.new()
@@ -54,17 +67,32 @@ func build() -> void:
 	npc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	npc_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	npc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	LuminariaTheme.apply_label(npc_label, 16, Color(0.92, 0.90, 0.96, 1.0), 2)
+	LuminariaTheme.apply_label(npc_label, 16, Color(0.82, 0.80, 0.92, 1.0), 2)
 	root.add_child(npc_label)
+
+	var spacer: Control = Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(spacer)
 
 	hint_label = Label.new()
 	hint_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	hint_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_label(hint_label, 17, Color(0.82, 0.72, 1.0, 1.0), 2)
 	root.add_child(hint_label)
 
 	set_intro()
+
+
+func get_hover_panel_texture() -> Texture2D:
+	var world_map_ui: Dictionary = DataManager.get_world_map_ui()
+	var path: String = str(world_map_ui.get("hover_info_panel", "res://assets/ui/world_hover_info_panel.png"))
+
+	if ResourceLoader.exists(path):
+		return load(path)
+
+	return null
 
 
 func set_intro() -> void:
@@ -105,10 +133,10 @@ func set_location(location_id: String) -> void:
 func get_short_description(text: String) -> String:
 	var clean_text: String = text.strip_edges()
 
-	if clean_text.length() <= 120:
+	if clean_text.length() <= 150:
 		return clean_text
 
-	return clean_text.substr(0, 117).strip_edges() + "..."
+	return clean_text.substr(0, 147).strip_edges() + "..."
 
 
 func get_present_npcs_for_location(location_id: String) -> Array:
@@ -135,29 +163,3 @@ func get_visible_npc_name(npc_id: String) -> String:
 
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	return str(npc.get("name", npc_id))
-
-func make_hover_card_style() -> StyleBoxFlat:
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(0.030, 0.022, 0.048, 0.82)
-	style.border_color = Color(0.58, 0.42, 0.92, 0.58)
-
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 2
-
-	style.corner_radius_top_left = 10
-	style.corner_radius_top_right = 10
-	style.corner_radius_bottom_left = 10
-	style.corner_radius_bottom_right = 10
-
-	style.content_margin_left = 12
-	style.content_margin_top = 10
-	style.content_margin_right = 12
-	style.content_margin_bottom = 10
-
-	style.shadow_color = Color(0, 0, 0, 0.48)
-	style.shadow_size = 16
-	style.shadow_offset = Vector2(0, 4)
-
-	return style

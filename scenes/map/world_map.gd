@@ -146,10 +146,10 @@ func refresh_overlay_layout_after_frame() -> void:
 
 func layout_action_panel() -> void:
 	var margin: float = 10.0
-	var panel_size: Vector2 = Vector2(420.0, 46.0)
+	var panel_size: Vector2 = Vector2(430.0, 60.0)
 
 	if map_layer.size.x < 900:
-		panel_size = Vector2(360.0, 46.0)
+		panel_size = Vector2(380.0, 54.0)
 
 	var x: float = max(margin, map_layer.size.x - panel_size.x - margin)
 	var y: float = margin
@@ -298,10 +298,10 @@ func hide_hover_card() -> void:
 func position_hover_card_bottom_left() -> void:
 	var margin: float = 12.0
 	var bottom_safe_margin: float = 42.0
-	var card_size: Vector2 = hover_card.custom_minimum_size
+	var card_size: Vector2 = Vector2(500, 320)
 
 	if map_layer.size.x < 760:
-		card_size = Vector2(380, 118)
+		card_size = Vector2(420, 270)
 
 	var y_position: float = map_layer.size.y - card_size.y - bottom_safe_margin
 
@@ -380,10 +380,10 @@ func setup_fullscreen_root() -> void:
 func position_hover_card_for_location(location_id: String) -> void:
 	var margin: float = 12.0
 	var bottom_safe_margin: float = 42.0
-	var card_size: Vector2 = hover_card.custom_minimum_size
+	var card_size: Vector2 = Vector2(500, 320)
 
 	if map_layer.size.x < 760:
-		card_size = Vector2(380, 118)
+		card_size = Vector2(420, 270)
 
 	var location_rect: Rect2 = get_location_screen_rect(location_id)
 

@@ -19,7 +19,9 @@
   },
   "world_map": {
 	"background": "res://assets/backgrounds/world_map_luminaria.png",
-	"fallback_title": "Mapa de Luminaria"
+	"fallback_title": "Mapa de Luminaria",
+	"top_nav_panel": "res://assets/ui/world_top_nav_panel.png",
+	"hover_info_panel": "res://assets/ui/world_hover_info_panel.png"
   },
   "locations": {
 	"home": {

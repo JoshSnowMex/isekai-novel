@@ -184,3 +184,19 @@ static func apply_hud_label(label: Label, alignment: HorizontalAlignment) -> voi
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.clip_text = true
 	apply_label(label, 20, Color(0.98, 0.93, 0.82, 1.0), 2)
+
+static func apply_flat_nav_text_button(button: Button) -> void:
+	var transparent_style: StyleBoxFlat = make_transparent_style()
+
+	button.add_theme_stylebox_override("normal", transparent_style)
+	button.add_theme_stylebox_override("hover", transparent_style)
+	button.add_theme_stylebox_override("pressed", transparent_style)
+	button.add_theme_stylebox_override("focus", transparent_style)
+	button.add_theme_stylebox_override("disabled", transparent_style)
+
+	apply_button_text(button, 18, Color(0.96, 0.91, 0.82, 1.0))
+
+	button.add_theme_color_override("font_hover_color", Color(0.88, 0.78, 1.0, 1.0))
+	button.add_theme_color_override("font_pressed_color", Color(0.72, 0.58, 0.92, 1.0))
+	button.add_theme_color_override("font_disabled_color", Color(0.52, 0.50, 0.62, 0.70))
+	button.add_theme_constant_override("outline_size", 2)
