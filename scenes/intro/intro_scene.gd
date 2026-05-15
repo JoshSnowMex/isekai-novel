@@ -31,6 +31,7 @@ var current_step: IntroStep = IntroStep.PROLOGUE
 var prologue_index: int = 0
 
 var appearance_cards: Dictionary = {}
+var class_cards: Dictionary = {}
 
 var prologue_pages: Array = [
 	"No recuerdas el final de tu vida anterior.\n\nSolo el sonido de una página rasgándose… y una luz imposible abriéndose bajo tus pies.",
@@ -353,8 +354,8 @@ func show_class_selection() -> void:
 	bottom_text_label.text = "Selecciona un camino. Cada uno favorece ciertos vínculos y complica otros."
 
 	clear_card_area()
-	card_grid = create_grid(6)
-	card_area.add_child(card_grid)
+	class_cards.clear()
+	card_grid = create_grid(3)
 
 	for class_id in DataManager.player_classes.keys():
 		add_class_card(card_grid, str(class_id))
@@ -376,18 +377,50 @@ func show_class_selection() -> void:
 
 	call_deferred("refresh_layout_after_frame")
 
-
 func add_class_card(parent: Node, class_id: String) -> void:
 	var locked_class_id: String = class_id
 	var class_data: Dictionary = DataManager.get_player_class(class_id)
+	var is_selected: bool = selected_class_id == locked_class_id
 
 	var card: Button = Button.new()
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(160, 300)
-	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	card.text = build_class_card_text(class_id, class_data)
+	card.custom_minimum_size = Vector2(180, 170)
+	card.text = ""
+	card.clip_contents = false
+	LuminariaTheme.apply_transparent_button(card)
+
+	var stage: Control = Control.new()
+	stage.set_anchors_preset(Control.PRESET_FULL_RECT)
+	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card.add_child(stage)
+
+	var seal_panel: PanelContainer = PanelContainer.new()
+	seal_panel.anchor_left = 0.12
+	seal_panel.anchor_top = 0.05
+	seal_panel.anchor_right = 0.88
+	seal_panel.anchor_bottom = 0.95
+	seal_panel.offset_left = 0
+	seal_panel.offset_top = 0
+	seal_panel.offset_right = 0
+	seal_panel.offset_bottom = 0
+	seal_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	seal_panel.add_theme_stylebox_override("panel", make_class_seal_style(is_selected))
+	stage.add_child(seal_panel)
+
+	var icon: TextureRect = TextureRect.new()
+	icon.texture = load_player_texture(get_class_sigil_path(locked_class_id))
+	icon.set_anchors_preset(Control.PRESET_FULL_RECT)
+	icon.offset_left = 26
+	icon.offset_top = 26
+	icon.offset_right = -26
+	icon.offset_bottom = -26
+	icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.modulate = get_class_sigil_color(is_selected)
+	stage.add_child(icon)
 
 	card.mouse_entered.connect(func():
 		bottom_text_label.text = build_class_hover_summary(class_data)
@@ -398,11 +431,16 @@ func add_class_card(parent: Node, class_id: String) -> void:
 	card.pressed.connect(func():
 		selected_class_id = locked_class_id
 		bottom_text_label.text = "%s seleccionado. Pulsa Continuar para confirmar." % class_data.get("name", locked_class_id)
-		show_class_selection()
+		refresh_class_selection_state()
 	)
 
-	parent.add_child(card)
+	class_cards[locked_class_id] = {
+		"seal_panel": seal_panel,
+		"icon": icon
+	}
 
+	parent.add_child(card)
+	
 func build_class_card_text(class_id: String, class_data: Dictionary) -> String:
 	var marker: String = ""
 
@@ -660,8 +698,8 @@ func layout_overlay_controls() -> void:
 			grid_width = min(panel_width, 840.0)
 			grid_height = min(card_area.size.y, 370.0)
 		elif current_step == IntroStep.CLASS:
-			grid_width = min(panel_width, 1120.0)
-			grid_height = min(card_area.size.y, 330.0)
+			grid_width = min(panel_width, 720.0)
+			grid_height = min(card_area.size.y, 360.0)
 
 		card_grid.size = Vector2(grid_width, grid_height)
 		card_grid.position = Vector2(
@@ -760,3 +798,64 @@ func refresh_appearance_selection_state() -> void:
 
 	if primary_button != null:
 		primary_button.disabled = selected_appearance_id == ""
+
+func refresh_class_selection_state() -> void:
+	for class_id in class_cards.keys():
+		var card_data: Dictionary = class_cards[class_id]
+		var is_selected: bool = str(class_id) == selected_class_id
+
+		var seal_panel: PanelContainer = card_data.get("seal_panel", null)
+		if seal_panel != null:
+			seal_panel.add_theme_stylebox_override("panel", make_class_seal_style(is_selected))
+
+		var icon: TextureRect = card_data.get("icon", null)
+		if icon != null:
+			icon.modulate = get_class_sigil_color(is_selected)
+
+	if primary_button != null:
+		primary_button.disabled = selected_class_id == ""
+
+
+func get_class_sigil_path(class_id: String) -> String:
+	var normalized_class_id: String = class_id.replace("_outsider", "")
+	return "res://assets/ui/classes/class_sigil_%s.png" % normalized_class_id
+
+
+func get_class_sigil_color(is_selected: bool) -> Color:
+	if is_selected:
+		return Color(1.0, 0.94, 0.68, 1.0)
+
+	return Color(0.78, 0.82, 0.96, 0.88)
+
+
+func make_class_seal_style(is_selected: bool) -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+
+	if is_selected:
+		style.bg_color = Color(0.16, 0.09, 0.18, 0.76)
+		style.border_color = Color(1.0, 0.78, 0.36, 0.96)
+		style.shadow_color = Color(1.0, 0.72, 0.28, 0.34)
+		style.shadow_size = 14
+	else:
+		style.bg_color = Color(0.04, 0.035, 0.08, 0.56)
+		style.border_color = Color(0.58, 0.52, 0.78, 0.52)
+		style.shadow_color = Color(0, 0, 0, 0.34)
+		style.shadow_size = 8
+
+	style.border_width_left = 2
+	style.border_width_top = 2
+	style.border_width_right = 2
+	style.border_width_bottom = 2
+
+	style.corner_radius_top_left = 96
+	style.corner_radius_top_right = 96
+	style.corner_radius_bottom_left = 96
+	style.corner_radius_bottom_right = 96
+
+	style.content_margin_left = 8
+	style.content_margin_top = 8
+	style.content_margin_right = 8
+	style.content_margin_bottom = 8
+	style.shadow_offset = Vector2(0, 3)
+
+	return style
