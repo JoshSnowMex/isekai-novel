@@ -246,7 +246,7 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(220, 390)
+	card.custom_minimum_size = Vector2(220, 360)
 	card.text = ""
 	card.clip_contents = false
 	LuminariaTheme.apply_transparent_button(card)
@@ -259,9 +259,9 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	card.add_child(root_box)
 
 	var portal_stage: Control = Control.new()
-	portal_stage.custom_minimum_size = Vector2(1, 330)
+	portal_stage.custom_minimum_size = Vector2(1, 360)
 	portal_stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	portal_stage.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	portal_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	portal_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root_box.add_child(portal_stage)	
 
@@ -290,35 +290,6 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	portrait.modulate = get_selection_portrait_color(is_selected)
 	portal_stage.add_child(portrait)
-
-	var text_box: VBoxContainer = VBoxContainer.new()
-	text_box.custom_minimum_size = Vector2(1, 58)
-	text_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	text_box.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	text_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	text_box.add_theme_constant_override("separation", 0)
-	text_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root_box.add_child(text_box)
-
-	var title_label: Label = Label.new()
-	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	title_label.clip_text = true
-	title_label.text = build_appearance_title_text(title, locked_appearance_id)
-	LuminariaTheme.apply_label(title_label, 17, Color(1.0, 0.92, 0.72, 1.0), 2)
-	text_box.add_child(title_label)
-
-	var description_label: Label = Label.new()
-	description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	description_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.clip_text = true
-	description_label.text = description
-	LuminariaTheme.apply_label(description_label, 13, Color(0.88, 0.86, 0.92, 1.0), 2)
-	text_box.add_child(description_label)
 
 	card.mouse_entered.connect(func():
 		bottom_text_label.text = "%s · %s" % [title, description]
@@ -679,7 +650,7 @@ func layout_overlay_controls() -> void:
 
 		if current_step == IntroStep.APPEARANCE:
 			grid_width = min(panel_width, 840.0)
-			grid_height = min(card_area.size.y, 410.0)
+			grid_height = min(card_area.size.y, 370.0)
 		elif current_step == IntroStep.CLASS:
 			grid_width = min(panel_width, 1120.0)
 			grid_height = min(card_area.size.y, 330.0)
