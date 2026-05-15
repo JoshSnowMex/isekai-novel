@@ -235,18 +235,58 @@ func show_appearance_selection() -> void:
 
 	call_deferred("refresh_layout_after_frame")
 
-
 func add_appearance_card(parent: Node, title: String, appearance_id: String, description: String) -> void:
 	var locked_appearance_id: String = appearance_id
-	var asset_name: String = get_appearance_asset_name(locked_appearance_id)
+	var asset_path: String = get_player_asset_path(get_appearance_asset_name(locked_appearance_id))
 
 	var card: Button = Button.new()
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	card.custom_minimum_size = Vector2(220, 300)
-	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	card.text = build_appearance_card_text(title, locked_appearance_id, description)
+	card.text = ""
+	card.clip_contents = true
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.offset_left = 10
+	margin.offset_top = 10
+	margin.offset_right = -10
+	margin.offset_bottom = -10
+	card.add_child(margin)
+
+	var box: VBoxContainer = VBoxContainer.new()
+	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	box.add_theme_constant_override("separation", 8)
+	margin.add_child(box)
+
+	var title_label: Label = Label.new()
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_label.clip_text = true
+	title_label.text = build_appearance_title_text(title, locked_appearance_id)
+	box.add_child(title_label)
+
+	var portrait: TextureRect = TextureRect.new()
+	portrait.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	portrait.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.texture = load_player_texture(asset_path)
+	box.add_child(portrait)
+
+	var description_label: Label = Label.new()
+	description_label.custom_minimum_size = Vector2(1, 42)
+	description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description_label.clip_text = true
+	description_label.text = description
+	box.add_child(description_label)
 
 	card.mouse_entered.connect(func():
 		bottom_text_label.text = "%s · %s" % [title, description]
@@ -261,21 +301,29 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	)
 
 	parent.add_child(card)
-
-
-func build_appearance_card_text(title: String, appearance_id: String, description: String) -> String:
-	var marker: String = ""
-
+	
+func build_appearance_title_text(title: String, appearance_id: String) -> String:
 	if selected_appearance_id == appearance_id:
-		marker = "✓ "
+		return "✓ %s" % title
 
-	return "%s%s\n\n%s\n\nArte final:\n%s" % [
-		marker,
-		title,
-		description,
-		get_appearance_asset_name(appearance_id)
-	]
+	return title
 
+
+func get_player_asset_path(asset_name: String) -> String:
+	var intro_ui: Dictionary = DataManager.get_intro_ui()
+	var player_asset_folder: String = str(intro_ui.get("player_asset_folder", "res://assets/player/"))
+
+	if not player_asset_folder.ends_with("/"):
+		player_asset_folder += "/"
+
+	return "%s%s" % [player_asset_folder, asset_name]
+
+
+func load_player_texture(path: String) -> Texture2D:
+	if ResourceLoader.exists(path):
+		return load(path)
+
+	return null
 
 func show_class_selection() -> void:
 	current_step = IntroStep.CLASS
