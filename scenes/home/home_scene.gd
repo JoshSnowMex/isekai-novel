@@ -456,16 +456,6 @@ func propose_final_union(npc_id: String) -> void:
 
 	refresh_home(str(result.get("text", "")))
 
-
-func add_global_action(text: String, callback: Callable) -> Button:
-	var button: Button = Button.new()
-	button.text = text
-	button.focus_mode = Control.FOCUS_ALL
-	button.pressed.connect(callback)
-	button.add_child(button)
-	return button
-
-
 func add_main_action(text: String, callback: Callable, disabled: bool = false) -> Button:
 	var button: Button = Button.new()
 	button.text = text
@@ -498,14 +488,15 @@ func layout_overlay_controls() -> void:
 
 	var margin: float = 10.0
 
-	var global_width: float = 430.0
+	var global_size: Vector2 = Vector2(430.0, 60.0)
 
-	if home_layer.size.x < 760:
-		global_width = 330.0
+	if home_layer.size.x < 900:
+		global_size = Vector2(380.0, 54.0)
 
-	global_action_panel.size = Vector2(global_width, 46)
+	global_action_panel.size = global_size
+	global_action_panel.custom_minimum_size = global_size
 	global_action_panel.position = Vector2(
-		max(margin, home_layer.size.x - global_width - margin),
+		max(margin, home_layer.size.x - global_size.x - margin),
 		margin
 	)
 
