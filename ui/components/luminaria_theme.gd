@@ -94,23 +94,27 @@ static func make_hud_panel_style() -> StyleBoxFlat:
 
 static func make_top_nav_panel_style() -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(0.012, 0.010, 0.018, 0.62)
-	style.border_color = Color(0.86, 0.70, 0.42, 0.18)
-	style.border_width_left = 0
-	style.border_width_top = 0
-	style.border_width_right = 0
+	style.bg_color = Color(0.018, 0.012, 0.030, 0.58)
+	style.border_color = Color(0.44, 0.30, 0.72, 0.30)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
 	style.border_width_bottom = 1
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_left = 8
-	style.corner_radius_bottom_right = 8
-	style.content_margin_left = 12
+
+	style.corner_radius_top_left = 12
+	style.corner_radius_top_right = 12
+	style.corner_radius_bottom_left = 12
+	style.corner_radius_bottom_right = 12
+
+	style.content_margin_left = 10
 	style.content_margin_top = 8
-	style.content_margin_right = 12
+	style.content_margin_right = 10
 	style.content_margin_bottom = 8
-	style.shadow_color = Color(0, 0, 0, 0.42)
-	style.shadow_size = 12
+
+	style.shadow_color = Color(0, 0, 0, 0.48)
+	style.shadow_size = 14
 	style.shadow_offset = Vector2(0, 4)
+
 	return style
 	
 static func make_top_nav_button_style(state: String = "normal") -> StyleBoxFlat:
@@ -118,38 +122,38 @@ static func make_top_nav_button_style(state: String = "normal") -> StyleBoxFlat:
 
 	match state:
 		"hover":
-			style.bg_color = Color(0.070, 0.045, 0.085, 0.68)
-			style.border_color = Color(1.0, 0.76, 0.34, 0.82)
-			style.shadow_color = Color(1.0, 0.70, 0.28, 0.18)
-			style.shadow_size = 8
+			style.bg_color = Color(0.18, 0.08, 0.28, 0.74)
+			style.border_color = Color(0.78, 0.58, 1.0, 0.78)
+			style.shadow_color = Color(0.48, 0.22, 0.90, 0.34)
+			style.shadow_size = 10
 		"pressed":
-			style.bg_color = Color(0.030, 0.024, 0.040, 0.82)
-			style.border_color = Color(0.84, 0.60, 0.26, 0.90)
-			style.shadow_color = Color(0, 0, 0, 0.46)
+			style.bg_color = Color(0.08, 0.04, 0.14, 0.86)
+			style.border_color = Color(0.64, 0.46, 0.90, 0.82)
+			style.shadow_color = Color(0, 0, 0, 0.50)
 			style.shadow_size = 3
 		"disabled":
-			style.bg_color = Color(0.010, 0.010, 0.014, 0.18)
-			style.border_color = Color(0.34, 0.32, 0.38, 0.18)
-			style.shadow_color = Color(0, 0, 0, 0.08)
+			style.bg_color = Color(0.012, 0.010, 0.018, 0.22)
+			style.border_color = Color(0.26, 0.22, 0.34, 0.18)
+			style.shadow_color = Color(0, 0, 0, 0.10)
 			style.shadow_size = 1
 		_:
-			style.bg_color = Color(0.020, 0.018, 0.030, 0.34)
-			style.border_color = Color(0.72, 0.58, 0.34, 0.44)
-			style.shadow_color = Color(0, 0, 0, 0.20)
-			style.shadow_size = 3
+			style.bg_color = Color(0.036, 0.026, 0.060, 0.58)
+			style.border_color = Color(0.46, 0.34, 0.72, 0.38)
+			style.shadow_color = Color(0, 0, 0, 0.24)
+			style.shadow_size = 4
 
-	style.border_width_left = 0
-	style.border_width_top = 0
-	style.border_width_right = 0
-	style.border_width_bottom = 2
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
 
-	style.corner_radius_top_left = 6
-	style.corner_radius_top_right = 6
-	style.corner_radius_bottom_left = 2
-	style.corner_radius_bottom_right = 2
+	style.corner_radius_top_left = 7
+	style.corner_radius_top_right = 7
+	style.corner_radius_bottom_left = 7
+	style.corner_radius_bottom_right = 7
 
 	style.content_margin_left = 14
-	style.content_margin_top = 4
+	style.content_margin_top = 5
 	style.content_margin_right = 14
 	style.content_margin_bottom = 6
 

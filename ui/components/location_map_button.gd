@@ -178,10 +178,10 @@ func make_map_icon_halo_style(layer: String, is_hovered: bool) -> StyleBoxFlat:
 				style.shadow_color = Color(0.48, 0.22, 0.90, 0.28)
 				style.shadow_size = 10
 			else:
-				style.bg_color = Color(0.12, 0.055, 0.20, 0.28)
-				style.border_color = Color(0.48, 0.34, 0.78, 0.34)
-				style.shadow_color = Color(0.24, 0.12, 0.42, 0.18)
-				style.shadow_size = 6
+				style.bg_color = Color(0.16, 0.070, 0.26, 0.42)
+				style.border_color = Color(0.62, 0.44, 0.95, 0.58)
+				style.shadow_color = Color(0.40, 0.18, 0.76, 0.30)
+				style.shadow_size = 10
 
 		"inner":
 			if is_hovered:
@@ -190,10 +190,10 @@ func make_map_icon_halo_style(layer: String, is_hovered: bool) -> StyleBoxFlat:
 				style.shadow_color = Color(1.0, 0.76, 0.28, 0.28)
 				style.shadow_size = 8
 			else:
-				style.bg_color = Color(0.78, 0.86, 1.00, 0.12)
-				style.border_color = Color(0.82, 0.90, 1.00, 0.38)
-				style.shadow_color = Color(0.42, 0.52, 0.80, 0.16)
-				style.shadow_size = 4
+				style.bg_color = Color(0.78, 0.86, 1.00, 0.18)
+				style.border_color = Color(0.86, 0.92, 1.00, 0.52)
+				style.shadow_color = Color(0.42, 0.52, 0.90, 0.24)
+				style.shadow_size = 7
 
 		_:
 			style.bg_color = Color(0, 0, 0, 0.0)

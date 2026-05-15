@@ -16,6 +16,8 @@ func _init() -> void:
 
 
 func build() -> void:
+	add_theme_stylebox_override("panel", make_hover_card_style())
+
 	var margin: MarginContainer = MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 14)
 	margin.add_theme_constant_override("margin_top", 10)
@@ -35,6 +37,7 @@ func build() -> void:
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_label(title_label, 16, Color(0.92, 0.90, 0.96, 1.0), 2)
 	root.add_child(title_label)
 
 	description_label = Label.new()
@@ -43,6 +46,7 @@ func build() -> void:
 	description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_label(description_label, 16, Color(0.92, 0.90, 0.96, 1.0), 2)
 	root.add_child(description_label)
 
 	npc_label = Label.new()
@@ -50,6 +54,7 @@ func build() -> void:
 	npc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	npc_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	npc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_label(npc_label, 16, Color(0.92, 0.90, 0.96, 1.0), 2)
 	root.add_child(npc_label)
 
 	hint_label = Label.new()
@@ -130,3 +135,29 @@ func get_visible_npc_name(npc_id: String) -> String:
 
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	return str(npc.get("name", npc_id))
+
+func make_hover_card_style() -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = Color(0.030, 0.022, 0.048, 0.82)
+	style.border_color = Color(0.58, 0.42, 0.92, 0.58)
+
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 2
+
+	style.corner_radius_top_left = 10
+	style.corner_radius_top_right = 10
+	style.corner_radius_bottom_left = 10
+	style.corner_radius_bottom_right = 10
+
+	style.content_margin_left = 12
+	style.content_margin_top = 10
+	style.content_margin_right = 12
+	style.content_margin_bottom = 10
+
+	style.shadow_color = Color(0, 0, 0, 0.48)
+	style.shadow_size = 16
+	style.shadow_offset = Vector2(0, 4)
+
+	return style

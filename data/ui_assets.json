@@ -81,8 +81,8 @@
 	"plaza": {
 	  "map_icon": "res://assets/map/locations/map_location_plaza_luminaria.png",
 	  "background": "res://assets/backgrounds/location_plaza_luminaria.png",
-	  "position": { "x": 390, "y": 205 },
-	  "size": { "x": 112, "y": 112 },
+	  "position": { "x": 390, "y": 210 },
+	  "size": { "x": 104, "y": 86 },
 	  "accent": "Plaza"
 	},
 	"guild": {
