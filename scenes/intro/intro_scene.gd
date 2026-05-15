@@ -461,18 +461,21 @@ func build_class_hover_summary(class_data: Dictionary) -> String:
 		class_data.get("narrative_style", "")
 	]
 
-
 func show_confirm_selection() -> void:
 	current_step = IntroStep.CONFIRM
 
+	var intro_ui: Dictionary = DataManager.get_intro_ui()
 	var class_data: Dictionary = DataManager.get_player_class(selected_class_id)
 	var appearance_label: String = get_appearance_label(selected_appearance_id)
-	var confirm_background_path: String = get_confirm_background_path(selected_class_id)
+	var confirm_background_path: String = str(intro_ui.get(
+		"confirm_background",
+		"res://assets/backgrounds/intro_confirm_outsider.png"
+	))
 
 	build_background(
 		confirm_background_path,
-		"Confirmar Forastero",
-		"Fondo final: %s" % get_confirm_background_name(selected_class_id)
+		str(intro_ui.get("fallback_confirm_title", "Confirmar Forastero")),
+		"Fondo final: %s" % confirm_background_path.get_file()
 	)
 
 	top_label.text = "Nuevo juego · Confirmar Forastero"
@@ -482,6 +485,7 @@ func show_confirm_selection() -> void:
 	]
 
 	clear_card_area()
+	build_confirm_preview(class_data, appearance_label)
 
 	build_three_buttons(
 		"Volver a camino",
@@ -499,8 +503,115 @@ func show_confirm_selection() -> void:
 	)
 
 	call_deferred("refresh_layout_after_frame")
+	
+func build_confirm_preview(class_data: Dictionary, appearance_label: String) -> void:
+	var preview_root: HBoxContainer = HBoxContainer.new()
+	preview_root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	preview_root.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	preview_root.alignment = BoxContainer.ALIGNMENT_CENTER
+	preview_root.add_theme_constant_override("separation", 34)
+	card_area.add_child(preview_root)
 
+	var character_stage: Control = Control.new()
+	character_stage.custom_minimum_size = Vector2(300, 360)
+	character_stage.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	character_stage.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	character_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview_root.add_child(character_stage)
 
+	var frame: TextureRect = TextureRect.new()
+	frame.texture = VisualAsset.load_texture(LuminariaTheme.SELECTION_FRAME_PATH)
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame.offset_left = -4
+	frame.offset_top = -4
+	frame.offset_right = 4
+	frame.offset_bottom = 4
+	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame.stretch_mode = TextureRect.STRETCH_SCALE
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.modulate = Color(1.0, 0.90, 0.55, 1.0)
+	character_stage.add_child(frame)
+
+	var portrait: TextureRect = TextureRect.new()
+	portrait.texture = load_player_texture(get_player_asset_path(get_appearance_asset_name(selected_appearance_id)))
+	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
+	portrait.offset_left = 38
+	portrait.offset_top = 68
+	portrait.offset_right = -38
+	portrait.offset_bottom = -34
+	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	character_stage.add_child(portrait)
+
+	var summary_panel: PanelContainer = PanelContainer.new()
+	summary_panel.custom_minimum_size = Vector2(360, 270)
+	summary_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	summary_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	summary_panel.add_theme_stylebox_override("panel", make_confirm_summary_style())
+	preview_root.add_child(summary_panel)
+
+	var margin: MarginContainer = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 18)
+	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_right", 18)
+	margin.add_theme_constant_override("margin_bottom", 16)
+	summary_panel.add_child(margin)
+
+	var summary_box: VBoxContainer = VBoxContainer.new()
+	summary_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	summary_box.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	summary_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	summary_box.add_theme_constant_override("separation", 10)
+	margin.add_child(summary_box)
+
+	var class_icon_holder: PanelContainer = PanelContainer.new()
+	class_icon_holder.custom_minimum_size = Vector2(118, 118)
+	class_icon_holder.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	class_icon_holder.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	class_icon_holder.add_theme_stylebox_override("panel", make_class_seal_style(true))
+	summary_box.add_child(class_icon_holder)
+
+	var class_icon: TextureRect = TextureRect.new()
+	class_icon.texture = load_player_texture(get_class_sigil_path(selected_class_id))
+	class_icon.set_anchors_preset(Control.PRESET_FULL_RECT)
+	class_icon.offset_left = 20
+	class_icon.offset_top = 20
+	class_icon.offset_right = -20
+	class_icon.offset_bottom = -20
+	class_icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	class_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	class_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	class_icon.modulate = get_class_sigil_color(true)
+	class_icon_holder.add_child(class_icon)
+
+	var appearance_label_node: Label = Label.new()
+	appearance_label_node.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	appearance_label_node.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	appearance_label_node.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	appearance_label_node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	appearance_label_node.text = appearance_label
+	LuminariaTheme.apply_label(appearance_label_node, 20, Color(1.0, 0.92, 0.72, 1.0), 2)
+	summary_box.add_child(appearance_label_node)
+
+	var class_label: Label = Label.new()
+	class_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	class_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	class_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	class_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	class_label.text = str(class_data.get("name", selected_class_id)).replace("Forastero ", "").replace("Forastera ", "")
+	LuminariaTheme.apply_label(class_label, 18, Color(0.92, 0.89, 0.96, 1.0), 2)
+	summary_box.add_child(class_label)
+
+	var element_label: Label = Label.new()
+	element_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	element_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	element_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	element_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	element_label.text = str(class_data.get("element", ""))
+	LuminariaTheme.apply_label(element_label, 15, Color(0.82, 0.84, 0.96, 1.0), 2)
+	summary_box.add_child(element_label)
+	
 func get_appearance_label(appearance_id: String) -> String:
 	match appearance_id:
 		"man":
@@ -707,7 +818,11 @@ func layout_overlay_controls() -> void:
 			(card_area.size.x - grid_width) / 2.0,
 			(card_area.size.y - grid_height) / 2.0
 		)
-
+	
+	for child in card_area.get_children():
+		if current_step == IntroStep.CONFIRM and child is HBoxContainer:
+			child.size = card_area.size
+			child.position = Vector2.ZERO
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
@@ -859,4 +974,25 @@ func make_class_seal_style(is_selected: bool) -> StyleBoxFlat:
 	style.content_margin_bottom = 8
 	style.shadow_offset = Vector2(0, 3)
 
+	return style
+
+func make_confirm_summary_style() -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = Color(0.035, 0.030, 0.060, 0.68)
+	style.border_color = Color(0.86, 0.68, 0.36, 0.62)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 14
+	style.corner_radius_top_right = 14
+	style.corner_radius_bottom_left = 14
+	style.corner_radius_bottom_right = 14
+	style.content_margin_left = 12
+	style.content_margin_top = 12
+	style.content_margin_right = 12
+	style.content_margin_bottom = 12
+	style.shadow_color = Color(0, 0, 0, 0.42)
+	style.shadow_size = 12
+	style.shadow_offset = Vector2(0, 4)
 	return style

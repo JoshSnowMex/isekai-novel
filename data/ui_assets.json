@@ -9,6 +9,7 @@
 	"prologue_background": "res://assets/backgrounds/intro_veil_crossing.png",
 	"appearance_background": "res://assets/backgrounds/intro_appearance_selection.png",
 	"class_background": "res://assets/backgrounds/intro_class_selection.png",
+	"confirm_background": "res://assets/backgrounds/intro_confirm_outsider.png",
 	"confirm_background_pattern": "res://assets/backgrounds/intro_confirm_outsider_{appearance}_{class}.png",
 	"player_asset_folder": "res://assets/player/",
 	"fallback_prologue_title": "El umbral",
