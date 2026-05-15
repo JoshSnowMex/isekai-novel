@@ -11,6 +11,8 @@ func _init() -> void:
 
 
 func build() -> void:
+	add_theme_stylebox_override("panel", LuminariaTheme.make_top_nav_panel_style())
+	
 	custom_minimum_size = Vector2(420, 46)
 	size = custom_minimum_size
 
@@ -37,8 +39,6 @@ func clear_actions() -> void:
 func add_action(button_text: String, callback: Callable) -> void:
 	var button: Button = Button.new()
 	button.text = button_text
-	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.custom_minimum_size = Vector2(82, 34)
+	LuminariaTheme.apply_top_nav_button(button)
 	button.pressed.connect(callback)
 	action_container.add_child(button)

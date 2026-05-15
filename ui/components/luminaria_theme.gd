@@ -74,3 +74,112 @@ static func apply_transparent_button(button: Button) -> void:
 	button.add_theme_stylebox_override("pressed", style)
 	button.add_theme_stylebox_override("focus", style)
 	button.add_theme_stylebox_override("disabled", style)
+
+static func make_hud_panel_style() -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = Color(0.025, 0.022, 0.035, 0.86)
+	style.border_color = Color(0.74, 0.58, 0.34, 0.36)
+	style.border_width_left = 0
+	style.border_width_top = 0
+	style.border_width_right = 0
+	style.border_width_bottom = 1
+	style.content_margin_left = 8
+	style.content_margin_top = 4
+	style.content_margin_right = 8
+	style.content_margin_bottom = 4
+	style.shadow_color = Color(0, 0, 0, 0.34)
+	style.shadow_size = 8
+	style.shadow_offset = Vector2(0, 2)
+	return style
+
+
+static func make_top_nav_panel_style() -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = Color(0.030, 0.026, 0.045, 0.68)
+	style.border_color = Color(0.76, 0.62, 0.40, 0.28)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_left = 6
+	style.corner_radius_bottom_right = 6
+	style.content_margin_left = 8
+	style.content_margin_top = 6
+	style.content_margin_right = 8
+	style.content_margin_bottom = 6
+	style.shadow_color = Color(0, 0, 0, 0.36)
+	style.shadow_size = 10
+	style.shadow_offset = Vector2(0, 3)
+	return style
+
+
+static func make_top_nav_button_style(state: String = "normal") -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+
+	match state:
+		"hover":
+			style.bg_color = Color(0.120, 0.075, 0.150, 0.88)
+			style.border_color = Color(1.00, 0.78, 0.38, 0.76)
+			style.shadow_color = Color(1.0, 0.70, 0.28, 0.20)
+			style.shadow_size = 8
+		"pressed":
+			style.bg_color = Color(0.075, 0.048, 0.095, 0.94)
+			style.border_color = Color(0.86, 0.62, 0.28, 0.82)
+			style.shadow_color = Color(0, 0, 0, 0.42)
+			style.shadow_size = 4
+		"disabled":
+			style.bg_color = Color(0.030, 0.030, 0.040, 0.38)
+			style.border_color = Color(0.42, 0.40, 0.46, 0.28)
+			style.shadow_color = Color(0, 0, 0, 0.20)
+			style.shadow_size = 2
+		_:
+			style.bg_color = Color(0.045, 0.040, 0.065, 0.78)
+			style.border_color = Color(0.70, 0.58, 0.40, 0.34)
+			style.shadow_color = Color(0, 0, 0, 0.30)
+			style.shadow_size = 5
+
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+
+	style.content_margin_left = 12
+	style.content_margin_top = 5
+	style.content_margin_right = 12
+	style.content_margin_bottom = 5
+
+	style.shadow_offset = Vector2(0, 2)
+
+	return style
+
+
+static func apply_top_nav_button(button: Button) -> void:
+	button.focus_mode = Control.FOCUS_ALL
+	button.custom_minimum_size = Vector2(88, 34)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	button.clip_text = true
+
+	apply_button_text(button, 17, Color(0.96, 0.91, 0.82, 1.0))
+
+	button.add_theme_stylebox_override("normal", make_top_nav_button_style("normal"))
+	button.add_theme_stylebox_override("hover", make_top_nav_button_style("hover"))
+	button.add_theme_stylebox_override("pressed", make_top_nav_button_style("pressed"))
+	button.add_theme_stylebox_override("focus", make_top_nav_button_style("hover"))
+	button.add_theme_stylebox_override("disabled", make_top_nav_button_style("disabled"))
+
+
+static func apply_hud_label(label: Label, alignment: HorizontalAlignment) -> void:
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.horizontal_alignment = alignment
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.clip_text = true
+	apply_label(label, 17, Color(0.96, 0.91, 0.82, 1.0), 2)

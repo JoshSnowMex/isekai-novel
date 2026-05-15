@@ -13,6 +13,8 @@ func _init() -> void:
 
 
 func build() -> void:
+	add_theme_stylebox_override("panel", LuminariaTheme.make_hud_panel_style())
+	
 	var margin: MarginContainer = MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 12)
 	margin.add_theme_constant_override("margin_top", 4)
@@ -42,11 +44,7 @@ func build() -> void:
 
 func make_hud_label(alignment: HorizontalAlignment) -> Label:
 	var label: Label = Label.new()
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.horizontal_alignment = alignment
-	label.autowrap_mode = TextServer.AUTOWRAP_OFF
-	label.clip_text = true
+	LuminariaTheme.apply_hud_label(label, alignment)
 	return label
 
 
