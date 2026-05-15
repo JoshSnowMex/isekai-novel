@@ -30,6 +30,8 @@ var selected_appearance_id: String = ""
 var current_step: IntroStep = IntroStep.PROLOGUE
 var prologue_index: int = 0
 
+var appearance_cards: Dictionary = {}
+
 var prologue_pages: Array = [
 	"No recuerdas el final de tu vida anterior.\n\nSolo el sonido de una página rasgándose… y una luz imposible abriéndose bajo tus pies.",
 	"Al despertar, Luminaria ya conoce tu nombre.\n\nO quizá solo finge conocerlo. En este mundo, incluso la memoria puede mentir.",
@@ -212,6 +214,7 @@ func show_appearance_selection() -> void:
 	bottom_text_label.text = "Selecciona una forma para continuar."
 
 	clear_card_area()
+	appearance_cards.clear()
 	card_grid = create_grid(3)
 	card_area.add_child(card_grid)
 
@@ -300,9 +303,14 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	card.pressed.connect(func():
 		selected_appearance_id = locked_appearance_id
 		bottom_text_label.text = "%s seleccionado. Pulsa Continuar para elegir camino." % title
-		show_appearance_selection()
+		refresh_appearance_selection_state()
 	)
 
+	appearance_cards[locked_appearance_id] = {
+		"frame": frame,
+		"portrait": portrait
+	}
+	
 	parent.add_child(card)
 		
 func build_appearance_title_text(title: String, appearance_id: String) -> String:
@@ -736,3 +744,19 @@ func make_selection_label_style(is_selected: bool) -> StyleBoxFlat:
 	style.shadow_offset = Vector2(0, 3)
 
 	return style
+
+func refresh_appearance_selection_state() -> void:
+	for appearance_id in appearance_cards.keys():
+		var card_data: Dictionary = appearance_cards[appearance_id]
+		var is_selected: bool = str(appearance_id) == selected_appearance_id
+
+		var frame: TextureRect = card_data.get("frame", null)
+		if frame != null:
+			frame.modulate = get_selection_frame_color(is_selected)
+
+		var portrait: TextureRect = card_data.get("portrait", null)
+		if portrait != null:
+			portrait.modulate = get_selection_portrait_color(is_selected)
+
+	if primary_button != null:
+		primary_button.disabled = selected_appearance_id == ""
