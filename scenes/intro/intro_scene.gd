@@ -246,66 +246,59 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	card.focus_mode = Control.FOCUS_ALL
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	card.custom_minimum_size = Vector2(220, 350)
+	card.custom_minimum_size = Vector2(220, 390)
 	card.text = ""
 	card.clip_contents = false
 	LuminariaTheme.apply_transparent_button(card)
 
-	var stage: Control = Control.new()
-	stage.set_anchors_preset(Control.PRESET_FULL_RECT)
-	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	card.add_child(stage)
+	var root_box: VBoxContainer = VBoxContainer.new()
+	root_box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	root_box.add_theme_constant_override("separation", 6)
+	card.add_child(root_box)
+
+	var portal_stage: Control = Control.new()
+	portal_stage.custom_minimum_size = Vector2(1, 334)
+	portal_stage.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	portal_stage.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	portal_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root_box.add_child(portal_stage)
 
 	var frame: TextureRect = TextureRect.new()
 	frame.texture = VisualAsset.load_texture(LuminariaTheme.SELECTION_FRAME_PATH)
 	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
-	frame.offset_left = -8
-	frame.offset_top = -8
-	frame.offset_right = 8
-	frame.offset_bottom = 8
+	frame.offset_left = -4
+	frame.offset_top = -4
+	frame.offset_right = 4
+	frame.offset_bottom = 4
 	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	frame.stretch_mode = TextureRect.STRETCH_SCALE
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	frame.modulate = get_selection_frame_color(is_selected)
-	stage.add_child(frame)
+	portal_stage.add_child(frame)
 
 	var portrait: TextureRect = TextureRect.new()
 	portrait.texture = load_player_texture(asset_path)
 	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
-	portrait.offset_left = 18
-	portrait.offset_top = 78
-	portrait.offset_right = -18
-	portrait.offset_bottom = -56
+	portrait.offset_left = 20
+	portrait.offset_top = 58
+	portrait.offset_right = -20
+	portrait.offset_bottom = -24
 	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	portrait.modulate = get_selection_portrait_color(is_selected)
-	stage.add_child(portrait)
+	portal_stage.add_child(portrait)
 
-	var label_panel: PanelContainer = PanelContainer.new()
-	label_panel.anchor_left = 0.20
-	label_panel.anchor_top = 0.85
-	label_panel.anchor_right = 0.80
-	label_panel.anchor_bottom = 0.96
-	label_panel.offset_left = 0
-	label_panel.offset_top = 0
-	label_panel.offset_right = 0
-	label_panel.offset_bottom = 0
-	label_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label_panel.add_theme_stylebox_override("panel", make_selection_label_style(is_selected))
-	stage.add_child(label_panel)
-
-	var label_margin: MarginContainer = MarginContainer.new()
-	label_margin.add_theme_constant_override("margin_left", 6)
-	label_margin.add_theme_constant_override("margin_top", 2)
-	label_margin.add_theme_constant_override("margin_right", 6)
-	label_margin.add_theme_constant_override("margin_bottom", 2)
-	label_panel.add_child(label_margin)
-
-	var label_box: VBoxContainer = VBoxContainer.new()
-	label_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	label_box.add_theme_constant_override("separation", 1)
-	label_margin.add_child(label_box)
+	var text_box: VBoxContainer = VBoxContainer.new()
+	text_box.custom_minimum_size = Vector2(1, 48)
+	text_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_box.size_flags_vertical = Control.SIZE_SHRINK_END
+	text_box.alignment = BoxContainer.ALIGNMENT_CENTER
+	text_box.add_theme_constant_override("separation", 0)
+	text_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root_box.add_child(text_box)
 
 	var title_label: Label = Label.new()
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -314,8 +307,8 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title_label.clip_text = true
 	title_label.text = build_appearance_title_text(title, locked_appearance_id)
-	LuminariaTheme.apply_label(title_label, 16, Color(1.0, 0.92, 0.72, 1.0), 2)
-	label_box.add_child(title_label)
+	LuminariaTheme.apply_label(title_label, 19, Color(1.0, 0.92, 0.72, 1.0), 2)
+	text_box.add_child(title_label)
 
 	var description_label: Label = Label.new()
 	description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -324,8 +317,8 @@ func add_appearance_card(parent: Node, title: String, appearance_id: String, des
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	description_label.clip_text = true
 	description_label.text = description
-	LuminariaTheme.apply_label(description_label, 13, Color(0.88, 0.86, 0.92, 1.0), 2)
-	label_box.add_child(description_label)
+	LuminariaTheme.apply_label(description_label, 14, Color(0.88, 0.86, 0.92, 1.0), 2)
+	text_box.add_child(description_label)
 
 	card.mouse_entered.connect(func():
 		bottom_text_label.text = "%s · %s" % [title, description]
@@ -685,8 +678,8 @@ func layout_overlay_controls() -> void:
 		var grid_height: float = card_area.size.y
 
 		if current_step == IntroStep.APPEARANCE:
-			grid_width = min(panel_width, 800.0)
-			grid_height = min(card_area.size.y, 360.0)
+			grid_width = min(panel_width, 840.0)
+			grid_height = min(card_area.size.y, 410.0)
 		elif current_step == IntroStep.CLASS:
 			grid_width = min(panel_width, 1120.0)
 			grid_height = min(card_area.size.y, 330.0)
