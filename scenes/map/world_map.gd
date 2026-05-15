@@ -11,11 +11,11 @@ var load_game_modal: LoadGameModal
 const BASE_MAP_SIZE := Vector2(1050.0, 540.0)
 
 func _ready() -> void:
+	GameManager.current_location_id = ""
 	setup_fullscreen_root()
 	build_ui()
 	refresh_screen()
 	show_pending_narrative_messages()
-
 
 func build_ui() -> void:
 	var root: VBoxContainer = VBoxContainer.new()

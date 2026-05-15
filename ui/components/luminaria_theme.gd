@@ -114,55 +114,55 @@ static func make_top_nav_panel_style() -> StyleBoxFlat:
 	style.shadow_offset = Vector2(0, 3)
 	return style
 
-
 static func make_top_nav_button_style(state: String = "normal") -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
 
 	match state:
 		"hover":
-			style.bg_color = Color(0.120, 0.075, 0.150, 0.88)
-			style.border_color = Color(1.00, 0.78, 0.38, 0.76)
-			style.shadow_color = Color(1.0, 0.70, 0.28, 0.20)
-			style.shadow_size = 8
+			style.bg_color = Color(0.105, 0.064, 0.125, 0.92)
+			style.border_color = Color(0.95, 0.74, 0.36, 0.82)
+			style.shadow_color = Color(1.0, 0.70, 0.30, 0.22)
+			style.shadow_size = 10
+			style.expand_margin_bottom = 1
 		"pressed":
-			style.bg_color = Color(0.075, 0.048, 0.095, 0.94)
-			style.border_color = Color(0.86, 0.62, 0.28, 0.82)
-			style.shadow_color = Color(0, 0, 0, 0.42)
-			style.shadow_size = 4
+			style.bg_color = Color(0.050, 0.034, 0.070, 0.96)
+			style.border_color = Color(0.78, 0.54, 0.24, 0.88)
+			style.shadow_color = Color(0, 0, 0, 0.48)
+			style.shadow_size = 3
+			style.expand_margin_top = 1
 		"disabled":
-			style.bg_color = Color(0.030, 0.030, 0.040, 0.38)
-			style.border_color = Color(0.42, 0.40, 0.46, 0.28)
-			style.shadow_color = Color(0, 0, 0, 0.20)
-			style.shadow_size = 2
+			style.bg_color = Color(0.020, 0.020, 0.030, 0.36)
+			style.border_color = Color(0.38, 0.36, 0.42, 0.24)
+			style.shadow_color = Color(0, 0, 0, 0.12)
+			style.shadow_size = 1
 		_:
-			style.bg_color = Color(0.045, 0.040, 0.065, 0.78)
-			style.border_color = Color(0.70, 0.58, 0.40, 0.34)
-			style.shadow_color = Color(0, 0, 0, 0.30)
-			style.shadow_size = 5
+			style.bg_color = Color(0.030, 0.026, 0.044, 0.86)
+			style.border_color = Color(0.66, 0.52, 0.32, 0.44)
+			style.shadow_color = Color(0, 0, 0, 0.36)
+			style.shadow_size = 6
 
 	style.border_width_left = 1
 	style.border_width_top = 1
 	style.border_width_right = 1
-	style.border_width_bottom = 1
+	style.border_width_bottom = 2
 
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_left = 4
-	style.corner_radius_bottom_right = 4
+	style.corner_radius_top_left = 2
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_left = 2
+	style.corner_radius_bottom_right = 8
 
-	style.content_margin_left = 12
+	style.content_margin_left = 14
 	style.content_margin_top = 5
-	style.content_margin_right = 12
-	style.content_margin_bottom = 5
+	style.content_margin_right = 14
+	style.content_margin_bottom = 6
 
-	style.shadow_offset = Vector2(0, 2)
+	style.shadow_offset = Vector2(0, 3)
 
 	return style
-
-
+	
 static func apply_top_nav_button(button: Button) -> void:
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(88, 34)
+	button.custom_minimum_size = Vector2(94, 36)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	button.clip_text = true
