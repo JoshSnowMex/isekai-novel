@@ -22,18 +22,27 @@ func build() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
-	color = Color(0, 0, 0, 0.58)
+	color = Color(0, 0, 0, 0.64)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
 	panel = PanelContainer.new()
-	panel.custom_minimum_size = Vector2(520, 260)
+	panel.custom_minimum_size = Vector2(560, 320)
+	panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	add_child(panel)
 
+	var panel_texture: TextureRect = TextureRect.new()
+	panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel_texture.texture = LuminariaTheme.get_world_info_panel_texture()
+	panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(panel_texture)
+
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 18)
-	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_right", 18)
-	margin.add_theme_constant_override("margin_bottom", 16)
+	margin.add_theme_constant_override("margin_left", 34)
+	margin.add_theme_constant_override("margin_top", 28)
+	margin.add_theme_constant_override("margin_right", 34)
+	margin.add_theme_constant_override("margin_bottom", 28)
 	panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
@@ -44,20 +53,22 @@ func build() -> void:
 
 	title_label = Label.new()
 	title_label.text = "Cargar partida"
-	title_label.custom_minimum_size = Vector2(1, 30)
+	title_label.custom_minimum_size = Vector2(1, 32)
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_title(title_label)
 	box.add_child(title_label)
 
 	description_label = Label.new()
 	description_label.text = ""
-	description_label.custom_minimum_size = Vector2(1, 22)
+	description_label.custom_minimum_size = Vector2(1, 24)
 	description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_body(description_label)
 	box.add_child(description_label)
 
 	var buttons_box: VBoxContainer = VBoxContainer.new()
@@ -80,35 +91,37 @@ func build() -> void:
 	manual_button.pressed.connect(load_manual)
 	buttons_box.add_child(manual_button)
 
-	title_screen_button = Button.new()
-	title_screen_button.text = "Volver al título"
-	title_screen_button.focus_mode = Control.FOCUS_ALL
-	title_screen_button.custom_minimum_size = Vector2(1, 38)
-	title_screen_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_screen_button = make_load_button(
+		"Volver al título",
+		""
+	)
 	title_screen_button.pressed.connect(SceneRouter.go_to_main_menu)
-	box.add_child(title_screen_button)
+	buttons_box.add_child(title_screen_button)
 
-	cancel_button = Button.new()
-	cancel_button.text = "Cancelar"
-	cancel_button.focus_mode = Control.FOCUS_ALL
-	cancel_button.custom_minimum_size = Vector2(1, 38)
-	cancel_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cancel_button = make_load_button(
+		"Cancelar",
+		""
+	)
 	cancel_button.pressed.connect(hide_modal)
-	box.add_child(cancel_button)
+	buttons_box.add_child(cancel_button)
 
 	call_deferred("layout_modal")
-
-
+	
 func make_load_button(title: String, hint: String) -> Button:
 	var button: Button = Button.new()
-	button.text = "%s\n%s" % [title, hint]
+
+	if hint == "":
+		button.text = title
+	else:
+		button.text = "%s\n%s" % [title, hint]
+
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(1, 58)
+	button.custom_minimum_size = Vector2(1, 42)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_action_button(button)
 	return button
-
-
+	
 func open() -> void:
 	visible = true
 	update_buttons()
@@ -150,8 +163,8 @@ func layout_modal() -> void:
 		return
 
 	var panel_size: Vector2 = Vector2(
-		min(560.0, max(420.0, size.x - 32.0)),
-		260.0
+		min(580.0, max(440.0, size.x - 32.0)),
+		320.0
 	)
 
 	panel.size = panel_size

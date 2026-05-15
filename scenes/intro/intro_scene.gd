@@ -110,14 +110,23 @@ func build_card_area() -> void:
 
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(1040, 136)
+	bottom_panel.custom_minimum_size = Vector2(1040, 184)
+	bottom_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	add_child(bottom_panel)
 
+	var panel_texture: TextureRect = TextureRect.new()
+	panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel_texture.texture = LuminariaTheme.get_world_info_panel_texture()
+	panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bottom_panel.add_child(panel_texture)
+
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 14)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 14)
-	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_left", 30)
+	margin.add_theme_constant_override("margin_top", 22)
+	margin.add_theme_constant_override("margin_right", 30)
+	margin.add_theme_constant_override("margin_bottom", 22)
 	bottom_panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
@@ -127,19 +136,15 @@ func build_bottom_panel() -> void:
 	margin.add_child(box)
 
 	bottom_text_label = Label.new()
-	bottom_text_label.custom_minimum_size = Vector2(1, 74)
+	bottom_text_label.custom_minimum_size = Vector2(1, 72)
 	bottom_text_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bottom_text_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	bottom_text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bottom_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	bottom_text_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	bottom_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	bottom_text_label.clip_text = true
-	LuminariaTheme.apply_label(bottom_text_label, 17, Color(0.94, 0.91, 0.86, 1.0), 2)
+	LuminariaTheme.apply_content_body(bottom_text_label)
 	box.add_child(bottom_text_label)
-
-	var spacer: Control = Control.new()
-	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_child(spacer)
 
 	bottom_buttons = HBoxContainer.new()
 	bottom_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -148,7 +153,6 @@ func build_bottom_panel() -> void:
 	bottom_buttons.custom_minimum_size = Vector2(1, 42)
 	bottom_buttons.add_theme_constant_override("separation", 10)
 	box.add_child(bottom_buttons)
-
 
 func show_prologue() -> void:
 	current_step = IntroStep.PROLOGUE
@@ -545,17 +549,17 @@ func build_confirm_preview(class_data: Dictionary, appearance_label: String) -> 
 	character_stage.add_child(portrait)
 
 	var summary_panel: PanelContainer = PanelContainer.new()
-	summary_panel.custom_minimum_size = Vector2(360, 270)
+	summary_panel.custom_minimum_size = Vector2(300, 360)
 	summary_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	summary_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	summary_panel.add_theme_stylebox_override("panel", make_confirm_summary_style())
 	preview_root.add_child(summary_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 18)
-	margin.add_theme_constant_override("margin_top", 16)
-	margin.add_theme_constant_override("margin_right", 18)
-	margin.add_theme_constant_override("margin_bottom", 16)
+	margin.add_theme_constant_override("margin_left", 24)
+	margin.add_theme_constant_override("margin_top", 26)
+	margin.add_theme_constant_override("margin_right", 24)
+	margin.add_theme_constant_override("margin_bottom", 26)
 	summary_panel.add_child(margin)
 
 	var summary_box: VBoxContainer = VBoxContainer.new()
@@ -566,7 +570,7 @@ func build_confirm_preview(class_data: Dictionary, appearance_label: String) -> 
 	margin.add_child(summary_box)
 
 	var class_icon_holder: PanelContainer = PanelContainer.new()
-	class_icon_holder.custom_minimum_size = Vector2(118, 118)
+	class_icon_holder.custom_minimum_size = Vector2(138, 138)
 	class_icon_holder.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	class_icon_holder.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	class_icon_holder.add_theme_stylebox_override("panel", make_class_seal_style(true))
@@ -575,10 +579,10 @@ func build_confirm_preview(class_data: Dictionary, appearance_label: String) -> 
 	var class_icon: TextureRect = TextureRect.new()
 	class_icon.texture = load_player_texture(get_class_sigil_path(selected_class_id))
 	class_icon.set_anchors_preset(Control.PRESET_FULL_RECT)
-	class_icon.offset_left = 20
-	class_icon.offset_top = 20
-	class_icon.offset_right = -20
-	class_icon.offset_bottom = -20
+	class_icon.offset_left = 24
+	class_icon.offset_top = 24
+	class_icon.offset_right = -24
+	class_icon.offset_bottom = -24
 	class_icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	class_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	class_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -591,7 +595,7 @@ func build_confirm_preview(class_data: Dictionary, appearance_label: String) -> 
 	appearance_label_node.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	appearance_label_node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	appearance_label_node.text = appearance_label
-	LuminariaTheme.apply_label(appearance_label_node, 20, Color(1.0, 0.92, 0.72, 1.0), 2)
+	LuminariaTheme.apply_label(appearance_label_node, 20, Color(0.96, 0.88, 1.0, 1.0), 2)
 	summary_box.add_child(appearance_label_node)
 
 	var class_label: Label = Label.new()
@@ -600,7 +604,7 @@ func build_confirm_preview(class_data: Dictionary, appearance_label: String) -> 
 	class_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	class_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	class_label.text = str(class_data.get("name", selected_class_id)).replace("Forastero ", "").replace("Forastera ", "")
-	LuminariaTheme.apply_label(class_label, 18, Color(0.92, 0.89, 0.96, 1.0), 2)
+	LuminariaTheme.apply_label(class_label, 18, Color(0.88, 0.78, 1.0, 1.0), 2)
 	summary_box.add_child(class_label)
 
 	var element_label: Label = Label.new()
@@ -609,7 +613,7 @@ func build_confirm_preview(class_data: Dictionary, appearance_label: String) -> 
 	element_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	element_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	element_label.text = str(class_data.get("element", ""))
-	LuminariaTheme.apply_label(element_label, 15, Color(0.82, 0.84, 0.96, 1.0), 2)
+	LuminariaTheme.apply_label(element_label, 15, Color(0.80, 0.82, 0.96, 1.0), 2)
 	summary_box.add_child(element_label)
 	
 func get_appearance_label(appearance_id: String) -> String:
@@ -751,11 +755,10 @@ func add_footer_button(text: String, callback: Callable) -> Button:
 	button.focus_mode = Control.FOCUS_ALL
 	button.custom_minimum_size = Vector2(190, 40)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	LuminariaTheme.apply_button_text(button, 17)
+	LuminariaTheme.apply_content_action_button(button)
 	button.pressed.connect(callback)
 	bottom_buttons.add_child(button)
 	return button
-
 
 func clear_card_area() -> void:
 	for child in card_area.get_children():
@@ -978,21 +981,26 @@ func make_class_seal_style(is_selected: bool) -> StyleBoxFlat:
 
 func make_confirm_summary_style() -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(0.035, 0.030, 0.060, 0.68)
-	style.border_color = Color(0.86, 0.68, 0.36, 0.62)
+	style.bg_color = Color(0.030, 0.018, 0.052, 0.74)
+	style.border_color = Color(0.62, 0.44, 0.96, 0.68)
+
 	style.border_width_left = 1
 	style.border_width_top = 1
 	style.border_width_right = 1
-	style.border_width_bottom = 1
+	style.border_width_bottom = 2
+
 	style.corner_radius_top_left = 14
 	style.corner_radius_top_right = 14
 	style.corner_radius_bottom_left = 14
 	style.corner_radius_bottom_right = 14
+
 	style.content_margin_left = 12
 	style.content_margin_top = 12
 	style.content_margin_right = 12
 	style.content_margin_bottom = 12
-	style.shadow_color = Color(0, 0, 0, 0.42)
-	style.shadow_size = 12
+
+	style.shadow_color = Color(0.22, 0.08, 0.42, 0.42)
+	style.shadow_size = 18
 	style.shadow_offset = Vector2(0, 4)
+
 	return style
