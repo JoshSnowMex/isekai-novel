@@ -153,7 +153,6 @@ func build_bottom_panel() -> void:
 	bottom_description_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bottom_description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	bottom_description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	LuminariaTheme.apply_content_body(bottom_description_label)
 	box.add_child(bottom_description_scroll)
 
 	bottom_description_label = Label.new()
@@ -161,6 +160,7 @@ func build_bottom_panel() -> void:
 	bottom_description_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	bottom_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	bottom_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_body(bottom_description_label)
 	bottom_description_scroll.add_child(bottom_description_label)
 
 	bottom_actions = HBoxContainer.new()
@@ -1372,13 +1372,15 @@ func layout_overlay_controls() -> void:
 
 	var margin: float = 10.0
 
-	var global_width: float = 430.0
-	if location_layer.size.x < 760:
-		global_width = 330.0
+	var global_size: Vector2 = Vector2(430.0, 60.0)
 
-	global_action_panel.size = Vector2(global_width, 46)
+	if location_layer.size.x < 900:
+		global_size = Vector2(380.0, 54.0)
+
+	global_action_panel.size = global_size
+	global_action_panel.custom_minimum_size = global_size
 	global_action_panel.position = Vector2(
-		max(margin, location_layer.size.x - global_width - margin),
+		max(margin, location_layer.size.x - global_size.x - margin),
 		margin
 	)
 
