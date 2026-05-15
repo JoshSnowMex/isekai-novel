@@ -92,77 +92,74 @@ static func make_hud_panel_style() -> StyleBoxFlat:
 	style.shadow_offset = Vector2(0, 2)
 	return style
 
-
 static func make_top_nav_panel_style() -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(0.030, 0.026, 0.045, 0.68)
-	style.border_color = Color(0.76, 0.62, 0.40, 0.28)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
+	style.bg_color = Color(0.012, 0.010, 0.018, 0.62)
+	style.border_color = Color(0.86, 0.70, 0.42, 0.18)
+	style.border_width_left = 0
+	style.border_width_top = 0
+	style.border_width_right = 0
 	style.border_width_bottom = 1
-	style.corner_radius_top_left = 6
-	style.corner_radius_top_right = 6
-	style.corner_radius_bottom_left = 6
-	style.corner_radius_bottom_right = 6
-	style.content_margin_left = 8
-	style.content_margin_top = 6
-	style.content_margin_right = 8
-	style.content_margin_bottom = 6
-	style.shadow_color = Color(0, 0, 0, 0.36)
-	style.shadow_size = 10
-	style.shadow_offset = Vector2(0, 3)
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_left = 8
+	style.corner_radius_bottom_right = 8
+	style.content_margin_left = 12
+	style.content_margin_top = 8
+	style.content_margin_right = 12
+	style.content_margin_bottom = 8
+	style.shadow_color = Color(0, 0, 0, 0.42)
+	style.shadow_size = 12
+	style.shadow_offset = Vector2(0, 4)
 	return style
-
+	
 static func make_top_nav_button_style(state: String = "normal") -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
 
 	match state:
 		"hover":
-			style.bg_color = Color(0.105, 0.064, 0.125, 0.92)
-			style.border_color = Color(0.95, 0.74, 0.36, 0.82)
-			style.shadow_color = Color(1.0, 0.70, 0.30, 0.22)
-			style.shadow_size = 10
-			style.expand_margin_bottom = 1
+			style.bg_color = Color(0.070, 0.045, 0.085, 0.68)
+			style.border_color = Color(1.0, 0.76, 0.34, 0.82)
+			style.shadow_color = Color(1.0, 0.70, 0.28, 0.18)
+			style.shadow_size = 8
 		"pressed":
-			style.bg_color = Color(0.050, 0.034, 0.070, 0.96)
-			style.border_color = Color(0.78, 0.54, 0.24, 0.88)
-			style.shadow_color = Color(0, 0, 0, 0.48)
+			style.bg_color = Color(0.030, 0.024, 0.040, 0.82)
+			style.border_color = Color(0.84, 0.60, 0.26, 0.90)
+			style.shadow_color = Color(0, 0, 0, 0.46)
 			style.shadow_size = 3
-			style.expand_margin_top = 1
 		"disabled":
-			style.bg_color = Color(0.020, 0.020, 0.030, 0.36)
-			style.border_color = Color(0.38, 0.36, 0.42, 0.24)
-			style.shadow_color = Color(0, 0, 0, 0.12)
+			style.bg_color = Color(0.010, 0.010, 0.014, 0.18)
+			style.border_color = Color(0.34, 0.32, 0.38, 0.18)
+			style.shadow_color = Color(0, 0, 0, 0.08)
 			style.shadow_size = 1
 		_:
-			style.bg_color = Color(0.030, 0.026, 0.044, 0.86)
-			style.border_color = Color(0.66, 0.52, 0.32, 0.44)
-			style.shadow_color = Color(0, 0, 0, 0.36)
-			style.shadow_size = 6
+			style.bg_color = Color(0.020, 0.018, 0.030, 0.34)
+			style.border_color = Color(0.72, 0.58, 0.34, 0.44)
+			style.shadow_color = Color(0, 0, 0, 0.20)
+			style.shadow_size = 3
 
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
+	style.border_width_left = 0
+	style.border_width_top = 0
+	style.border_width_right = 0
 	style.border_width_bottom = 2
 
-	style.corner_radius_top_left = 2
-	style.corner_radius_top_right = 8
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
 	style.corner_radius_bottom_left = 2
-	style.corner_radius_bottom_right = 8
+	style.corner_radius_bottom_right = 2
 
 	style.content_margin_left = 14
-	style.content_margin_top = 5
+	style.content_margin_top = 4
 	style.content_margin_right = 14
 	style.content_margin_bottom = 6
 
-	style.shadow_offset = Vector2(0, 3)
+	style.shadow_offset = Vector2(0, 2)
 
 	return style
 	
 static func apply_top_nav_button(button: Button) -> void:
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(94, 36)
+	button.custom_minimum_size = Vector2(92, 34)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	button.clip_text = true
