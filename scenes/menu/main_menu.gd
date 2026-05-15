@@ -28,7 +28,6 @@ func build_ui() -> void:
 	build_background()
 	build_logo_layer()
 	build_menu_panel()
-	build_debug_viewport_label()
 
 func build_background() -> void:
 	clear_children(background_layer)
@@ -200,25 +199,3 @@ func setup_fullscreen_root() -> void:
 	offset_top = 0
 	offset_right = 0
 	offset_bottom = 0
-
-func build_debug_viewport_label() -> void:
-	var label: Label = Label.new()
-	label.name = "DebugViewportLabel"
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.add_theme_font_size_override("font_size", 16)
-	label.add_theme_color_override("font_color", Color(1, 0.85, 0.35, 1))
-	label.position = Vector2(12, 12)
-	add_child(label)
-
-	var update_label := func():
-		var window: Window = get_window()
-		label.text = "root=%s | viewport=%s | window=%s | display=%s | control=%s" % [
-			get_tree().root.size,
-			get_viewport_rect().size,
-			get_window().size,
-			DisplayServer.window_get_size(),
-			size
-		]
-
-	update_label.call()
-	get_tree().root.size_changed.connect(update_label)
