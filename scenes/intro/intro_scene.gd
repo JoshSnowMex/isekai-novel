@@ -356,6 +356,7 @@ func show_class_selection() -> void:
 	clear_card_area()
 	class_cards.clear()
 	card_grid = create_grid(3)
+	card_area.add_child(card_grid)
 
 	for class_id in DataManager.player_classes.keys():
 		add_class_card(card_grid, str(class_id))
