@@ -411,8 +411,6 @@ func _on_save_pressed() -> void:
 func _on_map_pressed() -> void:
 	SceneRouter.go_to_world_map()
 
-
-func add_global_action(text: String, callback: Callable) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
