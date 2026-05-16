@@ -538,7 +538,7 @@ func layout_overlay_controls() -> void:
 		vendor_width = 190.0
 
 	var vendor_gap: float = 4.0
-	var right_margin: float = 210.0
+	var right_margin: float = 120.0
 	var available_width: float = shop_layer.size.x - 48.0
 	var panel_width: float = max(500.0, available_width - vendor_width - vendor_gap - right_margin)
 	var panel_height: float = max(300.0, shop_layer.size.y - panel_top - 24.0)
