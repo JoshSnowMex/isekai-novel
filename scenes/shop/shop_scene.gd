@@ -7,9 +7,8 @@ var shop_layer: Control
 var background_layer: Control
 var info_panel: PanelContainer
 var info_label: Label
-var global_action_panel: PanelContainer
-var global_action_buttons: HBoxContainer
-var shop_panel: PanelContainer
+var global_action_panel: WorldActionPanel
+var shop_panel: Control
 var item_scroll: ScrollContainer
 var item_grid: GridContainer
 var current_message: String = ""
@@ -101,17 +100,25 @@ func build_background() -> void:
 	background.offset_bottom = 0
 	background_layer.add_child(background)
 
-
 func build_info_panel() -> void:
 	info_panel = PanelContainer.new()
-	info_panel.custom_minimum_size = Vector2(540, 72)
+	info_panel.custom_minimum_size = Vector2(560, 104)
+	info_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	shop_layer.add_child(info_panel)
 
+	var panel_texture: TextureRect = TextureRect.new()
+	panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel_texture.texture = LuminariaTheme.get_world_info_panel_texture()
+	panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info_panel.add_child(panel_texture)
+
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_top", 6)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 6)
+	margin.add_theme_constant_override("margin_left", 28)
+	margin.add_theme_constant_override("margin_top", 20)
+	margin.add_theme_constant_override("margin_right", 28)
+	margin.add_theme_constant_override("margin_bottom", 20)
 	info_panel.add_child(margin)
 
 	info_label = Label.new()
@@ -121,60 +128,40 @@ func build_info_panel() -> void:
 	info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	info_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_label.clip_text = true
+	LuminariaTheme.apply_content_body(info_label)
 	margin.add_child(info_label)
 
-
 func build_global_action_panel() -> void:
-	global_action_panel = PanelContainer.new()
-	global_action_panel.custom_minimum_size = Vector2(430, 72)
+	global_action_panel = WorldActionPanel.new()
+	global_action_panel.build()
 	shop_layer.add_child(global_action_panel)
 
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_top", 6)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_bottom", 6)
-	global_action_panel.add_child(margin)
+	global_action_panel.clear_actions()
 
-	global_action_buttons = HBoxContainer.new()
-	global_action_buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	global_action_buttons.add_theme_constant_override("separation", 8)
-	margin.add_child(global_action_buttons)
-
-	add_global_action("Mapa", func(): _on_map_pressed())
-	add_global_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.SHOP_SCENE))
-	add_global_action("Guardar", func(): _on_save_pressed())
-	add_global_action("Cargar", func():
+	global_action_panel.add_action("Mapa", func(): _on_map_pressed())
+	global_action_panel.add_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.SHOP_SCENE))
+	global_action_panel.add_action("Guardar", func(): _on_save_pressed())
+	global_action_panel.add_action("Cargar", func():
 		load_game_modal.open()
 	)
 
-
 func build_shop_panel() -> void:
-	shop_panel = PanelContainer.new()
+	shop_panel = Control.new()
 	shop_panel.custom_minimum_size = Vector2(980, 420)
 	shop_layer.add_child(shop_panel)
 
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
-	shop_panel.add_child(margin)
-
 	item_scroll = ScrollContainer.new()
-	item_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	item_scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
 	item_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	margin.add_child(item_scroll)
+	shop_panel.add_child(item_scroll)
 
 	item_grid = GridContainer.new()
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_grid.columns = 5
-	item_grid.add_theme_constant_override("h_separation", 8)
-	item_grid.add_theme_constant_override("v_separation", 8)
+	item_grid.add_theme_constant_override("h_separation", 14)
+	item_grid.add_theme_constant_override("v_separation", 14)
 	item_scroll.add_child(item_grid)
-
 
 func refresh_shop(message: String = "") -> void:
 	current_message = message
@@ -240,7 +227,6 @@ func get_shop_item_ids() -> Array:
 
 	return result
 
-
 func add_item_card(item_id: String) -> void:
 	var locked_item_id: String = item_id
 	var item: Dictionary = DataManager.get_item(locked_item_id)
@@ -252,12 +238,13 @@ func add_item_card(item_id: String) -> void:
 
 	var button: Button = Button.new()
 	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	button.custom_minimum_size = Vector2(92, 92)
-	button.size = Vector2(92, 92)
+	button.custom_minimum_size = Vector2(128, 92)
 	button.disabled = not can_buy
 	button.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	LuminariaTheme.apply_content_action_button(button)
 
 	if can_buy:
 		button.pressed.connect(func():
@@ -281,22 +268,17 @@ func add_item_card(item_id: String) -> void:
 
 	item_grid.add_child(button)
 
-
 func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
-	var text: String = ""
-
-	text += "▣\n"
-	text += "%s\n" % item_name
-	text += "%s L" % price
+	var text: String = "%s\n%s L" % [item_name, price]
 
 	if owned > 0:
 		text += " · ×%s" % owned
 
 	if not can_buy:
-		text += "\n-%s L" % max(price - player_money, 0)
+		text += "\nFaltan %s L" % max(price - player_money, 0)
 
 	return text
-
+	
 func get_item_card_size() -> Vector2:
 	var panel_width: float = max(shop_panel.size.x, 1.0)
 	var columns: int = max(item_grid.columns, 1)
@@ -438,7 +420,6 @@ func add_global_action(text: String, callback: Callable) -> Button:
 	global_action_buttons.add_child(button)
 	return button
 
-
 func clear_children(node: Node) -> void:
 	for child in node.get_children():
 		child.queue_free()
@@ -448,77 +429,58 @@ func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
 	layout_overlay_controls()
 
-
 func layout_overlay_controls() -> void:
 	if shop_layer == null:
 		return
 
 	var margin: float = 10.0
 	var top_y: float = 10.0
-	var top_height: float = 72.0
 
-	var global_width: float = 430.0
-	if shop_layer.size.x < 760:
-		global_width = 330.0
+	var global_size: Vector2 = Vector2(430.0, 60.0)
 
-	global_action_panel.size = Vector2(global_width, top_height)
+	if shop_layer.size.x < 900:
+		global_size = Vector2(380.0, 54.0)
+
+	global_action_panel.size = global_size
+	global_action_panel.custom_minimum_size = global_size
 	global_action_panel.position = Vector2(
-		max(margin, shop_layer.size.x - global_width - margin),
+		max(margin, shop_layer.size.x - global_size.x - margin),
 		top_y
 	)
 
 	var info_width: float = max(
-		260.0,
-		shop_layer.size.x - global_width - (margin * 3.0)
+		360.0,
+		shop_layer.size.x - global_size.x - (margin * 3.0)
 	)
 
-	info_panel.size = Vector2(info_width, top_height)
+	info_panel.size = Vector2(info_width, 104.0)
 	info_panel.position = Vector2(
 		margin,
 		top_y
 	)
 
-	var vendor_reserved_width: float = 210.0
-
-	if shop_layer.size.x < 900:
-		vendor_reserved_width = 0.0
-
-	var panel_width: float = max(
-		360.0,
-		shop_layer.size.x - vendor_reserved_width - 36.0
-	)
-
-	var panel_height: float = max(300.0, shop_layer.size.y - top_height - 34.0)
+	var panel_top: float = top_y + 118.0
+	var panel_width: float = min(980.0, max(520.0, shop_layer.size.x - 40.0))
+	var panel_height: float = max(300.0, shop_layer.size.y - panel_top - 24.0)
 
 	shop_panel.size = Vector2(panel_width, panel_height)
 	shop_panel.position = Vector2(
-		12.0,
-		top_y + top_height + 12.0
+		24.0,
+		panel_top
 	)
 
-	if panel_width >= 860:
+	if panel_width >= 920:
 		item_grid.columns = 6
-	elif panel_width >= 700:
+	elif panel_width >= 760:
 		item_grid.columns = 5
-	elif panel_width >= 540:
+	elif panel_width >= 580:
 		item_grid.columns = 4
 	else:
 		item_grid.columns = 3
 
 	if vendor_placeholder != null:
-		if vendor_reserved_width <= 0.0:
-			vendor_placeholder.visible = false
-		else:
-			vendor_placeholder.visible = true
-			vendor_placeholder.size = Vector2(
-				vendor_reserved_width - 24.0,
-				panel_height
-			)
-			vendor_placeholder.position = Vector2(
-				shop_panel.position.x + panel_width + 12.0,
-				shop_panel.position.y
-			)
-
+		vendor_placeholder.visible = false
+		
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		if shop_layer != null:
