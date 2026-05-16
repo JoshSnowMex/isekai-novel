@@ -13,8 +13,8 @@ var item_scroll: ScrollContainer
 var item_grid: GridContainer
 var current_message: String = ""
 var preview_item_id: String = ""
-var vendor_placeholder: PanelContainer
-var vendor_label: Label
+var vendor_placeholder: Control
+var vendor_sprite: TextureRect
 var load_game_modal: LoadGameModal
 
 func _ready() -> void:
@@ -159,8 +159,8 @@ func build_shop_panel() -> void:
 	item_grid = GridContainer.new()
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_grid.columns = 5
-	item_grid.add_theme_constant_override("h_separation", 14)
-	item_grid.add_theme_constant_override("v_separation", 14)
+	item_grid.add_theme_constant_override("h_separation", 10)
+	item_grid.add_theme_constant_override("v_separation", 8)
 	item_scroll.add_child(item_grid)
 
 func refresh_shop(message: String = "") -> void:
@@ -240,11 +240,54 @@ func add_item_card(item_id: String) -> void:
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	button.custom_minimum_size = Vector2(128, 92)
+	button.custom_minimum_size = Vector2(112, 122)
 	button.disabled = not can_buy
-	button.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
+	button.text = ""
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	LuminariaTheme.apply_content_action_button(button)
+	LuminariaTheme.apply_transparent_button(button)
+
+	var root: VBoxContainer = VBoxContainer.new()
+	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.alignment = BoxContainer.ALIGNMENT_CENTER
+	root.add_theme_constant_override("separation", 3)
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(root)
+
+	var icon_panel: PanelContainer = PanelContainer.new()
+	icon_panel.custom_minimum_size = Vector2(74, 74)
+	icon_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	icon_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("normal"))
+	root.add_child(icon_panel)
+
+	var icon_margin: MarginContainer = MarginContainer.new()
+	icon_margin.add_theme_constant_override("margin_left", 7)
+	icon_margin.add_theme_constant_override("margin_top", 7)
+	icon_margin.add_theme_constant_override("margin_right", 7)
+	icon_margin.add_theme_constant_override("margin_bottom", 7)
+	icon_panel.add_child(icon_margin)
+
+	var icon: TextureRect = TextureRect.new()
+	icon.texture = load_item_icon(locked_item_id)
+	icon.custom_minimum_size = Vector2(60, 60)
+	icon.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	icon.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.modulate = Color(1, 1, 1, 1.0 if can_buy else 0.48)
+	icon_margin.add_child(icon)
+
+	var label: Label = Label.new()
+	label.custom_minimum_size = Vector2(1, 38)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.clip_text = true
+	label.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
+	LuminariaTheme.apply_label(label, 14, Color(0.94, 0.88, 1.0, 1.0 if can_buy else 0.55), 2)
+	root.add_child(label)
 
 	if can_buy:
 		button.pressed.connect(func():
@@ -253,31 +296,48 @@ func add_item_card(item_id: String) -> void:
 
 	button.mouse_entered.connect(func():
 		preview_item_id = locked_item_id
+		icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("hover"))
 		show_item_preview(locked_item_id)
 	)
 
 	button.focus_entered.connect(func():
 		preview_item_id = locked_item_id
+		icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("hover"))
 		show_item_preview(locked_item_id)
 	)
 
 	button.mouse_exited.connect(func():
 		preview_item_id = ""
+		icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("normal"))
+		refresh_info_panel()
+	)
+
+	button.focus_exited.connect(func():
+		preview_item_id = ""
+		icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("normal"))
 		refresh_info_panel()
 	)
 
 	item_grid.add_child(button)
-
+	
 func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
 	var text: String = "%s\n%s L" % [item_name, price]
 
 	if owned > 0:
-		text += " · ×%s" % owned
+		text += " ×%s" % owned
 
 	if not can_buy:
-		text += "\nFaltan %s L" % max(price - player_money, 0)
+		text += "\n-%s L" % max(price - player_money, 0)
 
 	return text
+		
+func load_item_icon(item_id: String) -> Texture2D:
+	var path: String = "res://assets/shop/items/item_%s.png" % item_id
+
+	if ResourceLoader.exists(path):
+		return load(path)
+
+	return null
 	
 func get_item_card_size() -> Vector2:
 	var panel_width: float = max(shop_panel.size.x, 1.0)
@@ -450,7 +510,13 @@ func layout_overlay_controls() -> void:
 	)
 
 	var panel_top: float = top_y + 118.0
-	var panel_width: float = min(980.0, max(520.0, shop_layer.size.x - 40.0))
+	var vendor_width: float = 220.0
+
+	if shop_layer.size.x < 900:
+		vendor_width = 190.0
+
+	var available_width: float = shop_layer.size.x - 48.0
+	var panel_width: float = max(500.0, available_width - vendor_width - 18.0)
 	var panel_height: float = max(300.0, shop_layer.size.y - panel_top - 24.0)
 
 	shop_panel.size = Vector2(panel_width, panel_height)
@@ -459,17 +525,25 @@ func layout_overlay_controls() -> void:
 		panel_top
 	)
 
-	if panel_width >= 920:
-		item_grid.columns = 6
-	elif panel_width >= 760:
+	if panel_width >= 860:
 		item_grid.columns = 5
-	elif panel_width >= 580:
+	elif panel_width >= 700:
 		item_grid.columns = 4
-	else:
+	elif panel_width >= 540:
 		item_grid.columns = 3
+	else:
+		item_grid.columns = 2
 
 	if vendor_placeholder != null:
-		vendor_placeholder.visible = false
+		vendor_placeholder.visible = true
+		vendor_placeholder.size = Vector2(vendor_width, panel_height)
+		vendor_placeholder.position = Vector2(
+			min(
+				shop_layer.size.x - vendor_width - 24.0,
+				shop_panel.position.x + panel_width + 18.0
+			),
+			panel_top
+		)
 		
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
@@ -499,24 +573,31 @@ func update_scroll_visibility() -> void:
 		item_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 
 func build_vendor_placeholder() -> void:
-	vendor_placeholder = PanelContainer.new()
-	vendor_placeholder.custom_minimum_size = Vector2(190, 300)
+	vendor_placeholder = Control.new()
+	vendor_placeholder.custom_minimum_size = Vector2(220, 420)
+	vendor_placeholder.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	shop_layer.add_child(vendor_placeholder)
 
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 10)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 10)
-	margin.add_theme_constant_override("margin_bottom", 10)
-	vendor_placeholder.add_child(margin)
+	vendor_sprite = TextureRect.new()
+	vendor_sprite.texture = load_vendor_texture()
+	vendor_sprite.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vendor_sprite.offset_left = 6
+	vendor_sprite.offset_top = 4
+	vendor_sprite.offset_right = -14
+	vendor_sprite.offset_bottom = -4
+	vendor_sprite.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	vendor_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	vendor_sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vendor_placeholder.add_child(vendor_sprite)
 
-	vendor_label = Label.new()
-	vendor_label.text = "Arte futuro:\nTendero del Umbral"
-	vendor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vendor_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	vendor_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	margin.add_child(vendor_label)
+func load_vendor_texture() -> Texture2D:
+	var path: String = "res://assets/shop/npc_vendor.png"
 
+	if ResourceLoader.exists(path):
+		return load(path)
+
+	return null
+	
 func load_continue_from_shop() -> void:
 	if SaveManager.load_continue_game():
 		SceneRouter.go_to_current_location_scene()
