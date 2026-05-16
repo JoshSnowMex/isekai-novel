@@ -415,11 +415,6 @@ func clear_children(node: Node) -> void:
 	for child in node.get_children():
 		child.queue_free()
 
-func clear_children(node: Node) -> void:
-	for child in node.get_children():
-		child.queue_free()
-
-
 func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
 	layout_overlay_controls()
