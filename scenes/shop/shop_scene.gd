@@ -411,12 +411,9 @@ func _on_save_pressed() -> void:
 func _on_map_pressed() -> void:
 	SceneRouter.go_to_world_map()
 
-	var button: Button = Button.new()
-	button.text = text
-	button.focus_mode = Control.FOCUS_ALL
-	button.pressed.connect(callback)
-	global_action_buttons.add_child(button)
-	return button
+func clear_children(node: Node) -> void:
+	for child in node.get_children():
+		child.queue_free()
 
 func clear_children(node: Node) -> void:
 	for child in node.get_children():
