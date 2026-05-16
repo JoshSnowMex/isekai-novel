@@ -159,8 +159,8 @@ func build_shop_panel() -> void:
 	item_grid = GridContainer.new()
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_grid.columns = 5
-	item_grid.add_theme_constant_override("h_separation", 4)
-	item_grid.add_theme_constant_override("v_separation", 2)
+	item_grid.add_theme_constant_override("h_separation", 5)
+	item_grid.add_theme_constant_override("v_separation", 8)
 	item_scroll.add_child(item_grid)
 
 func refresh_shop(message: String = "") -> void:
@@ -236,59 +236,54 @@ func add_item_card(item_id: String) -> void:
 	var player_money: int = int(GameManager.player.get("money", 0))
 	var can_buy: bool = player_money >= price
 
+	var cell: VBoxContainer = VBoxContainer.new()
+	cell.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	cell.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	cell.alignment = BoxContainer.ALIGNMENT_CENTER
+	cell.custom_minimum_size = Vector2(86, 104)
+	cell.add_theme_constant_override("separation", 8)
+	item_grid.add_child(cell)
+
 	var button: Button = Button.new()
 	button.focus_mode = Control.FOCUS_ALL
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	button.custom_minimum_size = Vector2(98, 104)
-	button.size = Vector2(98, 104)
+	button.custom_minimum_size = Vector2(82, 82)
+	button.size = Vector2(82, 82)
 	button.disabled = not can_buy
 	button.text = ""
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	LuminariaTheme.apply_transparent_button(button)
-
-	var root: VBoxContainer = VBoxContainer.new()
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
-	root.alignment = BoxContainer.ALIGNMENT_CENTER
-	root.add_theme_constant_override("separation", 3)
-	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	button.add_child(root)
-
-	var icon_panel: PanelContainer = PanelContainer.new()
-	icon_panel.custom_minimum_size = Vector2(84, 84)
-	icon_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	icon_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("normal"))
-	root.add_child(icon_panel)
-
-	var icon_margin: MarginContainer = MarginContainer.new()
-	icon_margin.add_theme_constant_override("margin_left", 4)
-	icon_margin.add_theme_constant_override("margin_top", 4)
-	icon_margin.add_theme_constant_override("margin_right", 4)
-	icon_margin.add_theme_constant_override("margin_bottom", 4)
-	icon_panel.add_child(icon_margin)
+	button.add_theme_stylebox_override("normal", make_shop_item_icon_style(false, can_buy))
+	button.add_theme_stylebox_override("hover", make_shop_item_icon_style(true, can_buy))
+	button.add_theme_stylebox_override("pressed", make_shop_item_icon_style(true, can_buy))
+	button.add_theme_stylebox_override("focus", make_shop_item_icon_style(true, can_buy))
+	button.add_theme_stylebox_override("disabled", make_shop_item_icon_style(false, false))
+	cell.add_child(button)
 
 	var icon: TextureRect = TextureRect.new()
 	icon.texture = load_item_icon(locked_item_id)
-	icon.custom_minimum_size = Vector2(76, 76)
-	icon.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	icon.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.set_anchors_preset(Control.PRESET_FULL_RECT)
+	icon.offset_left = 1
+	icon.offset_top = 1
+	icon.offset_right = -1
+	icon.offset_bottom = -1
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_SCALE
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon.modulate = Color(1, 1, 1, 1.0 if can_buy else 0.48)
-	icon_margin.add_child(icon)
+	button.add_child(icon)
 
 	var label: Label = Label.new()
-	label.custom_minimum_size = Vector2(98, 20)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.custom_minimum_size = Vector2(96, 16)
+	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.clip_text = true
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
-	LuminariaTheme.apply_label(label, 13, Color(0.94, 0.88, 1.0, 1.0 if can_buy else 0.55), 2)
-	root.add_child(label)
+	LuminariaTheme.apply_label(label, 12, Color(0.94, 0.88, 1.0, 1.0 if can_buy else 0.55), 2)
+	cell.add_child(label)
 
 	if can_buy:
 		button.pressed.connect(func():
@@ -297,29 +292,23 @@ func add_item_card(item_id: String) -> void:
 
 	button.mouse_entered.connect(func():
 		preview_item_id = locked_item_id
-		icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("hover"))
 		show_item_preview(locked_item_id)
 	)
 
 	button.focus_entered.connect(func():
 		preview_item_id = locked_item_id
-		icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("hover"))
 		show_item_preview(locked_item_id)
 	)
 
 	button.mouse_exited.connect(func():
 		preview_item_id = ""
-		icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("normal"))
 		refresh_info_panel()
 	)
 
 	button.focus_exited.connect(func():
 		preview_item_id = ""
-		icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("normal"))
 		refresh_info_panel()
 	)
-
-	item_grid.add_child(button)
 	
 func load_item_icon(item_id: String) -> Texture2D:
 	var path: String = "res://assets/shop/items/item_%s.png" % item_id
@@ -329,6 +318,43 @@ func load_item_icon(item_id: String) -> Texture2D:
 
 	return null
 	
+func make_shop_item_icon_style(is_hovered: bool, is_enabled: bool) -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+
+	if not is_enabled:
+		style.bg_color = Color(0.018, 0.016, 0.024, 0.46)
+		style.border_color = Color(0.28, 0.24, 0.36, 0.38)
+		style.shadow_color = Color(0, 0, 0, 0.20)
+		style.shadow_size = 3
+	elif is_hovered:
+		style.bg_color = Color(0.12, 0.055, 0.20, 0.58)
+		style.border_color = Color(0.78, 0.58, 1.0, 0.92)
+		style.shadow_color = Color(0.48, 0.22, 0.90, 0.36)
+		style.shadow_size = 9
+	else:
+		style.bg_color = Color(0.025, 0.022, 0.036, 0.58)
+		style.border_color = Color(0.55, 0.44, 0.72, 0.64)
+		style.shadow_color = Color(0, 0, 0, 0.28)
+		style.shadow_size = 5
+
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+
+	style.corner_radius_top_left = 7
+	style.corner_radius_top_right = 7
+	style.corner_radius_bottom_left = 7
+	style.corner_radius_bottom_right = 7
+
+	style.content_margin_left = 0
+	style.content_margin_top = 0
+	style.content_margin_right = 0
+	style.content_margin_bottom = 0
+	style.shadow_offset = Vector2(0, 2)
+
+	return style
+
 func get_item_card_size() -> Vector2:
 	var panel_width: float = max(shop_panel.size.x, 1.0)
 	var columns: int = max(item_grid.columns, 1)
