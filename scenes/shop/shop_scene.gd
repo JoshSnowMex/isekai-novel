@@ -656,3 +656,14 @@ func get_shop_item_short_name(item_id: String, item_name: String) -> String:
 			return "Libros"
 		_:
 			return item_name
+
+func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
+	var text: String = get_shop_item_short_name(item_name)
+
+	if owned > 0:
+		text += " ×%s" % owned
+
+	if not can_buy:
+		text += " -%s L" % max(price - player_money, 0)
+
+	return text
