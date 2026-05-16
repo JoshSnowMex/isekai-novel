@@ -2,9 +2,9 @@
 
 ## Propósito de este README
 
-Este README existe para que una nueva conversación de ChatGPT pueda continuar el desarrollo del juego sin perder contexto ni repetir errores.
+Este archivo existe para que una nueva conversación de ChatGPT pueda continuar el desarrollo del juego sin perder contexto, sin repetir errores y sin volver a tocar bloques ya aprobados.
 
-El proyecto vive en:
+Repositorio:
 
 ```text
 JoshSnowMex/isekai-novel
@@ -13,44 +13,78 @@ Archivo correcto:
 
 readme.md
 
-Importante: está en minúsculas. No buscar README.md.
+Importante: está en minúsculas. No buscar únicamente README.md.
 
+Prompt recomendado para iniciar la siguiente sesión
+
+Usar este prompt al empezar una nueva conversación:
+
+Hola, vamos a continuar el proyecto Godot “Luminaria: Crónicas del Velo” en el repo `JoshSnowMex/isekai-novel`.
+
+Antes de proponer cambios, lee `readme.md` en minúsculas desde el repositorio. Ese archivo contiene el estado actualizado, reglas de trabajo, escenas aprobadas, estructura del proyecto, assets integrados, pendientes y decisiones tomadas.
+
+Reglas obligatorias:
+- No confíes en la búsqueda indexada de GitHub; falla con frecuencia.
+- Abre archivos por ruta exacta usando fetch_file.
+- Si digo que actualicé el repo, asume que hice commit/push y revisa el archivo real.
+- Si menciono una captura o imagen, asume que sirve como referencia visual temporal.
+- No digas “si existe” cuando puedes revisar el archivo.
+- No propongas parches temporales.
+- No dupliques lógica si algo debe ser global.
+- Si el cambio es grande, dame reemplazo completo.
+- Si el cambio es puntual, dime archivo exacto, qué buscar y qué reemplazar.
+- No tocar escenas aprobadas salvo bug real o asset pass acordado.
+- No diagnosticar resize/fullscreen desde el runner/editor de Godot; ya se validó que el build exportado de Windows redimensiona correctamente.
+- Cuando una UI no pueda quedar bonita solo con StyleBoxFlat, dilo pronto y pide asset estructural reutilizable.
+
+Quiero continuar de forma ordenada y finalista desde el estado documentado en `readme.md`.
 Regla crítica del repositorio
 
-El repo está conectado por GitHub, pero la búsqueda indexada puede fallar o no encontrar funciones existentes.
+El repo está conectado por GitHub, pero la búsqueda indexada no es confiable. Puede no encontrar funciones, PNGs, archivos recién actualizados o incluso rutas que sí existen.
 
 Por eso:
 
-No confiar en búsqueda indexada para localizar funciones.
-Abrir archivos concretos por ruta.
-Usar fetch_file por ruta exacta.
-Si el usuario dice que actualizó el repo, asumir que hizo commit/push y revisar el archivo real antes de responder.
-Si el usuario menciona ejemplo.png, ejemplo1.png, tienda1.png, etc., asumir que esas capturas ya están en el repo y deben revisarse si hace falta.
+No confiar en búsqueda indexada.
+Abrir archivos concretos por ruta exacta.
+Usar fetch_file por ruta.
+Si el usuario dice que actualizó el repo, asumir commit/push y revisar el archivo real.
+Si hay error de compilación, revisar el archivo actual antes de dar instrucciones.
 No decir “si existe” cuando se puede revisar.
-No dar instrucciones basadas en memoria si el archivo puede revisarse.
+No dar instrucciones basadas en memoria si el archivo puede abrirse.
+
+Si GitHub no permite ver bien un archivo crítico, el usuario puede subirlo directamente al chat. Trabajar entonces contra ese archivo subido.
+
 Filosofía de trabajo
 
-El dueño del proyecto es programador backend Java/Spring y novato en Godot.
+El dueño del proyecto es programador backend Java/Spring y está aprendiendo Godot. Necesita guía concreta.
 
-Necesita instrucciones claras:
+Reglas de respuesta esperadas:
 
 Archivo exacto.
 Qué buscar.
 Qué reemplazar.
 Dónde pegar.
 Qué probar.
-Si el cambio es grande, dar reemplazo completo de archivo.
+
+Si el cambio es grande, dar reemplazo completo de función o archivo.
 Si el cambio es pequeño, dar instrucciones puntuales.
-No hacer cambios tentativos o parches “por mientras”.
-No duplicar lógica si debe ser global.
-No tocar archivos aprobados salvo bug real.
-No mezclar bloques grandes no relacionados.
-Si una solución debe ser productiva/finalista, hacerla así desde el inicio.
-Si se abre una decisión creativa o estructural importante, detenerse y acordarla antes de implementar.
 
-Regla emocional/práctica del proyecto:
+No hacer:
 
-El ritmo de trabajo es bueno cuando se avanza con cambios concretos y finalistas. El usuario se frustra con retrabajo, cambios a ciegas y pruebas repetidas sobre el mismo archivo.
+parches temporales;
+“por ahora luego lo globalizamos”;
+duplicar componentes locales si deben ser globales;
+retocar a ciegas;
+asumir que algo existe sin revisar;
+mezclar muchos bloques no relacionados;
+romper escenas aprobadas por cambios estéticos no acordados.
+
+Regla aprendida en UI:
+
+Layout y comportamiento → código.
+Identidad visual fuerte → assets estructurales reutilizables.
+
+No insistir durante horas en StyleBoxFlat si la pieza necesita identidad visual real. Si empieza a verse como Bootstrap oscuro, cortar rápido y pedir asset estructural.
 
 Qué es el juego
 
@@ -58,22 +92,21 @@ Título final:
 
 Luminaria: Crónicas del Velo
 
-No es una VN plana ni un dating sim simple. Es un simulador de historias basado en citas, vínculos y consecuencias.
+No es una VN plana ni un dating sim simple. Es un simulador narrativo basado en:
 
-La historia debe emerger de:
-
-relaciones;
+citas;
+vínculos;
+consecuencias;
 conocimiento;
-decisiones;
 lealtad;
 celos;
 tensión;
 estado del mundo;
-consecuencias;
 memoria emocional;
-postgame y unión final.
+postgame;
+unión final.
 
-La main storyline no debe depender rígidamente del calendario. El calendario sirve más para cumpleaños, aniversarios, schedules y memoria emocional.
+La historia debe emerger de sistemas y decisiones. La main storyline no debe depender rígidamente del calendario. El calendario sirve más para cumpleaños, aniversarios, schedules y memoria emocional.
 
 Estado general del backend
 
@@ -104,22 +137,23 @@ recompensas dinámicas.
 
 No tocar backend salvo:
 
-bugs claros;
-helpers visuales necesarios;
+bug claro;
+helper visual necesario;
 refactor formal de save slots si se decide hacer ese bloque.
-Estado técnico importante: resolución, resize y Godot
+Resize, fullscreen y Godot
 
-Hubo una sesión muy frustrante investigando resize/fullscreen.
+Tema cerrado.
 
-Conclusión cerrada:
+Hubo una sesión difícil investigando resize/fullscreen. Conclusión:
 
-En el editor/runner de Godot, el resize puede parecer roto.
-En build exportado real de Windows, el resize funciona correctamente.
-Se validó exportando el juego: el juego corre, maximiza/redimensiona bien, y los valores del label de prueba cambiaban consistentemente.
-Por tanto, el problema era el runner/editor de Godot, no el proyecto.
-No volver a diagnosticar fullscreen/resize únicamente desde el runner del editor.
+El runner/editor de Godot puede mostrar comportamiento engañoso.
+El build exportado real de Windows sí redimensiona correctamente.
 
-Configuración actual estable en project.godot:
+Se validó exportando el juego. El juego corre, maximiza/redimensiona bien y los valores del label de prueba cambiaban consistentemente.
+
+No volver a diagnosticar fullscreen/resize únicamente desde el editor.
+
+Configuración estable en project.godot:
 
 [display]
 
@@ -128,21 +162,31 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
-Notas:
+No reintroducir:
 
-No reintroducir WindowManager.
-No meter scripts para forzar root/viewport.
-No tocar escenas por este tema salvo bug visible en build exportado.
-Si vuelve a haber dudas de fullscreen/resize, validar en build exportado, no solo en Godot editor.
+WindowManager;
+scripts para forzar root/viewport;
+hacks de resize por escena.
 
-Export templates:
+Si vuelve a haber duda, validar con build exportado.
 
-Ya se instalaron plantillas de exportación.
-Se pudo exportar un build Windows exitosamente.
-Estado actual aprobado de escenas
-1. Title Screen / MainMenu
+Assets estructurales visuales aprobados
 
-Estado: integrado visualmente y congelado por ahora.
+Estos assets sí aportan identidad visual y deben reutilizarse:
+
+assets/ui/world_top_nav_panel.png
+assets/ui/world_hover_info_panel.png
+assets/ui/button_velo_normal.png
+assets/ui/title_logo_luminaria_cronicas_del_velo.png
+
+Regla:
+
+No volver a resolver esos paneles con StyleBoxFlat plano.
+Usar estos assets como base visual cuando aplique.
+Escenas y estado actual
+1. Title Screen / Main Menu
+
+Estado: aprobado/congelado salvo bug real.
 
 Archivos:
 
@@ -152,42 +196,20 @@ data/ui_assets.json
 ui/components/luminaria_button_style.gd
 ui/components/visual_asset.gd
 
-Título final:
+Características:
 
-Luminaria: Crónicas del Velo
+fondo real;
+logo real;
+botones Nuevo juego / Continuar / Cargar partida / Salir;
+botón visual con asset;
+panel contenedor transparente;
+sin debug label.
 
-Assets integrados:
+No tocar salvo bug real o cambio global de botones acordado.
 
-assets/backgrounds/title_luminaria_threshold.png
-assets/ui/title_logo_luminaria_cronicas_del_velo.png
-assets/ui/button_velo_normal.png
-
-Características actuales:
-
-Fondo real desde data/ui_assets.json.
-Logo real desde data/ui_assets.json.
-El logo ya reemplazó el panel textual de título.
-El logo está grande y cargado hacia la izquierda.
-Menú con botones:
-Nuevo juego;
-Continuar;
-Cargar partida;
-Salir.
-El panel contenedor del menú está transparente.
-Los botones usan LuminariaButtonStyle.
-button_velo_normal.png se usa como primer asset visual de botones.
-El estilo de botón está pensado como base global, aunque por ahora se usa en title screen.
-
-Notas importantes:
-
-No volver a usar assets/ui/title_logo_isekai_novel.png.
-El title screen no está perfecto eterno, pero queda congelado por ahora.
-No seguir puliendo title screen hasta avanzar otros bloques visuales.
-Si se cambia el estilo global de botones, hacerlo desde ui/components/luminaria_button_style.gd, no copiando estilos por escena.
-Ya se quitó el debug label del viewport.
 2. Intro / Onboarding
 
-Estado: funcional, aprobado estructuralmente, pendiente de arte final.
+Estado: actualizado visualmente y funcionando.
 
 Archivo:
 
@@ -201,6 +223,15 @@ Nuevo juego
 → Selección de clase/camino
 → Confirmación final
 → WorldMap
+
+Cambios ya integrados:
+
+botones inferiores usan estilo visual consistente;
+bottom panel usa asset morado;
+pantalla de confirmación tiene panel derecho morado;
+panel de confirmación tiene tamaño alineado al marco del personaje;
+sello/clase usa morados/fríos;
+se evitó volver al look Bootstrap.
 
 Fondos base esperados:
 
@@ -227,20 +258,11 @@ charming
 steadfast
 balanced
 
-Decisión pendiente importante:
-
-Antes de producir 18 fondos de confirmación, decidir si se hará:
-
-un fondo por combinación, o
-fondo genérico + sprite/personaje del Forastero.
-
-Recomendación actual:
-
-No empezar Intro en la misma sesión que se toque resolución/title. Tratar Intro como bloque visual separado.
+Decisión previa: evitar producir 18 fondos de confirmación si se puede componer con assets más globales. Preferir soluciones mantenibles.
 
 3. WorldMap
 
-Estado: funcional y responsive.
+Estado: aprobado.
 
 Archivo:
 
@@ -248,28 +270,44 @@ scenes/map/world_map.gd
 
 Componentes:
 
-ui/components/location_hover_card.gd
 ui/components/world_hud_bar.gd
 ui/components/world_action_panel.gd
 ui/components/location_map_button.gd
+ui/components/location_hover_card.gd
 
-Características:
+Características aprobadas:
 
-HUD superior.
-Mapa grande.
-Botones globales arriba derecha.
-Tarjeta hover.
-Ubicaciones clicables.
-Click directo entra a ubicación.
-NPCs presentes aparecen en hover.
+fondo real de mapa;
+sprites reales de ubicaciones;
+halos morados permanentes;
+hover visual funcionando;
+click entra a ubicación;
+top nav con asset dedicado;
+panel informativo con asset dedicado;
+guardado/carga desde WorldMap vuelve al WorldMap;
+NPCs presentes aparecen en hover;
 NPC desconocido aparece como ???.
-Responsive al tamaño disponible.
-Usa BASE_MAP_SIZE.
-Escala posiciones y tamaños de ubicaciones.
-Recalcula ubicaciones en resize con rebuild_locations().
-Usa fondo desde data/ui_assets.json.
 
-No tocar salvo bug real o asset pass.
+Assets de iconos de ubicaciones:
+
+assets/map/locations/map_location_home_forastero.png
+assets/map/locations/map_location_library_alba.png
+assets/map/locations/map_location_market_puente_rojo.png
+assets/map/locations/map_location_shop_umbral.png
+assets/map/locations/map_location_observatory_velo.png
+assets/map/locations/map_location_arcane_library_ateneo.png
+assets/map/locations/map_location_private_study.png
+assets/map/locations/map_location_archives_velo.png
+assets/map/locations/map_location_plaza_luminaria.png
+assets/map/locations/map_location_guild_alba_roja.png
+assets/map/locations/map_location_tavern_puente_rojo.png
+assets/map/locations/map_location_workshop_arcano.png
+assets/map/locations/map_location_sanctuary_velo_quieto.png
+assets/map/locations/map_location_forest_herido.png
+assets/map/locations/map_location_council_hall.png
+assets/map/locations/map_location_threshold_umbral.png
+
+No tocar salvo bug real.
 
 4. LocationScene
 
@@ -281,32 +319,24 @@ scenes/location/location_scene.gd
 
 Características:
 
-Fondo por ubicación desde ui_assets.json.
-HUD superior.
-Botones globales.
-NPCs presentes como sprites/placeholders clicables.
-Desconocidos como ???.
-Interacciones desde panel inferior:
-hablar;
-regalar;
-pedir favor;
-invitar a cita;
-avances especiales;
-cerrar.
-Acciones del lugar disponibles sin lista administrativa.
-Hover de acciones muestra info inmediata.
-Tooltips nativos evitados.
-Bug de NPCs encimados corregido.
-Funciones de posicionamiento ya existen. No duplicarlas.
+HUD global;
+top nav global con WorldActionPanel;
+fondo por ubicación desde data/ui_assets.json;
+panel inferior con asset visual morado;
+acciones e interacciones desde panel inferior;
+NPCs presentes como sprites/placeholders clicables;
+desconocidos como ???;
+hover de acciones muestra información;
+tooltips nativos evitados.
 
-Funciones importantes que ya existen y NO deben duplicarse:
+Funciones importantes que ya existen y no deben duplicarse:
 
 get_scaled_character_size()
 get_bottom_panel_reserved_height()
 get_stable_character_position()
 get_character_position()
 
-No tocar salvo bug real.
+No tocar salvo bug real o asset pass acordado.
 
 5. HomeScene
 
@@ -318,45 +348,114 @@ scenes/home/home_scene.gd
 
 Características:
 
-HUD.
-Botones globales.
-Fondo de casa.
-Panel inferior limpio.
-Dormir mantiene al jugador en casa al despertar.
-Dormir procesa mensajes narrativos.
-Guardar/cargar funcionan desde casa.
-Bitácora desde casa vuelve a casa.
+HUD global;
+top nav global;
+fondo de casa;
+panel inferior con asset visual;
+botones de acciones consistentes;
+dormir mantiene al jugador en casa al despertar;
+dormir procesa mensajes narrativos;
+guardar/cargar funcionan desde casa;
+bitácora vuelve a casa.
 
-No tocar salvo bug real.
+Nota: se corrigió un bug donde main_title_label se había perdido y main_actions estaba duplicado. No volver a tocar esa función sin revisar el archivo real.
 
 6. ShopScene
 
-Estado: aprobado / funcional.
+Estado: funcional y visualmente aprobado en general, con deuda menor de legibilidad de labels.
 
 Archivo:
 
 scenes/shop/shop_scene.gd
 
-Características:
+Características actuales:
 
-Entra directo desde mapa.
-No requiere LocationScene intermedia.
-Escaparate directo.
-Click en tarjeta compra.
-Hover muestra info compacta.
-Tarjetas compactas.
-Máximo 6 columnas.
-Espacio derecho reservado para tendero/arte futuro.
-Preview de items usa shop_preview desde data/items.json.
-Scroll existe, pero debe ocultarse si todo cabe.
+HUD global;
+top nav global con WorldActionPanel;
+info panel superior con asset morado;
+fondo real de tienda;
+tendera integrada desde asset;
+grid de objetos con iconos reales;
+hover/click solo sobre el cuadro del icono;
+texto debajo no debería activar compra;
+7 columnas aprobadas;
+nombre/precio/preview se muestra en info panel al hover.
 
-Assets futuros posibles:
+Asset de tendera:
 
-assets/backgrounds/location_shop_umbral.png
-assets/portraits/shop_vendor_umbral.png
-assets/items/<item>.png
+assets/shop/npc_vendor.png
 
-No tocar salvo bug real o asset pass.
+Assets de items:
+
+assets/shop/items/item_ancient_books.png
+assets/shop/items/item_symbolic_art.png
+assets/shop/items/item_weapons.png
+assets/shop/items/item_flowers.png
+assets/shop/items/item_wine.png
+assets/shop/items/item_special_tea.png
+assets/shop/items/item_sweets.png
+assets/shop/items/item_simple_jewels.png
+assets/shop/items/item_clothes.png
+assets/shop/items/item_music_box.png
+assets/shop/items/item_maps.png
+assets/shop/items/item_mana_gems.png
+assets/shop/items/item_tech_prototypes.png
+assets/shop/items/item_trophies.png
+assets/shop/items/item_coins.png
+assets/shop/items/item_blank_diaries.png
+assets/shop/items/item_sacred_objects.png
+assets/shop/items/item_gadgets.png
+assets/shop/items/item_desserts.png
+assets/shop/items/item_narrative_secrets.png
+
+IDs reales de data/items.json:
+
+ancient_books
+symbolic_art
+weapons
+flowers
+wine
+special_tea
+sweets
+simple_jewels
+clothes
+music_box
+maps
+mana_gems
+tech_prototypes
+trophies
+coins
+blank_diaries
+sacred_objects
+gadgets
+desserts
+narrative_secrets
+
+Importante:
+
+simple_jewels, no simple_jewelry.
+coins, no money.
+
+Labels cortos deseados en tienda:
+
+tech_prototypes → Prototipos
+blank_diaries → Diarios
+narrative_secrets → Secretos
+sacred_objects → Sagrados
+simple_jewels → Joyas
+ancient_books → Libros
+
+Deuda visual menor:
+
+Los labels debajo de items siguen siendo poco legibles en algunos casos.
+No es bloqueante porque el info panel muestra nombre completo y precio al hover.
+No volver a meter panel/cintilla grande detrás de cada label: agranda y ensucia el grid.
+Mejoras futuras posibles:
+- ocultar labels y depender del info panel;
+- mostrar label solo en hover;
+- crear mini asset de placa de item si realmente hace falta.
+
+No tocar más la tienda salvo bug real o decisión explícita de mejorar labels.
 
 7. JournalScene / Bitácora
 
@@ -368,15 +467,14 @@ scenes/journal/journal_scene.gd
 
 Características:
 
-Navegación por capítulos.
-Personas como tarjetas.
-Detalle narrativo por personaje.
-Mundo, calendario, recuerdos y unión separados.
-Panel contextual.
-Retorno correcto según escena de origen.
-Evita listas infinitas tipo ERP.
+navegación por capítulos;
+personas como tarjetas;
+detalle narrativo por personaje;
+mundo, calendario, recuerdos y unión separados;
+panel contextual;
+retorno correcto según escena de origen.
 
-No tocar salvo bug real.
+No tocar salvo bug real o asset pass acordado.
 
 8. DateScene
 
@@ -388,25 +486,23 @@ scenes/date/date_scene.gd
 
 Características:
 
-Header compacto.
-Narrativa con buen espacio.
-Acciones base abajo.
-Popup/modal con scroll para:
-respuestas;
-regalos;
-movimientos/gestos;
-lugares de cita.
-Resumen final ya no se corta.
-Modal de regalos funciona.
-Modal de lugares funciona.
-Cita especial funciona.
-Pregunta/respuesta ya no pierde texto al hover.
+header compacto;
+narrativa con buen espacio;
+acciones base abajo;
+popup/modal con scroll para respuestas, regalos, movimientos y lugares;
+resumen final ya no se corta;
+modal de regalos funciona;
+modal de lugares funciona;
+cita especial funciona;
+pregunta/respuesta ya no pierde texto al hover.
 
-No tocar salvo bug real o asset pass.
+Pendiente visual probable:
 
+Aplicar el mismo lenguaje visual de paneles/botones si aún se siente viejo.
+Revisar solo cuando se decida hacer pass visual de citas.
 9. LoadGameModal
 
-Estado: aprobado y funcionando.
+Estado: aprobado / funcionando visualmente.
 
 Archivo:
 
@@ -419,30 +515,27 @@ scenes/location/location_scene.gd
 scenes/home/home_scene.gd
 scenes/shop/shop_scene.gd
 
-Comportamiento actual:
-
-Cargar partida
+Comportamiento:
 
 Último autosave
 Guardado manual
 Volver al título
 Cancelar
 
-Notas:
+Ya usa panel visual consistente y botones coherentes. No tratar “Volver al título” como pendiente; ya existe.
 
-“Volver al título” ya está hecho y funcionando.
-El README viejo decía que era pendiente; ya no lo es.
-No volver a tratarlo como tarea pendiente.
 Guardado / carga
 
 Estado actual:
 
 Autosave funciona.
 Guardado manual funciona.
-Cargar desde title funciona.
+Cargar desde título funciona.
 Cargar desde dentro del juego funciona con modal global.
 Autosave vuelve a donde se generó.
 Guardado manual vuelve a donde se generó.
+Guardar desde WorldMap vuelve a WorldMap.
+Dormir solo puede hacerse en casa y debe dejarte en casa al avanzar el día.
 
 Archivos:
 
@@ -484,7 +577,7 @@ Si se decide hacer, tratar como bloque independiente:
 
 Save Slots 1/2/3
 
-No mezclar con assets ni UI visual.
+No mezclar con asset pass.
 
 Posible estructura futura:
 
@@ -510,32 +603,31 @@ Existe inventario oficial:
 
 docs/assets_inventory.md
 
-Este archivo debe consultarse antes de generar assets.
+Consultar antes de generar assets.
 
 Reglas:
 
 Usar rutas finales desde el inicio.
 No usar nombres genéricos.
-Las capturas de trabajo (ejemplo.png, ejemplo1.png, etc.) no son assets finales.
+Las capturas de trabajo no son assets finales.
 Los assets finales viven en assets/**.
 Usar data/ui_assets.json como fuente de rutas cuando aplique.
-Si algo visual debe poder cambiar sin tocar código, debe ir a ui_assets.json.
+Si algo visual debe poder cambiar sin tocar código, debe ir a data/ui_assets.json.
 
-Assets integrados hasta ahora:
+Capturas temporales pueden llamarse:
 
-assets/backgrounds/title_luminaria_threshold.png
-assets/ui/title_logo_luminaria_cronicas_del_velo.png
-assets/ui/button_velo_normal.png
+ejemplo.png
+evidencia.png
+tienda1.png
+tienda2.png
 
-Siguiente bloque visual recomendado:
-
-Intro / Onboarding
-
-Pero empezar solo después de confirmar que no hay pendientes técnicos abiertos.
+No tratarlas como assets finales.
 
 data/ui_assets.json
 
-Este archivo controla rutas visuales para:
+Archivo clave para rutas visuales.
+
+Controla rutas para:
 
 title screen;
 intro;
@@ -545,33 +637,38 @@ NPC portraits/sprites;
 UI;
 buttons.
 
-Debe preferirse sobre rutas hardcodeadas.
+Preferir este archivo sobre rutas hardcodeadas cuando aplique.
 
-Antes de agregar un asset final, verificar si ya hay una ruta esperada ahí.
+Excepción actual aceptada:
+
+assets/shop/npc_vendor.png
+assets/shop/items/item_<id>.png
+
+Estas rutas están hardcodeadas en ShopScene por ahora. Si se vuelve necesario hacerlas configurables, mover a data/ui_assets.json o data/items.json como asset path por item.
 
 Música/audio
 
-Se investigó música IA, pero la mayoría de servicios útiles requieren pago/licencia para descargar o usar comercialmente.
+Tema investigado pero no integrado.
 
-Regla recomendada:
+Reglas recomendadas:
 
 Música final: .ogg
-Música temporal o referencia: .mp3 permitido
+Música temporal/referencia: .mp3 permitido
 Efectos de sonido: .wav
 
 Fuentes posibles:
 
-OpenGameArt;
-Pixabay Music;
-FreePD;
-Incompetech;
-Itch.io asset packs.
+OpenGameArt
+Pixabay Music
+FreePD
+Incompetech
+Itch.io asset packs
 
 Si se usa música con atribución, crear:
 
 docs/audio_credits.md
 
-con:
+Con:
 
 archivo local
 nombre original
@@ -581,27 +678,9 @@ licencia
 URL
 requiere atribución sí/no
 
-No mezclar audio con el bloque visual actual.
+No mezclar audio con pass visual salvo que se acuerde.
 
-Capturas de referencia
-
-El usuario puede subir capturas al repo como:
-
-ejemplo.png
-ejemplo1.png
-ejemplo2.png
-tienda1.png
-tienda2.png
-
-Regla:
-
-Si el usuario menciona una captura, asumir que el repo ya fue actualizado.
-Revisar la imagen o el archivo correspondiente si es necesario.
-No pedir que confirme si ya subió o actualizó.
-
-Estas capturas son temporales y desaparecerán al final del proyecto. No son assets finales.
-
-Archivos clave
+Árbol lógico del proyecto
 
 Core:
 
@@ -625,6 +704,7 @@ scenes/date/date_scene.gd
 UI components:
 
 ui/components/visual_asset.gd
+ui/components/luminaria_theme.gd
 ui/components/luminaria_button_style.gd
 ui/components/load_game_modal.gd
 ui/components/location_map_button.gd
@@ -645,74 +725,119 @@ data/player_classes.json
 Docs:
 
 docs/assets_inventory.md
+
+Assets principales:
+
+assets/backgrounds/
+assets/ui/
+assets/map/locations/
+assets/shop/
+assets/shop/items/
+assets/player/
 Escenas aprobadas: no tocar salvo bug real
 
 No modificar sin razón clara:
 
+scenes/map/world_map.gd
 scenes/location/location_scene.gd
 scenes/home/home_scene.gd
 scenes/shop/shop_scene.gd
 scenes/journal/journal_scene.gd
 scenes/date/date_scene.gd
-scenes/map/world_map.gd
 scenes/intro/intro_scene.gd
 scenes/menu/main_menu.gd
 
-main_menu.gd queda congelado por ahora salvo bug real o cambio global de botones.
+Si se toca una escena aprobada, debe ser por:
 
-Próximo paso recomendado
+bug real;
+asset pass acordado;
+componente global que afecta varias escenas de forma controlada.
+Pendientes recomendados para próxima sesión
 
-La siguiente sesión debería empezar así:
+El proyecto está en etapa final de UI/assets.
 
-Leer readme.md.
-Revisar docs/assets_inventory.md.
-Revisar data/ui_assets.json.
-Confirmar que no hay debug label en main_menu.gd.
-No tocar resolución/fullscreen salvo que falle en build exportado.
-Empezar bloque visual de Intro / Onboarding por separado.
+Siguientes bloques posibles, en orden sugerido:
 
-Bloque sugerido:
+Opción A — DateScene visual pass
 
-Intro / Onboarding — arte final del prólogo y selección
+Revisar si DateScene ya se siente consistente con:
 
-Primer asset recomendado:
+world_hover_info_panel.png
+world_top_nav_panel.png
+botones morados
+HUD global
 
-assets/backgrounds/intro_veil_crossing.png
+Si se siente vieja, aplicar mismo lenguaje visual.
 
-Después:
+Opción B — Journal visual pass
 
-assets/backgrounds/intro_appearance_selection.png
-assets/backgrounds/intro_class_selection.png
+Revisar bitácora con el nuevo lenguaje visual.
+No tocar backend de bitácora; solo paneles/botones si hace falta.
 
-Antes de generar 18 fondos de confirmación, decidir si se usará fondo por combinación o fondo genérico + sprite del Forastero.
+Opción C — completar backgrounds restantes de ubicaciones
 
-Prompt sugerido para continuar en otro chat
+Ya se generaron y probaron 6 fondos importantes:
 
-Usa este prompt:
+home
+plaza
+library
+market
+observatory
+shop
 
-Estamos haciendo un juego Godot llamado “Luminaria: Crónicas del Velo” en el repositorio `JoshSnowMex/isekai-novel`.
+Faltan fondos para otras ubicaciones si no existen:
 
-Antes de responder, conéctate al repo y lee `readme.md` en minúsculas. Luego revisa `docs/assets_inventory.md` y `data/ui_assets.json`.
+arcane_library
+private_study
+archives
+guild
+tavern
+workshop
+sanctuary
+forest
+council_hall
+threshold
 
-Reglas obligatorias:
-- No confíes en búsqueda indexada del repo; falla con frecuencia.
-- Abre archivos por ruta exacta con fetch_file.
-- Si digo que actualicé el repo o menciono `ejemplo.png`, asume que el repo está actualizado.
-- No propongas parches temporales.
-- No dupliques lógica si debe ser global.
-- Si el cambio es grande, dame reemplazo completo de archivo.
-- Si el cambio es puntual, dime archivo exacto, qué buscar y qué reemplazar.
-- No tocar escenas aprobadas salvo bug real.
-- No diagnosticar resize/fullscreen desde el runner/editor de Godot: ya se validó que el build exportado de Windows sí redimensiona correctamente.
-- Si vuelve a haber dudas de resolución, validar en build exportado.
+Consultar data/ui_assets.json para nombres exactos.
 
-Estado actual:
-- Backend cerrado.
-- Title screen integrado con fondo, logo y botón visual.
-- Resize funciona correctamente en build exportado.
-- LoadGameModal ya tiene “Volver al título”.
-- El siguiente bloque recomendado es Intro / Onboarding visual, empezando por `assets/backgrounds/intro_veil_crossing.png`.
+Opción D — mejorar labels de tienda
 
-Quiero continuar desde ahí de forma ordenada y finalista.
+Deuda menor. No prioritaria.
 
-Después de reemplazarlo, haz commit/checkpoint. Este README ya deja registrado que el problema de resize 
+Posibles soluciones futuras:
+
+quitar labels y depender del info panel;
+label solo en hover;
+mini asset de placa de item;
+aumentar contraste con shader/outline más fino.
+
+No volver a meter panel grande detrás del texto.
+
+Último estado de sesión
+
+Cerrado hoy:
+
+fondos importantes probados;
+tienda visual actualizada;
+tendera integrada;
+iconos de items integrados;
+grid de tienda aprobado con 7 columnas;
+hover/click corregido para que aplique solo al cuadro del icono;
+info panel muestra nombre/precio/preview;
+legibilidad de labels aceptada como deuda menor.
+
+El usuario terminó la sesión satisfecho y pidió actualizar este README para continuar después.
+
+Recordatorio final para el próximo asistente
+
+No empieces buscando globalmente.
+Primero abre por ruta:
+
+readme.md
+docs/assets_inventory.md
+data/ui_assets.json
+
+Después abre solo los archivos necesarios por ruta exacta.
+
+No contestes con “probablemente”, “si existe”, “debería haber”.
+Revisa el archivo real y da instrucciones puntuales.
