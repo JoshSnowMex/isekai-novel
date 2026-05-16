@@ -281,7 +281,7 @@ func add_item_card(item_id: String) -> void:
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.clip_text = true
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
+	label.text = build_item_card_text(locked_item_id, item_name, price, owned, can_buy, player_money)
 	LuminariaTheme.apply_label(label, 13, Color(0.98, 0.94, 1.0, 1.0 if can_buy else 0.58), 3)
 	cell.add_child(label)
 
@@ -309,7 +309,7 @@ func add_item_card(item_id: String) -> void:
 		preview_item_id = ""
 		refresh_info_panel()
 	)
-	
+
 func load_item_icon(item_id: String) -> Texture2D:
 	var path: String = "res://assets/shop/items/item_%s.png" % item_id
 
@@ -629,8 +629,8 @@ func build_load_game_modal() -> void:
 	shop_layer.add_child(load_game_modal)
 	load_game_modal.hide_modal()
 
-func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
-	var text: String = item_name
+func build_item_card_text(item_id: String, item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
+	var text: String = get_shop_item_short_name(item_id, item_name)
 
 	if owned > 0:
 		text += " ×%s" % owned
@@ -639,6 +639,7 @@ func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bo
 		text += " -%s L" % max(price - player_money, 0)
 
 	return text
+
 
 func get_shop_item_short_name(item_id: String, item_name: String) -> String:
 	match item_id:
@@ -656,14 +657,3 @@ func get_shop_item_short_name(item_id: String, item_name: String) -> String:
 			return "Libros"
 		_:
 			return item_name
-
-func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
-	var text: String = get_shop_item_short_name(item_name)
-
-	if owned > 0:
-		text += " ×%s" % owned
-
-	if not can_buy:
-		text += " -%s L" % max(price - player_money, 0)
-
-	return text
