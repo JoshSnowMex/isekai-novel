@@ -159,7 +159,7 @@ func build_shop_panel() -> void:
 	item_grid = GridContainer.new()
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_grid.columns = 5
-	item_grid.add_theme_constant_override("h_separation", 5)
+	item_grid.add_theme_constant_override("h_separation", 20)
 	item_grid.add_theme_constant_override("v_separation", 8)
 	item_scroll.add_child(item_grid)
 
@@ -532,7 +532,7 @@ func layout_overlay_controls() -> void:
 		vendor_width = 190.0
 
 	var vendor_gap: float = 4.0
-	var right_margin: float = 42.0
+	var right_margin: float = 210.0
 	var available_width: float = shop_layer.size.x - 48.0
 	var panel_width: float = max(500.0, available_width - vendor_width - vendor_gap - right_margin)
 	var panel_height: float = max(300.0, shop_layer.size.y - panel_top - 24.0)
