@@ -538,9 +538,10 @@ func layout_overlay_controls() -> void:
 		vendor_width = 190.0
 
 	var vendor_gap: float = 4.0
-	var right_margin: float = 120.0
+	var grid_right_reserve: float = 120.0
+	var vendor_visual_offset: float = 90.0
 	var available_width: float = shop_layer.size.x - 48.0
-	var panel_width: float = max(500.0, available_width - vendor_width - vendor_gap - right_margin)
+	var panel_width: float = max(500.0, available_width - vendor_width - vendor_gap - grid_right_reserve)
 	var panel_height: float = max(300.0, shop_layer.size.y - panel_top - 24.0)
 
 	shop_panel.size = Vector2(panel_width, panel_height)
@@ -550,19 +551,19 @@ func layout_overlay_controls() -> void:
 	)
 
 	if panel_width >= 760:
-		item_grid.columns = 6
+		item_grid.columns = 7
 	elif panel_width >= 620:
-		item_grid.columns = 5
+		item_grid.columns = 6
 	elif panel_width >= 480:
-		item_grid.columns = 4
+		item_grid.columns = 5
 	else:
-		item_grid.columns = 3
+		item_grid.columns = 4
 
 	if vendor_placeholder != null:
 		vendor_placeholder.visible = true
 		vendor_placeholder.size = Vector2(vendor_width, panel_height)
 		vendor_placeholder.position = Vector2(
-			shop_layer.size.x - vendor_width - right_margin,
+			shop_layer.size.x - vendor_width - vendor_visual_offset,
 			panel_top
 		)
 		
