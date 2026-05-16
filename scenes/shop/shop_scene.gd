@@ -159,8 +159,8 @@ func build_shop_panel() -> void:
 	item_grid = GridContainer.new()
 	item_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_grid.columns = 5
-	item_grid.add_theme_constant_override("h_separation", 10)
-	item_grid.add_theme_constant_override("v_separation", 8)
+	item_grid.add_theme_constant_override("h_separation", 4)
+	item_grid.add_theme_constant_override("v_separation", 2)
 	item_scroll.add_child(item_grid)
 
 func refresh_shop(message: String = "") -> void:
@@ -240,7 +240,8 @@ func add_item_card(item_id: String) -> void:
 	button.focus_mode = Control.FOCUS_ALL
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	button.custom_minimum_size = Vector2(112, 122)
+	button.custom_minimum_size = Vector2(98, 104)
+	button.size = Vector2(98, 104)
 	button.disabled = not can_buy
 	button.text = ""
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -254,22 +255,22 @@ func add_item_card(item_id: String) -> void:
 	button.add_child(root)
 
 	var icon_panel: PanelContainer = PanelContainer.new()
-	icon_panel.custom_minimum_size = Vector2(74, 74)
+	icon_panel.custom_minimum_size = Vector2(84, 84)
 	icon_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	icon_panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	icon_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_content_action_button_style("normal"))
 	root.add_child(icon_panel)
 
 	var icon_margin: MarginContainer = MarginContainer.new()
-	icon_margin.add_theme_constant_override("margin_left", 7)
-	icon_margin.add_theme_constant_override("margin_top", 7)
-	icon_margin.add_theme_constant_override("margin_right", 7)
-	icon_margin.add_theme_constant_override("margin_bottom", 7)
+	icon_margin.add_theme_constant_override("margin_left", 4)
+	icon_margin.add_theme_constant_override("margin_top", 4)
+	icon_margin.add_theme_constant_override("margin_right", 4)
+	icon_margin.add_theme_constant_override("margin_bottom", 4)
 	icon_panel.add_child(icon_margin)
 
 	var icon: TextureRect = TextureRect.new()
 	icon.texture = load_item_icon(locked_item_id)
-	icon.custom_minimum_size = Vector2(60, 60)
+	icon.custom_minimum_size = Vector2(76, 76)
 	icon.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	icon.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
@@ -279,14 +280,14 @@ func add_item_card(item_id: String) -> void:
 	icon_margin.add_child(icon)
 
 	var label: Label = Label.new()
-	label.custom_minimum_size = Vector2(1, 38)
+	label.custom_minimum_size = Vector2(98, 20)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.clip_text = true
 	label.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
-	LuminariaTheme.apply_label(label, 14, Color(0.94, 0.88, 1.0, 1.0 if can_buy else 0.55), 2)
+	LuminariaTheme.apply_label(label, 13, Color(0.94, 0.88, 1.0, 1.0 if can_buy else 0.55), 2)
 	root.add_child(label)
 
 	if can_buy:
@@ -320,17 +321,6 @@ func add_item_card(item_id: String) -> void:
 
 	item_grid.add_child(button)
 	
-func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
-	var text: String = "%s\n%s L" % [item_name, price]
-
-	if owned > 0:
-		text += " ×%s" % owned
-
-	if not can_buy:
-		text += "\n-%s L" % max(price - player_money, 0)
-
-	return text
-		
 func load_item_icon(item_id: String) -> Texture2D:
 	var path: String = "res://assets/shop/items/item_%s.png" % item_id
 
@@ -510,13 +500,15 @@ func layout_overlay_controls() -> void:
 	)
 
 	var panel_top: float = top_y + 118.0
-	var vendor_width: float = 220.0
+	var vendor_width: float = 250.0
 
 	if shop_layer.size.x < 900:
 		vendor_width = 190.0
 
+	var vendor_gap: float = 4.0
+	var right_margin: float = 42.0
 	var available_width: float = shop_layer.size.x - 48.0
-	var panel_width: float = max(500.0, available_width - vendor_width - 18.0)
+	var panel_width: float = max(500.0, available_width - vendor_width - vendor_gap - right_margin)
 	var panel_height: float = max(300.0, shop_layer.size.y - panel_top - 24.0)
 
 	shop_panel.size = Vector2(panel_width, panel_height)
@@ -526,22 +518,19 @@ func layout_overlay_controls() -> void:
 	)
 
 	if panel_width >= 860:
-		item_grid.columns = 5
+		item_grid.columns = 6
 	elif panel_width >= 700:
-		item_grid.columns = 4
+		item_grid.columns = 5
 	elif panel_width >= 540:
-		item_grid.columns = 3
+		item_grid.columns = 4
 	else:
-		item_grid.columns = 2
+		item_grid.columns = 3
 
 	if vendor_placeholder != null:
 		vendor_placeholder.visible = true
 		vendor_placeholder.size = Vector2(vendor_width, panel_height)
 		vendor_placeholder.position = Vector2(
-			min(
-				shop_layer.size.x - vendor_width - 24.0,
-				shop_panel.position.x + panel_width + 18.0
-			),
+			shop_layer.size.x - vendor_width - right_margin,
 			panel_top
 		)
 		
@@ -581,9 +570,9 @@ func build_vendor_placeholder() -> void:
 	vendor_sprite = TextureRect.new()
 	vendor_sprite.texture = load_vendor_texture()
 	vendor_sprite.set_anchors_preset(Control.PRESET_FULL_RECT)
-	vendor_sprite.offset_left = 6
+	vendor_sprite.offset_left = 0
 	vendor_sprite.offset_top = 4
-	vendor_sprite.offset_right = -14
+	vendor_sprite.offset_right = -32
 	vendor_sprite.offset_bottom = -4
 	vendor_sprite.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	vendor_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -612,3 +601,14 @@ func build_load_game_modal() -> void:
 	load_game_modal = LoadGameModal.new()
 	shop_layer.add_child(load_game_modal)
 	load_game_modal.hide_modal()
+
+func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bool, player_money: int) -> String:
+	var text: String = item_name
+
+	if owned > 0:
+		text += " ×%s" % owned
+
+	if not can_buy:
+		text += " -%s L" % max(price - player_money, 0)
+
+	return text
