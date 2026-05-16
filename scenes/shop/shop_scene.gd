@@ -281,7 +281,13 @@ func add_item_card(item_id: String) -> void:
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.clip_text = true
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
+	label.text = build_item_card_text(
+		get_shop_item_short_name(locked_item_id, item_name),
+		price,
+		owned,
+		can_buy,
+		player_money
+	)
 	LuminariaTheme.apply_label(label, 12, Color(0.94, 0.88, 1.0, 1.0 if can_buy else 0.55), 2)
 	cell.add_child(label)
 
@@ -543,11 +549,11 @@ func layout_overlay_controls() -> void:
 		panel_top
 	)
 
-	if panel_width >= 860:
+	if panel_width >= 760:
 		item_grid.columns = 6
-	elif panel_width >= 700:
+	elif panel_width >= 620:
 		item_grid.columns = 5
-	elif panel_width >= 540:
+	elif panel_width >= 480:
 		item_grid.columns = 4
 	else:
 		item_grid.columns = 3
@@ -638,3 +644,20 @@ func build_item_card_text(item_name: String, price: int, owned: int, can_buy: bo
 		text += " -%s L" % max(price - player_money, 0)
 
 	return text
+
+func get_shop_item_short_name(item_id: String, item_name: String) -> String:
+	match item_id:
+		"tech_prototypes":
+			return "Prototipos"
+		"blank_diaries":
+			return "Diarios"
+		"narrative_secrets":
+			return "Secretos"
+		"sacred_objects":
+			return "Sagrados"
+		"simple_jewels":
+			return "Joyas"
+		"ancient_books":
+			return "Libros"
+		_:
+			return item_name
