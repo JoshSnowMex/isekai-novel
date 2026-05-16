@@ -273,23 +273,24 @@ func add_item_card(item_id: String) -> void:
 	icon.modulate = Color(1, 1, 1, 1.0 if can_buy else 0.48)
 	button.add_child(icon)
 
+	var label_panel: PanelContainer = PanelContainer.new()
+	label_panel.custom_minimum_size = Vector2(96, 20)
+	label_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	label_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label_panel.add_theme_stylebox_override("panel", make_shop_item_label_style(can_buy))
+	cell.add_child(label_panel)
+
 	var label: Label = Label.new()
-	label.custom_minimum_size = Vector2(96, 16)
-	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	label.custom_minimum_size = Vector2(96, 18)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.clip_text = true
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.text = build_item_card_text(
-		get_shop_item_short_name(locked_item_id, item_name),
-		price,
-		owned,
-		can_buy,
-		player_money
-	)
-	LuminariaTheme.apply_label(label, 12, Color(0.94, 0.88, 1.0, 1.0 if can_buy else 0.55), 2)
-	cell.add_child(label)
+	label.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
+	LuminariaTheme.apply_label(label, 13, Color(0.98, 0.94, 1.0, 1.0 if can_buy else 0.58), 3)
+	label_panel.add_child(label)
 
 	if can_buy:
 		button.pressed.connect(func():
@@ -539,7 +540,7 @@ func layout_overlay_controls() -> void:
 
 	var vendor_gap: float = 4.0
 	var grid_right_reserve: float = 120.0
-	var vendor_visual_offset: float = 90.0
+	var vendor_visual_offset: float = 220.0
 	var available_width: float = shop_layer.size.x - 48.0
 	var panel_width: float = max(500.0, available_width - vendor_width - vendor_gap - grid_right_reserve)
 	var panel_height: float = max(300.0, shop_layer.size.y - panel_top - 24.0)
@@ -662,3 +663,30 @@ func get_shop_item_short_name(item_id: String, item_name: String) -> String:
 			return "Libros"
 		_:
 			return item_name
+
+func make_shop_item_label_style(is_enabled: bool) -> StyleBoxFlat:
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+
+	if is_enabled:
+		style.bg_color = Color(0.012, 0.010, 0.018, 0.50)
+		style.border_color = Color(0.40, 0.30, 0.62, 0.30)
+	else:
+		style.bg_color = Color(0.012, 0.010, 0.018, 0.32)
+		style.border_color = Color(0.26, 0.22, 0.34, 0.18)
+
+	style.border_width_left = 1
+	style.border_width_top = 0
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+
+	style.corner_radius_top_left = 2
+	style.corner_radius_top_right = 2
+	style.corner_radius_bottom_left = 6
+	style.corner_radius_bottom_right = 6
+
+	style.content_margin_left = 3
+	style.content_margin_top = 0
+	style.content_margin_right = 3
+	style.content_margin_bottom = 1
+
+	return style
