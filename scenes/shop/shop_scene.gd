@@ -273,16 +273,9 @@ func add_item_card(item_id: String) -> void:
 	icon.modulate = Color(1, 1, 1, 1.0 if can_buy else 0.48)
 	button.add_child(icon)
 
-	var label_panel: PanelContainer = PanelContainer.new()
-	label_panel.custom_minimum_size = Vector2(96, 20)
-	label_panel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	label_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label_panel.add_theme_stylebox_override("panel", make_shop_item_label_style(can_buy))
-	cell.add_child(label_panel)
-
 	var label: Label = Label.new()
 	label.custom_minimum_size = Vector2(96, 18)
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -290,7 +283,7 @@ func add_item_card(item_id: String) -> void:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.text = build_item_card_text(item_name, price, owned, can_buy, player_money)
 	LuminariaTheme.apply_label(label, 13, Color(0.98, 0.94, 1.0, 1.0 if can_buy else 0.58), 3)
-	label_panel.add_child(label)
+	cell.add_child(label)
 
 	if can_buy:
 		button.pressed.connect(func():
@@ -663,30 +656,3 @@ func get_shop_item_short_name(item_id: String, item_name: String) -> String:
 			return "Libros"
 		_:
 			return item_name
-
-func make_shop_item_label_style(is_enabled: bool) -> StyleBoxFlat:
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-
-	if is_enabled:
-		style.bg_color = Color(0.012, 0.010, 0.018, 0.50)
-		style.border_color = Color(0.40, 0.30, 0.62, 0.30)
-	else:
-		style.bg_color = Color(0.012, 0.010, 0.018, 0.32)
-		style.border_color = Color(0.26, 0.22, 0.34, 0.18)
-
-	style.border_width_left = 1
-	style.border_width_top = 0
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-
-	style.corner_radius_top_left = 2
-	style.corner_radius_top_right = 2
-	style.corner_radius_bottom_left = 6
-	style.corner_radius_bottom_right = 6
-
-	style.content_margin_left = 3
-	style.content_margin_top = 0
-	style.content_margin_right = 3
-	style.content_margin_bottom = 1
-
-	return style
