@@ -26,7 +26,7 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const CHARACTER_BASE_SIZE := Vector2(190.0, 300.0)
+const CHARACTER_BASE_SIZE := Vector2(230.0, 330.0)
 
 
 func _ready() -> void:
@@ -113,7 +113,16 @@ func build_global_action_panel() -> void:
 
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(820, 230)
+	bottom_panel.custom_minimum_size = Vector2(900, 230)
+	bottom_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	bottom_panel.anchor_left = 0.5
+	bottom_panel.anchor_right = 0.5
+	bottom_panel.anchor_top = 1.0
+	bottom_panel.anchor_bottom = 1.0
+	bottom_panel.offset_left = -450
+	bottom_panel.offset_right = 450
+	bottom_panel.offset_top = -230
+	bottom_panel.offset_bottom = 0
 	bottom_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	location_layer.add_child(bottom_panel)
 
@@ -362,8 +371,8 @@ func get_character_position(index: int, total: int, button_size: Vector2) -> Vec
 	var reserved_bottom: float = get_bottom_panel_reserved_height()
 	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
 
-	var base_x: float = 32.0
-	var gap_x: float = 28.0
+	var base_x: float = 70.0
+	var gap_x: float = 24.0
 
 	var x: float = base_x + (float(index) * (button_size.x + gap_x))
 	var y: float = max(
@@ -403,6 +412,8 @@ func show_location_overview(location_data: Dictionary, clear_message: bool = fal
 
 	if present_npcs.is_empty() and not has_location_activity_actions(location_data):
 		add_bottom_action("No hay nada especial que hacer ahora", func(): pass, true)
+		
+	call_deferred("refresh_layout_after_frame")
 
 func add_approach_npc_action(npc_id: String) -> void:
 	var locked_npc_id: String = npc_id
@@ -754,6 +765,8 @@ func interact_npc(npc_id: String) -> void:
 		selected_npc_id = ""
 		show_location_overview(DataManager.get_location(current_location_id), true)
 	)
+	
+	call_deferred("refresh_layout_after_frame")
 
 func show_npc_result(npc_id: String, message: String) -> void:
 	hud_bar.refresh()
