@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dx2lot77nhgvm"
-path="res://.godot/imported/Lyria_location_sprite_.png-75f964dcb0ab41300b1cab2fd981bb41.ctex"
+uid="uid://bd0e8ygih060c"
+path="res://.godot/imported/npc_presence_frame.png-bd969394d52919d0db246de862bdfb8a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/portraits/Lyria_location_sprite_.png"
-dest_files=["res://.godot/imported/Lyria_location_sprite_.png-75f964dcb0ab41300b1cab2fd981bb41.ctex"]
+source_file="res://assets/ui/npc_presence_frame.png"
+dest_files=["res://.godot/imported/npc_presence_frame.png-bd969394d52919d0db246de862bdfb8a.ctex"]
 
 [params]
 

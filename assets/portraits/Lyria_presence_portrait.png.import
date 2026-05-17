@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3ttg58ggyf8r"
-path="res://.godot/imported/Lyria_talking.png-e9817cc78c55b4d43d7093ee87a437c5.ctex"
+uid="uid://ddcib612uasj5"
+path="res://.godot/imported/Lyria_presence_portrait.png-4a54bf1640f2447e128e5a4a4daddc9a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/portraits/Lyria_talking.png"
-dest_files=["res://.godot/imported/Lyria_talking.png-e9817cc78c55b4d43d7093ee87a437c5.ctex"]
+source_file="res://assets/portraits/Lyria_presence_portrait.png"
+dest_files=["res://.godot/imported/Lyria_presence_portrait.png-4a54bf1640f2447e128e5a4a4daddc9a.ctex"]
 
 [params]
 

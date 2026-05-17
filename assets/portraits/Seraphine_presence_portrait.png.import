@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cas44vtvosrwn"
-path="res://.godot/imported/Lyria_portrait_neutral.png-1cbb5e220d34120ba195c21cf51885c1.ctex"
+uid="uid://dxf51o855bwle"
+path="res://.godot/imported/Seraphine_presence_portrait.png-7e15e1f796d812b7a56f771378fa40ac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/portraits/Lyria_portrait_neutral.png"
-dest_files=["res://.godot/imported/Lyria_portrait_neutral.png-1cbb5e220d34120ba195c21cf51885c1.ctex"]
+source_file="res://assets/portraits/Seraphine_presence_portrait.png"
+dest_files=["res://.godot/imported/Seraphine_presence_portrait.png-7e15e1f796d812b7a56f771378fa40ac.ctex"]
 
 [params]
 
