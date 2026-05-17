@@ -113,16 +113,7 @@ func build_global_action_panel() -> void:
 
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(900, 230)
-	bottom_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	bottom_panel.anchor_left = 0.5
-	bottom_panel.anchor_right = 0.5
-	bottom_panel.anchor_top = 1.0
-	bottom_panel.anchor_bottom = 1.0
-	bottom_panel.offset_left = -450
-	bottom_panel.offset_right = 450
-	bottom_panel.offset_top = -230
-	bottom_panel.offset_bottom = 0
+	bottom_panel.custom_minimum_size = Vector2(980, 224)
 	bottom_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	location_layer.add_child(bottom_panel)
 
@@ -180,6 +171,19 @@ func build_bottom_panel() -> void:
 	bottom_actions.add_theme_constant_override("separation", 8)
 	box.add_child(bottom_actions)
 
+func layout_bottom_panel() -> void:
+	if bottom_panel == null or location_layer == null:
+		return
+
+	var panel_width: float = min(980.0, max(760.0, location_layer.size.x - 72.0))
+	var panel_height: float = 224.0
+
+	bottom_panel.size = Vector2(panel_width, panel_height)
+	bottom_panel.position = Vector2(
+		(location_layer.size.x - panel_width) * 0.5,
+		location_layer.size.y - panel_height - 8.0
+	)
+	
 func load_location(location_id: String, message: String = "") -> void:
 	current_location_id = location_id
 	selected_npc_id = ""
@@ -351,17 +355,12 @@ func get_scaled_character_size() -> Vector2:
 		location_layer.size.y / BASE_LOCATION_SIZE.y
 	)
 
-	scale_factor = clamp(scale_factor, 0.72, 1.0)
+	scale_factor = clamp(scale_factor, 0.86, 1.08)
 
 	return CHARACTER_BASE_SIZE * scale_factor
-
-
+	
 func get_bottom_panel_reserved_height() -> float:
-	if bottom_panel == null:
-		return 210.0
-
-	return max(bottom_panel.size.y + 24.0, 230.0)
-
+	return 238.0
 
 func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
 	return get_character_position(index, total, button_size)
@@ -371,13 +370,13 @@ func get_character_position(index: int, total: int, button_size: Vector2) -> Vec
 	var reserved_bottom: float = get_bottom_panel_reserved_height()
 	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
 
-	var base_x: float = 70.0
-	var gap_x: float = 24.0
+	var base_x: float = 64.0
+	var gap_x: float = 18.0
 
 	var x: float = base_x + (float(index) * (button_size.x + gap_x))
 	var y: float = max(
-		58.0,
-		available_height - button_size.y - 8.0
+		36.0,
+		available_height - button_size.y + 22.0
 	)
 
 	var max_x: float = max(32.0, location_layer.size.x - button_size.x - 32.0)
@@ -1295,9 +1294,10 @@ func add_bottom_action(text: String, callback: Callable, disabled: bool = false)
 	button.disabled = disabled
 	button.focus_mode = Control.FOCUS_ALL
 	button.clip_text = true
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	button.custom_minimum_size = Vector2(110, 34)
+	button.custom_minimum_size = Vector2(148, 34)
 
 	if not disabled:
 		button.pressed.connect(callback)
@@ -1305,7 +1305,7 @@ func add_bottom_action(text: String, callback: Callable, disabled: bool = false)
 	LuminariaTheme.apply_content_action_button(button)
 	bottom_actions.add_child(button)
 	return button
-
+	
 func clear_bottom_actions() -> void:
 	clear_children(bottom_actions)
 
@@ -1355,6 +1355,7 @@ func get_location_scale() -> float:
 
 func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
+	layout_bottom_panel()
 	layout_overlay_controls()
 	reposition_character_buttons()
 
