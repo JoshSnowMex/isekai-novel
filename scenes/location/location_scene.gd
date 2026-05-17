@@ -26,7 +26,7 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const CHARACTER_BASE_SIZE := Vector2(132.0, 210.0)
+const CHARACTER_BASE_SIZE := Vector2(190.0, 300.0)
 
 
 func _ready() -> void:
@@ -737,7 +737,7 @@ func interact_npc(npc_id: String) -> void:
 		var can_start_special: bool = RelationshipSystem.can_start_step(npc_id, step_id)
 
 		add_bottom_action(
-			"Avance: %s" % step.get("name", step_id),
+			"Avance",
 			func(): SceneRouter.go_to_date(npc_id, "", "special", step_id),
 			GameManager.is_day_exhausted() or not can_start_special
 		)
@@ -1281,7 +1281,9 @@ func add_bottom_action(text: String, callback: Callable, disabled: bool = false)
 	button.text = text
 	button.disabled = disabled
 	button.focus_mode = Control.FOCUS_ALL
+	button.clip_text = true
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	button.custom_minimum_size = Vector2(110, 34)
 
 	if not disabled:
