@@ -10,7 +10,7 @@ var bottom_panel: PanelContainer
 var bottom_title_label: Label
 var bottom_description_scroll: ScrollContainer
 var bottom_description_label: Label
-var bottom_actions: HBoxContainer
+var bottom_actions: GridContainer
 var global_action_panel: WorldActionPanel
 var modal_layer: ColorRect
 var modal_panel: PanelContainer
@@ -26,7 +26,7 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(210.0, 300.0)
+const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(250.0, 360.0)
 const NPC_PRESENCE_FRAME_PATH := "res://assets/ui/npc_presence_frame.png"
 
 
@@ -114,7 +114,7 @@ func build_global_action_panel() -> void:
 
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(980, 224)
+	bottom_panel.custom_minimum_size = Vector2(980, 250)
 	bottom_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	location_layer.add_child(bottom_panel)
 
@@ -164,14 +164,15 @@ func build_bottom_panel() -> void:
 	LuminariaTheme.apply_content_body(bottom_description_label)
 	bottom_description_scroll.add_child(bottom_description_label)
 
-	bottom_actions = HBoxContainer.new()
-	bottom_actions.custom_minimum_size = Vector2(1, 40)
+	bottom_actions = GridContainer.new()
+	bottom_actions.columns = 3
+	bottom_actions.custom_minimum_size = Vector2(1, 82)
 	bottom_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bottom_actions.size_flags_vertical = Control.SIZE_SHRINK_END
-	bottom_actions.alignment = BoxContainer.ALIGNMENT_CENTER
-	bottom_actions.add_theme_constant_override("separation", 8)
+	bottom_actions.add_theme_constant_override("h_separation", 8)
+	bottom_actions.add_theme_constant_override("v_separation", 6)
 	box.add_child(bottom_actions)
-
+	
 func layout_bottom_panel() -> void:
 	if bottom_panel == null or location_layer == null:
 		return
@@ -268,7 +269,6 @@ func handle_npc_no_longer_available(npc_id: String) -> void:
 	)
 
 func create_character_button(npc_id: String, index: int, total: int) -> void:
-	var npc: Dictionary = DataManager.get_npc(npc_id)
 	var known: bool = is_npc_known(npc_id)
 	var display_name: String = get_npc_display_name(npc_id)
 
@@ -277,6 +277,10 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.focus_mode = Control.FOCUS_ALL
 	button.tooltip_text = display_name
 	button.set_meta("npc_id", npc_id)
+	button.add_theme_stylebox_override("normal", LuminariaTheme.make_transparent_style())
+	button.add_theme_stylebox_override("hover", LuminariaTheme.make_transparent_style())
+	button.add_theme_stylebox_override("pressed", LuminariaTheme.make_transparent_style())
+	button.add_theme_stylebox_override("focus", LuminariaTheme.make_transparent_style())
 	button.mouse_entered.connect(func(): show_character_preview(npc_id))
 	button.focus_entered.connect(func(): show_character_preview(npc_id))
 	button.pressed.connect(func(): select_npc(npc_id))
@@ -288,6 +292,23 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.position = card_position
 	button.custom_minimum_size = card_size
 	button.size = card_size
+
+	var selection_glow: PanelContainer = PanelContainer.new()
+	selection_glow.position = Vector2(card_size.x * 0.015, card_size.y * 0.015)
+	selection_glow.size = Vector2(card_size.x * 0.97, card_size.y * 0.97)
+	selection_glow.custom_minimum_size = selection_glow.size
+	selection_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	selection_glow.visible = selected_npc_id == npc_id
+
+	var glow_style: StyleBoxFlat = StyleBoxFlat.new()
+	glow_style.bg_color = Color(0.55, 0.24, 1.0, 0.10)
+	glow_style.border_color = Color(0.82, 0.58, 1.0, 0.95)
+	glow_style.set_border_width_all(3)
+	glow_style.set_corner_radius_all(14)
+	glow_style.shadow_color = Color(0.65, 0.32, 1.0, 0.55)
+	glow_style.shadow_size = 16
+	selection_glow.add_theme_stylebox_override("panel", glow_style)
+	button.add_child(selection_glow)
 
 	var frame: Control = VisualAsset.make_texture_or_placeholder(
 		NPC_PRESENCE_FRAME_PATH,
@@ -301,17 +322,14 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.add_child(frame)
 
 	var portrait_area: Control = Control.new()
-	portrait_area.position = Vector2(card_size.x * 0.13, card_size.y * 0.10)
-	portrait_area.size = Vector2(card_size.x * 0.74, card_size.y * 0.70)
+	portrait_area.position = Vector2(card_size.x * 0.105, card_size.y * 0.155)
+	portrait_area.size = Vector2(card_size.x * 0.79, card_size.y * 0.635)
 	portrait_area.clip_contents = true
 	portrait_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(portrait_area)
 
 	var portrait_path: String = get_npc_presence_portrait_path(npc_id)
 	var portrait_title: String = display_name
-
-	if not known:
-		portrait_title = "???"
 
 	var portrait: Control = VisualAsset.make_texture_or_placeholder(
 		portrait_path,
@@ -329,22 +347,13 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	if not known:
 		var veil: ColorRect = ColorRect.new()
 		veil.set_anchors_preset(Control.PRESET_FULL_RECT)
-		veil.color = Color(0.02, 0.015, 0.045, 0.52)
+		veil.color = Color(0.02, 0.015, 0.045, 0.48)
 		veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		portrait_area.add_child(veil)
 
-		var unknown_label: Label = Label.new()
-		unknown_label.set_anchors_preset(Control.PRESET_FULL_RECT)
-		unknown_label.text = "???"
-		unknown_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		unknown_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		unknown_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		LuminariaTheme.apply_content_title(unknown_label)
-		portrait_area.add_child(unknown_label)
-
 	var name_label: Label = Label.new()
-	name_label.position = Vector2(card_size.x * 0.10, card_size.y * 0.80)
-	name_label.size = Vector2(card_size.x * 0.80, card_size.y * 0.12)
+	name_label.position = Vector2(card_size.x * 0.12, card_size.y * 0.835)
+	name_label.size = Vector2(card_size.x * 0.76, card_size.y * 0.085)
 	name_label.text = display_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -355,6 +364,7 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.add_child(name_label)
 
 	button.set_meta("name_label", name_label)
+	button.set_meta("selection_glow", selection_glow)
 	
 func get_npc_presence_portrait_path(npc_id: String) -> String:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
@@ -371,19 +381,19 @@ func get_scaled_character_size() -> Vector2:
 		location_layer.size.y / BASE_LOCATION_SIZE.y
 	)
 
-	scale_factor = clamp(scale_factor, 0.82, 1.02)
+	scale_factor = clamp(scale_factor, 0.78, 1.0)
 
 	return NPC_PRESENCE_CARD_BASE_SIZE * scale_factor
 	
 func get_bottom_panel_reserved_height() -> float:
-	return 244.0
+	return 270.0
 
 func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
 	return get_character_position(index, total, button_size)
 
 func get_character_position(index: int, total: int, button_size: Vector2) -> Vector2:
 	var reserved_bottom: float = get_bottom_panel_reserved_height()
-	var available_height: float = max(240.0, location_layer.size.y - reserved_bottom)
+	var available_height: float = max(260.0, location_layer.size.y - reserved_bottom)
 
 	var gap_x: float = 18.0
 	var total_width: float = (button_size.x * float(total)) + (gap_x * float(max(total - 1, 0)))
@@ -391,7 +401,7 @@ func get_character_position(index: int, total: int, button_size: Vector2) -> Vec
 	var start_x: float = (location_layer.size.x - total_width) * 0.5
 	var x: float = start_x + (float(index) * (button_size.x + gap_x))
 
-	var y: float = available_height - button_size.y + 12.0
+	var y: float = available_height - button_size.y + 18.0
 
 	var min_x: float = 28.0
 	var max_x: float = max(min_x, location_layer.size.x - button_size.x - 28.0)
@@ -721,9 +731,9 @@ func select_npc(npc_id: String) -> void:
 		GameManager.current_time_block
 	])
 
-	refresh_character_labels()
+	rebuild_characters()
 	interact_npc(npc_id)
-
+	
 func refresh_character_labels() -> void:
 	for character_button in character_layer.get_children():
 		if not character_button.has_meta("npc_id"):
@@ -731,9 +741,13 @@ func refresh_character_labels() -> void:
 
 		var npc_id: String = str(character_button.get_meta("npc_id"))
 		var label: Label = character_button.get_meta("name_label") as Label
+		var selection_glow: Control = character_button.get_meta("selection_glow") as Control
 
 		if label != null:
 			label.text = get_npc_display_name(npc_id)
+
+		if selection_glow != null:
+			selection_glow.visible = selected_npc_id == npc_id
 
 		character_button.tooltip_text = get_npc_display_name(npc_id)
 		
@@ -1310,9 +1324,9 @@ func add_bottom_action(text: String, callback: Callable, disabled: bool = false)
 	button.focus_mode = Control.FOCUS_ALL
 	button.clip_text = true
 	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	button.custom_minimum_size = Vector2(148, 34)
+	button.custom_minimum_size = Vector2(1, 34)
 
 	if not disabled:
 		button.pressed.connect(callback)
@@ -1414,9 +1428,9 @@ func layout_overlay_controls() -> void:
 		margin
 	)
 
-	var bottom_margin: float = 18.0
-	var bottom_height: float = min(210.0, max(176.0, location_layer.size.y * 0.34))
-	var bottom_width: float = min(900.0, max(620.0, location_layer.size.x - 24.0))
+	var bottom_margin: float = 12.0
+	var bottom_height: float = min(250.0, max(218.0, location_layer.size.y * 0.39))
+	var bottom_width: float = min(980.0, max(760.0, location_layer.size.x - 72.0))
 
 	bottom_panel.size = Vector2(bottom_width, bottom_height)
 	bottom_panel.position = Vector2(
@@ -1435,7 +1449,7 @@ func layout_overlay_controls() -> void:
 			(location_layer.size.x - modal_width) / 2.0,
 			(location_layer.size.y - modal_height) / 2.0
 		)
-
+		
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
 		if location_layer != null:
