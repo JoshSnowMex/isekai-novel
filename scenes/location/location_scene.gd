@@ -26,7 +26,8 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const CHARACTER_BASE_SIZE := Vector2(190.0, 300.0)
+const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(210.0, 300.0)
+const NPC_PRESENCE_FRAME_PATH := "res://assets/ui/npc_presence_frame.png"
 
 
 func _ready() -> void:
@@ -268,7 +269,6 @@ func handle_npc_no_longer_available(npc_id: String) -> void:
 
 func create_character_button(npc_id: String, index: int, total: int) -> void:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
-	var npc_ui: Dictionary = DataManager.get_npc_ui(npc_id)
 	var known: bool = is_npc_known(npc_id)
 	var display_name: String = get_npc_display_name(npc_id)
 
@@ -282,62 +282,88 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.pressed.connect(func(): select_npc(npc_id))
 	character_layer.add_child(button)
 
-	var button_size: Vector2 = get_scaled_character_size()
-	var button_position: Vector2 = get_stable_character_position(npc_id, index, total, button_size)
+	var card_size: Vector2 = get_scaled_character_size()
+	var card_position: Vector2 = get_stable_character_position(npc_id, index, total, card_size)
 
-	button.position = button_position
-	button.custom_minimum_size = button_size
-	button.size = button_size
+	button.position = card_position
+	button.custom_minimum_size = card_size
+	button.size = card_size
 
-	var sprite_path: String = str(npc_ui.get("map_sprite", npc_ui.get("talking", npc_ui.get("portrait", ""))))
-	var final_asset_name: String = sprite_path.get_file()
+	var frame: Control = VisualAsset.make_texture_or_placeholder(
+		NPC_PRESENCE_FRAME_PATH,
+		"Encuentro",
+		"Frame final: npc_presence_frame.png"
+	)
+	frame.position = Vector2.ZERO
+	frame.size = card_size
+	frame.custom_minimum_size = card_size
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(frame)
 
-	if final_asset_name == "":
-		final_asset_name = "%s_location_sprite.png" % npc_id.capitalize()
+	var portrait_area: Control = Control.new()
+	portrait_area.position = Vector2(card_size.x * 0.13, card_size.y * 0.10)
+	portrait_area.size = Vector2(card_size.x * 0.74, card_size.y * 0.70)
+	portrait_area.clip_contents = true
+	portrait_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(portrait_area)
 
-	var sprite_title: String = display_name
+	var portrait_path: String = get_npc_presence_portrait_path(npc_id)
+	var portrait_title: String = display_name
 
 	if not known:
-		sprite_title = "???"
+		portrait_title = "???"
 
-	var sprite: Control = VisualAsset.make_texture_or_placeholder(
-		sprite_path,
-		sprite_title,
-		"Sprite final: %s" % final_asset_name
+	var portrait: Control = VisualAsset.make_texture_or_placeholder(
+		portrait_path,
+		portrait_title,
+		"Portrait final: %s_presence_portrait.png" % npc_id.capitalize()
 	)
+	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
+	portrait.offset_left = 0
+	portrait.offset_top = 0
+	portrait.offset_right = 0
+	portrait.offset_bottom = 0
+	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	portrait_area.add_child(portrait)
 
-	sprite.position = Vector2(0, 0)
-	sprite.size = Vector2(button_size.x, button_size.y - 34.0)
-	sprite.custom_minimum_size = sprite.size
-	button.add_child(sprite)
+	if not known:
+		var veil: ColorRect = ColorRect.new()
+		veil.set_anchors_preset(Control.PRESET_FULL_RECT)
+		veil.color = Color(0.02, 0.015, 0.045, 0.52)
+		veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		portrait_area.add_child(veil)
 
-	var name_plate: PanelContainer = PanelContainer.new()
-	name_plate.position = Vector2(0, button_size.y - 34.0)
-	name_plate.size = Vector2(button_size.x, 34.0)
-	name_plate.custom_minimum_size = name_plate.size
-	button.add_child(name_plate)
-
-	var name_margin: MarginContainer = MarginContainer.new()
-	name_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	name_margin.offset_left = 0
-	name_margin.offset_top = 0
-	name_margin.offset_right = 0
-	name_margin.offset_bottom = 0
-	name_margin.add_theme_constant_override("margin_left", 6)
-	name_margin.add_theme_constant_override("margin_top", 3)
-	name_margin.add_theme_constant_override("margin_right", 6)
-	name_margin.add_theme_constant_override("margin_bottom", 3)
-	name_plate.add_child(name_margin)
+		var unknown_label: Label = Label.new()
+		unknown_label.set_anchors_preset(Control.PRESET_FULL_RECT)
+		unknown_label.text = "???"
+		unknown_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		unknown_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		unknown_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		LuminariaTheme.apply_content_title(unknown_label)
+		portrait_area.add_child(unknown_label)
 
 	var name_label: Label = Label.new()
+	name_label.position = Vector2(card_size.x * 0.10, card_size.y * 0.80)
+	name_label.size = Vector2(card_size.x * 0.80, card_size.y * 0.12)
 	name_label.text = display_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	name_label.clip_text = true
-	name_margin.add_child(name_label)
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	LuminariaTheme.apply_content_title(name_label)
+	button.add_child(name_label)
 
 	button.set_meta("name_label", name_label)
+	
+func get_npc_presence_portrait_path(npc_id: String) -> String:
+	var npc: Dictionary = DataManager.get_npc(npc_id)
+	var npc_name: String = str(npc.get("name", npc_id))
+
+	if npc_name != "":
+		return "res://assets/portraits/%s_presence_portrait.png" % npc_name
+
+	return "res://assets/portraits/%s_presence_portrait.png" % npc_id.capitalize()
 	
 func get_scaled_character_size() -> Vector2:
 	var scale_factor: float = min(
@@ -345,34 +371,34 @@ func get_scaled_character_size() -> Vector2:
 		location_layer.size.y / BASE_LOCATION_SIZE.y
 	)
 
-	scale_factor = clamp(scale_factor, 0.86, 1.08)
+	scale_factor = clamp(scale_factor, 0.82, 1.02)
 
-	return CHARACTER_BASE_SIZE * scale_factor
+	return NPC_PRESENCE_CARD_BASE_SIZE * scale_factor
 	
 func get_bottom_panel_reserved_height() -> float:
-	return 224.0
+	return 244.0
 
 func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
 	return get_character_position(index, total, button_size)
 
 func get_character_position(index: int, total: int, button_size: Vector2) -> Vector2:
 	var reserved_bottom: float = get_bottom_panel_reserved_height()
-	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
+	var available_height: float = max(240.0, location_layer.size.y - reserved_bottom)
 
-	var base_x: float = 70.0
-	var gap_x: float = 24.0
+	var gap_x: float = 18.0
+	var total_width: float = (button_size.x * float(total)) + (gap_x * float(max(total - 1, 0)))
 
-	var x: float = base_x + (float(index) * (button_size.x + gap_x))
-	var y: float = max(
-		36.0,
-		available_height - button_size.y + 22.0
-	)
+	var start_x: float = (location_layer.size.x - total_width) * 0.5
+	var x: float = start_x + (float(index) * (button_size.x + gap_x))
 
-	var max_x: float = max(32.0, location_layer.size.x - button_size.x - 32.0)
+	var y: float = available_height - button_size.y + 12.0
+
+	var min_x: float = 28.0
+	var max_x: float = max(min_x, location_layer.size.x - button_size.x - 28.0)
 
 	return Vector2(
-		clamp(x, 32.0, max_x),
-		y
+		clamp(x, min_x, max_x),
+		max(34.0, y)
 	)
 	
 func show_location_overview(location_data: Dictionary, clear_message: bool = false) -> void:
