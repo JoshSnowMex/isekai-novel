@@ -26,7 +26,7 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const CHARACTER_BASE_SIZE := Vector2(260.0, 390.0)
+const CHARACTER_BASE_SIZE := Vector2(190.0, 300.0)
 
 
 func _ready() -> void:
@@ -359,20 +359,19 @@ func get_character_position(index: int, total: int, button_size: Vector2) -> Vec
 	var reserved_bottom: float = get_bottom_panel_reserved_height()
 	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
 
+	var base_x: float = 70.0
 	var gap_x: float = 24.0
-	var total_width: float = (button_size.x * float(total)) + (gap_x * float(max(total - 1, 0)))
-	var start_x: float = max(42.0, (location_layer.size.x - total_width) * 0.5)
 
-	var x: float = start_x + (float(index) * (button_size.x + gap_x))
+	var x: float = base_x + (float(index) * (button_size.x + gap_x))
 	var y: float = max(
-		18.0,
-		available_height - button_size.y + 44.0
+		36.0,
+		available_height - button_size.y + 22.0
 	)
 
-	var max_x: float = max(42.0, location_layer.size.x - button_size.x - 42.0)
+	var max_x: float = max(32.0, location_layer.size.x - button_size.x - 32.0)
 
 	return Vector2(
-		clamp(x, 42.0, max_x),
+		clamp(x, 32.0, max_x),
 		y
 	)
 	
@@ -1389,14 +1388,14 @@ func layout_overlay_controls() -> void:
 		margin
 	)
 
-	var bottom_margin: float = 0.0
-	var bottom_height: float = 224.0
-	var bottom_width: float = location_layer.size.x
+	var bottom_margin: float = 18.0
+	var bottom_height: float = min(210.0, max(176.0, location_layer.size.y * 0.34))
+	var bottom_width: float = min(900.0, max(620.0, location_layer.size.x - 24.0))
 
 	bottom_panel.size = Vector2(bottom_width, bottom_height)
 	bottom_panel.position = Vector2(
-		0.0,
-		location_layer.size.y - bottom_height - bottom_margin
+		(location_layer.size.x - bottom_width) / 2.0,
+		max(8.0, location_layer.size.y - bottom_height - bottom_margin)
 	)
 	
 	if modal_layer != null:
