@@ -26,7 +26,7 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const CHARACTER_BASE_SIZE := Vector2(230.0, 330.0)
+const CHARACTER_BASE_SIZE := Vector2(260.0, 390.0)
 
 
 func _ready() -> void:
@@ -289,25 +289,6 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.custom_minimum_size = button_size
 	button.size = button_size
 
-	var root_margin: MarginContainer = MarginContainer.new()
-	root_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	root_margin.offset_left = 0
-	root_margin.offset_top = 0
-	root_margin.offset_right = 0
-	root_margin.offset_bottom = 0
-	root_margin.add_theme_constant_override("margin_left", 2)
-	root_margin.add_theme_constant_override("margin_top", 2)
-	root_margin.add_theme_constant_override("margin_right", 2)
-	root_margin.add_theme_constant_override("margin_bottom", 2)
-	button.add_child(root_margin)
-
-	var box: VBoxContainer = VBoxContainer.new()
-	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.alignment = BoxContainer.ALIGNMENT_END
-	box.add_theme_constant_override("separation", 4)
-	root_margin.add_child(box)
-
 	var sprite_path: String = str(npc_ui.get("map_sprite", npc_ui.get("talking", npc_ui.get("portrait", ""))))
 	var final_asset_name: String = sprite_path.get_file()
 
@@ -324,15 +305,24 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 		sprite_title,
 		"Sprite final: %s" % final_asset_name
 	)
-	sprite.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	sprite.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	box.add_child(sprite)
+
+	sprite.position = Vector2(0, 0)
+	sprite.size = Vector2(button_size.x, button_size.y - 34.0)
+	sprite.custom_minimum_size = sprite.size
+	button.add_child(sprite)
 
 	var name_plate: PanelContainer = PanelContainer.new()
-	name_plate.custom_minimum_size = Vector2(1, 34)
-	box.add_child(name_plate)
+	name_plate.position = Vector2(0, button_size.y - 34.0)
+	name_plate.size = Vector2(button_size.x, 34.0)
+	name_plate.custom_minimum_size = name_plate.size
+	button.add_child(name_plate)
 
 	var name_margin: MarginContainer = MarginContainer.new()
+	name_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	name_margin.offset_left = 0
+	name_margin.offset_top = 0
+	name_margin.offset_right = 0
+	name_margin.offset_bottom = 0
 	name_margin.add_theme_constant_override("margin_left", 6)
 	name_margin.add_theme_constant_override("margin_top", 3)
 	name_margin.add_theme_constant_override("margin_right", 6)
@@ -348,7 +338,7 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	name_margin.add_child(name_label)
 
 	button.set_meta("name_label", name_label)
-
+	
 func get_scaled_character_size() -> Vector2:
 	var scale_factor: float = min(
 		location_layer.size.x / BASE_LOCATION_SIZE.x,
@@ -360,29 +350,29 @@ func get_scaled_character_size() -> Vector2:
 	return CHARACTER_BASE_SIZE * scale_factor
 	
 func get_bottom_panel_reserved_height() -> float:
-	return 238.0
+	return 224.0
 
 func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
 	return get_character_position(index, total, button_size)
-
 
 func get_character_position(index: int, total: int, button_size: Vector2) -> Vector2:
 	var reserved_bottom: float = get_bottom_panel_reserved_height()
 	var available_height: float = max(220.0, location_layer.size.y - reserved_bottom)
 
-	var base_x: float = 64.0
-	var gap_x: float = 18.0
+	var gap_x: float = 24.0
+	var total_width: float = (button_size.x * float(total)) + (gap_x * float(max(total - 1, 0)))
+	var start_x: float = max(42.0, (location_layer.size.x - total_width) * 0.5)
 
-	var x: float = base_x + (float(index) * (button_size.x + gap_x))
+	var x: float = start_x + (float(index) * (button_size.x + gap_x))
 	var y: float = max(
-		36.0,
-		available_height - button_size.y + 22.0
+		18.0,
+		available_height - button_size.y + 44.0
 	)
 
-	var max_x: float = max(32.0, location_layer.size.x - button_size.x - 32.0)
+	var max_x: float = max(42.0, location_layer.size.x - button_size.x - 42.0)
 
 	return Vector2(
-		clamp(x, 32.0, max_x),
+		clamp(x, 42.0, max_x),
 		y
 	)
 	
@@ -1355,7 +1345,6 @@ func get_location_scale() -> float:
 
 func refresh_layout_after_frame() -> void:
 	await get_tree().process_frame
-	layout_bottom_panel()
 	layout_overlay_controls()
 	reposition_character_buttons()
 
@@ -1400,21 +1389,14 @@ func layout_overlay_controls() -> void:
 		margin
 	)
 
-	var panel_width: float = min(820.0, max(420.0, location_layer.size.x - 24.0))
-	var panel_height: float = 190.0
-
-	if location_layer.size.x < 760:
-		panel_width = max(360.0, location_layer.size.x - 24.0)
-		panel_height = 206.0
-
-	var bottom_margin: float = 18.0
-	var bottom_height: float = min(210.0, max(176.0, location_layer.size.y * 0.34))
-	var bottom_width: float = min(900.0, max(620.0, location_layer.size.x - 24.0))
+	var bottom_margin: float = 0.0
+	var bottom_height: float = 224.0
+	var bottom_width: float = location_layer.size.x
 
 	bottom_panel.size = Vector2(bottom_width, bottom_height)
 	bottom_panel.position = Vector2(
-		(location_layer.size.x - bottom_width) / 2.0,
-		max(8.0, location_layer.size.y - bottom_height - bottom_margin)
+		0.0,
+		location_layer.size.y - bottom_height - bottom_margin
 	)
 	
 	if modal_layer != null:
