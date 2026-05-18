@@ -332,9 +332,9 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	portrait.texture = VisualAsset.load_texture(get_npc_presence_portrait_path(npc_id))
 	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
 	portrait.offset_left = card_size.x * 0.12
-	portrait.offset_top = card_size.y * 0.11
+	portrait.offset_top = card_size.y * 0.16
 	portrait.offset_right = -card_size.x * 0.12
-	portrait.offset_bottom = -card_size.y * 0.17
+	portrait.offset_bottom = -card_size.y * 0.12
 	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -342,8 +342,8 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	stage.add_child(portrait)
 
 	var name_label: Label = Label.new()
-	name_label.position = Vector2(card_size.x * 0.18, card_size.y * 0.842)
-	name_label.size = Vector2(card_size.x * 0.64, card_size.y * 0.065)
+	name_label.position = Vector2(card_size.x * 0.18, card_size.y * 0.880)
+	name_label.size = Vector2(card_size.x * 0.64, card_size.y * 0.055)
 	name_label.text = display_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
