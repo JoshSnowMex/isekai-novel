@@ -428,15 +428,12 @@ func show_location_overview(location_data: Dictionary, clear_message: bool = fal
 
 	var present_npcs: Array = get_present_npcs()
 
-	for npc_id in present_npcs:
-		add_approach_npc_action(str(npc_id))
-
 	add_location_activity_actions(location_data)
 
 	if present_npcs.is_empty() and not has_location_activity_actions(location_data):
 		add_bottom_action("No hay nada especial que hacer ahora", func(): pass, true)
 		
-	call_deferred("refresh_layout_after_frame")
+		call_deferred("refresh_layout_after_frame")
 
 func add_approach_npc_action(npc_id: String) -> void:
 	var locked_npc_id: String = npc_id
@@ -832,13 +829,25 @@ func show_gift_selection(npc_id: String) -> void:
 	bottom_title_label.text = "Regalo para %s" % npc_name
 
 	if relation.get("gift_given_today", false):
-		bottom_description_label.text = "Ya le diste un regalo hoy."
+		open_compact_info_modal(
+			"Regalo no disponible",
+			"Ya le diste un regalo hoy.",
+			func():
+				close_choice_modal()
+				interact_npc(npc_id)
+		)
 		return
 
 	var gifts: Array = GameManager.get_gift_items_in_inventory()
 
 	if gifts.is_empty():
-		bottom_description_label.text = "No tienes regalos disponibles."
+		open_compact_info_modal(
+			"Sin regalos",
+			"No tienes regalos disponibles.",
+			func():
+				close_choice_modal()
+				interact_npc(npc_id)
+		)
 		return
 
 	gifts.sort_custom(func(a, b):
@@ -858,8 +867,10 @@ func show_gift_selection(npc_id: String) -> void:
 
 	open_choice_modal(
 		"Regalo para %s" % npc_name,
-		"Selecciona un regalo de tu inventario. Los objetos están ordenados por precio para que coincidan mejor con la tienda."
+		"Selecciona un regalo de tu inventario."
 	)
+
+	build_modal_choice_grid(3)
 
 	for entry in gifts:
 		var item_entry: Dictionary = entry
@@ -867,7 +878,7 @@ func show_gift_selection(npc_id: String) -> void:
 		var amount: int = int(item_entry.get("amount", 0))
 		var item_data: Dictionary = DataManager.get_item(item_id)
 
-		add_modal_choice_button(
+		add_modal_grid_button(
 			"%s x%s" % [item_data.get("name", item_id), amount],
 			func(): give_gift(npc_id, item_id)
 		)
@@ -1442,6 +1453,9 @@ func layout_overlay_controls() -> void:
 		if modal_panel != null and modal_panel.has_meta("compact_info_modal"):
 			modal_width = clamp(location_layer.size.x * 0.42, 440.0, 540.0)
 			modal_height = 168.0
+			modal_panel.custom_minimum_size = Vector2(440.0, 168.0)
+		elif modal_panel != null:
+			modal_panel.custom_minimum_size = Vector2(520.0, 280.0)
 
 		modal_panel.size = Vector2(modal_width, modal_height)
 		modal_panel.position = Vector2(
@@ -1476,7 +1490,7 @@ func build_modal() -> void:
 	location_layer.add_child(modal_layer)
 
 	modal_panel = PanelContainer.new()
-	modal_panel.custom_minimum_size = Vector2(520, 360)
+	modal_panel.custom_minimum_size = Vector2(520, 220)
 	modal_layer.add_child(modal_panel)
 	
 	modal_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
@@ -1571,7 +1585,43 @@ func close_choice_modal() -> void:
 	if modal_layer != null:
 		modal_layer.visible = false
 
+func build_modal_choice_grid(columns: int = 3) -> GridContainer:
+	clear_children(modal_buttons)
 
+	var grid: GridContainer = GridContainer.new()
+	grid.columns = columns
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	modal_buttons.add_child(grid)
+
+	return grid
+
+
+func add_modal_grid_button(text: String, callback: Callable) -> Button:
+	var grid: GridContainer = null
+
+	if modal_buttons.get_child_count() > 0 and modal_buttons.get_child(0) is GridContainer:
+		grid = modal_buttons.get_child(0) as GridContainer
+
+	if grid == null:
+		grid = build_modal_choice_grid(3)
+
+	var button: Button = Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_ALL
+	button.clip_text = true
+	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	button.custom_minimum_size = Vector2(1, 42)
+	button.pressed.connect(callback)
+	LuminariaTheme.apply_content_action_button(button)
+
+	grid.add_child(button)
+	return button
+	
 func add_modal_choice_button(text: String, callback: Callable) -> Button:
 	var button: Button = Button.new()
 	button.text = text
@@ -1580,7 +1630,7 @@ func add_modal_choice_button(text: String, callback: Callable) -> Button:
 	button.custom_minimum_size = Vector2(1, 48)
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	button.pressed.connect(callback)
-
+	LuminariaTheme.apply_content_action_button(button)
 	modal_buttons.add_child(button)
 	return button
 
@@ -1591,7 +1641,7 @@ func add_modal_footer_button(text: String, callback: Callable) -> Button:
 	button.focus_mode = Control.FOCUS_ALL
 	button.pressed.connect(callback)
 	LuminariaTheme.apply_content_action_button(button)
-	button.custom_minimum_size = Vector2(190, 40)
+	button.custom_minimum_size = Vector2(190, 36)
 
 	modal_footer.add_child(button)
 	return button
