@@ -26,7 +26,7 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(230.0, 332.0)
+const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(222.0, 320.0)
 const NPC_PRESENCE_FRAME_PATH := "res://assets/ui/npc_presence_frame.png"
 
 
@@ -114,7 +114,7 @@ func build_global_action_panel() -> void:
 
 func build_bottom_panel() -> void:
 	bottom_panel = PanelContainer.new()
-	bottom_panel.custom_minimum_size = Vector2(980, 250)
+	bottom_panel.custom_minimum_size = Vector2(980, 224)
 	bottom_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
 	location_layer.add_child(bottom_panel)
 
@@ -130,7 +130,7 @@ func build_bottom_panel() -> void:
 	margin.add_theme_constant_override("margin_left", 30)
 	margin.add_theme_constant_override("margin_top", 22)
 	margin.add_theme_constant_override("margin_right", 30)
-	margin.add_theme_constant_override("margin_bottom", 22)
+	margin.add_theme_constant_override("margin_bottom", 18)
 	bottom_panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
@@ -153,20 +153,21 @@ func build_bottom_panel() -> void:
 	bottom_description_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bottom_description_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bottom_description_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	bottom_description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	bottom_description_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	box.add_child(bottom_description_scroll)
 
 	bottom_description_label = Label.new()
 	bottom_description_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	bottom_description_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	bottom_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	bottom_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	bottom_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	bottom_description_label.clip_text = true
 	LuminariaTheme.apply_content_body(bottom_description_label)
 	bottom_description_scroll.add_child(bottom_description_label)
 
 	bottom_actions = GridContainer.new()
 	bottom_actions.columns = 3
-	bottom_actions.custom_minimum_size = Vector2(1, 82)
+	bottom_actions.custom_minimum_size = Vector2(1, 42)
 	bottom_actions.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bottom_actions.size_flags_vertical = Control.SIZE_SHRINK_END
 	bottom_actions.add_theme_constant_override("h_separation", 8)
@@ -273,18 +274,17 @@ func handle_npc_no_longer_available(npc_id: String) -> void:
 	)
 
 func create_character_button(npc_id: String, index: int, total: int) -> void:
-	var known: bool = is_npc_known(npc_id)
 	var display_name: String = get_npc_display_name(npc_id)
+	var is_selected: bool = selected_npc_id == npc_id
 
 	var button: Button = Button.new()
 	button.flat = true
 	button.focus_mode = Control.FOCUS_ALL
 	button.tooltip_text = display_name
+	button.text = ""
+	button.clip_contents = false
 	button.set_meta("npc_id", npc_id)
-	button.add_theme_stylebox_override("normal", LuminariaTheme.make_transparent_style())
-	button.add_theme_stylebox_override("hover", LuminariaTheme.make_transparent_style())
-	button.add_theme_stylebox_override("pressed", LuminariaTheme.make_transparent_style())
-	button.add_theme_stylebox_override("focus", LuminariaTheme.make_transparent_style())
+	LuminariaTheme.apply_transparent_button(button)
 	button.mouse_entered.connect(func(): show_character_preview(npc_id))
 	button.focus_entered.connect(func(): show_character_preview(npc_id))
 	button.pressed.connect(func(): select_npc(npc_id))
@@ -297,59 +297,64 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.custom_minimum_size = card_size
 	button.size = card_size
 
-	var selection_glow: PanelContainer = PanelContainer.new()
-	selection_glow.position = Vector2(card_size.x * 0.025, card_size.y * 0.025)
-	selection_glow.size = Vector2(card_size.x * 0.95, card_size.y * 0.95)
-	selection_glow.custom_minimum_size = selection_glow.size
-	selection_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	selection_glow.visible = selected_npc_id == npc_id
+	var stage: Control = Control.new()
+	stage.set_anchors_preset(Control.PRESET_FULL_RECT)
+	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(stage)
 
-	var glow_style: StyleBoxFlat = StyleBoxFlat.new()
-	glow_style.bg_color = Color(0.0, 0.0, 0.0, 0.0)
-	glow_style.border_color = Color(0.82, 0.45, 1.0, 0.88)
-	glow_style.set_border_width_all(2)
-	glow_style.set_corner_radius_all(16)
-	glow_style.shadow_color = Color(0.72, 0.25, 1.0, 0.55)
-	glow_style.shadow_size = 18
-	selection_glow.add_theme_stylebox_override("panel", glow_style)
-	button.add_child(selection_glow)
+	var selection_backlight: ColorRect = ColorRect.new()
+	selection_backlight.set_anchors_preset(Control.PRESET_FULL_RECT)
+	selection_backlight.offset_left = card_size.x * 0.08
+	selection_backlight.offset_top = card_size.y * 0.08
+	selection_backlight.offset_right = -card_size.x * 0.08
+	selection_backlight.offset_bottom = -card_size.y * 0.08
+	selection_backlight.color = Color(0.55, 0.18, 1.0, 0.20)
+	selection_backlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	selection_backlight.visible = is_selected
+	stage.add_child(selection_backlight)
 
-	var portrait_area: Control = Control.new()
-	portrait_area.position = Vector2(card_size.x * 0.105, card_size.y * 0.125)
-	portrait_area.size = Vector2(card_size.x * 0.79, card_size.y * 0.695)
-	portrait_area.clip_contents = true
-	portrait_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	button.add_child(portrait_area)
+	var portrait: TextureRect = TextureRect.new()
+	portrait.texture = VisualAsset.load_texture(get_npc_presence_portrait_path(npc_id))
+	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
+	portrait.offset_left = card_size.x * 0.16
+	portrait.offset_top = card_size.y * 0.16
+	portrait.offset_right = -card_size.x * 0.16
+	portrait.offset_bottom = -card_size.y * 0.18
+	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	portrait.modulate = Color(1.08, 1.03, 1.12, 1.0) if is_selected else Color(0.92, 0.90, 0.96, 1.0)
+	stage.add_child(portrait)
 
-	var portrait_path: String = get_npc_presence_portrait_path(npc_id)
-	var portrait: Control = make_npc_presence_portrait(portrait_path, display_name)
-	portrait_area.add_child(portrait)
-
-	var frame: Control = VisualAsset.make_texture_or_placeholder(
-		NPC_PRESENCE_FRAME_PATH,
-		"Encuentro",
-		"Frame final: npc_presence_frame.png"
-	)
-	frame.position = Vector2.ZERO
-	frame.size = card_size
-	frame.custom_minimum_size = card_size
+	var frame: TextureRect = TextureRect.new()
+	frame.texture = VisualAsset.load_texture(NPC_PRESENCE_FRAME_PATH)
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame.offset_left = 0
+	frame.offset_top = 0
+	frame.offset_right = 0
+	frame.offset_bottom = 0
+	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame.stretch_mode = TextureRect.STRETCH_SCALE
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	button.add_child(frame)
+	frame.modulate = Color(1.08, 0.82, 1.22, 1.0) if is_selected else Color(0.88, 0.78, 1.0, 1.0)
+	stage.add_child(frame)
 
 	var name_label: Label = Label.new()
-	name_label.position = Vector2(card_size.x * 0.14, card_size.y * 0.835)
-	name_label.size = Vector2(card_size.x * 0.72, card_size.y * 0.075)
+	name_label.position = Vector2(card_size.x * 0.18, card_size.y * 0.842)
+	name_label.size = Vector2(card_size.x * 0.64, card_size.y * 0.065)
 	name_label.text = display_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	name_label.clip_text = true
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	LuminariaTheme.apply_content_title(name_label)
-	button.add_child(name_label)
+	LuminariaTheme.apply_label(name_label, 15, Color(0.98, 0.90, 1.0, 1.0), 2)
+	stage.add_child(name_label)
 
 	button.set_meta("name_label", name_label)
-	button.set_meta("selection_glow", selection_glow)
+	button.set_meta("selection_backlight", selection_backlight)
+	button.set_meta("frame", frame)
+	button.set_meta("portrait", portrait)
 	
 func get_npc_presence_portrait_path(npc_id: String) -> String:
 	var npc: Dictionary = DataManager.get_npc(npc_id)
@@ -360,36 +365,21 @@ func get_npc_presence_portrait_path(npc_id: String) -> String:
 
 	return "res://assets/portraits/%s_presence_portrait.png" % npc_id.capitalize()
 
-func make_npc_presence_portrait(path: String, title: String) -> Control:
-	var texture: Texture2D = VisualAsset.load_texture(path)
-
-	if texture == null:
-		return VisualAsset.make_placeholder_panel(title, "Portrait final: %s" % path.get_file())
-
-	var rect: TextureRect = TextureRect.new()
-	rect.texture = texture
-	rect.set_anchors_preset(Control.PRESET_FULL_RECT)
-	rect.offset_left = 0
-	rect.offset_top = 0
-	rect.offset_right = 0
-	rect.offset_bottom = 0
-	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	return rect
-	
 func get_scaled_character_size() -> Vector2:
+	var safe_width: float = max(location_layer.size.x, BASE_LOCATION_SIZE.x)
+	var safe_height: float = max(location_layer.size.y, BASE_LOCATION_SIZE.y)
+
 	var scale_factor: float = min(
-		location_layer.size.x / BASE_LOCATION_SIZE.x,
-		location_layer.size.y / BASE_LOCATION_SIZE.y
+		safe_width / BASE_LOCATION_SIZE.x,
+		safe_height / BASE_LOCATION_SIZE.y
 	)
 
-	scale_factor = clamp(scale_factor, 0.78, 1.0)
+	scale_factor = clamp(scale_factor, 0.92, 1.0)
 
 	return NPC_PRESENCE_CARD_BASE_SIZE * scale_factor
 	
 func get_bottom_panel_reserved_height() -> float:
-	return 270.0
+	return 238.0
 
 func get_stable_character_position(npc_id: String, index: int, total: int, button_size: Vector2) -> Vector2:
 	return get_character_position(index, total, button_size)
@@ -402,12 +392,12 @@ func get_character_position(index: int, total: int, button_size: Vector2) -> Vec
 	var total_width: float = (button_size.x * float(total)) + (gap_x * float(max(total - 1, 0)))
 
 	var start_x: float = (location_layer.size.x - total_width) * 0.5
-	var x: float = start_x + (float(index) * (button_size.x + gap_x))
 
 	if total >= 3:
-		x = 32.0 + (float(index) * (button_size.x + gap_x))
+		start_x = max(34.0, min(start_x, 220.0))
 
-	var y: float = available_height - button_size.y + 18.0
+	var x: float = start_x + (float(index) * (button_size.x + gap_x))
+	var y: float = available_height - button_size.y + 8.0
 
 	var min_x: float = 28.0
 	var max_x: float = max(min_x, location_layer.size.x - button_size.x - 28.0)
@@ -420,7 +410,10 @@ func get_character_position(index: int, total: int, button_size: Vector2) -> Vec
 func show_location_overview(location_data: Dictionary, clear_message: bool = false) -> void:
 	selected_npc_id = ""
 	clear_bottom_actions()
-
+	
+	bottom_actions.columns = 3
+	bottom_actions.custom_minimum_size = Vector2(1, 42)
+	
 	if clear_message:
 		last_message = ""
 
@@ -746,14 +739,24 @@ func refresh_character_labels() -> void:
 			continue
 
 		var npc_id: String = str(character_button.get_meta("npc_id"))
+		var is_selected: bool = selected_npc_id == npc_id
+
 		var label: Label = character_button.get_meta("name_label") as Label
-		var selection_glow: Control = character_button.get_meta("selection_glow") as Control
+		var selection_backlight: Control = character_button.get_meta("selection_backlight") as Control
+		var frame: TextureRect = character_button.get_meta("frame") as TextureRect
+		var portrait: TextureRect = character_button.get_meta("portrait") as TextureRect
 
 		if label != null:
 			label.text = get_npc_display_name(npc_id)
 
-		if selection_glow != null:
-			selection_glow.visible = selected_npc_id == npc_id
+		if selection_backlight != null:
+			selection_backlight.visible = is_selected
+
+		if frame != null:
+			frame.modulate = Color(1.08, 0.82, 1.22, 1.0) if is_selected else Color(0.88, 0.78, 1.0, 1.0)
+
+		if portrait != null:
+			portrait.modulate = Color(1.08, 1.03, 1.12, 1.0) if is_selected else Color(0.92, 0.90, 0.96, 1.0)
 
 		character_button.tooltip_text = get_npc_display_name(npc_id)
 		
@@ -764,7 +767,10 @@ func interact_npc(npc_id: String) -> void:
 	var npc_name: String = npc.get("name", npc_id)
 
 	bottom_title_label.text = npc_name
-	bottom_description_label.text = "Elige cómo acercarte a %s. Cada acción consume tiempo y puede revelar información nueva." % npc_name
+	bottom_description_label.text = "Elige cómo acercarte a %s." % npc_name
+
+	bottom_actions.columns = 3
+	bottom_actions.custom_minimum_size = Vector2(1, 82)
 
 	add_bottom_action("Hablar", func(): talk_to_npc(npc_id), GameManager.is_day_exhausted())
 	add_bottom_action("Regalar", func(): show_gift_selection(npc_id), GameManager.is_day_exhausted())
@@ -792,12 +798,11 @@ func interact_npc(npc_id: String) -> void:
 		show_location_overview(DataManager.get_location(current_location_id), true)
 		rebuild_characters()
 	)
-	
+
 	call_deferred("refresh_layout_after_frame")
 	
 func show_npc_result(npc_id: String, message: String) -> void:
 	hud_bar.refresh()
-	rebuild_characters()
 
 	if not is_npc_present_here(npc_id):
 		handle_npc_no_longer_available(npc_id)
@@ -1418,8 +1423,8 @@ func layout_overlay_controls() -> void:
 		margin
 	)
 
-	var bottom_margin: float = 12.0
-	var bottom_height: float = min(250.0, max(218.0, location_layer.size.y * 0.39))
+	var bottom_margin: float = 14.0
+	var bottom_height: float = min(224.0, max(184.0, location_layer.size.y * 0.34))
 	var bottom_width: float = min(980.0, max(760.0, location_layer.size.x - 72.0))
 
 	bottom_panel.size = Vector2(bottom_width, bottom_height)
@@ -1431,8 +1436,8 @@ func layout_overlay_controls() -> void:
 	if modal_layer != null:
 		modal_layer.size = location_layer.size
 
-		var modal_width: float = clamp(location_layer.size.x * 0.72, 520.0, 860.0)
-		var modal_height: float = clamp(location_layer.size.y * 0.72, 360.0, 640.0)
+		var modal_width: float = clamp(location_layer.size.x * 0.62, 520.0, 760.0)
+		var modal_height: float = clamp(location_layer.size.y * 0.46, 280.0, 430.0)
 
 		modal_panel.size = Vector2(modal_width, modal_height)
 		modal_panel.position = Vector2(
@@ -1518,6 +1523,16 @@ func build_modal() -> void:
 
 func open_result_modal(title: String, message: String, continue_callback: Callable) -> void:
 	open_choice_modal(title, message)
+
+	if modal_panel != null:
+		var panel_texture: TextureRect = TextureRect.new()
+		panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
+		panel_texture.texture = LuminariaTheme.get_world_info_panel_texture()
+		panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
+		panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		modal_panel.add_child(panel_texture)
+		modal_panel.move_child(panel_texture, 0)
 
 	add_modal_footer_button("Continuar", continue_callback)
 	
