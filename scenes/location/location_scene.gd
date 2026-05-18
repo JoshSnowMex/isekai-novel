@@ -869,8 +869,11 @@ func show_gift_selection(npc_id: String) -> void:
 		"Regalo para %s" % npc_name,
 		"Selecciona un regalo de tu inventario."
 	)
-
-	build_modal_choice_grid(3)
+	
+	if modal_panel != null:
+		modal_panel.set_meta("gift_modal", true)
+		
+	build_modal_choice_grid(4)
 
 	for entry in gifts:
 		var item_entry: Dictionary = entry
@@ -1454,7 +1457,11 @@ func layout_overlay_controls() -> void:
 			modal_width = clamp(location_layer.size.x * 0.42, 440.0, 540.0)
 			modal_height = 168.0
 			modal_panel.custom_minimum_size = Vector2(440.0, 168.0)
-		elif modal_panel != null:
+		elif modal_panel != null and modal_panel.has_meta("gift_modal"):
+			modal_width = clamp(location_layer.size.x * 0.70, 760.0, 900.0)
+			modal_height = clamp(location_layer.size.y * 0.58, 380.0, 500.0)
+			modal_panel.custom_minimum_size = Vector2(760.0, 380.0)
+		else:
 			modal_panel.custom_minimum_size = Vector2(520.0, 280.0)
 
 		modal_panel.size = Vector2(modal_width, modal_height)
@@ -1561,6 +1568,7 @@ func open_choice_modal(title: String, description: String) -> void:
 
 	if modal_panel != null:
 		modal_panel.remove_meta("compact_info_modal")
+		modal_panel.remove_meta("gift_modal")
 		
 	if modal_margin != null:
 		modal_margin.add_theme_constant_override("margin_left", 40)
@@ -1615,7 +1623,7 @@ func add_modal_grid_button(text: String, callback: Callable) -> Button:
 	button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	button.custom_minimum_size = Vector2(1, 42)
+	button.custom_minimum_size = Vector2(1, 38)
 	button.pressed.connect(callback)
 	LuminariaTheme.apply_content_action_button(button)
 
