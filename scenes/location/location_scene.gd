@@ -19,6 +19,7 @@ var modal_description_label: Label
 var modal_scroll: ScrollContainer
 var modal_buttons: VBoxContainer
 var modal_footer: HBoxContainer
+var modal_margin: MarginContainer
 var current_location_id: String = ""
 var last_message: String = ""
 var selected_npc_id: String = ""
@@ -1440,7 +1441,7 @@ func layout_overlay_controls() -> void:
 
 		if modal_panel != null and modal_panel.has_meta("compact_info_modal"):
 			modal_width = clamp(location_layer.size.x * 0.42, 440.0, 540.0)
-			modal_height = 128.0
+			modal_height = 168.0
 
 		modal_panel.size = Vector2(modal_width, modal_height)
 		modal_panel.position = Vector2(
@@ -1488,18 +1489,18 @@ func build_modal() -> void:
 	modal_panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	modal_panel.add_child(modal_panel_texture)
 
-	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 40)
-	margin.add_theme_constant_override("margin_top", 28)
-	margin.add_theme_constant_override("margin_right", 40)
-	margin.add_theme_constant_override("margin_bottom", 28)
-	modal_panel.add_child(margin)
+	var modal_margin = MarginContainer.new()
+	modal_margin.add_theme_constant_override("margin_left", 40)
+	modal_margin.add_theme_constant_override("margin_top", 28)
+	modal_margin.add_theme_constant_override("margin_right", 40)
+	modal_margin.add_theme_constant_override("margin_bottom", 28)
+	modal_panel.add_child(modal_margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	box.add_theme_constant_override("separation", 10)
-	margin.add_child(box)
+	modal_margin.add_child(box)
 
 	modal_title_label = Label.new()
 	modal_title_label.custom_minimum_size = Vector2(1, 28)
@@ -1546,6 +1547,12 @@ func open_choice_modal(title: String, description: String) -> void:
 
 	if modal_panel != null:
 		modal_panel.remove_meta("compact_info_modal")
+		
+	if modal_margin != null:
+		modal_margin.add_theme_constant_override("margin_left", 40)
+		modal_margin.add_theme_constant_override("margin_top", 28)
+		modal_margin.add_theme_constant_override("margin_right", 40)
+		modal_margin.add_theme_constant_override("margin_bottom", 28)
 
 	modal_title_label.custom_minimum_size = Vector2(1, 28)
 	modal_description_label.custom_minimum_size = Vector2(1, 52)
@@ -1611,6 +1618,12 @@ func open_compact_info_modal(title: String, message: String, continue_callback: 
 	if modal_panel != null:
 		modal_panel.set_meta("compact_info_modal", true)
 
+	if modal_margin != null:
+		modal_margin.add_theme_constant_override("margin_left", 34)
+		modal_margin.add_theme_constant_override("margin_top", 16)
+		modal_margin.add_theme_constant_override("margin_right", 34)
+		modal_margin.add_theme_constant_override("margin_bottom", 14)
+	
 	modal_title_label.custom_minimum_size = Vector2(1, 24)
 	modal_description_label.custom_minimum_size = Vector2(1, 48)
 	modal_footer.custom_minimum_size = Vector2(1, 38)
