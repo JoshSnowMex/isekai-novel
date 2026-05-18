@@ -1438,6 +1438,10 @@ func layout_overlay_controls() -> void:
 		var modal_width: float = clamp(location_layer.size.x * 0.62, 520.0, 760.0)
 		var modal_height: float = clamp(location_layer.size.y * 0.46, 280.0, 430.0)
 
+		if modal_panel != null and modal_panel.has_meta("compact_info_modal"):
+			modal_width = clamp(location_layer.size.x * 0.44, 460.0, 580.0)
+			modal_height = clamp(location_layer.size.y * 0.30, 210.0, 270.0)
+
 		modal_panel.size = Vector2(modal_width, modal_height)
 		modal_panel.position = Vector2(
 			(location_layer.size.x - modal_width) / 2.0,
@@ -1541,6 +1545,9 @@ func open_choice_modal(title: String, description: String) -> void:
 	clear_children(modal_buttons)
 	clear_children(modal_footer)
 
+	if modal_panel != null:
+		modal_panel.remove_meta("compact_info_modal")
+
 	modal_title_label.text = title
 	modal_description_label.text = description
 
@@ -1593,8 +1600,17 @@ func build_load_game_modal() -> void:
 	location_layer.add_child(load_game_modal)
 	load_game_modal.hide_modal()
 
+func open_compact_info_modal(title: String, message: String, continue_callback: Callable) -> void:
+	open_choice_modal(title, message)
+
+	if modal_panel != null:
+		modal_panel.set_meta("compact_info_modal", true)
+
+	add_modal_footer_button("Continuar", continue_callback)
+	call_deferred("refresh_layout_after_frame")
+	
 func show_save_confirmation_modal() -> void:
-	open_result_modal(
+	open_compact_info_modal(
 		"Partida guardada",
 		"El progreso fue guardado manualmente.\nPuedes continuar explorando esta zona.",
 		func():
