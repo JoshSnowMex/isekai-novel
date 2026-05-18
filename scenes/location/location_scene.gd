@@ -257,20 +257,12 @@ func get_present_npcs() -> Array:
 func is_npc_present_here(npc_id: String) -> bool:
 	return ScheduleSystem.get_npc_location(npc_id) == current_location_id
 
-
 func handle_npc_no_longer_available(npc_id: String) -> void:
-	var npc: Dictionary = DataManager.get_npc(npc_id)
-	var npc_name: String = str(npc.get("name", npc_id))
-
 	selected_npc_id = ""
-	rebuild_characters()
 	hud_bar.refresh()
-
-	show_location_message(
-		"%s ya no está aquí" % npc_name,
-		"%s se ha marchado según su rutina. Puedes seguir explorando la ubicación o buscarle más tarde." % npc_name
-	)
-
+	rebuild_characters()
+	show_location_overview(DataManager.get_location(current_location_id), true)
+	
 func create_character_button(npc_id: String, index: int, total: int) -> void:
 	var display_name: String = get_npc_display_name(npc_id)
 	var is_selected: bool = selected_npc_id == npc_id
@@ -433,7 +425,7 @@ func show_location_overview(location_data: Dictionary, clear_message: bool = fal
 	if present_npcs.is_empty() and not has_location_activity_actions(location_data):
 		add_bottom_action("No hay nada especial que hacer ahora", func(): pass, true)
 		
-		call_deferred("refresh_layout_after_frame")
+	call_deferred("refresh_layout_after_frame")
 
 func add_approach_npc_action(npc_id: String) -> void:
 	var locked_npc_id: String = npc_id
@@ -819,6 +811,19 @@ func show_npc_result(npc_id: String, message: String) -> void:
 			interact_npc(npc_id)
 	)
 	
+func show_location_result(message: String) -> void:
+	hud_bar.refresh()
+	rebuild_characters()
+
+	open_result_modal(
+		DataManager.get_location(current_location_id).get("name", current_location_id),
+		message,
+		func():
+			close_choice_modal()
+			show_location_overview(DataManager.get_location(current_location_id), true)
+			rebuild_characters()
+	)
+	
 func show_gift_selection(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
 
@@ -890,6 +895,8 @@ func show_gift_selection(npc_id: String) -> void:
 		close_choice_modal()
 		interact_npc(npc_id)
 	)
+
+	call_deferred("refresh_layout_after_frame")
 	
 func show_petitions(npc_id: String) -> void:
 	clear_bottom_actions()
@@ -1153,18 +1160,22 @@ func talk_to_npc(npc_id: String) -> void:
 	SaveManager.autosave_game()
 	show_npc_result(npc_id, message)
 
-
 func do_activity(activity_id: String) -> void:
 	if GameManager.is_day_exhausted():
-		reload_scene("Ya no te queda tiempo útil hoy. Deberías volver a casa y dormir.")
+		open_compact_info_modal(
+			"Sin tiempo",
+			"Ya no te queda tiempo útil hoy. Deberías volver a casa y dormir.",
+			func():
+				close_choice_modal()
+				show_location_overview(DataManager.get_location(current_location_id), true)
+		)
 		return
 
 	var result_message: String = GameManager.perform_activity(activity_id)
 	hud_bar.refresh()
 	rebuild_characters()
 	SaveManager.autosave_game()
-	reload_scene(result_message)
-
+	show_location_result(result_message)
 
 func do_train(location_data: Dictionary) -> void:
 	var stat: String = location_data.get("train_stat", "intellect")
@@ -1172,24 +1183,24 @@ func do_train(location_data: Dictionary) -> void:
 	GameManager.consume_action(10)
 	hud_bar.refresh()
 	rebuild_characters()
-	reload_scene("Entrenas y mejoras %s." % stat)
-
+	SaveManager.autosave_game()
+	show_location_result("Entrenas y mejoras %s." % stat)
 
 func do_work_full() -> void:
 	GameManager.player["money"] += 20
 	GameManager.consume_action(25)
 	hud_bar.refresh()
 	rebuild_characters()
-	reload_scene("Trabajas una jornada completa.\nDinero +20")
-
+	SaveManager.autosave_game()
+	show_location_result("Trabajas una jornada completa.\nDinero +20")
 
 func do_work_half() -> void:
 	GameManager.player["money"] += 10
 	GameManager.consume_action(15)
 	hud_bar.refresh()
 	rebuild_characters()
-	reload_scene("Trabajas medio turno.\nDinero +10")
-
+	SaveManager.autosave_game()
+	show_location_result("Trabajas medio turno.\nDinero +10")
 
 func do_rest() -> void:
 	GameManager.player["stamina"] = min(
@@ -1199,9 +1210,9 @@ func do_rest() -> void:
 	GameManager.consume_action(5)
 	hud_bar.refresh()
 	rebuild_characters()
-	reload_scene("Descansas un momento.\nResistencia +20")
-
-
+	SaveManager.autosave_game()
+	show_location_result("Descansas un momento.\nResistencia +20")
+	
 func perform_petition(petition_id: String) -> void:
 	if not GameManager.can_perform_action(5):
 		reload_scene(GameManager.get_action_blocked_message(5))
@@ -1600,12 +1611,12 @@ func build_modal_choice_grid(columns: int = 3) -> GridContainer:
 	grid.columns = columns
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	grid.custom_minimum_size = Vector2(1, 1)
 	grid.add_theme_constant_override("h_separation", 8)
 	grid.add_theme_constant_override("v_separation", 8)
 	modal_buttons.add_child(grid)
 
 	return grid
-
 
 func add_modal_grid_button(text: String, callback: Callable) -> Button:
 	var grid: GridContainer = null
