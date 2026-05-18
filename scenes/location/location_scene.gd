@@ -26,7 +26,7 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(250.0, 360.0)
+const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(230.0, 332.0)
 const NPC_PRESENCE_FRAME_PATH := "res://assets/ui/npc_presence_frame.png"
 
 
@@ -197,11 +197,15 @@ func load_location(location_id: String, message: String = "") -> void:
 
 	hud_bar.refresh()
 	rebuild_background()
-	rebuild_characters()
 	show_location_overview(location_data)
+	call_deferred("rebuild_characters_after_layout")
 	call_deferred("refresh_layout_after_frame")
-
-
+	
+func rebuild_characters_after_layout() -> void:
+	await get_tree().process_frame
+	rebuild_characters()
+	reposition_character_buttons()
+	
 func rebuild_background() -> void:
 	clear_children(background_layer)
 
@@ -294,21 +298,32 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	button.size = card_size
 
 	var selection_glow: PanelContainer = PanelContainer.new()
-	selection_glow.position = Vector2(card_size.x * 0.015, card_size.y * 0.015)
-	selection_glow.size = Vector2(card_size.x * 0.97, card_size.y * 0.97)
+	selection_glow.position = Vector2(card_size.x * 0.025, card_size.y * 0.025)
+	selection_glow.size = Vector2(card_size.x * 0.95, card_size.y * 0.95)
 	selection_glow.custom_minimum_size = selection_glow.size
 	selection_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	selection_glow.visible = selected_npc_id == npc_id
 
 	var glow_style: StyleBoxFlat = StyleBoxFlat.new()
-	glow_style.bg_color = Color(0.55, 0.24, 1.0, 0.10)
-	glow_style.border_color = Color(0.82, 0.58, 1.0, 0.95)
-	glow_style.set_border_width_all(3)
-	glow_style.set_corner_radius_all(14)
-	glow_style.shadow_color = Color(0.65, 0.32, 1.0, 0.55)
-	glow_style.shadow_size = 16
+	glow_style.bg_color = Color(0.0, 0.0, 0.0, 0.0)
+	glow_style.border_color = Color(0.82, 0.45, 1.0, 0.88)
+	glow_style.set_border_width_all(2)
+	glow_style.set_corner_radius_all(16)
+	glow_style.shadow_color = Color(0.72, 0.25, 1.0, 0.55)
+	glow_style.shadow_size = 18
 	selection_glow.add_theme_stylebox_override("panel", glow_style)
 	button.add_child(selection_glow)
+
+	var portrait_area: Control = Control.new()
+	portrait_area.position = Vector2(card_size.x * 0.105, card_size.y * 0.125)
+	portrait_area.size = Vector2(card_size.x * 0.79, card_size.y * 0.695)
+	portrait_area.clip_contents = true
+	portrait_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(portrait_area)
+
+	var portrait_path: String = get_npc_presence_portrait_path(npc_id)
+	var portrait: Control = make_npc_presence_portrait(portrait_path, display_name)
+	portrait_area.add_child(portrait)
 
 	var frame: Control = VisualAsset.make_texture_or_placeholder(
 		NPC_PRESENCE_FRAME_PATH,
@@ -321,39 +336,9 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(frame)
 
-	var portrait_area: Control = Control.new()
-	portrait_area.position = Vector2(card_size.x * 0.105, card_size.y * 0.155)
-	portrait_area.size = Vector2(card_size.x * 0.79, card_size.y * 0.635)
-	portrait_area.clip_contents = true
-	portrait_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	button.add_child(portrait_area)
-
-	var portrait_path: String = get_npc_presence_portrait_path(npc_id)
-	var portrait_title: String = display_name
-
-	var portrait: Control = VisualAsset.make_texture_or_placeholder(
-		portrait_path,
-		portrait_title,
-		"Portrait final: %s_presence_portrait.png" % npc_id.capitalize()
-	)
-	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
-	portrait.offset_left = 0
-	portrait.offset_top = 0
-	portrait.offset_right = 0
-	portrait.offset_bottom = 0
-	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	portrait_area.add_child(portrait)
-
-	if not known:
-		var veil: ColorRect = ColorRect.new()
-		veil.set_anchors_preset(Control.PRESET_FULL_RECT)
-		veil.color = Color(0.02, 0.015, 0.045, 0.48)
-		veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		portrait_area.add_child(veil)
-
 	var name_label: Label = Label.new()
-	name_label.position = Vector2(card_size.x * 0.12, card_size.y * 0.835)
-	name_label.size = Vector2(card_size.x * 0.76, card_size.y * 0.085)
+	name_label.position = Vector2(card_size.x * 0.14, card_size.y * 0.835)
+	name_label.size = Vector2(card_size.x * 0.72, card_size.y * 0.075)
 	name_label.text = display_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -374,6 +359,24 @@ func get_npc_presence_portrait_path(npc_id: String) -> String:
 		return "res://assets/portraits/%s_presence_portrait.png" % npc_name
 
 	return "res://assets/portraits/%s_presence_portrait.png" % npc_id.capitalize()
+
+func make_npc_presence_portrait(path: String, title: String) -> Control:
+	var texture: Texture2D = VisualAsset.load_texture(path)
+
+	if texture == null:
+		return VisualAsset.make_placeholder_panel(title, "Portrait final: %s" % path.get_file())
+
+	var rect: TextureRect = TextureRect.new()
+	rect.texture = texture
+	rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	rect.offset_left = 0
+	rect.offset_top = 0
+	rect.offset_right = 0
+	rect.offset_bottom = 0
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return rect
 	
 func get_scaled_character_size() -> Vector2:
 	var scale_factor: float = min(
@@ -400,6 +403,9 @@ func get_character_position(index: int, total: int, button_size: Vector2) -> Vec
 
 	var start_x: float = (location_layer.size.x - total_width) * 0.5
 	var x: float = start_x + (float(index) * (button_size.x + gap_x))
+
+	if total >= 3:
+		x = 32.0 + (float(index) * (button_size.x + gap_x))
 
 	var y: float = available_height - button_size.y + 18.0
 
@@ -758,7 +764,7 @@ func interact_npc(npc_id: String) -> void:
 	var npc_name: String = npc.get("name", npc_id)
 
 	bottom_title_label.text = npc_name
-	bottom_description_label.text = "¿Qué quieres hacer con %s?" % npc_name
+	bottom_description_label.text = "Elige cómo acercarte a %s. Cada acción consume tiempo y puede revelar información nueva." % npc_name
 
 	add_bottom_action("Hablar", func(): talk_to_npc(npc_id), GameManager.is_day_exhausted())
 	add_bottom_action("Regalar", func(): show_gift_selection(npc_id), GameManager.is_day_exhausted())
@@ -781,21 +787,14 @@ func interact_npc(npc_id: String) -> void:
 			GameManager.is_day_exhausted() or not can_start_special
 		)
 
-		if can_start_special:
-			bottom_description_label.text += "\n\nPuedes intentar avanzar la relación. Esta cita especial pondrá a prueba cuánto conoces realmente a %s." % npc_name
-		else:
-			var reason: String = RelationshipSystem.get_blocked_reason(npc_id, step_id)
-
-			if reason != "":
-				bottom_description_label.text += "\n\nAvance especial bloqueado por ahora."
-
-	add_bottom_action("Volver a la ubicación", func():
+	add_bottom_action("Volver", func():
 		selected_npc_id = ""
 		show_location_overview(DataManager.get_location(current_location_id), true)
+		rebuild_characters()
 	)
 	
 	call_deferred("refresh_layout_after_frame")
-
+	
 func show_npc_result(npc_id: String, message: String) -> void:
 	hud_bar.refresh()
 	rebuild_characters()
@@ -805,28 +804,19 @@ func show_npc_result(npc_id: String, message: String) -> void:
 		return
 
 	selected_npc_id = npc_id
-	clear_bottom_actions()
+	rebuild_characters()
 
 	var npc: Dictionary = DataManager.get_npc(npc_id)
 	var npc_name: String = str(npc.get("name", npc_id))
 
-	bottom_title_label.text = npc_name
-	bottom_description_label.text = message
-
-	add_bottom_action("Hablar otra vez", func(): talk_to_npc(npc_id), GameManager.is_day_exhausted())
-	add_bottom_action("Regalar", func(): show_gift_selection(npc_id), GameManager.is_day_exhausted())
-
-	var petition_disabled: bool = GameManager.is_day_exhausted() or not PetitionSystem.has_any_available_petition(npc_id)
-	add_bottom_action("Pedir favor", func(): show_petitions(npc_id), petition_disabled)
-
-	var date_disabled: bool = GameManager.is_day_exhausted() or not GameManager.can_invite_to_date(npc_id)
-	add_bottom_action("Invitar a cita", func(): show_date_location_selection(npc_id), date_disabled)
-
-	add_bottom_action("Volver a la ubicación", func():
-		selected_npc_id = ""
-		show_location_overview(DataManager.get_location(current_location_id), true)
+	open_result_modal(
+		npc_name,
+		message,
+		func():
+			close_choice_modal()
+			interact_npc(npc_id)
 	)
-
+	
 func show_gift_selection(npc_id: String) -> void:
 	GameManager.ensure_relationship(npc_id)
 
@@ -1526,7 +1516,11 @@ func build_modal() -> void:
 	modal_footer.add_theme_constant_override("separation", 10)
 	box.add_child(modal_footer)
 
+func open_result_modal(title: String, message: String, continue_callback: Callable) -> void:
+	open_choice_modal(title, message)
 
+	add_modal_footer_button("Continuar", continue_callback)
+	
 func open_choice_modal(title: String, description: String) -> void:
 	clear_children(modal_buttons)
 	clear_children(modal_footer)
