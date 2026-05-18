@@ -103,10 +103,7 @@ func build_global_action_panel() -> void:
 	global_action_panel.add_action("Bitácora", func(): SceneRouter.go_to_journal(SceneRouter.LOCATION_SCENE))
 	global_action_panel.add_action("Guardar", func():
 		SaveManager.save_game()
-		show_location_message(
-			"Partida guardada",
-			"El progreso fue guardado manualmente.\nPuedes continuar explorando esta zona."
-		)
+		show_save_confirmation_modal()
 	)
 	global_action_panel.add_action("Cargar", func():
 		load_game_modal.open()
@@ -1595,3 +1592,12 @@ func build_load_game_modal() -> void:
 	load_game_modal = LoadGameModal.new()
 	location_layer.add_child(load_game_modal)
 	load_game_modal.hide_modal()
+
+func show_save_confirmation_modal() -> void:
+	open_result_modal(
+		"Partida guardada",
+		"El progreso fue guardado manualmente.\nPuedes continuar explorando esta zona.",
+		func():
+			close_choice_modal()
+			show_location_overview(DataManager.get_location(current_location_id), true)
+	)
