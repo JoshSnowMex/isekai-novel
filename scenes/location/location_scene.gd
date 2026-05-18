@@ -1599,11 +1599,30 @@ func open_choice_modal(title: String, description: String) -> void:
 	modal_layer.move_to_front()
 	call_deferred("refresh_layout_after_frame")
 
-
 func close_choice_modal() -> void:
 	if modal_layer != null:
 		modal_layer.visible = false
 
+	clear_children(modal_buttons)
+	clear_children(modal_footer)
+
+	if modal_panel != null:
+		modal_panel.remove_meta("compact_info_modal")
+		modal_panel.remove_meta("gift_modal")
+
+	if modal_margin != null:
+		modal_margin.add_theme_constant_override("margin_left", 40)
+		modal_margin.add_theme_constant_override("margin_top", 28)
+		modal_margin.add_theme_constant_override("margin_right", 40)
+		modal_margin.add_theme_constant_override("margin_bottom", 28)
+
+	modal_title_label.custom_minimum_size = Vector2(1, 28)
+	modal_description_label.custom_minimum_size = Vector2(1, 52)
+	modal_footer.custom_minimum_size = Vector2(1, 40)
+
+	modal_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	modal_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	
 func build_modal_choice_grid(columns: int = 3) -> GridContainer:
 	clear_children(modal_buttons)
 
