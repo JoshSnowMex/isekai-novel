@@ -1439,8 +1439,8 @@ func layout_overlay_controls() -> void:
 		var modal_height: float = clamp(location_layer.size.y * 0.46, 280.0, 430.0)
 
 		if modal_panel != null and modal_panel.has_meta("compact_info_modal"):
-			modal_width = clamp(location_layer.size.x * 0.44, 460.0, 580.0)
-			modal_height = clamp(location_layer.size.y * 0.30, 210.0, 270.0)
+			modal_width = clamp(location_layer.size.x * 0.42, 440.0, 540.0)
+			modal_height = 128.0
 
 		modal_panel.size = Vector2(modal_width, modal_height)
 		modal_panel.position = Vector2(
@@ -1477,6 +1477,16 @@ func build_modal() -> void:
 	modal_panel = PanelContainer.new()
 	modal_panel.custom_minimum_size = Vector2(520, 360)
 	modal_layer.add_child(modal_panel)
+	
+	modal_panel.add_theme_stylebox_override("panel", LuminariaTheme.make_transparent_style())
+
+	var modal_panel_texture: TextureRect = TextureRect.new()
+	modal_panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
+	modal_panel_texture.texture = LuminariaTheme.get_world_info_panel_texture()
+	modal_panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	modal_panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
+	modal_panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	modal_panel.add_child(modal_panel_texture)
 
 	var margin: MarginContainer = MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 40)
@@ -1528,17 +1538,6 @@ func build_modal() -> void:
 
 func open_result_modal(title: String, message: String, continue_callback: Callable) -> void:
 	open_choice_modal(title, message)
-
-	if modal_panel != null:
-		var panel_texture: TextureRect = TextureRect.new()
-		panel_texture.set_anchors_preset(Control.PRESET_FULL_RECT)
-		panel_texture.texture = LuminariaTheme.get_world_info_panel_texture()
-		panel_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		panel_texture.stretch_mode = TextureRect.STRETCH_SCALE
-		panel_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		modal_panel.add_child(panel_texture)
-		modal_panel.move_child(panel_texture, 0)
-
 	add_modal_footer_button("Continuar", continue_callback)
 	
 func open_choice_modal(title: String, description: String) -> void:
@@ -1548,8 +1547,13 @@ func open_choice_modal(title: String, description: String) -> void:
 	if modal_panel != null:
 		modal_panel.remove_meta("compact_info_modal")
 
+	modal_title_label.custom_minimum_size = Vector2(1, 28)
+	modal_description_label.custom_minimum_size = Vector2(1, 52)
+	modal_footer.custom_minimum_size = Vector2(1, 40)
 	modal_title_label.text = title
 	modal_description_label.text = description
+	modal_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	modal_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 
 	modal_layer.visible = true
 	modal_layer.move_to_front()
@@ -1601,12 +1605,25 @@ func build_load_game_modal() -> void:
 	load_game_modal.hide_modal()
 
 func open_compact_info_modal(title: String, message: String, continue_callback: Callable) -> void:
-	open_choice_modal(title, message)
+	clear_children(modal_buttons)
+	clear_children(modal_footer)
 
 	if modal_panel != null:
 		modal_panel.set_meta("compact_info_modal", true)
 
+	modal_title_label.custom_minimum_size = Vector2(1, 24)
+	modal_description_label.custom_minimum_size = Vector2(1, 48)
+	modal_footer.custom_minimum_size = Vector2(1, 38)
+
+	modal_title_label.text = title
+	modal_description_label.text = message
+	modal_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	modal_description_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
 	add_modal_footer_button("Continuar", continue_callback)
+
+	modal_layer.visible = true
+	modal_layer.move_to_front()
 	call_deferred("refresh_layout_after_frame")
 	
 func show_save_confirmation_modal() -> void:
