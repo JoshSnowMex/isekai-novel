@@ -26,7 +26,7 @@ var character_positions_by_location: Dictionary = {}
 var load_game_modal: LoadGameModal
 
 const BASE_LOCATION_SIZE := Vector2(1050.0, 540.0)
-const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(222.0, 320.0)
+const NPC_PRESENCE_CARD_BASE_SIZE := Vector2(250, 360.0)
 const NPC_PRESENCE_FRAME_PATH := "res://assets/ui/npc_presence_frame.png"
 
 
@@ -302,28 +302,30 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(stage)
 
-	var selection_backlight: ColorRect = ColorRect.new()
-	selection_backlight.set_anchors_preset(Control.PRESET_FULL_RECT)
-	selection_backlight.offset_left = card_size.x * 0.08
-	selection_backlight.offset_top = card_size.y * 0.08
-	selection_backlight.offset_right = -card_size.x * 0.08
-	selection_backlight.offset_bottom = -card_size.y * 0.08
-	selection_backlight.color = Color(0.55, 0.18, 1.0, 0.20)
-	selection_backlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	selection_backlight.visible = is_selected
-	stage.add_child(selection_backlight)
+	var frame_backlight: TextureRect = TextureRect.new()
+	frame_backlight.texture = VisualAsset.load_texture(NPC_PRESENCE_FRAME_PATH)
+	frame_backlight.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame_backlight.offset_left = -card_size.x * 0.025
+	frame_backlight.offset_top = -card_size.y * 0.025
+	frame_backlight.offset_right = card_size.x * 0.025
+	frame_backlight.offset_bottom = card_size.y * 0.025
+	frame_backlight.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame_backlight.stretch_mode = TextureRect.STRETCH_SCALE
+	frame_backlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame_backlight.modulate = Color(0.72, 0.22, 1.0, 0.0) if not is_selected else Color(0.72, 0.22, 1.0, 0.62)
+	stage.add_child(frame_backlight)
 
 	var portrait: TextureRect = TextureRect.new()
 	portrait.texture = VisualAsset.load_texture(get_npc_presence_portrait_path(npc_id))
 	portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
-	portrait.offset_left = card_size.x * 0.16
-	portrait.offset_top = card_size.y * 0.16
-	portrait.offset_right = -card_size.x * 0.16
-	portrait.offset_bottom = -card_size.y * 0.18
-	portrait.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	portrait.offset_left = card_size.x * 0.12
+	portrait.offset_top = card_size.y * 0.11
+	portrait.offset_right = -card_size.x * 0.12
+	portrait.offset_bottom = -card_size.y * 0.17
+	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	portrait.modulate = Color(1.08, 1.03, 1.12, 1.0) if is_selected else Color(0.92, 0.90, 0.96, 1.0)
+	portrait.modulate = Color(1.0, 1.0, 1.0, 1.0)
 	stage.add_child(portrait)
 
 	var frame: TextureRect = TextureRect.new()
@@ -336,7 +338,7 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	frame.stretch_mode = TextureRect.STRETCH_SCALE
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	frame.modulate = Color(1.08, 0.82, 1.22, 1.0) if is_selected else Color(0.88, 0.78, 1.0, 1.0)
+	frame.modulate = Color(1.06, 0.82, 1.18, 1.0) if is_selected else Color(1.0, 1.0, 1.0, 1.0)
 	stage.add_child(frame)
 
 	var name_label: Label = Label.new()
@@ -352,7 +354,7 @@ func create_character_button(npc_id: String, index: int, total: int) -> void:
 	stage.add_child(name_label)
 
 	button.set_meta("name_label", name_label)
-	button.set_meta("selection_backlight", selection_backlight)
+	button.set_meta("frame_backlight", frame_backlight)
 	button.set_meta("frame", frame)
 	button.set_meta("portrait", portrait)
 	
@@ -742,21 +744,21 @@ func refresh_character_labels() -> void:
 		var is_selected: bool = selected_npc_id == npc_id
 
 		var label: Label = character_button.get_meta("name_label") as Label
-		var selection_backlight: Control = character_button.get_meta("selection_backlight") as Control
+		var frame_backlight: TextureRect = character_button.get_meta("frame_backlight") as TextureRect
 		var frame: TextureRect = character_button.get_meta("frame") as TextureRect
 		var portrait: TextureRect = character_button.get_meta("portrait") as TextureRect
 
 		if label != null:
 			label.text = get_npc_display_name(npc_id)
 
-		if selection_backlight != null:
-			selection_backlight.visible = is_selected
+		if frame_backlight != null:
+			frame_backlight.modulate = Color(0.72, 0.22, 1.0, 0.0) if not is_selected else Color(0.72, 0.22, 1.0, 0.62)
 
 		if frame != null:
-			frame.modulate = Color(1.08, 0.82, 1.22, 1.0) if is_selected else Color(0.88, 0.78, 1.0, 1.0)
+			frame.modulate = Color(1.06, 0.82, 1.18, 1.0) if is_selected else Color(1.0, 1.0, 1.0, 1.0)
 
 		if portrait != null:
-			portrait.modulate = Color(1.08, 1.03, 1.12, 1.0) if is_selected else Color(0.92, 0.90, 0.96, 1.0)
+			portrait.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 		character_button.tooltip_text = get_npc_display_name(npc_id)
 		
@@ -1476,10 +1478,10 @@ func build_modal() -> void:
 	modal_layer.add_child(modal_panel)
 
 	var margin: MarginContainer = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_bottom", 14)
+	margin.add_theme_constant_override("margin_left", 40)
+	margin.add_theme_constant_override("margin_top", 28)
+	margin.add_theme_constant_override("margin_right", 40)
+	margin.add_theme_constant_override("margin_bottom", 28)
 	modal_panel.add_child(margin)
 
 	var box: VBoxContainer = VBoxContainer.new()
@@ -1494,6 +1496,7 @@ func build_modal() -> void:
 	modal_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	modal_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	modal_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_title(modal_title_label)
 	box.add_child(modal_title_label)
 
 	modal_description_label = Label.new()
@@ -1502,6 +1505,7 @@ func build_modal() -> void:
 	modal_description_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	modal_description_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	modal_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	LuminariaTheme.apply_content_body(modal_description_label)
 	box.add_child(modal_description_label)
 
 	modal_scroll = ScrollContainer.new()
@@ -1570,8 +1574,9 @@ func add_modal_footer_button(text: String, callback: Callable) -> Button:
 	var button: Button = Button.new()
 	button.text = text
 	button.focus_mode = Control.FOCUS_ALL
-	button.custom_minimum_size = Vector2(180, 42)
 	button.pressed.connect(callback)
+	LuminariaTheme.apply_content_action_button(button)
+	button.custom_minimum_size = Vector2(190, 40)
 
 	modal_footer.add_child(button)
 	return button
